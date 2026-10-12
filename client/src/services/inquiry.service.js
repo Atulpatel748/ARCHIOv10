@@ -11,7 +11,7 @@ export const inquiryService = {
   create: async ({ website, consent, areaSqm, ...inquiry }) => {
     if (website) return { success: true }; // a bot filled the hidden field: pretend it worked, send nothing
     return api.post(ENDPOINT, {
-      access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+      access_key: import.meta.env.WEB3FORMS_ACCESS_KEY,
       subject: `New inquiry: ${labelFor(INQUIRY_PROJECT_TYPES, inquiry.projectType)}`,
       from_name: 'Archió website',
       name: inquiry.name,

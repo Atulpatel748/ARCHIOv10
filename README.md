@@ -114,12 +114,12 @@ one it shows its error message.
 
 ## Environment variables
 
-Anything prefixed `VITE_` is **public** (it ships to the browser and is fixed at build time). On Vercel set it under
+`VITE_*` variables and `WEB3FORMS_ACCESS_KEY` are **public** (they ship to the browser and are fixed at build time). On Vercel set it under
 Project Settings > Environment Variables, then redeploy.
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_WEB3FORMS_ACCESS_KEY` | Web3Forms access key for the studio inbox (**required**, replace the `YOUR_WEB3FORMS_ACCESS_KEY` placeholder). Public by design; restrict it to the site's domain in the Web3Forms dashboard |
+| `WEB3FORMS_ACCESS_KEY` | Web3Forms access key for the studio inbox (**required**, replace the `YOUR_WEB3FORMS_ACCESS_KEY` placeholder). Public by design; restrict it to the site's domain in the Web3Forms dashboard |
 | `VITE_SITE_URL` | Public: canonical site URL |
 | `NGROK_HOST` | Optional: lets the dev server answer on an ngrok tunnel |
 
@@ -168,7 +168,7 @@ Browser -> api.web3forms.com -> studio inbox (contact form only)
 1. Import the repository in Vercel with **Root Directory** `client` (the monorepo's `shared/` package is installed
    with it). `client/vercel.json` sets the CSP and security headers and sends every other path to `index.html`.
 2. Set `VITE_SITE_URL` to the public URL (it is used at build time for canonical links, `robots.txt` and the
-   sitemap; a Vercel build without it stops with an error), and `VITE_WEB3FORMS_ACCESS_KEY` to the key for the studio
+   sitemap; a Vercel build without it stops with an error), and `WEB3FORMS_ACCESS_KEY` to the key for the studio
    inbox. Restrict the key to the site's domain in the Web3Forms dashboard.
 3. Spam protection is the honeypot field plus Web3Forms' own filtering; turn on its captcha option if spam arrives.
 4. After the first deployment, send a test inquiry and confirm it arrives.

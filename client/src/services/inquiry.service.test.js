@@ -8,7 +8,7 @@ const INQUIRY = {
 
 let fetchMock;
 beforeEach(() => {
-  vi.stubEnv('VITE_WEB3FORMS_ACCESS_KEY', 'test-key');
+  vi.stubEnv('WEB3FORMS_ACCESS_KEY', 'test-key');
   fetchMock = vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ success: true }) });
   vi.stubGlobal('fetch', fetchMock);
 });

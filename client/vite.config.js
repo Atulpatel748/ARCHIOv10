@@ -27,6 +27,8 @@ export default defineConfig(({ command, mode }) => {
   }
   return {
     envDir,
+    // Vite only exposes VITE_* to the browser; the Web3Forms key is sent from the browser too, so it is allowed explicitly.
+    envPrefix: ['VITE_', 'WEB3FORMS_'],
     resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
     plugins: [
       react(),

@@ -14,7 +14,7 @@ and what remains is listed here with where it lives and which tests exercise it.
 | Transport and headers | CSP, HSTS, no-referrer, frame deny, Permissions-Policy, sent by Vercel from `vercel.json` (kept equal to `security-headers.js` by a test) | `client/vercel.json`, `client/security-headers.js` | `hosting-config.test` |
 | Abuse limits | Honeypot field (bots get a fake success and nothing is sent); length limits on every field; Web3Forms' own filtering | `inquiry.service.js`, `shared/schemas/inquiry.js` | `inquiry.service.test` |
 | Errors and logs | The visitor sees a fixed message; Web3Forms error text is never shown | `client/src/services/api.js` | `api.test` |
-| Secrets | None server-side. The Web3Forms access key is public by design (`VITE_WEB3FORMS_ACCESS_KEY`); `.env` is git-ignored | `.env.example` | static scan |
+| Secrets | None server-side. The Web3Forms access key is public by design (`WEB3FORMS_ACCESS_KEY`); `.env` is git-ignored | `.env.example` | static scan |
 | Data minimisation | Nothing is stored by the site. An inquiry exists only as an email to the studio. No cookies; the only browser storage is the router's scroll position and a "loading screen already shown" flag (session storage, this tab only) | n/a | E2E (`no accounts` spec) |
 | Uploads, SSRF, path traversal, process execution | Not applicable by design: no upload endpoint, the function never fetches user URLs, no filesystem paths or shell calls use user input | n/a | n/a |
 | Dependencies | Few runtime dependencies; run `npm run audit:deps` before each release | `package-lock.json` | `npm run audit:deps` |
