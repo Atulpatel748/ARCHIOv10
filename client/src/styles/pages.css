@@ -389,7 +389,6 @@
   position: relative;
   display: grid;
   place-items: center;
-  container-type: inline-size; /* the words measure their travel against the stage width (cqw) */
   min-height: calc(100vh - var(--header-h) - var(--border-thin));
   min-height: calc(100svh - var(--header-h) - var(--border-thin));
   padding-block: var(--section-y);
@@ -398,9 +397,10 @@
 
 .do-type__big {
   position: absolute;
-  inset: 0 var(--gutter);
+  inset: 0 max(var(--gutter), calc((100% - 1680px) / 2)); /* on very wide screens the words stop 1680px apart */
   display: flex;
   justify-content: space-between;
+  container-type: inline-size; /* the words measure their travel against this line (cqw) */
   height: fit-content;
   margin: auto 0; /* with inset 0 this centres the one line of words in the stage */
   overflow: clip; /* the masked line the words rise out of */
@@ -468,16 +468,16 @@
   }
 }
 
-/* After yodezeen.com. The section is one and a half screens tall and its stage is pinned for the half. On the way in
-   "we" and "do" rise out of a masked line. While the stage is pinned the scroll plays the rest: the words move out to
-   the edges and fade back, the names gather up from below (the lower ones start further down and catch up), and the
-   button fades in last, so it is never under a name. Only where scroll-driven animations exist and motion is welcome;
-   elsewhere one screen with everything in place. */
+/* After yodezeen.com. The section is two screens tall: its stage scrolls in empty, and nothing shows until the stage
+   touches the header and pins. The scroll then plays the whole thing: "we" and "do" rise out of a masked line, move
+   out to the edges and fade back, the names gather up from below (the lower ones start further down and catch up),
+   and the button fades in last, so it is never under a name. Only where scroll-driven animations exist and motion is
+   welcome; elsewhere one screen with everything in place. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .do-type {
       view-timeline: --do-type block;
-      height: calc(150svh - var(--header-h) - var(--border-thin));
+      height: calc(200svh - var(--header-h) - var(--border-thin));
     }
 
     .do-type__stage {
@@ -496,23 +496,26 @@
     .do-type__button {
       animation: linear both;
       animation-timeline: --do-type;
-      /* cover starts when the section's top meets the screen bottom; the stage is pinned (under the header) one
-         screen less a header later and stays pinned until one screen before the cover ends. */
+      /* cover starts when the section's top meets the screen bottom; the stage pins (under the header) one screen
+         less a header later and stays pinned until one screen before the cover ends. */
       animation-range: cover calc(100svh - var(--header-h)) cover calc(100% - 100svh);
     }
 
     .do-type__word {
       animation-name: do-type-in, do-type-out;
       animation-timeline: --do-type, --do-type;
-      animation-range: cover 42svh cover 85svh, cover calc(100svh - var(--header-h)) cover calc(100% - 100svh);
+      /* the rise takes the first 12svh of the pinned scroll */
+      animation-range:
+        cover calc(100svh - var(--header-h)) cover calc(112svh - var(--header-h)),
+        cover calc(100svh - var(--header-h)) cover calc(100% - 100svh);
     }
 
     .do-type__word--start {
-      --travel: calc(50cqw - var(--gutter) - 100% - 0.05em);
+      --travel: calc(50cqw - 100% - 0.05em);
     }
 
     .do-type__word--end {
-      --travel: calc(var(--gutter) + 100% + 0.05em - 50cqw);
+      --travel: calc(100% + 0.05em - 50cqw);
     }
 
     .do-type__center {
@@ -535,25 +538,140 @@
   to { translate: none; rotate: none; }
 }
 
-/* Each word starts with its inner edge on the middle line, a hair apart from the other, and ends at its edge. */
+/* Each word waits with its inner edge on the middle line, a hair apart from the other, then moves out to its edge. */
 @keyframes do-type-out {
-  0% { opacity: 1; transform: translateX(var(--travel)); }
-  83%, 100% { opacity: 0.6; transform: none; }
+  0%, 12% { opacity: 1; transform: translateX(var(--travel)); }
+  75%, 100% { opacity: 0.6; transform: none; }
 }
 
 @keyframes do-type-rise {
-  0% { transform: translateY(60svh); }
-  83%, 100% { transform: none; }
+  0%, 12% { transform: translateY(calc(50svh + 100%)); } /* the whole block starts below the stage, whatever its height */
+  75%, 100% { transform: none; }
 }
 
 @keyframes do-type-gather {
-  0% { transform: translateY(calc(var(--i) * var(--i) * 100%)); }
-  83%, 100% { transform: none; }
+  0%, 12% { transform: translateY(calc(var(--i) * var(--i) * 100%)); }
+  75%, 100% { transform: none; }
 }
 
 @keyframes do-type-button {
-  0%, 83% { opacity: 0; }
-  100% { opacity: 1; }
+  0%, 75% { opacity: 0; }
+  90%, 100% { opacity: 1; }
+}
+
+/* The featured project the We do sequence hands over to: the name on the left and a large photo on the right from
+   laptops up; below that the name sits above the photo, which takes the full width. Where scroll-driven animations
+   exist the text and photo ease in as the section scrolls into view; elsewhere they are simply there. */
+.do-feature__link {
+  display: grid;
+  gap: var(--space-5);
+  align-items: center;
+  text-decoration: none;
+}
+
+.do-feature__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.do-feature__name {
+  margin-block: var(--space-1);
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  transition: color var(--duration-fast);
+}
+
+.do-feature__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.do-feature__media {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: var(--color-secondary);
+}
+
+.do-feature__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-out);
+}
+
+.do-feature__link:focus-visible .do-feature__name {
+  color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .do-feature__link:hover .do-feature__name {
+    color: var(--color-accent);
+  }
+
+  .do-feature__link:hover .do-feature__media img {
+    transform: scale(1.035);
+  }
+}
+
+@media (min-width: 1024px) {
+  .do-feature__link {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-9);
+  }
+
+  .do-feature__media {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .do-feature__text,
+    .do-feature__media,
+    .do-feature__media img {
+      animation: linear both;
+      animation-timeline: view();
+    }
+
+    .do-feature__text {
+      animation-name: do-feature-text;
+      animation-range: entry 10% entry 80%;
+    }
+
+    .do-feature__media {
+      animation-name: do-feature-media;
+      animation-range: entry 0% entry 70%;
+    }
+
+    .do-feature__media img {
+      animation-name: do-feature-photo;
+      animation-range: entry 0% cover 40%;
+    }
+  }
+}
+
+@keyframes do-feature-text {
+  from { opacity: 0; transform: translateY(32px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes do-feature-media {
+  from { opacity: 0; transform: translateY(56px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes do-feature-photo {
+  from { transform: scale(1.12); }
+  to { transform: none; }
 }
 
 /* Contents-style list (process) */

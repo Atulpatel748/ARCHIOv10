@@ -12,7 +12,7 @@ import { ROUTES } from '../constants/routes.js';
 import { SITE } from '../constants/site.js';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll.js';
 import { useRevealItems } from '../hooks/useRevealItems.js';
-import { PROJECTS, featuredProjects } from '../services/projects.js';
+import { PROJECTS, featuredProjects, getProject } from '../services/projects.js';
 import { formatProjectLocation } from '../utils/format.js';
 import Picture from '../components/common/Picture.jsx';
 
@@ -32,6 +32,8 @@ const ORGANIZATION = {
 
 // The portfolio is static, so the featured list is worked out once rather than on every scroll-driven render.
 const FEATURED = featuredProjects(PROJECTS);
+// The project the We do sequence hands over to.
+const WEDO_PROJECT = getProject(PROJECTS, 'arabian-ranches-2-landscape');
 
 export default function HomePage() {
   const featuredReveal = useRevealOnScroll();
@@ -121,6 +123,24 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {WEDO_PROJECT && (
+        <section className="do-feature section container section--ruled section--soft" aria-labelledby="do-feature-title">
+          <Link className="do-feature__link" to={ROUTES.project(WEDO_PROJECT.slug)}>
+            <span className="do-feature__text">
+              <span className="t-label">{labelFor(PROJECT_CATEGORIES, WEDO_PROJECT.category)}</span>
+              <h2 id="do-feature-title" className="do-feature__name">
+                {WEDO_PROJECT.title} {labelFor(PROJECT_CATEGORIES, WEDO_PROJECT.category)}
+              </h2>
+              <span className="t-small t-muted">{formatProjectLocation(WEDO_PROJECT)}</span>
+              <span className="do-feature__cta t-label">View project <ArrowIcon /></span>
+            </span>
+            <span className="do-feature__media">
+              <Picture src={WEDO_PROJECT.coverImage.url} alt={WEDO_PROJECT.coverImage.alt} width="1600" height="1200" loading="lazy" decoding="async" />
+            </span>
+          </Link>
+        </section>
+      )}
 
       <CtaBand />
     </>
