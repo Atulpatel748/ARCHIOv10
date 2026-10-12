@@ -421,17 +421,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-6);
   text-align: center;
 }
 
 .do-row {
-  display: block;
-  width: fit-content;
-  margin-inline: auto;
+  display: inline-block;
   font-family: var(--font-serif);
   font-size: var(--type-h2);
-  line-height: 0.9; /* the names stand close together, as one block */
+  line-height: 1.05;
   letter-spacing: 0.015em;
   text-transform: uppercase;
   text-decoration: none;
@@ -500,7 +498,7 @@
       animation-timeline: --do-type;
     }
 
-    /* 0 to 66svh of the pinned scroll: the words move out (first 45svh) and, from a third of the way, fade almost away */
+    /* 0 to 66svh of the pinned scroll: the words move out (first 45svh), then fade back */
     .do-type__word {
       animation-name: do-type-out;
       animation-range: cover var(--pin) cover calc(var(--pin) + 66svh);
@@ -530,13 +528,11 @@
   }
 }
 
-/* The words wait together, each with its inner edge on the middle line a hair apart from the other, move out, and
-   fade back to a faint backdrop for the names. */
+/* The words wait together, each with its inner edge on the middle line a hair apart from the other. */
 @keyframes do-type-out {
   0% { opacity: 1; transform: translateX(var(--travel)); animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1); }
-  24% { opacity: 1; }
-  68% { opacity: 0.4; transform: none; }
-  100% { opacity: 0.12; transform: none; }
+  68% { opacity: 1; transform: none; }
+  100% { opacity: 0.6; transform: none; }
 }
 
 /* A name rises from below its place while it fades in, and settles softly. */
