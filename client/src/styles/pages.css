@@ -446,16 +446,23 @@
   }
 }
 
-/* Narrow screens have no room for the names between the words, so the words take the top of the stage instead. */
-@media (max-width: 1023px) {
+/* Narrow or portrait screens have no room for the names between the words, so the words sit above the names and the
+   pair is centred in the stage. */
+@media ((max-width: 1023px) or (max-aspect-ratio: 4/5)) and (min-height: 560px) {
+  .do-type__stage {
+    align-content: center;
+    row-gap: var(--space-8);
+  }
+
   .do-type__big {
-    inset: var(--section-y) var(--gutter) auto;
-    margin: 0;
+    position: static;
+    justify-self: stretch;
+    margin: 0 var(--gutter);
   }
 }
 
-/* Short laptop screens: the framing words step down a size so they clear the names. */
-@media (min-width: 1024px) and (max-height: 820px) {
+/* Short screens (laptops, phones on their side): the framing words step down a size so they clear the names. */
+@media (min-width: 1024px) and (max-height: 820px), (max-height: 559px) {
   .do-type__big {
     font-size: calc(var(--type-h1) * 1.35);
   }
