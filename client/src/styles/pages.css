@@ -468,16 +468,17 @@
   }
 }
 
-/* After yodezeen.com. The section is two screens tall: its stage scrolls in empty, and nothing shows until the stage
-   touches the header and pins. The scroll then plays the whole thing: "we" and "do" rise out of a masked line, move
-   out to the edges and fade back, the names gather up from below (the lower ones start further down and catch up),
-   and the button fades in last, so it is never under a name. Only where scroll-driven animations exist and motion is
-   welcome; elsewhere one screen with everything in place. */
+/* The section scrolls up from the bottom of the screen like any other, with "we do" together at the middle. Once its
+   stage touches the header it pins, and the scroll plays one step after another: "we" moves out to the left and "do"
+   to the right, the words fade back, the names come up from below one by one, each easing in over a long stretch and
+   overlapping the one before, until they stand together in a line, and the button appears last. Only where scroll-driven animations exist and motion is welcome; elsewhere one screen
+   with everything in place. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .do-type {
+      --pin: calc(100svh - var(--header-h)); /* where the pinned scroll starts, in cover offsets */
       view-timeline: --do-type block;
-      height: calc(200svh - var(--header-h) - var(--border-thin));
+      height: calc(240svh - var(--header-h) - var(--border-thin));
     }
 
     .do-type__stage {
@@ -491,23 +492,16 @@
     }
 
     .do-type__word,
-    .do-type__center,
     .do-type__list li,
     .do-type__button {
       animation: linear both;
       animation-timeline: --do-type;
-      /* cover starts when the section's top meets the screen bottom; the stage pins (under the header) one screen
-         less a header later and stays pinned until one screen before the cover ends. */
-      animation-range: cover calc(100svh - var(--header-h)) cover calc(100% - 100svh);
     }
 
+    /* 0 to 66svh of the pinned scroll: the words move out (first 45svh), then fade back */
     .do-type__word {
-      animation-name: do-type-in, do-type-out;
-      animation-timeline: --do-type, --do-type;
-      /* the rise takes the first 12svh of the pinned scroll */
-      animation-range:
-        cover calc(100svh - var(--header-h)) cover calc(112svh - var(--header-h)),
-        cover calc(100svh - var(--header-h)) cover calc(100% - 100svh);
+      animation-name: do-type-out;
+      animation-range: cover var(--pin) cover calc(var(--pin) + 66svh);
     }
 
     .do-type__word--start {
@@ -518,45 +512,38 @@
       --travel: calc(100% + 0.05em - 50cqw);
     }
 
-    .do-type__center {
-      animation-name: do-type-rise;
-    }
-
+    /* from 56svh: each name comes up over 40svh, 6svh after the one before it, so they overlap and flow */
     .do-type__list li {
-      animation-name: do-type-gather;
+      animation-name: do-type-come;
+      animation-timing-function: var(--ease-out);
+      animation-range:
+        cover calc(var(--pin) + 56svh + var(--i) * 6svh)
+        cover calc(var(--pin) + 96svh + var(--i) * 6svh);
     }
 
     .do-type__button {
       animation-name: do-type-button;
+      animation-range: cover calc(var(--pin) + 114svh) cover calc(var(--pin) + 132svh);
     }
   }
 }
 
-/* The words rise into view (individual properties, so the spread below can use transform). */
-@keyframes do-type-in {
-  from { translate: 0 150%; rotate: 2deg; }
-  to { translate: none; rotate: none; }
-}
-
-/* Each word waits with its inner edge on the middle line, a hair apart from the other, then moves out to its edge. */
+/* The words wait together, each with its inner edge on the middle line a hair apart from the other. */
 @keyframes do-type-out {
-  0%, 12% { opacity: 1; transform: translateX(var(--travel)); }
-  75%, 100% { opacity: 0.6; transform: none; }
+  0% { opacity: 1; transform: translateX(var(--travel)); animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1); }
+  68% { opacity: 1; transform: none; }
+  100% { opacity: 0.6; transform: none; }
 }
 
-@keyframes do-type-rise {
-  0%, 12% { transform: translateY(calc(50svh + 100%)); } /* the whole block starts below the stage, whatever its height */
-  75%, 100% { transform: none; }
-}
-
-@keyframes do-type-gather {
-  0%, 12% { transform: translateY(calc(var(--i) * var(--i) * 100%)); }
-  75%, 100% { transform: none; }
+/* A name rises from below its place while it fades in, and settles softly. */
+@keyframes do-type-come {
+  from { opacity: 0; transform: translateY(28svh); }
+  to { opacity: 1; transform: none; }
 }
 
 @keyframes do-type-button {
-  0%, 75% { opacity: 0; }
-  90%, 100% { opacity: 1; }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
 }
 
 /* The featured project the We do sequence hands over to: the name on the left and a large photo on the right from
