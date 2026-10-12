@@ -378,21 +378,29 @@
   }
 }
 
-/* We do: type only, after yodezeen.com. "We" at the top left and "do" at the bottom right, large and in the
-   muted ink, frame the category names centred between them, with the one button under the names. */
+/* We do: type only. "We" and "do" sit left and right, large and in the muted ink, with the category names centred
+   between them and the one button under the names. Where scroll-driven animations exist the section is a pinned
+   screen (see the @supports block): the words start together in the middle and draw out to the edges. */
 .do-type {
+  position: relative;
+}
+
+.do-type__stage {
   position: relative;
   display: grid;
   place-items: center;
-  overflow: clip; /* not hidden: that would make the section a scroll container and stop the view() timeline below */
+  container-type: inline-size; /* the words measure their travel against the stage width (cqw) */
+  min-height: calc(100vh - var(--header-h) - var(--border-thin));
+  min-height: calc(100svh - var(--header-h) - var(--border-thin));
   padding-block: var(--section-y);
+  overflow: clip; /* not hidden: that would make the stage a scroll container and stop it pinning */
 }
 
 .do-type__big {
   position: absolute;
-  inset: var(--section-y) var(--gutter);
+  inset: 0 var(--gutter);
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
   margin: 0;
   color: var(--color-muted);
@@ -404,10 +412,6 @@
   letter-spacing: 0.01em;
   text-transform: uppercase;
   pointer-events: none;
-}
-
-.do-type__word--end {
-  align-self: flex-end;
 }
 
 .do-type__center {
@@ -448,16 +452,29 @@
   }
 }
 
-/* While the section scrolls into view the framing words start drawn in towards the middle and move out to their
-   corners, and the names start apart and close up. Only where scroll-driven animations exist and motion is welcome;
-   elsewhere everything simply sits in its final place. */
+/* The section is three screens tall and its stage is pinned for the last two, while the scroll plays the animation:
+   "we" and "do" start side by side at the middle and move out to the edges, then the names rise from below.
+   Only where scroll-driven animations exist and motion is welcome; elsewhere one screen with everything in place. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
+    .do-type {
+      view-timeline: --do-type block;
+      height: 300svh;
+    }
+
+    .do-type__stage {
+      position: sticky;
+      top: var(--header-h);
+    }
+
     .do-type__word,
+    .do-type__center,
     .do-type__list li {
       animation: linear both;
-      animation-timeline: view();
-      animation-range: entry 10% cover 50%;
+      animation-timeline: --do-type;
+      /* cover starts when the section's top meets the screen bottom; the stage is pinned (under the header) one
+         screen less a header later and stays pinned until one screen before the cover ends. */
+      animation-range: cover calc(100svh - var(--header-h)) cover calc(100% - 100svh);
     }
 
     .do-type__word--start {
@@ -468,25 +485,35 @@
       animation-name: do-type-out-right;
     }
 
+    .do-type__center {
+      animation-name: do-type-rise;
+    }
+
     .do-type__list li {
       animation-name: do-type-gather;
     }
   }
 }
 
+/* Each word starts with its inner edge on the middle line, a hair apart from the other. */
 @keyframes do-type-out-left {
-  from { transform: translateX(25%); }
-  to { transform: none; }
+  0%, 10% { transform: translateX(calc(50cqw - var(--gutter) - 100% - 0.05em)); }
+  60%, 100% { transform: none; }
 }
 
 @keyframes do-type-out-right {
-  from { transform: translateX(-25%); }
-  to { transform: none; }
+  0%, 10% { transform: translateX(calc(var(--gutter) + 100% + 0.05em - 50cqw)); }
+  60%, 100% { transform: none; }
+}
+
+@keyframes do-type-rise {
+  0%, 35% { opacity: 0; transform: translateY(50svh); }
+  100% { opacity: 1; transform: none; }
 }
 
 @keyframes do-type-gather {
-  from { transform: translateY(calc(var(--i) * 60%)); }
-  to { transform: none; }
+  0%, 35% { transform: translateY(calc(var(--i) * 12svh)); }
+  100% { transform: none; }
 }
 
 /* Contents-style list (process) */

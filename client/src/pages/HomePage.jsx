@@ -35,7 +35,6 @@ const FEATURED = featuredProjects(PROJECTS);
 
 export default function HomePage() {
   const featuredReveal = useRevealOnScroll();
-  const doReveal = useRevealOnScroll();
   const processReveal = useRevealOnScroll();
   const featuredItems = useRevealItems();
   const processItems = useRevealItems();
@@ -103,21 +102,23 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* We do: type only. "We" and "do" frame the categories from the top left and the bottom right, and
-          draw apart while the section scrolls in as the names gather (CSS scroll-driven, transform only). */}
-      <section ref={doReveal} className="screen do-type section--ruled section--soft reveal-section" aria-labelledby="do-title">
-        <h2 id="do-title" className="do-type__big">
-          <span className="do-type__word do-type__word--start">We</span> <span className="do-type__word do-type__word--end">do</span>
-        </h2>
-        <div className="do-type__center">
-          <ul className="do-type__list">
-            {HOME_CATEGORIES.map((category, index) => (
-              <li key={category.value} style={{ '--i': index }}>
-                <Link className="do-row" to={`${ROUTES.projects}?category=${category.value}`}>{category.label}</Link>
-              </li>
-            ))}
-          </ul>
-          <Button to={ROUTES.projects} variant="secondary" size="sm">View all projects</Button>
+      {/* We do: type only. "We" and "do" start together in the middle of a pinned screen, then draw out to the left and
+          right edges while the category names rise between them (CSS scroll-driven, transform and opacity only). */}
+      <section className="do-type section--ruled section--soft" aria-labelledby="do-title">
+        <div className="do-type__stage">
+          <h2 id="do-title" className="do-type__big">
+            <span className="do-type__word do-type__word--start">We</span> <span className="do-type__word do-type__word--end">do</span>
+          </h2>
+          <div className="do-type__center">
+            <ul className="do-type__list">
+              {HOME_CATEGORIES.map((category, index) => (
+                <li key={category.value} style={{ '--i': index }}>
+                  <Link className="do-row" to={`${ROUTES.projects}?category=${category.value}`}>{category.label}</Link>
+                </li>
+              ))}
+            </ul>
+            <Button to={ROUTES.projects} variant="secondary" size="sm">View all projects</Button>
+          </div>
         </div>
       </section>
 
