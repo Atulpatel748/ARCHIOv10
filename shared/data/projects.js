@@ -62,7 +62,7 @@ const SOURCE = [
     ],
   },
   {
-    slug: 'arabian-ranches-2-landscape', title: 'Arabian Ranches 2 Landscape', category: 'landscape',
+    slug: 'arabian-ranches-2-landscape', title: 'Arabian Ranches 2', category: 'landscape',
     city: 'Arabian Ranches 2, Dubai', country: 'United Arab Emirates', areaSqm: 6500, featured: true,
     summary: 'Classic Arabian architecture and a relaxed, resort-style way of living outdoors.',
     description: 'This landscape design brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors. Palms and layered greenery line a stone path to the entrance, setting a calm, welcoming tone from the moment you arrive.\n\nWe design and build outdoor spaces where architecture and nature meet, from softscaping and hardscaping to pools, irrigation, and lighting. Every project is shaped around the client\'s lifestyle and the character of the property, delivered with quality craftsmanship from concept to completion.\n\nOur aim is simple: outdoor spaces our clients love living in, season after season.',
