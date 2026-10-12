@@ -400,15 +400,16 @@
   position: absolute;
   inset: 0 var(--gutter);
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin: 0;
+  height: fit-content;
+  margin: auto 0; /* with inset 0 this centres the one line of words in the stage */
+  overflow: clip; /* the masked line the words rise out of */
   color: var(--color-muted);
   opacity: 0.75; /* lighter than the names, still above 3:1 for large text */
   font-family: var(--font-serif);
-  font-size: var(--type-display);
+  font-size: clamp(4.5rem, 1rem + 16vw, 16rem);
   font-weight: 400;
-  line-height: 0.9;
+  line-height: 1;
   letter-spacing: 0.01em;
   text-transform: uppercase;
   pointer-events: none;
@@ -445,21 +446,31 @@
   }
 }
 
-/* Short laptop screens: the framing words step down a size so they clear the names. */
-@media (min-width: 1024px) and (max-height: 820px) {
+/* Narrow screens have no room for the names between the words, so the words take the top of the stage instead. */
+@media (max-width: 1023px) {
   .do-type__big {
-    font-size: var(--type-h1);
+    inset: var(--section-y) var(--gutter) auto;
+    margin: 0;
   }
 }
 
-/* The section is three screens tall and its stage is pinned for the last two, while the scroll plays the animation:
-   "we" and "do" start side by side at the middle and move out to the edges, then the names rise from below.
-   Only where scroll-driven animations exist and motion is welcome; elsewhere one screen with everything in place. */
+/* Short laptop screens: the framing words step down a size so they clear the names. */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .do-type__big {
+    font-size: calc(var(--type-h1) * 1.35);
+  }
+}
+
+/* After yodezeen.com. The section is one and a half screens tall and its stage is pinned for the half. On the way in
+   "we" and "do" rise out of a masked line. While the stage is pinned the scroll plays the rest: the words move out to
+   the edges and fade back, the names gather up from below (the lower ones start further down and catch up), and the
+   button fades in last, so it is never under a name. Only where scroll-driven animations exist and motion is welcome;
+   elsewhere one screen with everything in place. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .do-type {
       view-timeline: --do-type block;
-      height: 300svh;
+      height: calc(150svh - var(--header-h) - var(--border-thin));
     }
 
     .do-type__stage {
@@ -467,9 +478,15 @@
       top: var(--header-h);
     }
 
+    .do-type__big {
+      opacity: 1;
+      color: var(--color-ink);
+    }
+
     .do-type__word,
     .do-type__center,
-    .do-type__list li {
+    .do-type__list li,
+    .do-type__button {
       animation: linear both;
       animation-timeline: --do-type;
       /* cover starts when the section's top meets the screen bottom; the stage is pinned (under the header) one
@@ -477,12 +494,18 @@
       animation-range: cover calc(100svh - var(--header-h)) cover calc(100% - 100svh);
     }
 
+    .do-type__word {
+      animation-name: do-type-in, do-type-out;
+      animation-timeline: --do-type, --do-type;
+      animation-range: cover 42svh cover 85svh, cover calc(100svh - var(--header-h)) cover calc(100% - 100svh);
+    }
+
     .do-type__word--start {
-      animation-name: do-type-out-left;
+      --travel: calc(50cqw - var(--gutter) - 100% - 0.05em);
     }
 
     .do-type__word--end {
-      animation-name: do-type-out-right;
+      --travel: calc(var(--gutter) + 100% + 0.05em - 50cqw);
     }
 
     .do-type__center {
@@ -492,28 +515,38 @@
     .do-type__list li {
       animation-name: do-type-gather;
     }
+
+    .do-type__button {
+      animation-name: do-type-button;
+    }
   }
 }
 
-/* Each word starts with its inner edge on the middle line, a hair apart from the other. */
-@keyframes do-type-out-left {
-  0%, 10% { transform: translateX(calc(50cqw - var(--gutter) - 100% - 0.05em)); }
-  60%, 100% { transform: none; }
+/* The words rise into view (individual properties, so the spread below can use transform). */
+@keyframes do-type-in {
+  from { translate: 0 150%; rotate: 2deg; }
+  to { translate: none; rotate: none; }
 }
 
-@keyframes do-type-out-right {
-  0%, 10% { transform: translateX(calc(var(--gutter) + 100% + 0.05em - 50cqw)); }
-  60%, 100% { transform: none; }
+/* Each word starts with its inner edge on the middle line, a hair apart from the other, and ends at its edge. */
+@keyframes do-type-out {
+  0% { opacity: 1; transform: translateX(var(--travel)); }
+  83%, 100% { opacity: 0.6; transform: none; }
 }
 
 @keyframes do-type-rise {
-  0%, 35% { opacity: 0; transform: translateY(50svh); }
-  100% { opacity: 1; transform: none; }
+  0% { transform: translateY(60svh); }
+  83%, 100% { transform: none; }
 }
 
 @keyframes do-type-gather {
-  0%, 35% { transform: translateY(calc(var(--i) * 12svh)); }
-  100% { transform: none; }
+  0% { transform: translateY(calc(var(--i) * var(--i) * 100%)); }
+  83%, 100% { transform: none; }
+}
+
+@keyframes do-type-button {
+  0%, 83% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 /* Contents-style list (process) */

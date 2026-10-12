@@ -103,7 +103,7 @@ export default function HomePage() {
       </section>
 
       {/* We do: type only. "We" and "do" start together in the middle of a pinned screen, then draw out to the left and
-          right edges while the category names rise between them (CSS scroll-driven, transform and opacity only). */}
+          right edges while the category names gather between them (CSS scroll-driven, transform and opacity only). */}
       <section className="do-type section--ruled section--soft" aria-labelledby="do-title">
         <div className="do-type__stage">
           <h2 id="do-title" className="do-type__big">
@@ -117,7 +117,7 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
-            <Button to={ROUTES.projects} variant="secondary" size="sm">View all projects</Button>
+            <Button className="do-type__button" to={ROUTES.projects} variant="secondary" size="sm">View all projects</Button>
           </div>
         </div>
       </section>
