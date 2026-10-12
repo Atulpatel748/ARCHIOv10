@@ -1,0 +1,965 @@
+/* Home hero: a full-bleed photo with the wordmark set over it. The h1 is first in the document; the intro row is
+   moved above it visually. --hero-h is shared by the photo and the overlay so they always cover the same area. */
+.hero {
+  --hero-h: clamp(520px, calc(100svh - var(--header-h) - 76px), 940px);
+  position: relative;
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: var(--hero-h);
+  padding-block: var(--space-6) var(--space-5);
+  color: var(--color-inverse);
+  /* Darkens the top and bottom edges of the photo so the white text always has enough contrast over it. */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.54) 20%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 44%, rgba(0, 0, 0, 0.44) 64%, rgba(0, 0, 0, 0.62) 80%, rgba(0, 0, 0, 0.8));
+  pointer-events: none;
+}
+
+.hero__overlay a {
+  pointer-events: auto;
+}
+
+.hero__top {
+  order: -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+@media (min-width: 640px) {
+  .hero__cta {
+    display: none;
+  }
+}
+
+.hero__intro {
+  max-width: 36ch;
+  font-size: var(--type-lead);
+  line-height: 1.35;
+}
+
+.hero__wordmark {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.04em;
+  overflow: hidden;
+  font-size: min(17.5vw, 18.5rem);
+  font-weight: 600;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+}
+
+.hero__letter {
+  display: inline-block;
+  transform: translateY(105%);
+  animation: rise 900ms var(--ease-out) forwards;
+}
+
+.hero__letter:nth-child(2) { animation-delay: 70ms; }
+.hero__letter:nth-child(3) { animation-delay: 140ms; }
+.hero__letter:nth-child(4) { animation-delay: 210ms; }
+.hero__letter:nth-child(5) { animation-delay: 280ms; }
+.hero__letter:nth-child(6) { animation-delay: 350ms; }
+
+@keyframes rise {
+  to { transform: none; }
+}
+
+/* Background film: sits over the slider photos, under the overlay scrim, and fades in only once it is playing. */
+.hero__video {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  width: 100%;
+  height: var(--hero-h);
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1400ms ease;
+  pointer-events: none;
+}
+
+.hero__video[data-ready='true'] {
+  opacity: 1;
+}
+
+.slider__viewport {
+  position: relative;
+  height: var(--hero-h, 70svh);
+  overflow: hidden;
+  background: var(--color-secondary);
+}
+
+.slider__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--duration-slow) ease;
+}
+
+.slider__slide[data-active='true'] {
+  opacity: 1;
+}
+
+.slider__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.slider__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+}
+
+.slider__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.slider__count {
+  min-width: 4ch;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+/* Intro */
+.intro {
+  display: grid;
+  gap: var(--space-7);
+}
+
+@media (min-width: 900px) {
+  .intro {
+    grid-template-columns: 2fr 1fr;
+    align-items: end;
+  }
+}
+
+/* Projects */
+.project-card {
+  display: block;
+  text-decoration: none;
+}
+
+.project-card__media {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-secondary);
+}
+
+.project-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-out);
+}
+
+.project-card:focus-visible .project-card__media img {
+  transform: scale(1.035);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-card__media img {
+    transform: scale(1.035);
+  }
+}
+
+.project-card__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  padding-top: var(--space-3);
+}
+
+.project-card__title {
+  font-size: var(--type-h3);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-card__title {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.project-grid {
+  display: grid;
+  gap: var(--space-7) var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-grid--dense {
+    grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  }
+}
+
+/* Selected projects: zigzag rows. Each project is one row and one link: a large photo and, beside it, the number and
+   category, the name in the display font, and the place. The rows zigzag on every screen (see the
+   media queries below). */
+.project-rows {
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.project-row {
+  display: grid;
+  gap: var(--space-5);
+  padding-block: var(--space-6);
+  border-top: var(--border-thin) solid var(--color-border);
+  text-decoration: none;
+}
+
+.project-row__media {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: var(--color-secondary);
+}
+
+.project-row__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-out);
+}
+
+.project-row__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.project-row__meta {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.project-row__name {
+  margin-block: var(--space-1);
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  transition: color var(--duration-fast);
+}
+
+.project-row:focus-visible .project-row__media img {
+  transform: scale(1.035);
+}
+
+.project-row:focus-visible .project-row__name {
+  color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-row:hover .project-row__media img {
+    transform: scale(1.035);
+  }
+
+  .project-row:hover .project-row__name {
+    color: var(--color-accent);
+  }
+
+}
+
+/* Phones: a soft zigzag. The photo stays above its text but is a little narrower and keeps to one side, alternating:
+   odd rows to the right with the text on the left, even rows to the left with the text set to the right. */
+@media (max-width: 767px) {
+  .project-row__media {
+    width: 86%;
+  }
+
+  .project-rows > li:nth-child(odd) .project-row__media {
+    justify-self: end;
+  }
+
+  .project-rows > li:nth-child(even) .project-row__text {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+/* Tablets and up: photo and text side by side, swapping sides row by row (text first in the odd rows). Tablets split
+   the row in half; wide screens give the photo 7 of 12 parts. */
+@media (min-width: 768px) {
+  .project-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .project-row__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  .project-rows > li:nth-child(odd) .project-row__media {
+    order: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-row {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-9);
+    padding-block: var(--space-7);
+  }
+
+  .project-row__media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .project-rows > li:nth-child(even) .project-row {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+/* Projects page, wide screens: wide and narrow cards alternate and are staggered down the page on 12 columns. */
+@media (min-width: 1024px) {
+  .project-grid:not(.project-grid--dense) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--space-9) var(--space-5);
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-7);
+  padding-bottom: var(--space-5);
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.filters__search {
+  width: min(100%, 320px);
+}
+
+.density {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .density {
+    display: flex;
+  }
+}
+
+/* We do: type only, after yodezeen.com. "We" at the top left and "do" at the bottom right, large and in the
+   muted ink, frame the category names centred between them, with the one button under the names. */
+.do-type {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: clip; /* not hidden: that would make the section a scroll container and stop the view() timeline below */
+  padding-block: var(--section-y);
+}
+
+.do-type__big {
+  position: absolute;
+  inset: var(--section-y) var(--gutter);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0;
+  color: var(--color-muted);
+  opacity: 0.75; /* lighter than the names, still above 3:1 for large text */
+  font-family: var(--font-serif);
+  font-size: var(--type-display);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.do-type__word--end {
+  align-self: flex-end;
+}
+
+.do-type__center {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+.do-row {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  line-height: 1.05;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--duration-fast);
+}
+
+.do-row:focus-visible {
+  color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .do-row:hover {
+    color: var(--color-accent);
+  }
+}
+
+/* Short laptop screens: the framing words step down a size so they clear the names. */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .do-type__big {
+    font-size: var(--type-h1);
+  }
+}
+
+/* While the section scrolls into view the framing words start drawn in towards the middle and move out to their
+   corners, and the names start apart and close up. Only where scroll-driven animations exist and motion is welcome;
+   elsewhere everything simply sits in its final place. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .do-type__word,
+    .do-type__list li {
+      animation: linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 50%;
+    }
+
+    .do-type__word--start {
+      animation-name: do-type-out-left;
+    }
+
+    .do-type__word--end {
+      animation-name: do-type-out-right;
+    }
+
+    .do-type__list li {
+      animation-name: do-type-gather;
+    }
+  }
+}
+
+@keyframes do-type-out-left {
+  from { transform: translateX(25%); }
+  to { transform: none; }
+}
+
+@keyframes do-type-out-right {
+  from { transform: translateX(-25%); }
+  to { transform: none; }
+}
+
+@keyframes do-type-gather {
+  from { transform: translateY(calc(var(--i) * 60%)); }
+  to { transform: none; }
+}
+
+/* Contents-style list (process) */
+.toc-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-5);
+  align-items: baseline;
+  padding-block: calc(var(--space-5) + var(--space-1));
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.toc-row:last-child {
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.toc-row__num {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+/* Home process list: the numerals match the point text beside them. */
+.toc--home .toc-row__num {
+  color: var(--color-ink);
+}
+
+.toc-row__duration {
+  grid-column: 2;
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .toc-row {
+    grid-template-columns: 4rem 1fr auto;
+  }
+
+  .toc-row__duration {
+    grid-column: auto;
+    text-align: right;
+  }
+}
+
+.split {
+  display: grid;
+  gap: var(--space-7);
+}
+
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-9);
+  }
+}
+
+/* Team and two-column text blocks */
+.team-grid {
+  display: grid;
+  gap: var(--space-7) var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 20rem));
+}
+
+.team-card {
+  display: grid;
+  gap: var(--space-1);
+  justify-items: start;
+}
+
+.team-card h3 {
+  font-family: var(--font-serif);
+  font-weight: 400; /* Marcellus has one weight */
+}
+
+.team-card__photo {
+  width: 100%;
+  aspect-ratio: 1;
+  margin-bottom: var(--space-3);
+  border-radius: 50%;
+  background: var(--color-surface-strong);
+  object-fit: cover;
+}
+
+.pair {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 900px) {
+  .pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-9);
+  }
+}
+
+/* CTA: the rose top of the footer block (drawn into the footer), so beige, rose and maroon follow each other. Everything
+   sits on one centred axis, like the last page of a monograph: the label between two short rules, the statement with
+   its last word on a line of its own, the paragraph in a narrow measure, then the one button. */
+.cta-band {
+  padding-block: calc(var(--section-y) * 1.25);
+  background: var(--color-secondary);
+  color: var(--color-ink);
+  text-align: center;
+}
+
+.cta-band__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta-band__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0 0 var(--space-6);
+}
+
+.cta-band__eyebrow::before,
+.cta-band__eyebrow::after {
+  content: '';
+  width: var(--space-7);
+  border-top: var(--border-thin) solid var(--color-border-strong);
+}
+
+/* The lighter maroon, so the word reads apart from the near-black ink (5.2:1 on the rose). */
+.cta-band__accent {
+  display: block;
+  color: var(--color-accent);
+}
+
+.cta-band__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+  margin-top: var(--space-6);
+}
+
+.cta-band__aside > p {
+  max-width: 34rem;
+  font-size: var(--type-lead);
+  line-height: var(--leading-body);
+  text-wrap: pretty;
+}
+
+/* Project detail: full-bleed cover photo with the title overlaid at the foot, mirroring the home hero. */
+.project-hero-wrap {
+  position: relative;
+}
+
+.project-hero {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  object-fit: cover;
+  background: var(--color-secondary);
+}
+
+.project-hero__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  padding-top: calc(var(--header-h) + var(--space-6));
+  padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
+  color: var(--color-inverse);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.14) 20%, rgba(0, 0, 0, 0.3) 48%, rgba(0, 0, 0, 0.68) 84%, rgba(0, 0, 0, 0.9));
+}
+
+.project-hero__title {
+  display: block;
+  margin: 0;
+  max-width: 100%;
+  font-family: var(--font-sans);
+  font-size: var(--type-h1);
+  font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: var(--tracking-heading);
+  text-transform: uppercase;
+}
+
+.project-hero__line {
+  display: block;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  padding-block: var(--space-6);
+  border-block: var(--border-thin) solid var(--color-border-strong);
+}
+
+.facts dt {
+  color: var(--color-muted);
+  font-size: var(--type-caption);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.facts dd {
+  font-weight: 500;
+}
+
+@media (min-width: 1024px) {
+  /* Location, the longest value, gets a double column so it stays on one line; the other four facts fit beside it. */
+  .facts {
+    grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr));
+  }
+}
+
+.gallery {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.gallery figure {
+  overflow: hidden;
+  background: var(--color-secondary);
+}
+
+.gallery img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--color-secondary);
+  transition: transform 1100ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery figure:hover img {
+    transform: scale(1.04);
+  }
+}
+
+@media (min-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+@media (min-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .gallery figure:nth-child(4n + 1),
+  .gallery figure:nth-child(4n + 4) { grid-column: span 7; }
+  .gallery figure:nth-child(4n + 2),
+  .gallery figure:nth-child(4n + 3) { grid-column: span 5; }
+
+  .gallery figure:nth-child(4n + 1) img,
+  .gallery figure:nth-child(4n + 4) img {
+    aspect-ratio: 28 / 15;
+  }
+}
+
+/* Services and about */
+/* Contact and forms */
+.contact-layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .contact-layout {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-9);
+  }
+}
+
+.form-panel {
+  padding: clamp(20px, 3vw, 48px);
+  border: var(--border-thin) solid var(--color-border-strong);
+  background: var(--color-surface);
+}
+
+.stepper {
+  display: flex;
+  gap: var(--space-4);
+  margin: 0 0 var(--space-6);
+  padding: 0;
+  list-style: none;
+}
+
+.stepper li {
+  flex: 1;
+  padding-top: var(--space-3);
+  border-top: 3px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: var(--type-small);
+}
+
+.stepper li[data-done='true'],
+.stepper li[aria-current='step'] {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.stepper li[aria-current='step'] {
+  font-weight: 600;
+}
+
+/* Full project list: the same wide / narrow staggered rhythm as the home page, on wide screens only. The dense
+   4-up view keeps its plain grid. */
+@media (min-width: 1024px) {
+  .project-grid:not(.project-grid--dense) {
+    gap: var(--space-9) var(--space-5);
+  }
+
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 1) { grid-column: 1 / span 7; margin-top: 0; }
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 2) { grid-column: 9 / span 4; margin-top: var(--space-11); }
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 3) { grid-column: 5 / span 8; margin-top: 0; }
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 4) { grid-column: 1 / span 5; margin-top: 0; }
+
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 1) .project-card__media,
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 3) .project-card__media {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* Page titles on Projects, Services, About and Contact: set large, with a rule under them. */
+.page-head--display {
+  padding-bottom: var(--space-6);
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.page-head__display {
+  font-family: var(--font-serif);
+  font-size: clamp(2.75rem, 0.5rem + 11vw, 11rem);
+  font-weight: 400; /* Marcellus has one weight */
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+/* Services: large rows, one per service */
+.toc--large .toc-row {
+  align-items: baseline;
+  padding-block: var(--space-6);
+  border-top: var(--border-thin) solid var(--color-border-strong);
+}
+
+.toc--large .toc-row:last-child {
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.toc-row__title {
+  font-size: var(--type-h2);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+.service-row {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.service-trigger {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.service-trigger__indicator {
+  position: relative;
+  flex: 0 0 var(--space-4);
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.service-trigger__indicator::before,
+.service-trigger__indicator::after {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: var(--border-thin);
+  background: currentColor;
+  content: '';
+}
+
+.service-trigger__indicator::after {
+  transform: rotate(90deg);
+}
+
+.service-trigger[aria-expanded='true'] .service-trigger__indicator::after {
+  display: none;
+}
+
+.service-panel {
+  margin-top: var(--space-4);
+}
+
+.service-panel img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* Services on wide screens: the list on the left, one sticky photo on the right that follows the row under the pointer. */
+.services-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  column-gap: clamp(2rem, 5vw, 6rem);
+  align-items: start;
+}
+
+.services-split .toc-row {
+  color: var(--color-muted); /* the other services; a colour (not opacity) so the text keeps its contrast */
+}
+
+.services-split .toc-row.is-active {
+  color: var(--color-ink);
+}
+
+.services-split .toc-row__title,
+.services-split .toc-row__num {
+  color: inherit;
+}
+
+.services-split .toc-row__title {
+  font-size: clamp(1.75rem, 1rem + 2.2vw, 3.25rem);
+  line-height: 1.05;
+  text-transform: none; /* same as the accordion titles on phones */
+}
+
+.services-photo {
+  position: sticky;
+  top: 6rem;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-secondary);
+}
+
+.services-photo picture,
+.services-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.services-photo img {
+  object-fit: cover;
+  opacity: 0;
+}
+
+.services-photo img.is-active {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .services-split .toc-row {
+    transition: color 0.35s ease;
+  }
+
+  .services-photo img {
+    transition: opacity 0.35s ease;
+  }
+}
+
+.project-grid-count {
+  margin-bottom: var(--space-5);
+}

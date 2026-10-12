@@ -1,0 +1,15 @@
+# Archió
+
+> Archió is a Dubai interior design consultancy for residential, commercial and mixed-use spaces, and a unit of Beracah Trading.
+
+## Pages
+
+- [Home](__SITE_URL__/)
+- [Projects](__SITE_URL__/projects)
+- [Services](__SITE_URL__/services)
+- [About](__SITE_URL__/about)
+- [Contact](__SITE_URL__/contact)
+- [Privacy](__SITE_URL__/privacy)
+- [Terms](__SITE_URL__/terms)
+- [Cookies](__SITE_URL__/cookies)
+- [Sitemap](__SITE_URL__/sitemap.xml)
