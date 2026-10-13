@@ -1,0 +1,851 @@
+/* Intro */
+.intro {
+  display: grid;
+  gap: var(--space-7);
+}
+
+@media (min-width: 900px) {
+  .intro {
+    grid-template-columns: 2fr 1fr;
+    align-items: end;
+  }
+}
+
+/* Projects */
+.project-card {
+  display: block;
+  text-decoration: none;
+}
+
+.project-card__media {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-secondary);
+}
+
+.project-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-out);
+}
+
+.project-card:focus-visible .project-card__media img {
+  transform: scale(1.035);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-card__media img {
+    transform: scale(1.035);
+  }
+}
+
+/* Category, name and place always stack, so a short name never jumps up beside the category. */
+.project-card__body {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-1);
+  padding-top: var(--space-3);
+}
+
+.project-card__title {
+  font-size: var(--type-h3);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-card__title {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.project-grid {
+  display: grid;
+  gap: var(--space-7) var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-grid--dense {
+    grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  }
+}
+
+/* Selected projects: zigzag rows. Each project is one row and one link: a large photo and, beside it, the number and
+   category, the name in the display font, and the place. The rows zigzag on every screen (see the
+   media queries below). */
+.project-rows {
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.project-row {
+  display: grid;
+  gap: var(--space-5);
+  padding-block: var(--space-6);
+  border-top: var(--border-thin) solid var(--color-border);
+  text-decoration: none;
+}
+
+.project-row__media {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: var(--color-secondary);
+}
+
+.project-row__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-out);
+}
+
+.project-row__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.project-row__meta {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.project-row__name {
+  margin-block: var(--space-1);
+  font-size: var(--type-h2);
+  line-height: var(--leading-tight);
+  transition: color var(--duration-fast);
+}
+
+.project-row:focus-visible .project-row__media img {
+  transform: scale(1.035);
+}
+
+.project-row:focus-visible .project-row__name {
+  color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-row:hover .project-row__media img {
+    transform: scale(1.035);
+  }
+
+  .project-row:hover .project-row__name {
+    color: var(--color-accent);
+  }
+
+}
+
+/* Phones: a soft zigzag. The photo stays above its text but is a little narrower and keeps to one side, alternating:
+   odd rows to the right with the text on the left, even rows to the left with the text set to the right. */
+@media (max-width: 767px) {
+  .project-row__media {
+    width: 86%;
+  }
+
+  .project-rows > li:nth-child(odd) .project-row__media {
+    justify-self: end;
+  }
+
+  .project-rows > li:nth-child(even) .project-row__text {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+/* Tablets and up: photo and text side by side, swapping sides row by row (text first in the odd rows). Tablets split
+   the row in half; wide screens give the photo 7 of 12 parts. */
+@media (min-width: 768px) {
+  .project-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .project-row__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  .project-rows > li:nth-child(odd) .project-row__media {
+    order: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-row {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-9);
+    padding-block: var(--space-7);
+  }
+
+  .project-row__media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .project-rows > li:nth-child(even) .project-row {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+/* Projects page, wide screens: wide and narrow cards alternate and are staggered down the page on 12 columns. */
+@media (min-width: 1024px) {
+  .project-grid:not(.project-grid--dense) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--space-9) var(--space-5);
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-7);
+  padding-bottom: var(--space-5);
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.filters__search {
+  width: min(100%, 320px);
+}
+
+/* We do: type only. "We" and "do" sit left and right, large and in the muted ink, with the category names centred
+   between them and the one button under the names. While the scroll sequence runs (useScrollSequence, below) the
+   section is a pinned screen: the words start together in the middle and draw out to the edges. */
+.do-type {
+  position: relative;
+}
+
+.do-type__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - var(--header-h) - var(--border-thin));
+  min-height: calc(100svh - var(--header-h) - var(--border-thin));
+  padding-block: var(--section-y);
+  overflow: clip; /* not hidden: that would make the stage a scroll container and stop it pinning */
+}
+
+.do-type__big {
+  position: absolute;
+  inset: 0 max(var(--gutter), calc((100% - 1680px) / 2)); /* on very wide screens the words stop 1680px apart */
+  display: flex;
+  justify-content: space-between;
+  container-type: inline-size; /* the words measure their travel against this line (cqw) */
+  height: fit-content;
+  margin: auto 0; /* with inset 0 this centres the one line of words in the stage */
+  overflow: clip; /* the masked line the words rise out of */
+  color: var(--color-muted);
+  opacity: 0.75; /* lighter than the names, still above 3:1 for large text */
+  font-family: var(--font-serif);
+  font-size: clamp(4.5rem, 1rem + 16vw, 16rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.do-type__center {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+.do-row {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  line-height: 1.05;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--duration-fast);
+}
+
+/* On a touch screen each name is a comfortable target (44px) even where the type is small. */
+@media (pointer: coarse) {
+  .do-row {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+.do-row:focus-visible {
+  color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .do-row:hover {
+    color: var(--color-accent);
+  }
+}
+
+/* Narrow or portrait screens have no room for the names between the words, so the words sit above the names and the
+   pair is centred in the stage. */
+@media ((max-width: 1023px) or (max-aspect-ratio: 4/5)) and (min-height: 560px) {
+  .do-type__stage {
+    align-content: center;
+    row-gap: var(--space-8);
+  }
+
+  .do-type__big {
+    position: static;
+    justify-self: stretch;
+    margin: 0 var(--gutter);
+  }
+}
+
+/* Short screens (laptops, phones on their side): the framing words step down a size so they clear the names. */
+@media (min-width: 1024px) and (max-height: 820px), (max-height: 559px) {
+  .do-type__big {
+    font-size: calc(var(--type-h1) * 1.35);
+  }
+}
+
+/* The section scrolls up from the bottom of the screen like any other, with "we do" together at the middle. Once its
+   stage touches the header it pins, and the scroll plays one step after another: "we" moves out to the left and "do"
+   to the right, the words fade back, the names come up from below one by one, each easing in over a long stretch and
+   overlapping the one before, until they stand together in a line, and the button appears last.
+   useScrollSequence sets --seq on the section, the scroll distance in svh since the stage touched the header, and
+   every step below is a function of it, so the sequence plays the same in every browser. Without it (reduced motion,
+   no script) there is no data-seq and the section is one screen with everything in place. */
+.do-type[data-seq] {
+  height: calc(240svh - var(--header-h) - var(--border-thin));
+}
+
+.do-type[data-seq] .do-type__stage {
+  position: sticky;
+  top: var(--header-h);
+}
+
+.do-type[data-seq] .do-type__big {
+  opacity: 1;
+  color: var(--color-ink);
+}
+
+/* 0 to 45svh: the words move out, easing at both ends. 45 to 66svh: they fade back. */
+.do-type[data-seq] .do-type__word {
+  --move: clamp(0, calc(var(--seq, 0) / 45), 1);
+  --eased: calc(var(--move) * var(--move) * (3 - 2 * var(--move)));
+  --fade: clamp(0, calc((var(--seq, 0) - 45) / 21), 1);
+  transform: translateX(calc((1 - var(--eased)) * var(--travel)));
+  opacity: calc(1 - 0.4 * var(--fade));
+}
+
+/* Each word starts with its inner edge on the middle line, a hair apart from the other. */
+.do-type[data-seq] .do-type__word--start {
+  --travel: calc(50cqw - 100% - 0.05em);
+}
+
+.do-type[data-seq] .do-type__word--end {
+  --travel: calc(100% + 0.05em - 50cqw);
+}
+
+/* From 56svh each name rises from below its place over 40svh while it fades in, 6svh after the one before it, and
+   settles softly (the last fifth of the rise is the slow part). */
+.do-type[data-seq] .do-type__list li {
+  --come: clamp(0, calc((var(--seq, 0) - 56 - var(--i, 0) * 6) / 40), 1);
+  --rest: calc(1 - var(--come));
+  --rise: calc(1 - var(--rest) * var(--rest) * var(--rest) * var(--rest) * var(--rest));
+  opacity: var(--rise);
+  transform: translateY(calc((1 - var(--rise)) * 28svh));
+}
+
+/* From 114svh the button fades in, last. */
+.do-type[data-seq] .do-type__button {
+  opacity: clamp(0, calc((var(--seq, 0) - 114) / 18), 1);
+}
+
+/* A keyboard user who tabs into the names would otherwise land on something still invisible, wherever the scroll is,
+   so keyboard focus shows the finished screen at once. (:focus-visible, not :focus-within: a mouse press must not move
+   the names from under the pointer.) */
+.do-type[data-seq]:has(.do-row:focus-visible, .do-type__button:focus-visible) .do-type__word {
+  transform: none;
+  opacity: 0.6;
+}
+
+.do-type[data-seq]:has(.do-row:focus-visible, .do-type__button:focus-visible) .do-type__list li {
+  opacity: 1;
+  transform: none;
+}
+
+.do-type[data-seq]:has(.do-row:focus-visible, .do-type__button:focus-visible) .do-type__button {
+  opacity: 1;
+}
+
+/* Contents-style list (process) */
+.toc-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-5);
+  align-items: baseline;
+  padding-block: calc(var(--space-5) + var(--space-1));
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.toc-row:last-child {
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.toc-row__num {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+/* Home process list: the numerals match the point text beside them. */
+.toc--home .toc-row__num {
+  color: var(--color-ink);
+}
+
+@media (min-width: 768px) {
+  .toc-row {
+    grid-template-columns: 4rem 1fr;
+  }
+}
+
+.split {
+  display: grid;
+  gap: var(--space-7);
+}
+
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-9);
+  }
+}
+
+/* Team and two-column text blocks */
+.team-grid {
+  display: grid;
+  gap: var(--space-7) var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 20rem));
+}
+
+.team-card {
+  display: grid;
+  gap: var(--space-1);
+  justify-items: start;
+}
+
+.team-card__photo {
+  width: 100%;
+  aspect-ratio: 1;
+  margin-bottom: var(--space-3);
+  border-radius: 50%;
+  background: var(--color-surface-strong);
+  object-fit: cover;
+}
+
+.pair {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 900px) {
+  .pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-9);
+  }
+}
+
+/* CTA: the rose top of the footer block (drawn into the footer), so beige, rose and maroon follow each other. Everything
+   sits on one centred axis, like the last page of a monograph: the label between two short rules, the statement with
+   its last word on a line of its own, the paragraph in a narrow measure, then the one button. */
+.cta-band {
+  padding-block: calc(var(--section-y) * 1.25);
+  background: var(--color-secondary);
+  color: var(--color-ink);
+  text-align: center;
+}
+
+.cta-band__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta-band__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0 0 var(--space-6);
+}
+
+.cta-band__eyebrow::before,
+.cta-band__eyebrow::after {
+  content: '';
+  width: var(--space-7);
+  border-top: var(--border-thin) solid var(--color-border-strong);
+}
+
+/* The lighter maroon, so the word reads apart from the near-black ink (5.2:1 on the rose). */
+.cta-band__accent {
+  display: block;
+  color: var(--color-accent);
+}
+
+.cta-band__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+  margin-top: var(--space-6);
+}
+
+.cta-band__aside > p {
+  max-width: 34rem;
+  font-size: var(--type-lead);
+  line-height: var(--leading-body);
+  text-wrap: pretty;
+}
+
+/* Project detail: full-bleed cover photo with the title overlaid at the foot, mirroring the home hero. */
+.project-hero-wrap {
+  position: relative;
+}
+
+.project-hero {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  object-fit: cover;
+  background: var(--color-secondary);
+}
+
+.project-hero__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  padding-top: calc(var(--header-h) + var(--space-6));
+  padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
+  color: var(--color-inverse);
+  /* Deep at the top as well as the foot: the clear header's cream links sit over the photo's brightest parts. */
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 70%, transparent), color-mix(in srgb, var(--color-scrim) 62%, transparent) 8%, color-mix(in srgb, var(--color-scrim) 18%, transparent) 26%, color-mix(in srgb, var(--color-scrim) 14%, transparent) 36%, color-mix(in srgb, var(--color-scrim) 30%, transparent) 52%, color-mix(in srgb, var(--color-scrim) 68%, transparent) 84%, color-mix(in srgb, var(--color-scrim) 90%, transparent));
+}
+
+.project-hero__title {
+  display: block;
+  margin: 0;
+  max-width: 100%;
+  font-size: var(--type-h1);
+  line-height: var(--leading-tight);
+}
+
+.project-hero__line {
+  display: block;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  padding-block: var(--space-6);
+  border-block: var(--border-thin) solid var(--color-border-strong);
+}
+
+.facts dt {
+  color: var(--color-muted);
+  font-size: var(--type-caption);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.facts dd {
+  font-weight: 500;
+}
+
+@media (min-width: 1024px) {
+  /* Location, the longest value, gets a double column so it stays on one line; the other four facts fit beside it. */
+  .facts {
+    grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr));
+  }
+}
+
+.gallery {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* The frame carries the shape and the photo fills it, so the two frames of a row stretch to one height. */
+.gallery figure {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--color-secondary);
+}
+
+.gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--color-secondary);
+  transition: transform 1100ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery figure:hover img {
+    transform: scale(1.04);
+  }
+}
+
+@media (min-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+@media (min-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .gallery figure:nth-child(4n + 1),
+  .gallery figure:nth-child(4n + 4) {
+    grid-column: span 7;
+    aspect-ratio: 28 / 15;
+  }
+  .gallery figure:nth-child(4n + 2),
+  .gallery figure:nth-child(4n + 3) { grid-column: span 5; aspect-ratio: auto; position: relative; }
+  /* The narrow frame takes the height of the wide one beside it (a frame with a ratio of its own would not stretch). */
+  .gallery figure:nth-child(4n + 2) img,
+  .gallery figure:nth-child(4n + 3) img { position: absolute; inset: 0; }
+  /* Alone in its row (an odd photo count) there is no wide frame to borrow a height from. */
+  .gallery figure:nth-child(4n + 3):last-child { aspect-ratio: 4 / 3; }
+  .gallery figure:nth-child(4n + 3):last-child img { position: static; }
+}
+
+/* Services and about */
+/* Contact and forms */
+.contact-layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .contact-layout {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-9);
+  }
+}
+
+.form-panel {
+  padding: clamp(20px, 3vw, 48px);
+  border: var(--border-thin) solid var(--color-border-strong);
+  background: var(--color-surface);
+}
+
+.stepper {
+  display: flex;
+  gap: var(--space-4);
+  margin: 0 0 var(--space-6);
+  padding: 0;
+  list-style: none;
+}
+
+.stepper li {
+  flex: 1;
+  padding-top: var(--space-3);
+  border-top: 3px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: var(--type-small);
+}
+
+.stepper li[data-done='true'],
+.stepper li[aria-current='step'] {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.stepper li[aria-current='step'] {
+  font-weight: 600;
+}
+
+/* Full project list: the same wide / narrow staggered rhythm as the home page, on wide screens only. The dense
+   4-up view keeps its plain grid. */
+@media (min-width: 1024px) {
+  .project-grid:not(.project-grid--dense) {
+    gap: var(--space-9) var(--space-5);
+  }
+
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 1) { grid-column: 1 / span 7; margin-top: 0; }
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 2) { grid-column: 9 / span 4; margin-top: var(--space-11); }
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 3) { grid-column: 5 / span 8; margin-top: 0; }
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 4) { grid-column: 1 / span 5; margin-top: 0; }
+
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 1) .project-card__media,
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 3) .project-card__media {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* Page titles on Projects, Services, About and Contact: set large, with a rule under them. */
+.page-head--display {
+  padding-bottom: var(--space-6);
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.page-head__display {
+  font-family: var(--font-serif);
+  font-size: clamp(2.75rem, 0.5rem + 11vw, 11rem);
+  font-weight: 400; /* Marcellus has one weight */
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+/* Services: large rows, one per service */
+.toc--large .toc-row {
+  align-items: baseline;
+  padding-block: var(--space-6);
+  border-top: var(--border-thin) solid var(--color-border-strong);
+}
+
+.toc--large .toc-row:last-child {
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.toc-row__title {
+  font-size: var(--type-h2);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+.service-row {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.service-trigger {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.service-trigger__indicator {
+  position: relative;
+  flex: 0 0 var(--space-4);
+  width: var(--space-4);
+  height: var(--space-4);
+}
+
+.service-trigger__indicator::before,
+.service-trigger__indicator::after {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: var(--border-thin);
+  background: currentColor;
+  content: '';
+}
+
+.service-trigger__indicator::after {
+  transform: rotate(90deg);
+}
+
+.service-trigger[aria-expanded='true'] .service-trigger__indicator::after {
+  display: none;
+}
+
+.service-panel {
+  margin-top: var(--space-4);
+}
+
+.service-panel img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+/* Services on wide screens: the list on the left, one sticky photo on the right that follows the row under the pointer. */
+.services-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  column-gap: clamp(2rem, 5vw, 6rem);
+  align-items: start;
+}
+
+.services-split .toc-row {
+  color: var(--color-muted); /* the other services; a colour (not opacity) so the text keeps its contrast */
+}
+
+.services-split .toc-row.is-active {
+  color: var(--color-ink);
+}
+
+.services-split .toc-row__title,
+.services-split .toc-row__num {
+  color: inherit;
+}
+
+.services-split .toc-row__title {
+  font-size: clamp(1.75rem, 1rem + 2.2vw, 3.25rem);
+  line-height: 1.05;
+  text-transform: none; /* same as the accordion titles on phones */
+}
+
+.services-photo {
+  position: sticky;
+  top: 6rem;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-secondary);
+}
+
+.services-photo picture,
+.services-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.services-photo img {
+  object-fit: cover;
+  opacity: 0;
+}
+
+.services-photo img.is-active {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .services-split .toc-row {
+    transition: color 0.35s ease;
+  }
+
+  .services-photo img {
+    transition: opacity 0.35s ease;
+  }
+}
+
+.project-grid-count {
+  margin-bottom: var(--space-5);
+}

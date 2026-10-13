@@ -1,0 +1,19 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+playwright-report/
+test-results/
+.DS_Store
+.vite/
+.claude/launch.json
+.vercel/
+
+
+# Local tooling: the Impeccable skill and agents are installed per machine
+.claude/skills/impeccable/
+.claude/agents/
+.claude/settings.local.json

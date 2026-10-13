@@ -1,0 +1,345 @@
+/* Buttons */
+.btn {
+  --btn-bg: var(--color-brand);
+  --btn-fg: var(--color-inverse);
+  --btn-bd: var(--color-brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 var(--space-6);
+  border: var(--border-thin) solid var(--btn-bd);
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-size: var(--type-small);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background-color var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover:not(:disabled):not([aria-disabled='true']) {
+    --btn-bg: var(--color-accent);
+    --btn-bd: var(--color-accent);
+  }
+}
+
+.btn--secondary {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-brand);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn--secondary:hover:not(:disabled):not([aria-disabled='true']) {
+    --btn-bg: var(--color-brand);
+    --btn-fg: var(--color-inverse);
+    --btn-bd: var(--color-brand);
+  }
+}
+
+.btn--inverse {
+  --btn-bg: var(--color-inverse);
+  --btn-fg: var(--color-ink);
+  --btn-bd: var(--color-inverse);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn--inverse:hover:not(:disabled):not([aria-disabled='true']) {
+    --btn-bg: var(--color-bg);
+    --btn-fg: var(--color-ink);
+    --btn-bd: var(--color-bg);
+  }
+}
+
+.btn--danger {
+  --btn-bg: var(--color-error);
+  --btn-bd: var(--color-error);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn--danger:hover:not(:disabled):not([aria-disabled='true']) {
+    --btn-bg: var(--color-error-strong);
+    --btn-bd: var(--color-error-strong);
+  }
+}
+
+.btn--sm {
+  min-height: 40px;
+  padding: 0 var(--space-5);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  min-height: 40px;
+  padding: 0 var(--space-5);
+  border: var(--border-thin) solid var(--color-ink);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font-size: var(--type-small);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  transition: background-color var(--duration-fast), color var(--duration-fast), transform var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover {
+    background: var(--color-hover);
+  }
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--color-brand);
+  color: var(--color-inverse);
+}
+
+/* The compact controls look the same on touch screens but grow to a fingertip-sized 44px. */
+@media (pointer: coarse) {
+  .chip,
+  .btn--sm {
+    min-height: 44px;
+  }
+}
+
+/* Forms */
+.field {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.field__label {
+  font-size: var(--type-small);
+  font-weight: 500;
+}
+
+.field__optional {
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+.field__hint {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.field__error {
+  color: var(--color-error);
+  font-size: var(--type-small);
+  font-weight: 500;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: var(--border-thin) solid var(--color-ink);
+  border-radius: var(--radius-none);
+  background: var(--color-surface-strong);
+  caret-color: var(--color-accent);
+}
+
+/* The browser's own placeholder grey is 4.1:1 on these fields; the muted ink is above 5:1 and still reads as lighter than
+   typed text. */
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+.textarea {
+  min-height: 144px;
+  resize: vertical;
+}
+
+.select {
+  appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232b1012' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.input[aria-invalid='true'],
+.select[aria-invalid='true'],
+.textarea[aria-invalid='true'] {
+  border-color: var(--color-error);
+  box-shadow: inset 0 0 0 1px var(--color-error);
+}
+
+.input:disabled,
+.select:disabled,
+.textarea:disabled {
+  opacity: 0.6;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.check input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 1px 0 0;
+  accent-color: var(--color-brand);
+}
+
+.hp-field {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .field--full {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Feedback */
+.alert {
+  padding: var(--space-4);
+  border: var(--border-thin) solid currentColor;
+  font-size: var(--type-small);
+}
+
+.alert--error { color: var(--color-error); background: var(--color-error-bg); }
+.alert--success { color: var(--color-success); background: var(--color-success-bg); }
+.alert--info { color: var(--color-ink); background: var(--color-surface); border-color: var(--color-border-strong); }
+
+.state {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-9) var(--space-4);
+  border-block: var(--border-thin) solid var(--color-border-strong);
+  text-align: center;
+}
+
+.state__title {
+  font-size: var(--type-h3);
+}
+
+.state p {
+  max-width: 52ch;
+  color: var(--color-muted);
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-8);
+}
+
+.pagination__page {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border: var(--border-thin) solid transparent;
+  background: none;
+  font-variant-numeric: tabular-nums;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.pagination__page[aria-current='page'] {
+  border-color: var(--color-brand);
+  background: var(--color-brand);
+  color: var(--color-inverse);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pagination__page:hover:not([aria-current='page']):not(:disabled) {
+    border-color: var(--color-ink);
+  }
+}
+
+/* Press feedback: pressable things dip slightly while held, so the interface visibly hears the tap. */
+.btn:active:not(:disabled):not([aria-disabled='true']),
+.chip:active:not(:disabled),
+.pagination__page:active:not(:disabled):not([aria-current='page']) {
+  transform: scale(0.97);
+}
+
+.pagination__page:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.detail-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-2) var(--space-5);
+  font-size: var(--type-small);
+}
+
+.detail-list dt {
+  color: var(--color-muted);
+}
+
+.detail-list dd {
+  overflow-wrap: anywhere;
+}

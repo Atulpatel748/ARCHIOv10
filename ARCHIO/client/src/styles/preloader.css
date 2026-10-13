@@ -1,0 +1,136 @@
+/* First-paint loading screen, shown before the app bundle has run (see #app-preloader in index.html;
+   main.jsx adds .is-hidden once React has painted, then removes the node after 300ms). It is a separate
+   file, not an inline <style>, because the Content-Security-Policy allows only same-origin stylesheets
+   (style-src 'self'). Vite minifies this standalone stylesheet for production builds. The colours (beige
+   and maroon, as in tokens.css) and curves are written out here, because this sheet loads before the tokens. Like the rest of the site it
+   animates only transform and opacity. */
+#app-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 200; /* above the skip link (100) and the header (30) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #dacfba url('/images/preloader-architecture.webp') center / cover no-repeat;
+  /* Deliberately not 1. The browser skips painting whatever sits behind a fully opaque layer, so the hero
+     underneath was only drawn once the curtain started to lift: its lower part showed black for a few
+     hundred milliseconds. At 0.999 the screen looks identical but the hero is already painted when it is
+     revealed (checked on a recording of the real page: black share of the photo area 21% -> 6%, the
+     normal level for that photo). */
+  opacity: 0.999;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+#app-preloader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* This tab has already seen it (public/preloader-gate.js): never drawn, and its background photo is not fetched. */
+html[data-preloader-seen] #app-preloader {
+  display: none;
+}
+
+.app-preloader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  transition: opacity 0.3s ease;
+}
+#app-preloader.is-hidden .app-preloader__inner {
+  opacity: 0;
+}
+
+/* The logo mark settles in first. */
+.app-preloader__mark {
+  display: block;
+  width: auto;
+  height: clamp(3rem, 2rem + 4vw, 4.25rem);
+  opacity: 0;
+  transform: scale(0.85);
+  animation: app-preloader-mark 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.05s forwards;
+}
+
+/* The wordmark: each letter rises out of a clipped line, one after another. */
+.app-preloader__word {
+  display: inline-flex;
+  overflow: hidden;
+  padding-block: 0.2em;
+  font-family: Marcellus, 'Palatino Linotype', Palatino, Georgia, serif;
+  font-size: clamp(1.75rem, 1rem + 3vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  margin-right: -0.28em; /* the trailing letter-space would pull the word off-centre */
+  color: #4c1114;
+}
+.app-preloader__word i {
+  display: inline-block;
+  font-style: normal;
+  transform: translateY(110%);
+  animation: app-preloader-letter 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+.app-preloader__word i:nth-child(1) { animation-delay: 0.15s; }
+.app-preloader__word i:nth-child(2) { animation-delay: 0.21s; }
+.app-preloader__word i:nth-child(3) { animation-delay: 0.27s; }
+.app-preloader__word i:nth-child(4) { animation-delay: 0.33s; }
+.app-preloader__word i:nth-child(5) { animation-delay: 0.39s; }
+.app-preloader__word i:nth-child(6) { animation-delay: 0.45s; }
+
+/* A hairline under the word with a short bar sweeping along it for as long as the page is loading. */
+.app-preloader__line {
+  position: relative;
+  width: 7.5rem;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(76, 17, 20, 0.18);
+  opacity: 0;
+  animation: app-preloader-fade 0.4s ease 0.6s forwards;
+}
+.app-preloader__line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #4c1114;
+  transform: translateX(-100%);
+  animation: app-preloader-sweep 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.7s infinite;
+}
+
+@keyframes app-preloader-mark {
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes app-preloader-letter {
+  to { transform: translateY(0); }
+}
+@keyframes app-preloader-fade {
+  to { opacity: 1; }
+}
+@keyframes app-preloader-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Reduced motion: everything is simply there, and the exit is a quick fade instead of a slide. */
+@media (prefers-reduced-motion: reduce) {
+  .app-preloader__mark,
+  .app-preloader__word i,
+  .app-preloader__line {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .app-preloader__line::after {
+    animation: none;
+    transform: none;
+    opacity: 0.5;
+  }
+  #app-preloader.is-hidden {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  #app-preloader {
+    background-position: right center;
+  }
+}
