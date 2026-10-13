@@ -128,6 +128,14 @@
   color: var(--color-inverse);
 }
 
+/* The compact controls look the same on touch screens but grow to a fingertip-sized 44px. */
+@media (pointer: coarse) {
+  .chip,
+  .btn--sm {
+    min-height: 44px;
+  }
+}
+
 /* Forms */
 .field {
   display: grid;
