@@ -44,8 +44,8 @@ describe('hosting security headers stay in sync', () => {
     expect(CONTENT_SECURITY_POLICY).toContain("form-action 'self'");
   });
 
-  it('falls back to index.html for client-side routes, but not for the /api functions', () => {
+  it('falls back to index.html for every client-side route', () => {
     const { rewrites } = JSON.parse(read('vercel.json'));
-    expect(rewrites).toEqual([{ source: '/((?!api/).*)', destination: '/index.html' }]);
+    expect(rewrites).toEqual([{ source: '/(.*)', destination: '/index.html' }]);
   });
 });

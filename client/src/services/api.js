@@ -1,5 +1,5 @@
 import { GENERIC_ERROR_MESSAGE } from '../constants/messages.js';
-const BASE = (import.meta.env.VITE_API_URL ?? '/api/v1').replace(/\/$/, ''); // relative paths only; the form uses an absolute URL
+
 const TIMEOUT_MS = 15_000;
 
 export class ApiError extends Error {
@@ -13,7 +13,7 @@ export class ApiError extends Error {
 }
 
 // The site's only request is the contact form; there are no accounts, cookies or tokens to manage.
-async function send(method, path, { body, signal } = {}) {
+async function send(method, url, { body, signal } = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(new DOMException('Request timed out', 'TimeoutError')), TIMEOUT_MS);
   const forwardAbort = () => controller.abort(signal.reason);
@@ -21,7 +21,7 @@ async function send(method, path, { body, signal } = {}) {
   signal?.addEventListener('abort', forwardAbort, { once: true });
 
   try {
-    const response = await fetch(/^https:/.test(path) ? path : `${BASE}${path}`, {
+    const response = await fetch(url, {
       method,
       signal: controller.signal,
       headers: { Accept: 'application/json', ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}) },
@@ -51,5 +51,5 @@ async function send(method, path, { body, signal } = {}) {
 }
 
 export const api = {
-  post: (path, body, options) => send('POST', path, { ...options, body }),
+  post: (url, body, options) => send('POST', url, { ...options, body }),
 };
