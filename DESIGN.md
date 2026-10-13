@@ -17,6 +17,12 @@ colors:
   success: "#145e34"
   warning: "#774700"
   error: "#9e211a"
+  error-strong: "#8c1c15"
+  error-bg: "#f3dcda"
+  success-bg: "#d9ecdf"
+  hover: "rgba(43, 16, 18, 0.08)"
+  photo-ground: "#14090a"
+  scrim: "#000000"
 
 typography:
   family: "Public Sans Variable, Public Sans, system-ui, sans-serif"
@@ -64,10 +70,13 @@ The tone is calm and confident. Short labels, uppercase for navigation and headi
 
 - **Beige canvas `#dacfba`** (from the brand kit) is the page. Cards and panels step lighter (`surface`, `surface-strong`), never pure white.
 - **Maroon `#4c1114`** is the brand colour, taken exactly from the logo. It fills primary buttons, selected chips and menu items, and the footer.
-- **Ink `#2b1012`** is all text and thin lines: a very dark maroon-brown, so there is no pure black or grey anywhere.
+- **Ink `#2b1012`** is all text and thin lines: a very dark maroon-brown, so there is no pure black or grey on the page itself.
 - **Accent `#7a2230`** is a lighter maroon for the hovered "what we do" row, link hover, button hover and focus. Do not use it for large fills.
 - **Inverse `#f6efe2`** is cream text on maroon and over photographs and video.
 - **Rose `#ceb6a8`** (`secondary`, from the brand kit) is the call-to-action band that closes each page before the maroon footer, so beige, rose and maroon follow each other, and the ground photos sit on while they load. Do not use it for text. Ink on rose is 9.2:1, maroon 7.8:1, accent 5.2:1.
+- **Scrim `#000`** is the one neutral. It is never a fill on the page: it only darkens photographs, at 8 to 90 percent (hero edges, project-hero gradient), written as `color-mix(in srgb, var(--color-scrim) N%, transparent)`. A tinted maroon would colour the photos; a neutral keeps them true. The morph canvas also sits on it. Behind a photo that has not loaded yet, `photo-ground #14090a` (a near-black maroon) shows instead.
+- **Status tints.** `error-bg #f3dcda` and `success-bg #d9ecdf` are the alert backgrounds (the error and success text on them keep 5:1 or more); `error-strong #8c1c15` is the danger button on hover; `hover` is the faint ink wash behind a hovered chip.
+- The loading screen (`preloader.css`) keeps the canvas and maroon as literals on purpose: it loads before the token sheet.
 
 Measured contrast on the beige page: ink 11.5:1, muted text 5.4:1, eyebrow labels (ink at 75%) 6.2:1, accent 6.5:1, maroon 9.7:1, error 5.1:1, success 5.1:1, warning 5.1:1; cream on maroon 13.1:1.
 

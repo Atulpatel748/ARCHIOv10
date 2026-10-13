@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router';
-import { NAV_LINKS } from '../../constants/site.js';
+import { NAV_LINKS, SITE } from '../../constants/site.js';
 
 export default function MobileMenu({ open, onClose }) {
   const dialogRef = useRef(null);
@@ -34,6 +34,13 @@ export default function MobileMenu({ open, onClose }) {
               ))}
             </ul>
           </nav>
+          <address className="mobile-menu__contact">
+            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone}</a>
+            {SITE.social.map((item) => (
+              <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer">{item.label} {item.handle}</a>
+            ))}
+          </address>
         </div>
       )}
     </dialog>

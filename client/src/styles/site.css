@@ -208,6 +208,21 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   gap: var(--space-3);
 }
 
+/* Pushed to the foot of the screen, so the menu does not end half way down. */
+.mobile-menu__contact {
+  display: grid;
+  margin-top: auto;
+  font-style: normal;
+  font-size: var(--type-small, 0.875rem);
+}
+
+.mobile-menu__contact a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+}
+
 .mobile-menu__link {
   display: block;
   padding-block: var(--space-2);

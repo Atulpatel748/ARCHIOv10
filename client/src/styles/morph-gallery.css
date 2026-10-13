@@ -3,7 +3,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: #000;
+  background: var(--color-scrim);
 }
 
 .mg__img,

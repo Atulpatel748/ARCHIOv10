@@ -15,6 +15,12 @@
   --color-success: #145e34;
   --color-warning: #774700;
   --color-error: #9e211a; /* status colours keep 5:1 on the beige page */
+  --color-error-strong: #8c1c15; /* the error colour while hovered */
+  --color-success-bg: #d9ecdf;
+  --color-error-bg: #f3dcda;
+  --color-hover: rgba(43, 16, 18, 0.08); /* a faint ink wash behind a hovered chip */
+  --color-photo-ground: #14090a; /* behind a photo while it loads: a near-black maroon */
+  --color-scrim: #000; /* the neutral darkening laid over photos, used only as a partial wash (8 to 90 percent) */
   --color-focus: var(--color-accent);
 
   --space-1: 4px;

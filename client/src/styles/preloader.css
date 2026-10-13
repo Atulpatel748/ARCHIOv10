@@ -1,8 +1,8 @@
 /* First-paint loading screen, shown before the app bundle has run (see #app-preloader in index.html;
    main.jsx adds .is-hidden once React has painted, then removes the node after 300ms). It is a separate
    file, not an inline <style>, because the Content-Security-Policy allows only same-origin stylesheets
-   (style-src 'self'). Vite minifies this standalone stylesheet for production builds. The colours and
-   curves are written out here instead of using the site's tokens. Like the rest of the site it
+   (style-src 'self'). Vite minifies this standalone stylesheet for production builds. The colours (beige
+   and maroon, as in tokens.css) and curves are written out here, because this sheet loads before the tokens. Like the rest of the site it
    animates only transform and opacity. */
 #app-preloader {
   position: fixed;

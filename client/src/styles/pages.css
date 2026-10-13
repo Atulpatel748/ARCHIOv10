@@ -540,7 +540,7 @@
   padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
   color: var(--color-inverse);
   /* Deep at the top as well as the foot: the clear header's cream links sit over the photo's brightest parts. */
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.62) 8%, rgba(0, 0, 0, 0.18) 26%, rgba(0, 0, 0, 0.14) 36%, rgba(0, 0, 0, 0.3) 52%, rgba(0, 0, 0, 0.68) 84%, rgba(0, 0, 0, 0.9));
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 70%, transparent), color-mix(in srgb, var(--color-scrim) 62%, transparent) 8%, color-mix(in srgb, var(--color-scrim) 18%, transparent) 26%, color-mix(in srgb, var(--color-scrim) 14%, transparent) 36%, color-mix(in srgb, var(--color-scrim) 30%, transparent) 52%, color-mix(in srgb, var(--color-scrim) 68%, transparent) 84%, color-mix(in srgb, var(--color-scrim) 90%, transparent));
 }
 
 .project-hero__title {
@@ -586,14 +586,16 @@
   gap: var(--space-4);
 }
 
+/* The frame carries the shape and the photo fills it, so the two frames of a row stretch to one height. */
 .gallery figure {
   overflow: hidden;
+  aspect-ratio: 4 / 3;
   background: var(--color-secondary);
 }
 
 .gallery img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
   background: var(--color-secondary);
   transition: transform 1100ms var(--ease-out);
@@ -615,18 +617,21 @@
 @media (min-width: 1024px) {
   .gallery {
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    align-items: start;
   }
 
   .gallery figure:nth-child(4n + 1),
-  .gallery figure:nth-child(4n + 4) { grid-column: span 7; }
-  .gallery figure:nth-child(4n + 2),
-  .gallery figure:nth-child(4n + 3) { grid-column: span 5; }
-
-  .gallery figure:nth-child(4n + 1) img,
-  .gallery figure:nth-child(4n + 4) img {
+  .gallery figure:nth-child(4n + 4) {
+    grid-column: span 7;
     aspect-ratio: 28 / 15;
   }
+  .gallery figure:nth-child(4n + 2),
+  .gallery figure:nth-child(4n + 3) { grid-column: span 5; aspect-ratio: auto; position: relative; }
+  /* The narrow frame takes the height of the wide one beside it (a frame with a ratio of its own would not stretch). */
+  .gallery figure:nth-child(4n + 2) img,
+  .gallery figure:nth-child(4n + 3) img { position: absolute; inset: 0; }
+  /* Alone in its row (an odd photo count) there is no wide frame to borrow a height from. */
+  .gallery figure:nth-child(4n + 3):last-child { aspect-ratio: 4 / 3; }
+  .gallery figure:nth-child(4n + 3):last-child img { position: static; }
 }
 
 /* Services and about */

@@ -6,7 +6,7 @@
   min-height: 100svh;
   overflow: hidden;
   isolation: isolate;
-  background: #14090a;
+  background: var(--color-photo-ground);
   color: var(--color-inverse);
 }
 
@@ -28,16 +28,16 @@
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 52% 26% at 50% 40%, rgba(0, 0, 0, 0.24), transparent),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.48), rgba(0, 0, 0, 0.12) 22%, rgba(0, 0, 0, 0.12) 55%, rgba(0, 0, 0, 0.58));
+    radial-gradient(ellipse 52% 26% at 50% 40%, color-mix(in srgb, var(--color-scrim) 24%, transparent), transparent),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 48%, transparent), color-mix(in srgb, var(--color-scrim) 12%, transparent) 22%, color-mix(in srgb, var(--color-scrim) 12%, transparent) 55%, color-mix(in srgb, var(--color-scrim) 58%, transparent));
 }
 
 /* On a phone the centred block spans most of the width, so the soft shadow behind it does too. */
 @media (max-width: 639px) {
   .hero-portal__scrim {
     background:
-      radial-gradient(ellipse 100% 22% at 50% 40%, rgba(0, 0, 0, 0.3), transparent),
-      linear-gradient(to bottom, rgba(0, 0, 0, 0.48), rgba(0, 0, 0, 0.12) 22%, rgba(0, 0, 0, 0.12) 55%, rgba(0, 0, 0, 0.58));
+      radial-gradient(ellipse 100% 22% at 50% 40%, color-mix(in srgb, var(--color-scrim) 30%, transparent), transparent),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 48%, transparent), color-mix(in srgb, var(--color-scrim) 12%, transparent) 22%, color-mix(in srgb, var(--color-scrim) 12%, transparent) 55%, color-mix(in srgb, var(--color-scrim) 58%, transparent));
   }
 }
 
@@ -78,7 +78,7 @@
   font-size: calc(var(--type-h1) * 0.95); /* the wordmark's height */
   line-height: 1;
   transform-origin: center;
-  filter: drop-shadow(0 2px 28px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 2px 28px color-mix(in srgb, var(--color-scrim) 55%, transparent));
 }
 
 .hero-portal__descriptor {
