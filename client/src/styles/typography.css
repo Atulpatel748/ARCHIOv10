@@ -161,3 +161,7 @@ button:focus-visible > .roll > span {
 .project-copy {
   font-family: var(--font-text-serif);
 }
+
+.nowrap {
+  white-space: nowrap;
+}

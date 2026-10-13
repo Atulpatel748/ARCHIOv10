@@ -61,7 +61,7 @@ describe('InquiryForm', () => {
     await user.type(screen.getByLabelText(/tell us about your space/i), MESSAGE);
     await user.click(screen.getByLabelText(/privacy notice/i));
 
-    const send = screen.getByRole('button', { name: /send request/i });
+    const send = screen.getByRole('button', { name: /send me a quote/i });
     await user.dblClick(send);
     expect(inquiryService.create).toHaveBeenCalledTimes(1);
     expect(inquiryService.create).toHaveBeenCalledWith(expect.objectContaining({
@@ -77,7 +77,7 @@ describe('InquiryForm', () => {
     const user = userEvent.setup();
     renderWithProviders(<InquiryForm />);
     await reachLastStep(user);
-    await user.click(screen.getByRole('button', { name: /send request/i }));
+    await user.click(screen.getByRole('button', { name: /send me a quote/i }));
     expect(screen.getByLabelText(/tell us about your space/i)).toHaveAttribute('aria-invalid', 'true');
     expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'true');
     expect(inquiryService.create).not.toHaveBeenCalled();
@@ -90,10 +90,10 @@ describe('InquiryForm', () => {
     await reachLastStep(user);
     await user.type(screen.getByLabelText(/tell us about your space/i), MESSAGE);
     await user.click(screen.getByRole('checkbox'));
-    await user.click(screen.getByRole('button', { name: /send request/i }));
+    await user.click(screen.getByRole('button', { name: /send me a quote/i }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not reach the server/i);
     expect(screen.getByLabelText(/tell us about your space/i)).toHaveValue(MESSAGE);
-    expect(screen.getByRole('button', { name: /send request/i })).toBeEnabled();
+    expect(screen.getByRole('button', { name: /send me a quote/i })).toBeEnabled();
   });
 
   it('returns to the step that holds a server-side field error', async () => {
@@ -105,7 +105,7 @@ describe('InquiryForm', () => {
     await reachLastStep(user);
     await user.type(screen.getByLabelText(/tell us about your space/i), MESSAGE);
     await user.click(screen.getByRole('checkbox'));
-    await user.click(screen.getByRole('button', { name: /send request/i }));
+    await user.click(screen.getByRole('button', { name: /send me a quote/i }));
     await waitFor(() => expect(screen.getByLabelText(/^email/i)).toBeInTheDocument());
     expect(screen.getByLabelText(/^email/i)).toHaveAccessibleDescription(/valid email/i);
   });
@@ -119,7 +119,7 @@ describe('InquiryForm', () => {
     await reachLastStep(user);
     await user.type(screen.getByLabelText(/tell us about your space/i), MESSAGE);
     await user.click(screen.getByRole('checkbox'));
-    await user.click(screen.getByRole('button', { name: /send request/i }));
+    await user.click(screen.getByRole('button', { name: /send me a quote/i }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/unrecognized key/i);
   });
 });

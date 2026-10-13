@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { CALL_TO_ACTION } from '../../constants/content.js';
+import CtaCopy from './CtaCopy.jsx';
 import { ROUTES } from '../../constants/routes.js';
 import ArrowIcon from '../ui/ArrowIcon.jsx';
 import Button from '../ui/Button.jsx';
@@ -8,7 +9,7 @@ import RollText from '../ui/RollText.jsx';
 
 // The page decides whether it closes with a call to action (and its wording); the band itself is drawn at the top of
 // the footer (#footer-cta), so statement, links and wordmark read as one closing screen.
-export default function CtaBand({ title = CALL_TO_ACTION.title, children = CALL_TO_ACTION.text }) {
+export default function CtaBand({ title = CALL_TO_ACTION.title, children = <CtaCopy /> }) {
   const [slot, setSlot] = useState(null);
   useEffect(() => setSlot(document.getElementById('footer-cta')), []);
   if (!slot) return null;

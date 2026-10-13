@@ -110,11 +110,8 @@ function ProjectDetail({ project, related }) {
           </dl>
         </div>
         <div className="container section--tight">
-          <div className="split project-copy">
-            <p className="t-lead">{project.summary}</p>
-            <div className="prose">
-              {paragraphs(project.description).map((text, index) => <p key={index}>{text}</p>)}
-            </div>
+          <div className="prose project-copy">
+            {paragraphs(project.description).map((text, index) => <p key={index}>{text}</p>)}
           </div>
         </div>
       </div>

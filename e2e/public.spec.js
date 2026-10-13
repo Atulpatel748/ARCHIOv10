@@ -158,9 +158,9 @@ test.describe('public site', () => {
     expect(sizes).toBeLessThanOrEqual(10);
   });
 
-  test('"We do" names each category as a link to its projects, with one link to them all', async ({ page }) => {
+  test('"We design" names each category as a link to its projects, with one link to them all', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: 'We do' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'We design', exact: true })).toBeVisible();
     const rows = page.locator('.do-row');
     await expect(rows).toHaveText(['Residential', 'Commercial', 'Landscape'], { ignoreCase: true });
     await expect(page.locator('.do-type').getByRole('link', { name: 'View all projects' })).toHaveAttribute('href', '/projects');
@@ -168,7 +168,7 @@ test.describe('public site', () => {
     await expect(page).toHaveURL(/category=landscape/);
   });
 
-  test('"We do" shows its finished screen when a keyboard user tabs into the names, wherever the scroll is', async ({ page }) => {
+  test('"We design" shows its finished screen when a keyboard user tabs into the names, wherever the scroll is', async ({ page }) => {
     await page.goto('/');
     const first = page.locator('.do-type__list li').first();
     await first.getByRole('link').focus();

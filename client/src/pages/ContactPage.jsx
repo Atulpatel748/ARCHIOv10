@@ -1,7 +1,7 @@
 import InquiryForm from '../components/forms/InquiryForm.jsx';
 import PageHead from '../components/common/PageHead.jsx';
 import Seo from '../components/common/Seo.jsx';
-import { CALL_TO_ACTION } from '../constants/content.js';
+import CtaCopy from '../components/common/CtaCopy.jsx';
 import { ROUTES } from '../constants/routes.js';
 import EmailLink from '../components/common/EmailLink.jsx';
 import { SITE } from '../constants/site.js';
@@ -21,7 +21,7 @@ export default function ContactPage() {
           <div className="contact-layout">
             <div className="stack--lg">
               <div className="stack">
-                <p className="t-lead">{CALL_TO_ACTION.text}</p>
+                <p className="t-lead"><CtaCopy /></p>
                 <dl className="detail-list">
                   <dt>Email</dt>
                   <dd><EmailLink className="link" /></dd>
@@ -29,8 +29,6 @@ export default function ContactPage() {
                   <dd><a className="link" href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone}</a></dd>
                   <dt>{instagram.label}</dt>
                   <dd><a className="link" href={instagram.href} rel="noopener noreferrer">{instagram.handle}</a></dd>
-                  <dt>Studio</dt>
-                  <dd>Dubai. {SITE.parent}.</dd>
                 </dl>
                 <p className="t-muted">Three short steps. The more you tell us, the more useful our first reply will be.</p>
               </div>

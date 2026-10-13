@@ -114,5 +114,4 @@ export const PHILOSOPHY = Object.freeze({
 export const CALL_TO_ACTION = Object.freeze({
   eyebrow: 'Get started',
   title: 'Let\u2019s build something purposeful',
-  text: 'Planning a residential, commercial, or mixed-use project? We\u2019d welcome the opportunity to understand your vision and explore how we can bring clarity, purpose, and lasting value to your space.',
 });

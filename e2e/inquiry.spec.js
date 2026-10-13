@@ -28,12 +28,12 @@ test.describe('project inquiry form', () => {
     await form.getByLabel('When would you like to start?').selectOption('1_3_months');
     await form.getByRole('button', { name: 'Next' }).click();
 
-    await form.getByRole('button', { name: 'Send request' }).click();
+    await form.getByRole('button', { name: 'Send me a quote' }).click();
     await expect(form.getByLabel('Tell us about your space')).toHaveAttribute('aria-invalid', 'true');
 
     await form.getByLabel('Tell us about your space').fill('We want to renovate a two bedroom apartment, including the kitchen and bathrooms.');
     await form.getByRole('checkbox').check();
-    await form.getByRole('button', { name: 'Send request' }).click();
+    await form.getByRole('button', { name: 'Send me a quote' }).click();
 
     await expect(page.getByRole('heading', { name: 'Thank you' })).toBeVisible();
     expect(sent).toEqual([expect.objectContaining({ name, email: 'e2e.visitor@example.com', needs: 'Residential interior' })]);
@@ -86,7 +86,7 @@ test.describe('project inquiry form', () => {
     await form.getByRole('button', { name: 'Next' }).click();
     await form.getByLabel('Tell us about your space').fill('Our living room never feels finished and we need help with layout and lighting.');
     await form.getByRole('checkbox').check();
-    await form.getByRole('button', { name: 'Send request' }).click();
+    await form.getByRole('button', { name: 'Send me a quote' }).click();
     await expect(page.getByRole('alert')).toContainText(/could not reach the server/i);
     await expect(form.getByLabel('Tell us about your space')).toHaveValue(/living room/);
   });

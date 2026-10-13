@@ -209,7 +209,7 @@ and pagination dip to `scale(0.97)` while pressed. Scroll-reveal sections (`useR
 classes once the animation ends, so they do not hold a compositing layer afterwards.
 
 Scroll-driven behaviour comes from two places. GSAP with ScrollTrigger drives the word-by-word reveal of the
-Our Approach heading (`WordReveal`, `lib/gsapLoader.js`). The pinned "We do" section on the home page is driven by
+Our Approach heading (`WordReveal`, `lib/gsapLoader.js`). The pinned "We design" section on the home page is driven by
 `useScrollSequence`, which writes how far the page has scrolled since the section touched the header into a CSS variable
 (`--seq`, in svh); `styles/pages.css` derives every step from it (words out and faded, names one by one, button last),
 so it plays the same in every browser instead of relying on CSS scroll-driven animations. Under reduced motion it is
@@ -257,7 +257,7 @@ ref that also picks up items added later, such as filter results). Each client-s
   default Open Graph tags from `index.html`.
 - The project photos are 800px wide, so on large screens the hero gallery is soft; it needs higher-resolution
   photos. The reference site's scroll-scrubbed image sequence and rotating globe are not
-  reproduced. The scroll effects are the heading word reveal and the pinned "We do" section described above; there is no
+  reproduced. The scroll effects are the heading word reveal and the pinned "We design" section described above; there is no
   parallax layout.
 
 ## Design system

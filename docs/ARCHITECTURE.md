@@ -13,7 +13,7 @@ informed approximations.
 | Navigation links with a rolling-text hover (labels repeated in the DOM) | `RollText`: one visible label plus a decorative duplicate, hidden from assistive tech |
 | Full-screen hero with project slideshow and caption | `HeroPortal`: a full-screen WebGL photo gallery (`morph-gallery.tsx`) behind a clear header; the brand kit's ARCHIÓ wordmark with the studio descriptor under it between two thin rules, the featured-project block and a pause button sit on top |
 | Uppercase statement block with a "read more" link | `.statement` + link to About |
-| "We do" category list | Type only: the category names as links between a large "We" / "do", pinned while the scroll draws them apart and brings the names up one by one (`useScrollSequence` writes the scroll distance into `--seq`; the CSS derives each step from it) |
+| "We design" category list | Type only: the category names as links between a large "We" / "design", pinned while the scroll draws them apart and brings the names up one by one (`useScrollSequence` writes the scroll distance into `--seq`; the CSS derives each step from it) |
 | Table-of-contents style list with right-aligned numbers | Process list (number, title, duration) |
 | Projects page: title, discipline/category chips, location filter, 2/4 per-row toggle, bottom CTA | Category chips, literal search, 2/4 density toggle, pagination, CTA band |
 | Services page: list with "learn more" per service | One services page listing every service (no per-service pages) |

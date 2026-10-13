@@ -140,7 +140,7 @@ export default function InquiryForm() {
       {form.formError && <div className="form-actions"><Alert tone="error">{form.formError}</Alert></div>}
       <div className="form-actions">
         {step > 0 ? <Button variant="secondary" onClick={() => setStep(step - 1)}>Back</Button> : <span />}
-        <Button type="submit" loading={form.submitting}>{last ? 'Send request' : 'Next'}</Button>
+        <Button type="submit" loading={form.submitting}>{last ? 'Send me a quote' : 'Next'}</Button>
       </div>
     </form>
   );

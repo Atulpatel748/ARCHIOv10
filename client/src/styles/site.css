@@ -270,6 +270,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-6) var(--space-5);
   padding-block: var(--space-7) var(--space-5);
+  color: var(--color-bg); /* brand beige on the maroon, as the brand kit shows the wordmark */
 }
 
 /* Plain footer links only: the call-to-action button above them keeps its own button styling. */
@@ -304,14 +305,14 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
 .footer-tagline {
   max-width: 26ch;
   margin: 0;
-  color: rgba(246, 239, 226, 0.72);
+  color: var(--color-secondary);
   line-height: 1.5;
 }
 
 .footer-col h2 {
   margin-bottom: var(--space-3);
   font-family: var(--font-sans); /* a small label, not a display heading */
-  color: rgba(246, 239, 226, 0.72);
+  color: var(--color-secondary);
   font-size: var(--type-caption);
   font-weight: 500;
   letter-spacing: var(--tracking-label);
@@ -357,8 +358,8 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   justify-content: space-between;
   gap: var(--space-1) var(--space-5);
   padding-top: var(--space-4);
-  border-top: var(--border-thin) solid rgba(246, 239, 226, 0.28);
-  color: rgba(246, 239, 226, 0.72);
+  border-top: var(--border-thin) solid rgba(218, 207, 186, 0.28);
+  color: var(--color-secondary);
   font-size: var(--type-small);
 }
 

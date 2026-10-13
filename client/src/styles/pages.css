@@ -1,13 +1,41 @@
-/* Intro */
-.intro {
+/* About page rows (the company profile's layout): title on the left, a thin rule, the text on the right. Below 900px
+   the title simply sits above its text. */
+.about-split {
   display: grid;
-  gap: var(--space-7);
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.about-split__title {
+  font-size: var(--type-h2);
+  line-height: var(--leading-heading);
+}
+
+.about-split__body > * + * {
+  margin-top: var(--space-4);
+}
+
+.about-list {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: 1.25em;
+  list-style: disc outside;
 }
 
 @media (min-width: 900px) {
-  .intro {
-    grid-template-columns: 2fr 1fr;
-    align-items: end;
+  .about-split {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 0;
+  }
+
+  .about-split__title {
+    padding-right: var(--space-6);
+  }
+
+  .about-split__body {
+    max-width: 44rem;
+    padding: var(--space-5) 0 var(--space-5) var(--space-8);
+    border-left: var(--border-thin) solid var(--color-border-strong);
   }
 }
 
@@ -247,7 +275,7 @@
   color: var(--color-muted);
   opacity: 0.75; /* lighter than the names, still above 3:1 for large text */
   font-family: var(--font-serif);
-  font-size: clamp(4.5rem, 1rem + 16vw, 16rem);
+  font-size: min(clamp(4.5rem, 1rem + 16vw, 16rem), 7.6vw); /* "design" is wide: it must clear the names beside it */
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0.01em;
@@ -305,6 +333,7 @@
 
   .do-type__big {
     position: static;
+    font-size: 12.5vw; /* no names beside the words here, but "design" must fit within half the line */
     justify-self: stretch;
     margin: 0 var(--gutter);
   }
@@ -313,7 +342,7 @@
 /* Short screens (laptops, phones on their side): the framing words step down a size so they clear the names. */
 @media (min-width: 1024px) and (max-height: 820px), (max-height: 559px) {
   .do-type__big {
-    font-size: calc(var(--type-h1) * 1.35);
+    font-size: min(calc(var(--type-h1) * 1.35), 7.6vw);
   }
 }
 
@@ -440,7 +469,28 @@
 .team-card {
   display: grid;
   gap: var(--space-1);
-  justify-items: start;
+  justify-items: center;
+  text-align: center;
+}
+
+/* "Our team": the title centred with a short rule under it, the portraits centred below (as in the company profile). */
+.about-team__title {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  font-size: var(--type-h2);
+  text-align: center;
+}
+
+.about-team__title::after {
+  content: '';
+  width: min(100%, 16rem);
+  border-top: var(--border-thin) solid var(--color-border-strong);
+}
+
+.team-grid {
+  justify-content: center;
 }
 
 .team-card__photo {
@@ -452,15 +502,47 @@
   object-fit: cover;
 }
 
-.pair {
+/* Vision and mission share one row with a rule between them. On wide screens the vision title is at the top left with
+   its text at the foot, and the mission is the mirror image: text at the top, title at the foot, right-aligned. */
+.vision-mission {
   display: grid;
   gap: var(--space-8);
 }
 
+.vision-mission__half {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.vision-mission__half > .lora > * + * {
+  margin-top: var(--space-4);
+}
+
 @media (min-width: 900px) {
-  .pair {
+  .vision-mission {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-9);
+    gap: 0;
+  }
+
+  .vision-mission__half {
+    justify-content: space-between;
+    gap: var(--space-8);
+    min-height: 26rem;
+  }
+
+  .vision-mission__half:first-child {
+    padding-right: var(--space-8);
+    border-right: var(--border-thin) solid var(--color-border-strong);
+  }
+
+  .vision-mission__half:last-child {
+    flex-direction: column-reverse;
+    padding-left: var(--space-8);
+  }
+
+  .vision-mission__half:last-child .about-split__title {
+    text-align: right;
   }
 }
 
@@ -509,7 +591,7 @@
 }
 
 .cta-band__aside > p {
-  max-width: 34rem;
+  max-width: 42rem; /* wide enough for the question to sit on one line */
   font-size: var(--type-lead);
   line-height: var(--leading-body);
   text-wrap: pretty;
@@ -848,4 +930,9 @@
 
 .project-grid-count {
   margin-bottom: var(--space-5);
+}
+
+.about-list li {
+  display: list-item; /* the base reset removes list markers; the About lists keep theirs */
+  list-style: disc;
 }

@@ -25,7 +25,7 @@ const SOURCE = [
     slug: 'dubai-marina-residence', title: 'Dubai Marina Residence', category: 'residential',
     city: 'Dubai Marina, Dubai', country: 'United Arab Emirates', areaSqm: fromSqft(2500), featured: true,
     summary: 'Interiors where architecture, material and light work as one, shaped around how our clients actually live.',
-    description: 'We design and build interiors where architecture, material, and light work as one, from feature walls and joinery to lighting and finishing details. Every space is shaped around how our clients actually live, delivered with precision and craftsmanship from concept to completion.\n\nOur aim is simple: interiors our clients love living in, every single day.',
+    description: 'We design and build interiors where architecture, material, and light work as one, from feature walls and joinery to lighting and finishing details. Every space is shaped around how our clients actually live, delivered with precision and craftsmanship from concept to completion.',
     images: [
       'Double-height living room with marble-clad feature walls and a crystal chandelier',
       'Marble and dark stone feature wall with built-in shelving and a chandelier',
@@ -46,7 +46,7 @@ const SOURCE = [
     slug: 'jlt-commercial-interior', title: 'JLT Commercial Interior', category: 'commercial',
     city: 'JLT, Dubai', country: 'United Arab Emirates', areaSqm: fromSqft(2000), featured: true,
     summary: 'Commercial spaces that make the right first impression, from reception areas and lounges to full office fit-outs.',
-    description: 'Commercial spaces that make the right first impression, from reception areas and lounges to full office fit-outs. Every detail, from material selection to lighting, is considered to reflect the brand and support how people actually work and meet.\n\nOur aim is simple: commercial spaces our clients are proud to welcome people into, every day.',
+    description: 'Commercial spaces that make the right first impression, from reception areas and lounges to full office fit-outs. Every detail, from material selection to lighting, is considered to reflect the brand and support how people actually work and meet.',
     images: [
       'Boardroom with a long white table and cream high-back chairs',
       'Meeting room with a ceiling grid, a wall screen and a long conference table',
@@ -65,7 +65,7 @@ const SOURCE = [
     slug: 'arabian-ranches-2-landscape', title: 'Arabian Ranches 2', category: 'landscape',
     city: 'Arabian Ranches 2, Dubai', country: 'United Arab Emirates', areaSqm: 6500, featured: true,
     summary: 'Classic Arabian architecture and a relaxed, resort-style way of living outdoors.',
-    description: 'This landscape design brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors. Palms and layered greenery line a stone path to the entrance, setting a calm, welcoming tone from the moment you arrive.\n\nWe design and build outdoor spaces where architecture and nature meet, from softscaping and hardscaping to pools, irrigation, and lighting. Every project is shaped around the client\'s lifestyle and the character of the property, delivered with quality craftsmanship from concept to completion.\n\nOur aim is simple: outdoor spaces our clients love living in, season after season.',
+    description: 'This landscape design brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors. Palms and layered greenery line a stone path to the entrance, setting a calm, welcoming tone from the moment you arrive.\n\nWe design and build outdoor spaces where architecture and nature meet, from softscaping and hardscaping to pools, irrigation, and lighting. Every project is shaped around the client\'s lifestyle and the character of the property, delivered with quality craftsmanship from concept to completion.',
     images: [
       'Villa entrance by day with palms, layered planting and a stone path',
       'Villa entrance at dusk with lit palms and planting',

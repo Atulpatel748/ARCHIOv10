@@ -45,7 +45,7 @@ test.describe('accessibility (axe-core, WCAG 2.2 A/AA + best practice)', () => {
     await form.getByLabel('Budget range').selectOption('100k_250k');
     await form.getByLabel('When would you like to start?').selectOption('asap');
     await form.getByRole('button', { name: 'Next' }).click();
-    await form.getByRole('button', { name: 'Send request' }).click();
+    await form.getByRole('button', { name: 'Send me a quote' }).click();
     await expectAccessible(page, 'contact step 3 with errors');
   });
 
