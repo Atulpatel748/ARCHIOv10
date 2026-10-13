@@ -379,8 +379,8 @@
 }
 
 /* We do: type only. "We" and "do" sit left and right, large and in the muted ink, with the category names centred
-   between them and the one button under the names. Where scroll-driven animations exist the section is a pinned
-   screen (see the @supports block): the words start together in the middle and draw out to the edges. */
+   between them and the one button under the names. While the scroll sequence runs (useScrollSequence, below) the
+   section is a pinned screen: the words start together in the middle and draw out to the edges. */
 .do-type {
   position: relative;
 }
@@ -471,79 +471,55 @@
 /* The section scrolls up from the bottom of the screen like any other, with "we do" together at the middle. Once its
    stage touches the header it pins, and the scroll plays one step after another: "we" moves out to the left and "do"
    to the right, the words fade back, the names come up from below one by one, each easing in over a long stretch and
-   overlapping the one before, until they stand together in a line, and the button appears last. Only where scroll-driven animations exist and motion is welcome; elsewhere one screen
-   with everything in place. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .do-type {
-      --pin: calc(100svh - var(--header-h)); /* where the pinned scroll starts, in cover offsets */
-      view-timeline: --do-type block;
-      height: calc(240svh - var(--header-h) - var(--border-thin));
-    }
-
-    .do-type__stage {
-      position: sticky;
-      top: var(--header-h);
-    }
-
-    .do-type__big {
-      opacity: 1;
-      color: var(--color-ink);
-    }
-
-    .do-type__word,
-    .do-type__list li,
-    .do-type__button {
-      animation: linear both;
-      animation-timeline: --do-type;
-    }
-
-    /* 0 to 66svh of the pinned scroll: the words move out (first 45svh), then fade back */
-    .do-type__word {
-      animation-name: do-type-out;
-      animation-range: cover var(--pin) cover calc(var(--pin) + 66svh);
-    }
-
-    .do-type__word--start {
-      --travel: calc(50cqw - 100% - 0.05em);
-    }
-
-    .do-type__word--end {
-      --travel: calc(100% + 0.05em - 50cqw);
-    }
-
-    /* from 56svh: each name comes up over 40svh, 6svh after the one before it, so they overlap and flow */
-    .do-type__list li {
-      animation-name: do-type-come;
-      animation-timing-function: var(--ease-out);
-      animation-range:
-        cover calc(var(--pin) + 56svh + var(--i) * 6svh)
-        cover calc(var(--pin) + 96svh + var(--i) * 6svh);
-    }
-
-    .do-type__button {
-      animation-name: do-type-button;
-      animation-range: cover calc(var(--pin) + 114svh) cover calc(var(--pin) + 132svh);
-    }
-  }
+   overlapping the one before, until they stand together in a line, and the button appears last.
+   useScrollSequence sets --seq on the section, the scroll distance in svh since the stage touched the header, and
+   every step below is a function of it, so the sequence plays the same in every browser. Without it (reduced motion,
+   no script) there is no data-seq and the section is one screen with everything in place. */
+.do-type[data-seq] {
+  height: calc(240svh - var(--header-h) - var(--border-thin));
 }
 
-/* The words wait together, each with its inner edge on the middle line a hair apart from the other. */
-@keyframes do-type-out {
-  0% { opacity: 1; transform: translateX(var(--travel)); animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1); }
-  68% { opacity: 1; transform: none; }
-  100% { opacity: 0.6; transform: none; }
+.do-type[data-seq] .do-type__stage {
+  position: sticky;
+  top: var(--header-h);
 }
 
-/* A name rises from below its place while it fades in, and settles softly. */
-@keyframes do-type-come {
-  from { opacity: 0; transform: translateY(28svh); }
-  to { opacity: 1; transform: none; }
+.do-type[data-seq] .do-type__big {
+  opacity: 1;
+  color: var(--color-ink);
 }
 
-@keyframes do-type-button {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: none; }
+/* 0 to 45svh: the words move out, easing at both ends. 45 to 66svh: they fade back. */
+.do-type[data-seq] .do-type__word {
+  --move: clamp(0, calc(var(--seq, 0) / 45), 1);
+  --eased: calc(var(--move) * var(--move) * (3 - 2 * var(--move)));
+  --fade: clamp(0, calc((var(--seq, 0) - 45) / 21), 1);
+  transform: translateX(calc((1 - var(--eased)) * var(--travel)));
+  opacity: calc(1 - 0.4 * var(--fade));
+}
+
+/* Each word starts with its inner edge on the middle line, a hair apart from the other. */
+.do-type[data-seq] .do-type__word--start {
+  --travel: calc(50cqw - 100% - 0.05em);
+}
+
+.do-type[data-seq] .do-type__word--end {
+  --travel: calc(100% + 0.05em - 50cqw);
+}
+
+/* From 56svh each name rises from below its place over 40svh while it fades in, 6svh after the one before it, and
+   settles softly (the last fifth of the rise is the slow part). */
+.do-type[data-seq] .do-type__list li {
+  --come: clamp(0, calc((var(--seq, 0) - 56 - var(--i, 0) * 6) / 40), 1);
+  --rest: calc(1 - var(--come));
+  --rise: calc(1 - var(--rest) * var(--rest) * var(--rest) * var(--rest) * var(--rest));
+  opacity: var(--rise);
+  transform: translateY(calc((1 - var(--rise)) * 28svh));
+}
+
+/* From 114svh the button fades in, last. */
+.do-type[data-seq] .do-type__button {
+  opacity: clamp(0, calc((var(--seq, 0) - 114) / 18), 1);
 }
 
 /* The featured project the We do sequence hands over to: the name on the left and a large photo on the right from

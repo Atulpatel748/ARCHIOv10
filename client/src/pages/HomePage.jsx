@@ -12,6 +12,7 @@ import { ROUTES } from '../constants/routes.js';
 import { SITE } from '../constants/site.js';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll.js';
 import { useRevealItems } from '../hooks/useRevealItems.js';
+import { useScrollSequence } from '../hooks/useScrollSequence.js';
 import { PROJECTS, featuredProjects, getProject } from '../services/projects.js';
 import { formatProjectLocation } from '../utils/format.js';
 import Picture from '../components/common/Picture.jsx';
@@ -40,6 +41,7 @@ export default function HomePage() {
   const processReveal = useRevealOnScroll();
   const featuredItems = useRevealItems();
   const processItems = useRevealItems();
+  const doSequence = useScrollSequence();
 
   return (
     <>
@@ -105,8 +107,8 @@ export default function HomePage() {
       </section>
 
       {/* We do: type only. "We" and "do" start together in the middle of a pinned screen, then draw out to the left and
-          right edges while the category names gather between them (CSS scroll-driven, transform and opacity only). */}
-      <section className="do-type section--ruled section--soft" aria-labelledby="do-title">
+          right edges while the category names gather between them (driven by scroll, transform and opacity only). */}
+      <section ref={doSequence} className="do-type section--ruled section--soft" aria-labelledby="do-title">
         <div className="do-type__stage">
           <h2 id="do-title" className="do-type__big">
             <span className="do-type__word do-type__word--start">We</span> <span className="do-type__word do-type__word--end">do</span>
