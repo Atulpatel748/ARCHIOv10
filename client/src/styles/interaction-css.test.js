@@ -51,6 +51,11 @@ describe('interaction CSS', () => {
     expect(block).toMatch(/\.site-footer a[^}]*min-height: 44px/s);
   });
 
+  it('grows the compact chips and small buttons to 44px on touch screens', () => {
+    const components = readFileSync(join(dir, 'components.css'), 'utf8');
+    expect(components).toMatch(/@media \(pointer: coarse\) \{\s*\.chip,\s*\.btn--sm \{\s*min-height: 44px/);
+  });
+
   it('uses a strong ease-out curve and releases will-change after a reveal', () => {
     const tokens = readFileSync(join(dir, 'tokens.css'), 'utf8');
     expect(tokens).toContain('--ease-out: cubic-bezier(0.23, 1, 0.32, 1)');
