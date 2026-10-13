@@ -40,12 +40,11 @@
   }
 }
 
+/* Category, name and place always stack, so a short name never jumps up beside the category. */
 .project-card__body {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-1) var(--space-4);
+  display: grid;
+  justify-items: start;
+  gap: var(--space-1);
   padding-top: var(--space-3);
 }
 
@@ -121,12 +120,8 @@
 
 .project-row__name {
   margin-block: var(--space-1);
-  font-family: var(--font-serif);
   font-size: var(--type-h2);
-  font-weight: 400;
   line-height: var(--leading-tight);
-  letter-spacing: 0.015em;
-  text-transform: uppercase;
   transition: color var(--duration-fast);
 }
 
@@ -279,6 +274,15 @@
   text-transform: uppercase;
   text-decoration: none;
   transition: color var(--duration-fast);
+}
+
+/* On a touch screen each name is a comfortable target (44px) even where the type is small. */
+@media (pointer: coarse) {
+  .do-row {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
 }
 
 .do-row:focus-visible {
@@ -439,11 +443,6 @@
   justify-items: start;
 }
 
-.team-card h3 {
-  font-family: var(--font-serif);
-  font-weight: 400; /* Marcellus has one weight */
-}
-
 .team-card__photo {
   width: 100%;
   aspect-ratio: 1;
@@ -540,19 +539,16 @@
   padding-top: calc(var(--header-h) + var(--space-6));
   padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
   color: var(--color-inverse);
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.14) 20%, rgba(0, 0, 0, 0.3) 48%, rgba(0, 0, 0, 0.68) 84%, rgba(0, 0, 0, 0.9));
+  /* Deep at the top as well as the foot: the clear header's cream links sit over the photo's brightest parts. */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.62) 8%, rgba(0, 0, 0, 0.18) 26%, rgba(0, 0, 0, 0.14) 36%, rgba(0, 0, 0, 0.3) 52%, rgba(0, 0, 0, 0.68) 84%, rgba(0, 0, 0, 0.9));
 }
 
 .project-hero__title {
   display: block;
   margin: 0;
   max-width: 100%;
-  font-family: var(--font-sans);
   font-size: var(--type-h1);
-  font-weight: 600;
-  line-height: 0.9;
-  letter-spacing: var(--tracking-heading);
-  text-transform: uppercase;
+  line-height: var(--leading-tight);
 }
 
 .project-hero__line {

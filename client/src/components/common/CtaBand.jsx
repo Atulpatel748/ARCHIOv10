@@ -18,7 +18,7 @@ export default function CtaBand({ title = CALL_TO_ACTION.title, children = CALL_
     <section className="cta-band" aria-labelledby="cta-title">
       <div className="container cta-band__inner">
         <p className="eyebrow t-label cta-band__eyebrow">{CALL_TO_ACTION.eyebrow}</p>
-        <h2 id="cta-title" className="t-h1 t-serif cta-band__title">
+        <h2 id="cta-title" className="t-h2 cta-band__title">
           {title.slice(0, lastSpace + 1)}<span className="cta-band__accent">{title.slice(lastSpace + 1)}</span>
         </h2>
         <div className="cta-band__aside">

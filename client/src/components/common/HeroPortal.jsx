@@ -43,14 +43,16 @@ export default function HeroPortal({ projects }) {
   const descriptorRef = useRef(null);
   const wordmarkRef = useRef(null);
 
+  // The hero fills the screen, so ask for a photo as wide as the screen is in device pixels (the largest size made, at most).
+  const [wantedWidth] = useState(() => Math.round(window.innerWidth * (window.devicePixelRatio || 1)));
   // The AVIF twin of each photo is a fraction of the JPEG's size; WebGL can read either. A browser that cannot decode
   // AVIF falls back to the JPEG.
   const items = useMemo(
     () => slides.map((project) => {
-      const avif = modernImageUrl(project.coverImage.url);
+      const avif = modernImageUrl(project.coverImage.url, wantedWidth);
       return { src: avif ?? project.coverImage.url, fallbackSrc: avif ? project.coverImage.url : undefined, alt: project.coverImage.alt };
     }),
-    [slides],
+    [slides, wantedWidth],
   );
 
   // With no photos to wait for (no featured projects) the preloader has nothing left to hold for.

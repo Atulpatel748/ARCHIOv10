@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { modernImageUrl } from '../utils/images.js';
+import { modernImageUrl, modernSrcSet } from '../utils/images.js';
 import { HERO_IMAGE } from './site.js';
 
 const fromClient = (path) => join(import.meta.dirname, '../..', path);
@@ -11,6 +11,10 @@ describe('hero image', () => {
     const gate = readFileSync(fromClient('public/preloader-gate.js'), 'utf8');
     expect(gate).toContain(`link.href = '${modernImageUrl(HERO_IMAGE)}'`);
     expect(readFileSync(fromClient('index.html'), 'utf8')).not.toContain('rel="preload" as="image"'); // a static tag would load it on every page
+  });
+
+  it('has a single size, which is what the home page preloads (several sizes need the preload in preloader-gate.js to name them)', () => {
+    expect(modernSrcSet(HERO_IMAGE)).toBeNull();
   });
 
   it('exists in the public folder, in both formats', () => {

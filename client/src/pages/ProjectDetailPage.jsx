@@ -87,6 +87,7 @@ function ProjectDetail({ project, related }) {
           alt={project.coverImage.alt}
           width="1600"
           height="1200"
+          sizes="100vw"
           loading="eager"
           fetchPriority="high"
         />
@@ -122,7 +123,7 @@ function ProjectDetail({ project, related }) {
           <div ref={galleryItems} className="gallery">
             {project.gallery.map((image) => (
               <figure key={image.url}>
-                <Picture src={image.url} alt={image.alt} width="1600" height="1200" loading="lazy" decoding="async" />
+                <Picture src={image.url} alt={image.alt} width="1600" height="1200" sizes="(min-width: 1024px) 58vw, 100vw" loading="lazy" decoding="async" />
               </figure>
             ))}
           </div>

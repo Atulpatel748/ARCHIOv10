@@ -14,6 +14,7 @@ export default function ProjectCard({ project, priority = false }) {
             alt=""
             width="1600"
             height="1200"
+            sizes="(min-width: 1024px) 34vw, (min-width: 640px) 50vw, 100vw"
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
           />

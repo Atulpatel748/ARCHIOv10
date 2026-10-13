@@ -212,8 +212,9 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   display: block;
   padding-block: var(--space-2);
   border-bottom: var(--border-thin) solid var(--color-border);
+  font-family: var(--font-serif);
   font-size: clamp(2rem, 9vw, 3.5rem);
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.05;
   letter-spacing: var(--tracking-heading);
   text-decoration: none;
@@ -294,6 +295,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
 
 .footer-col h2 {
   margin-bottom: var(--space-3);
+  font-family: var(--font-sans); /* a small label, not a display heading */
   color: rgba(246, 239, 226, 0.72);
   font-size: var(--type-caption);
   font-weight: 500;

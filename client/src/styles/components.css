@@ -166,6 +166,15 @@
   border: var(--border-thin) solid var(--color-ink);
   border-radius: var(--radius-none);
   background: var(--color-surface-strong);
+  caret-color: var(--color-accent);
+}
+
+/* The browser's own placeholder grey is 4.1:1 on these fields; the muted ink is above 5:1 and still reads as lighter than
+   typed text. */
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
 }
 
 .textarea {

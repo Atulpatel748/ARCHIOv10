@@ -56,7 +56,7 @@ export default function HomePage() {
         <div className="split split--divided">
           <div className="stack">
             <p className="eyebrow t-label">{APPROACH.eyebrow}</p>
-            <WordReveal as="h2" id="process-title" text={APPROACH.heading} className="t-h2 t-serif" />
+            <WordReveal as="h2" id="process-title" text={APPROACH.heading} className="t-h2" />
             <p className="t-lead">{APPROACH.principle}</p>
             <p>{APPROACH.intro}</p>
             <Link className="link link--quiet" to={ROUTES.services}>View our services <ArrowIcon /></Link>
@@ -77,7 +77,7 @@ export default function HomePage() {
 
       <section ref={featuredReveal} className="screen screen--center home-featured section container section--ruled section--soft reveal-section" aria-labelledby="featured-title">
         <div className="section__head section__head--stacked">
-          <h2 id="featured-title" className="t-h2 t-serif">Selected projects</h2>
+          <h2 id="featured-title" className="t-h2">Selected projects</h2>
           <Link className="link link--quiet" to={ROUTES.projects}>View all projects <ArrowIcon /></Link>
         </div>
         {FEATURED.length === 0 ? (
@@ -88,7 +88,7 @@ export default function HomePage() {
               <li key={project.slug}>
                 <Link className="project-row" to={ROUTES.project(project.slug)}>
                   <span className="project-row__media">
-                    <Picture src={project.coverImage.url} alt="" width="1600" height="1200" loading="lazy" decoding="async" />
+                    <Picture src={project.coverImage.url} alt="" width="1600" height="1200" sizes="(min-width: 1024px) 58vw, (min-width: 768px) 50vw, 86vw" loading="lazy" decoding="async" />
                   </span>
                   <span className="project-row__text">
                     <span className="project-row__meta t-label">

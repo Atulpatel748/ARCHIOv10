@@ -33,7 +33,7 @@ export default function AboutPage() {
         </section>
       </div>
 
-      <section ref={teamReveal} className="screen screen--center container section section--ruled reveal-section" aria-labelledby="team-title">
+      <section ref={teamReveal} className="screen screen--center screen--compact container section section--ruled reveal-section" aria-labelledby="team-title">
         <h2 id="team-title" className="t-h2 section__head">Our team</h2>
         <ul className="team-grid">
           {TEAM.map((person) => (
@@ -53,7 +53,7 @@ export default function AboutPage() {
         </ul>
       </section>
 
-      <section ref={visionReveal} className="screen screen--center container section section--ruled reveal-section" aria-label="Vision and mission">
+      <section ref={visionReveal} className="screen screen--center screen--compact container section section--ruled reveal-section" aria-label="Vision and mission">
         <div className="pair">
           {VISION_MISSION.map((block) => (
             <div key={block.title} className="stack">
@@ -66,7 +66,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section ref={whyReveal} className="screen screen--center container section section--ruled reveal-section" aria-labelledby="why-title">
+      <section ref={whyReveal} className="screen screen--center screen--compact container section section--ruled reveal-section" aria-labelledby="why-title">
         <div className="split">
           <div className="stack">
             <h2 id="why-title" className="t-h2">Why choose us</h2>
@@ -83,7 +83,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section ref={philosophyReveal} className="screen screen--center container section section--ruled reveal-section" aria-labelledby="philosophy-title">
+      <section ref={philosophyReveal} className="screen screen--center screen--compact container section section--ruled reveal-section" aria-labelledby="philosophy-title">
         <div className="split">
           <h2 id="philosophy-title" className="t-h2">Our philosophy</h2>
           <div className="stack">

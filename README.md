@@ -46,18 +46,21 @@ kit's primary font is Optima, which needs a paid web licence (Monotype). Once it
 
 **Home page speed.** Three things make the home page load faster, and each is measured (Lighthouse, mobile).
 The home page ships in the main script instead of a separate download. The portfolio is built into the site, so no page waits for a request. The hero
-image is preloaded from `client/index.html`. That last hint applies to every page, which costs a page someone
-lands on directly (for example `/contact`) about 4 Lighthouse points; delete the `<link rel="preload">` line
-(and the test that expects it) if you would rather not pay that. Always audit a production build
+image is preloaded on the home page only, by `client/public/preloader-gate.js`, so no other page pays for it. Always audit a production build
 (`npm run build`, then `npm run preview -w client`), never `npm run dev`, which scores far lower.
 
 **Photos are served as AVIF.** Every photo in `client/public/images` exists twice: the `.jpg` you supplied and a
 `.avif` made from it, about 70 percent smaller. `components/common/Picture.jsx` offers the AVIF first and keeps the
 JPEG as the fallback. In a local Lighthouse run this cut the home page from 518 KiB to 319 KiB; it is the fix
-aimed at Lighthouse's "Improve image delivery" opportunity (re-run Lighthouse on a production build to confirm). The hero preload in `client/index.html` therefore names the `.avif`.
+aimed at Lighthouse's "Improve image delivery" opportunity (re-run Lighthouse on a production build to confirm). The hero preload therefore names the `.avif`.
 
 *Adding photos.* Put the `.jpg` in the right folder, then run `npm run images`. It only converts what is new or
-changed (`-- --force` redoes everything). A test fails if any `.jpg` is missing its `.avif`, so this cannot be
+changed (`-- --force` redoes everything). **Supply the largest original you have**: the supplied photos are 707 to 800px
+wide, which is soft on large and high-density screens (a phone shows each photo at about 1100 device pixels, the home
+hero at up to 2.7 times its size). For a photo wider than 800px the script also writes smaller steps
+(`NN-800.avif`, `-1200`, `-1600`, `-2400`, never an enlarged copy) and lists them in `client/src/generated/image-widths.json`;
+`Picture` then offers them as a `srcset` and the hero asks for a size as wide as the screen. Aim for 2400px on the hero
+covers and 1600px on gallery photos. When a hero photo gets several sizes, a test reminds you to update the hero preload. A test fails if any `.jpg` is missing its `.avif`, so this cannot be
 forgotten. Quality is the `QUALITY` constant in `client/scripts/make-avif.mjs` (50: smaller files, very slightly
 softer fine texture; raise it towards 65 for more detail). A photo given as an outside web address in the data file
 has no AVIF twin and are shown as they are. Your web server must send `.avif` as `image/avif`. An end-to-end test checks this

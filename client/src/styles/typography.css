@@ -1,6 +1,8 @@
+/* One display voice: every heading is set in the display face (Marcellus has one weight), in capitals. */
 h1, h2, h3, .t-display, .t-h1, .t-h2, .t-h3, .statement, .state__title {
   text-wrap: balance;
-  font-weight: 500;
+  font-family: var(--font-serif);
+  font-weight: 400;
   letter-spacing: var(--tracking-heading);
   text-transform: uppercase;
   overflow-wrap: break-word;
@@ -24,7 +26,6 @@ h2, .t-h2 {
 h3, .t-h3 {
   font-size: var(--type-h3);
   line-height: 1.2;
-  letter-spacing: -0.01em;
 }
 
 .t-lead {
@@ -66,26 +67,7 @@ h3, .t-h3 {
 .statement {
   max-width: 24ch;
   font-size: var(--type-h2);
-  font-weight: 500;
-  line-height: 1.04;
-  letter-spacing: var(--tracking-heading);
-  text-transform: uppercase;
-}
-
-/* Display headings (home page sections and the call-to-action band), in the display font. */
-.t-serif {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  letter-spacing: 0.015em;
-  line-height: 1.08;
-}
-
-.t-h2.t-serif {
-  font-size: calc(var(--type-h2) * 1.1);
-}
-
-.t-h1.t-serif {
-  font-size: calc(var(--type-h1) * 0.8);
+  line-height: var(--leading-heading);
 }
 
 .prose {

@@ -1,6 +1,8 @@
 import { readdirSync, statSync } from 'node:fs';
+import sharp from 'sharp';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import widths from '../generated/image-widths.json';
 import { modernImageUrl } from './images.js';
 
 describe('modernImageUrl', () => {
@@ -40,6 +42,28 @@ describe('photos on disk', () => {
         continue;
       }
       if (avifSize >= statSync(jpg).size) problems.push(`not smaller than the JPEG: ${avif.replace(root, '')}`);
+    }
+    expect(problems).toEqual([]);
+  });
+
+  it('lists in src/generated/image-widths.json the sizes that exist for every photo (run `npm run images` if this fails)', async () => {
+    const problems = [];
+    for (const jpg of jpegs) {
+      const url = `/images${jpg.slice(root.length).replaceAll('\\', '/')}`;
+      const steps = widths[url];
+      if (!steps) {
+        problems.push(`not listed: ${url}`);
+        continue;
+      }
+      const { width } = await sharp(jpg).metadata();
+      if (steps.at(-1) !== width) problems.push(`${url}: listed up to ${steps.at(-1)}, the photo is ${width} wide`);
+      for (const step of steps.slice(0, -1)) {
+        try {
+          statSync(jpg.replace(/\.jpg$/, `-${step}.avif`));
+        } catch {
+          problems.push(`missing ${url} at ${step}`);
+        }
+      }
     }
     expect(problems).toEqual([]);
   });
