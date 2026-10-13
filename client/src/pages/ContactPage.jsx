@@ -3,6 +3,7 @@ import PageHead from '../components/common/PageHead.jsx';
 import Seo from '../components/common/Seo.jsx';
 import { CALL_TO_ACTION } from '../constants/content.js';
 import { ROUTES } from '../constants/routes.js';
+import EmailLink from '../components/common/EmailLink.jsx';
 import { SITE } from '../constants/site.js';
 
 export default function ContactPage() {
@@ -23,7 +24,7 @@ export default function ContactPage() {
                 <p className="t-lead">{CALL_TO_ACTION.text}</p>
                 <dl className="detail-list">
                   <dt>Email</dt>
-                  <dd><a className="link" href={`mailto:${SITE.email}`}>{SITE.email}</a></dd>
+                  <dd><EmailLink className="link" /></dd>
                   <dt>Phone</dt>
                   <dd><a className="link" href={`tel:${SITE.phone.replace(/\s/g, '')}`}>{SITE.phone}</a></dd>
                   <dt>{instagram.label}</dt>

@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import PageHead from '../components/common/PageHead.jsx';
 import Seo from '../components/common/Seo.jsx';
 import { ROUTES } from '../constants/routes.js';
+import EmailLink from '../components/common/EmailLink.jsx';
 import { SITE } from '../constants/site.js';
 
 export default function PrivacyPage() {
@@ -18,7 +19,7 @@ export default function PrivacyPage() {
               <p>
                 {SITE.name} is an interior design studio and a unit of {SITE.parent}. Questions about this notice can be
                 sent to{' '}
-                <a className="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+                <EmailLink className="link" />.
               </p>
             </section>
 
@@ -73,7 +74,7 @@ export default function PrivacyPage() {
               <h2 className="t-h3">Your rights</h2>
               <p>
                 You can ask to see, correct, or delete your personal data at any time by writing to{' '}
-                <a className="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+                <EmailLink className="link" />.
               </p>
             </section>
 

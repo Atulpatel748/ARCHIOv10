@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { NAV_LINKS, SITE } from '../../constants/site.js';
+import EmailLink from '../common/EmailLink.jsx';
 import { ROUTES } from '../../constants/routes.js';
 
 // The wordmark and a line about the studio, then the contact, studio, legal and follow columns (site.css), and the
@@ -17,7 +18,7 @@ export default function Footer() {
         </div>
         <div className="footer-col footer-contact">
           <h2>Contact</h2>
-          <a className="footer-mail" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+          <EmailLink className="footer-mail" />
           <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>
             <svg className="icon-phone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M6.6 3.5h2.9l1.6 4-2 1.6a11.6 11.6 0 0 0 5.8 5.8l1.6-2 4 1.6v2.9a2 2 0 0 1-2.1 2A16.5 16.5 0 0 1 4.6 5.6a2 2 0 0 1 2-2.1Z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />

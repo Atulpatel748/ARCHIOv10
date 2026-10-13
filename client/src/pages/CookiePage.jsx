@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import PageHead from '../components/common/PageHead.jsx';
 import Seo from '../components/common/Seo.jsx';
 import { ROUTES } from '../constants/routes.js';
+import EmailLink from '../components/common/EmailLink.jsx';
 import { SITE } from '../constants/site.js';
 
 export default function CookiePage() {
@@ -38,7 +39,7 @@ export default function CookiePage() {
               <h2 className="t-h3">Contact</h2>
               <p>
                 Questions about this cookie policy can be sent to{' '}
-                <a className="link" href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+                <EmailLink className="link" />.
                 For how we handle your personal data more broadly, see our{' '}
                 <Link className="link" to={ROUTES.privacy}>Privacy notice</Link>.
               </p>

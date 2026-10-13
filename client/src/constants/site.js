@@ -15,7 +15,11 @@ export const SITE = Object.freeze({
   ],
 });
 
-export const NAV_LINKS = Object.freeze([
+// A mailto: link opens whatever mail program the computer has set (often none on a PC), so desktop visitors also get
+// this link, which opens a Gmail compose window addressed to the studio.
+export const GMAIL_COMPOSE_URL = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE.email)}`;
+
+export const NAV_LINKS =Object.freeze([
   { to: '/projects', label: 'Projects' },
   { to: '/services', label: 'Services' },
   { to: '/about', label: 'About' },
