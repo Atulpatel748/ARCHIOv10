@@ -53,9 +53,9 @@
 
   --font-sans: 'Public Sans Variable', 'Public Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   /* Every display heading (page titles, section heads, statements, project and category names, the menu); everything else
-     (body, labels, buttons, navigation) is Public Sans. The brand kit's primary font is Optima: once its web licence
-     is bought, add its @font-face and put 'Optima LT Pro' first here (see README). Marcellus is the free stand-in. */
-  --font-serif: Marcellus, 'Palatino Linotype', Palatino, Georgia, serif;
+     (body, labels, buttons, navigation) is Public Sans. The brand kit's primary font is Optima: it is listed first, so it shows
+     wherever it is installed (Apple devices). Add its @font-face once the web files are in client/public/fonts/ (see README); until then Marcellus is the stand-in. */
+  --font-serif: 'Optima LT Pro', Optima, Marcellus, 'Palatino Linotype', Palatino, Georgia, serif;
   /* Brand kit's third font, for long-form project text (portfolio write-ups). */
   --font-text-serif: 'Lora Variable', Lora, Georgia, 'Times New Roman', serif;
 

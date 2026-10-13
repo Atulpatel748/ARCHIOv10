@@ -26,7 +26,7 @@ export default function AboutPage() {
         <section className="container section--tight" aria-labelledby="about-title">
           <div className="intro">
             <h2 id="about-title" className="statement">{ABOUT.lead}</h2>
-            <div className="prose stack">
+            <div className="prose stack lora">
               {ABOUT.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
           </div>
@@ -58,7 +58,7 @@ export default function AboutPage() {
           {VISION_MISSION.map((block) => (
             <div key={block.title} className="stack">
               <h2 className="t-h2">{block.title}</h2>
-              <div className="prose stack">
+              <div className="prose stack lora">
                 {block.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
               </div>
             </div>
@@ -70,13 +70,13 @@ export default function AboutPage() {
         <div className="split">
           <div className="stack">
             <h2 id="why-title" className="t-h2">Why choose us</h2>
-            <p className="t-lead">{WHY_CHOOSE_US.lead}</p>
+            <p className="t-lead lora">{WHY_CHOOSE_US.lead}</p>
           </div>
           <ol className="toc">
             {WHY_CHOOSE_US.points.map((point, index) => (
               <li key={point} className="toc-row">
                 <span className="toc-row__num">{String(index + 1).padStart(2, '0')}</span>
-                <p>{point}</p>
+                <p className="lora">{point}</p>
               </li>
             ))}
           </ol>
@@ -88,7 +88,7 @@ export default function AboutPage() {
           <h2 id="philosophy-title" className="t-h2">Our philosophy</h2>
           <div className="stack">
             <p className="statement">{PHILOSOPHY.lead}</p>
-            <div className="prose stack">
+            <div className="prose stack lora">
               {PHILOSOPHY.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             </div>
           </div>

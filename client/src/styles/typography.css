@@ -156,7 +156,8 @@ button:focus-visible > .roll > span {
   }
 }
 
-/* Project descriptions (the lead summary and the body paragraphs) are set in Lora, the brand kit's font for write-ups. */
+/* Lora is the brand kit's font for write-ups: project descriptions and the About page paragraphs. */
+.lora,
 .project-copy {
   font-family: var(--font-text-serif);
 }
