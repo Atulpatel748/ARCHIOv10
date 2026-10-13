@@ -43,9 +43,13 @@ export default function HeroPortal({ projects }) {
   const descriptorRef = useRef(null);
   const wordmarkRef = useRef(null);
 
-  // The AVIF twin of each photo is a fraction of the JPEG's size; WebGL can read either.
+  // The AVIF twin of each photo is a fraction of the JPEG's size; WebGL can read either. A browser that cannot decode
+  // AVIF falls back to the JPEG.
   const items = useMemo(
-    () => slides.map((project) => ({ src: modernImageUrl(project.coverImage.url) ?? project.coverImage.url, alt: project.coverImage.alt })),
+    () => slides.map((project) => {
+      const avif = modernImageUrl(project.coverImage.url);
+      return { src: avif ?? project.coverImage.url, fallbackSrc: avif ? project.coverImage.url : undefined, alt: project.coverImage.alt };
+    }),
     [slides],
   );
 

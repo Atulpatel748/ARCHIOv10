@@ -43,7 +43,9 @@ describe('HeroPortal', () => {
     preloaderPainted();
     const { container } = renderWithProviders(<HeroPortal projects={PROJECTS} />);
     const first = container.querySelector('.mg__img');
-    expect(first).toHaveAttribute('src', '/images/projects/a/01.avif');
+    // The AVIF twin first, for browsers that can read it; the JPEG for the ones that cannot.
+    expect(first.closest('picture').querySelector('source')).toHaveAttribute('srcset', '/images/projects/a/01.avif');
+    expect(first).toHaveAttribute('src', '/images/projects/a/01.jpg');
     act(() => vi.advanceTimersByTime(1000));
     expect(curtain).not.toHaveClass('is-hidden'); // still waiting for the photo
     fireEvent.load(first);

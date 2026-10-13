@@ -76,7 +76,7 @@ test.describe('public site', () => {
     await expect(page.getByLabel('Search projects')).toHaveAttribute('placeholder', /\u2026$/); // ends with an ellipsis, as a hint
     await page.getByRole('button', { name: 'Landscape' }).click();
     await expect(page).toHaveURL(/category=landscape/);
-    await expect(page.getByRole('link', { name: /arabian ranches 2 landscape/i })).toBeVisible();
+    await expect(page.getByRole('link', { name: /arabian ranches 2/i })).toBeVisible();
     await expect(page.getByRole('link', { name: /dubai marina residence/i })).toHaveCount(0);
 
     await page.getByRole('button', { name: 'All' }).click();
@@ -166,6 +166,14 @@ test.describe('public site', () => {
     await expect(page.locator('.do-type').getByRole('link', { name: 'View all projects' })).toHaveAttribute('href', '/projects');
     await rows.nth(2).click();
     await expect(page).toHaveURL(/category=landscape/);
+  });
+
+  test('"We do" shows its finished screen when a keyboard user tabs into the names, wherever the scroll is', async ({ page }) => {
+    await page.goto('/');
+    const first = page.locator('.do-type__list li').first();
+    await first.getByRole('link').focus();
+    await expect(first).toHaveCSS('opacity', '1');
+    await expect(page.locator('.do-type').getByRole('link', { name: 'View all projects' })).toHaveCSS('opacity', '1');
   });
 
   test('home page makes no API request, and downloads the first hero photo exactly once', async ({ page }) => {
@@ -497,7 +505,7 @@ test.describe('public site', () => {
     await expect(page.getByRole('img', { name: 'Portrait of Pooja Vijayakumar' })).toBeVisible();
     await expect(page.getByText('Co-Founder, Strategy & Growth')).toBeVisible();
     await expect(page.locator('.footer-follow').getByRole('link', { name: 'Instagram' })).toBeVisible();
-    await expect(page.locator('.footer-contact').getByRole('link', { name: /971 55 654 1410/ }).locator('.icon-whatsapp')).toBeVisible();
+    await expect(page.locator('.footer-contact').getByRole('link', { name: /971 55 654 1410/ }).locator('.icon-phone')).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Legal' }).getByRole('link', { name: 'Privacy notice' })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Legal' }).getByRole('link', { name: 'Terms of service' })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Legal' }).getByRole('link', { name: 'Cookie policy' })).toBeVisible();

@@ -129,7 +129,9 @@ h3, .t-h3 {
 
 /* Small, muted text link with an arrow, like "View projects" in the "What we do" rows. */
 .link--quiet {
-  display: inline-block; /* inline links ignore the margin .stack puts between items */
+  display: inline-flex; /* inline links ignore the margin .stack puts between items */
+  align-items: center;
+  min-height: 24px; /* a comfortable target (WCAG 2.5.8) */
   font-size: var(--type-small);
   color: var(--color-muted);
   white-space: nowrap;

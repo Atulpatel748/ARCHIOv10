@@ -22,15 +22,15 @@ export default function AboutPage() {
         path={ROUTES.about}
       />
       <div className="screen">
-      <PageHead title="About" display />
-      <section className="container section--tight" aria-labelledby="about-title">
-        <div className="intro">
-          <h2 id="about-title" className="statement">{ABOUT.lead}</h2>
-          <div className="prose stack">
-            {ABOUT.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        <PageHead title="About" display />
+        <section className="container section--tight" aria-labelledby="about-title">
+          <div className="intro">
+            <h2 id="about-title" className="statement">{ABOUT.lead}</h2>
+            <div className="prose stack">
+              {ABOUT.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
       </div>
 
       <section ref={teamReveal} className="screen screen--center container section section--ruled reveal-section" aria-labelledby="team-title">

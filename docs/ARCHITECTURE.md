@@ -13,7 +13,7 @@ informed approximations.
 | Navigation links with a rolling-text hover (labels repeated in the DOM) | `RollText`: one visible label plus a decorative duplicate, hidden from assistive tech |
 | Full-screen hero with project slideshow and caption | `HeroPortal`: a full-screen WebGL photo gallery (`morph-gallery.tsx`) behind a clear header; the brand kit's ARCHIÓ wordmark with the studio descriptor under it between two thin rules, the featured-project block and a pause button sit on top |
 | Uppercase statement block with a "read more" link | `.statement` + link to About |
-| "We do" category list | Type only: the category names as links between a large "We" / "do", drawn apart by a CSS scroll-driven animation |
+| "We do" category list | Type only: the category names as links between a large "We" / "do", pinned while the scroll draws them apart and brings the names up one by one (`useScrollSequence` writes the scroll distance into `--seq`; the CSS derives each step from it) |
 | Table-of-contents style list with right-aligned numbers | Process list (number, title, duration) |
 | Projects page: title, discipline/category chips, location filter, 2/4 per-row toggle, bottom CTA | Category chips, literal search, 2/4 density toggle, pagination, CTA band |
 | Services page: list with "learn more" per service | One services page listing every service (no per-service pages) |
@@ -79,10 +79,10 @@ in the browser and sent to Web3Forms. Whoever can push to the repository control
 
 ## 6. Testing strategy
 
-Shared schema and portfolio-data tests, client unit and component tests (including the contact-form function and the
+Shared schema and portfolio-data tests, client unit and component tests (including the contact-form service and the
 sitemap), and Playwright end-to-end and accessibility specs run against the production build in desktop and phone
 viewports.
 
 ## 7. Deployment
 
-Vercel: static files from `client/dist` on its CDN, and the one function from `client/api`. See README.
+Vercel: static files from `client/dist` on its CDN; there is no server code. See README.

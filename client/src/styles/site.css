@@ -313,13 +313,15 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
 
 /* The email is the footer's one large line: the display font, kept lowercase as an address reads. */
 .footer-mail {
+  display: inline-block;
+  min-height: 24px; /* a comfortable target (WCAG 2.5.8) even where the address is a single line */
   font-family: var(--font-serif);
   font-size: var(--type-h3);
   line-height: 1.2;
   overflow-wrap: anywhere;
 }
 
-.icon-whatsapp {
+.icon-phone {
   display: inline-block; /* base.css makes every svg block, which put the icon on its own line */
   width: 1em;
   height: 1em;

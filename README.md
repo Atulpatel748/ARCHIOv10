@@ -1,7 +1,7 @@
 # Archió
 
 Website for Archió, an interior design studio in Dubai (a unit of Beracah Trading), built
-as a static React 19 site (Vite) hosted on Vercel, plus one serverless function for the contact form. Its structure,
+as a static React 19 site (Vite) hosted on Vercel; the contact form posts straight to Web3Forms, so there is no server code. Its structure,
 typography and interaction patterns are derived from the layout of the reference site (`yodezeen.com`). The
 copy, team, contact details and project images come from the Archió company profile.
 
@@ -114,12 +114,12 @@ one it shows its error message.
 
 ## Environment variables
 
-`VITE_*` variables and `WEB3FORMS_ACCESS_KEY` are **public** (they ship to the browser and are fixed at build time). On Vercel set it under
+`VITE_*` variables and the Web3Forms key are **public** (they ship to the browser and are fixed at build time). On Vercel set it under
 Project Settings > Environment Variables, then redeploy.
 
 | Variable | Purpose |
 | --- | --- |
-| `WEB3FORMS_ACCESS_KEY` | Web3Forms access key for the studio inbox (**required**, replace the `YOUR_WEB3FORMS_ACCESS_KEY` placeholder). Public by design; restrict it to the site's domain in the Web3Forms dashboard |
+| `WEB3FORMS_ACCESS_KEY` (or `VITE_WEB3FORMS_ACCESS_KEY`, both are read) | Web3Forms access key for the studio inbox (**required**, replace the `YOUR_WEB3FORMS_ACCESS_KEY` placeholder; without a real key the form tells visitors to email instead). Public by design; restrict it to the site's domain in the Web3Forms dashboard |
 | `VITE_SITE_URL` | Public: canonical site URL |
 | `NGROK_HOST` | Optional: lets the dev server answer on an ngrok tunnel |
 
@@ -127,11 +127,11 @@ Project Settings > Environment Variables, then redeploy.
 
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | The site in development on :5173 (no contact-form function, see above) |
+| `npm run dev` | The site in development on :5173 |
 | `npm run build` | Production build into `client/dist`, including `sitemap.xml` |
 | `npm run preview` | Serve that build on :4173 |
-| `npm test` | Unit tests for shared and client (including the contact-form function) |
-| `npm run test:e2e` | Playwright against the production build (run `npm run build` first) |
+| `npm test` | Unit tests for shared and client (including the contact-form service) |
+| `npm run test:e2e` | Playwright against the production build (it builds the site first, with a stand-in form key, and starts the preview server; it reuses one already running on :4173) |
 | `npm run images` | Make a smaller `.avif` next to every photo in `client/public/images` (see "Adding photos") |
 | `npm run audit:deps` | `npm audit` at moderate level |
 
@@ -168,7 +168,7 @@ Browser -> api.web3forms.com -> studio inbox (contact form only)
 1. Import the repository in Vercel with **Root Directory** `client` (the monorepo's `shared/` package is installed
    with it). `client/vercel.json` sets the CSP and security headers and sends every other path to `index.html`.
 2. Set `VITE_SITE_URL` to the public URL (it is used at build time for canonical links, `robots.txt` and the
-   sitemap; a Vercel build without it stops with an error), and `WEB3FORMS_ACCESS_KEY` to the key for the studio
+   sitemap; a Vercel build without it stops with an error), and `WEB3FORMS_ACCESS_KEY` (or `VITE_WEB3FORMS_ACCESS_KEY`) to the key for the studio
    inbox. Restrict the key to the site's domain in the Web3Forms dashboard.
 3. Spam protection is the honeypot field plus Web3Forms' own filtering; turn on its captcha option if spam arrives.
 4. After the first deployment, send a test inquiry and confirm it arrives.
@@ -205,8 +205,12 @@ hover reveals also has a `:focus-visible` twin outside that block so keyboard us
 and pagination dip to `scale(0.97)` while pressed. Scroll-reveal sections (`useRevealOnScroll`) drop their
 classes once the animation ends, so they do not hold a compositing layer afterwards.
 
-Scroll-driven behaviour uses GSAP with ScrollTrigger, and only in one place: the word-by-word reveal of the
-Our Approach heading (`WordReveal`, `lib/gsapLoader.js`). GSAP is loaded with a dynamic `import()` only when that
+Scroll-driven behaviour comes from two places. GSAP with ScrollTrigger drives the word-by-word reveal of the
+Our Approach heading (`WordReveal`, `lib/gsapLoader.js`). The pinned "We do" section on the home page is driven by
+`useScrollSequence`, which writes how far the page has scrolled since the section touched the header into a CSS variable
+(`--seq`, in svh); `styles/pages.css` derives every step from it (words out and faded, names one by one, button last),
+so it plays the same in every browser instead of relying on CSS scroll-driven animations. Under reduced motion it is
+one still screen. GSAP is loaded with a dynamic `import()` only when that
 effect runs, so it sits in its own chunks and is never downloaded in tests or for people who prefer reduced motion.
 The project-detail title overlay puts white text over a photo;
 its dark gradient was set by measuring contrast against the real cover images, so re-check it when a cover photo is replaced.
@@ -240,8 +244,8 @@ ref that also picks up items added later, such as filter results). Each client-s
 
 - There is no admin screen: a new or changed project is an edit to `shared/data/projects.js` and a redeploy. Photos
   either go in `client/public/images` or are hosted elsewhere and given as https:// addresses.
-- `client/index.html` preloads the first featured project's cover. If a different project becomes the first featured one,
-  update the preload and `HERO_IMAGE` (a test keeps them equal), or that early download is wasted.
+- `client/public/preloader-gate.js` preloads the first featured project's cover on the home page. If a different project
+  becomes the first featured one, update the preload and `HERO_IMAGE` (a test keeps them equal), or that early download is wasted.
 - Inquiries exist only in the studio's email, sent by Web3Forms (a third party; the privacy notice does not name it yet,
   which needs the lawyer's sign-off). If sending fails the visitor is told to try again, but nothing keeps a copy.
 - The access key is visible in the site's JavaScript; anyone can send mail to the inbox with it, so keep the domain
@@ -250,7 +254,7 @@ ref that also picks up items added later, such as filter results). Each client-s
   default Open Graph tags from `index.html`.
 - The project photos are 800px wide, so on large screens the hero gallery is soft; it needs higher-resolution
   photos. The reference site's scroll-scrubbed image sequence and rotating globe are not
-  reproduced. The only scroll-driven effect is the heading word reveal described above; there is no pinned or
+  reproduced. The scroll effects are the heading word reveal and the pinned "We do" section described above; there is no
   parallax layout.
 
 ## Design system

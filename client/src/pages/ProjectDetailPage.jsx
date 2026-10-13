@@ -99,23 +99,23 @@ function ProjectDetail({ project, related }) {
         </div>
       </header>
       <div className="screen screen--center">
-      <div id="project-facts" className="container section--tight">
-        <dl className="facts">
-          <div><dt>Location</dt><dd>{formatProjectLocation(project)}</dd></div>
-          {project.year && <div><dt>Year</dt><dd>{project.year}</dd></div>}
-          <div><dt>Area</dt><dd>{formatArea(project.areaSqm)}</dd></div>
-          <div><dt>Category</dt><dd>{labelFor(PROJECT_CATEGORIES, project.category)}</dd></div>
-          {project.style && <div><dt>Style</dt><dd>{labelFor(PROJECT_STYLES, project.style)}</dd></div>}
-        </dl>
-      </div>
-      <div className="container section--tight">
-        <div className="split">
-          <p className="t-lead">{project.summary}</p>
-          <div className="prose">
-            {paragraphs(project.description).map((text, index) => <p key={index}>{text}</p>)}
+        <div id="project-facts" className="container section--tight">
+          <dl className="facts">
+            <div><dt>Location</dt><dd>{formatProjectLocation(project)}</dd></div>
+            {project.year && <div><dt>Year</dt><dd>{project.year}</dd></div>}
+            <div><dt>Area</dt><dd>{formatArea(project.areaSqm)}</dd></div>
+            <div><dt>Category</dt><dd>{labelFor(PROJECT_CATEGORIES, project.category)}</dd></div>
+            {project.style && <div><dt>Style</dt><dd>{labelFor(PROJECT_STYLES, project.style)}</dd></div>}
+          </dl>
+        </div>
+        <div className="container section--tight">
+          <div className="split">
+            <p className="t-lead">{project.summary}</p>
+            <div className="prose">
+              {paragraphs(project.description).map((text, index) => <p key={index}>{text}</p>)}
+            </div>
           </div>
         </div>
-      </div>
       </div>
       {project.gallery.length > 0 && (
         <section ref={galleryReveal} className="screen container section--tight reveal-section" aria-label="Gallery">

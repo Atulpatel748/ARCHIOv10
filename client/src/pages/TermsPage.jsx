@@ -51,17 +51,17 @@ export default function TermsPage() {
         path={ROUTES.terms}
       />
       <div className="screen">
-      <PageHead title="Terms of service" size="md" />
-      <div className="container section--tight">
-        <div className="prose stack--lg">
-          {SECTIONS.map((section) => (
-            <section key={section.title} className="stack--sm">
-              <h2 className="t-h3">{section.title}</h2>
-              <p>{section.text}</p>
-            </section>
-          ))}
+        <PageHead title="Terms of service" size="md" />
+        <div className="container section--tight">
+          <div className="prose stack--lg">
+            {SECTIONS.map((section) => (
+              <section key={section.title} className="stack--sm">
+                <h2 className="t-h3">{section.title}</h2>
+                <p>{section.text}</p>
+              </section>
+            ))}
+          </div>
         </div>
-      </div>
       </div>
     </>
   );

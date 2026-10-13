@@ -20,9 +20,16 @@ export default defineConfig({
     { name: 'desktop', use: { viewport: { width: 1440, height: 900 } } },
     { name: 'mobile', use: { viewport: { width: 390, height: 844 } }, testMatch: /public\.spec\.js|inquiry\.spec\.js/ },
   ],
-  // The built site only: the contact-form function does not run under `vite preview`, so inquiry.spec.js answers
-  // /api/v1/inquiries itself (the function has its own tests in client/api).
+  // The built site only. The contact form posts to Web3Forms, so inquiry.spec.js answers that request itself.
   webServer: process.env.E2E_NO_SERVER
     ? undefined
-    : { command: 'npm run preview -w client -- --port 4173 --strictPort', url: baseURL, reuseExistingServer: true, timeout: 60_000 },
+    : {
+        // Builds first, so the tests always run against the current source, with a stand-in form key (a build without a
+        // real key refuses to send, and the tests answer Web3Forms themselves).
+        command: 'npm run build -w client && npm run preview -w client -- --port 4173 --strictPort',
+        env: { WEB3FORMS_ACCESS_KEY: 'e2e-test-key' },
+        url: baseURL,
+        reuseExistingServer: true,
+        timeout: 120_000,
+      },
 });

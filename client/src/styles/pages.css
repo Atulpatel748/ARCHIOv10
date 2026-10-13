@@ -1,148 +1,3 @@
-/* Home hero: a full-bleed photo with the wordmark set over it. The h1 is first in the document; the intro row is
-   moved above it visually. --hero-h is shared by the photo and the overlay so they always cover the same area. */
-.hero {
-  --hero-h: clamp(520px, calc(100svh - var(--header-h) - 76px), 940px);
-  position: relative;
-}
-
-.hero__overlay {
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: var(--hero-h);
-  padding-block: var(--space-6) var(--space-5);
-  color: var(--color-inverse);
-  /* Darkens the top and bottom edges of the photo so the white text always has enough contrast over it. */
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.68), rgba(0, 0, 0, 0.54) 20%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0) 44%, rgba(0, 0, 0, 0.44) 64%, rgba(0, 0, 0, 0.62) 80%, rgba(0, 0, 0, 0.8));
-  pointer-events: none;
-}
-
-.hero__overlay a {
-  pointer-events: auto;
-}
-
-.hero__top {
-  order: -1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-5);
-}
-
-@media (min-width: 640px) {
-  .hero__cta {
-    display: none;
-  }
-}
-
-.hero__intro {
-  max-width: 36ch;
-  font-size: var(--type-lead);
-  line-height: 1.35;
-}
-
-.hero__wordmark {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 0.04em;
-  overflow: hidden;
-  font-size: min(17.5vw, 18.5rem);
-  font-weight: 600;
-  line-height: 0.8;
-  letter-spacing: -0.04em;
-}
-
-.hero__letter {
-  display: inline-block;
-  transform: translateY(105%);
-  animation: rise 900ms var(--ease-out) forwards;
-}
-
-.hero__letter:nth-child(2) { animation-delay: 70ms; }
-.hero__letter:nth-child(3) { animation-delay: 140ms; }
-.hero__letter:nth-child(4) { animation-delay: 210ms; }
-.hero__letter:nth-child(5) { animation-delay: 280ms; }
-.hero__letter:nth-child(6) { animation-delay: 350ms; }
-
-@keyframes rise {
-  to { transform: none; }
-}
-
-/* Background film: sits over the slider photos, under the overlay scrim, and fades in only once it is playing. */
-.hero__video {
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 0;
-  width: 100%;
-  height: var(--hero-h);
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 1400ms ease;
-  pointer-events: none;
-}
-
-.hero__video[data-ready='true'] {
-  opacity: 1;
-}
-
-.slider__viewport {
-  position: relative;
-  height: var(--hero-h, 70svh);
-  overflow: hidden;
-  background: var(--color-secondary);
-}
-
-.slider__slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity var(--duration-slow) ease;
-}
-
-.slider__slide[data-active='true'] {
-  opacity: 1;
-}
-
-.slider__slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.slider__bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding-block: var(--space-4);
-  border-bottom: var(--border-thin) solid var(--color-border-strong);
-}
-
-.slider__caption {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2) var(--space-5);
-}
-
-.slider__controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.slider__count {
-  min-width: 4ch;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-}
-
 /* Intro */
 .intro {
   display: grid;
@@ -368,16 +223,6 @@
   width: min(100%, 320px);
 }
 
-.density {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .density {
-    display: flex;
-  }
-}
-
 /* We do: type only. "We" and "do" sit left and right, large and in the muted ink, with the category names centred
    between them and the one button under the names. While the scroll sequence runs (useScrollSequence, below) the
    section is a pinned screen: the words start together in the middle and draw out to the edges. */
@@ -522,6 +367,23 @@
   opacity: clamp(0, calc((var(--seq, 0) - 114) / 18), 1);
 }
 
+/* A keyboard user who tabs into the names would otherwise land on something still invisible, wherever the scroll is,
+   so keyboard focus shows the finished screen at once. (:focus-visible, not :focus-within: a mouse press must not move
+   the names from under the pointer.) */
+.do-type[data-seq]:has(.do-row:focus-visible, .do-type__button:focus-visible) .do-type__word {
+  transform: none;
+  opacity: 0.6;
+}
+
+.do-type[data-seq]:has(.do-row:focus-visible, .do-type__button:focus-visible) .do-type__list li {
+  opacity: 1;
+  transform: none;
+}
+
+.do-type[data-seq]:has(.do-row:focus-visible, .do-type__button:focus-visible) .do-type__button {
+  opacity: 1;
+}
+
 /* Contents-style list (process) */
 .toc-row {
   display: grid;
@@ -546,19 +408,9 @@
   color: var(--color-ink);
 }
 
-.toc-row__duration {
-  grid-column: 2;
-  color: var(--color-muted);
-}
-
 @media (min-width: 768px) {
   .toc-row {
-    grid-template-columns: 4rem 1fr auto;
-  }
-
-  .toc-row__duration {
-    grid-column: auto;
-    text-align: right;
+    grid-template-columns: 4rem 1fr;
   }
 }
 

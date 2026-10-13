@@ -19,9 +19,8 @@ export default function Footer() {
           <h2>Contact</h2>
           <a className="footer-mail" href={`mailto:${SITE.email}`}>{SITE.email}</a>
           <a href={`tel:${SITE.phone.replace(/\s/g, '')}`}>
-            <svg className="icon-whatsapp" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M20 11.7a8 8 0 0 1-11.8 7L4 20l1.4-4A8 8 0 1 1 20 11.7Z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
-              <path d="M9 8.2c.2-.4.5-.4.8-.4h.4c.2 0 .3.1.4.4l.7 1.6c.1.2.1.4-.1.6l-.5.6c-.2.2-.2.4 0 .6.5.9 1.2 1.5 2.1 2 .2.1.4.1.6-.1l.7-.8c.2-.2.4-.2.6-.1l1.5.7c.3.1.4.3.4.5 0 .4-.2 1.1-.6 1.4-.4.4-1.1.6-1.8.4-1.1-.3-2.4-1-3.5-2-1.1-1.1-1.8-2.4-2-3.4-.2-.8.1-1.5.3-2Z" fill="currentColor" />
+            <svg className="icon-phone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M6.6 3.5h2.9l1.6 4-2 1.6a11.6 11.6 0 0 0 5.8 5.8l1.6-2 4 1.6v2.9a2 2 0 0 1-2.1 2A16.5 16.5 0 0 1 4.6 5.6a2 2 0 0 1 2-2.1Z" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
             </svg>
             {SITE.phone}
           </a>

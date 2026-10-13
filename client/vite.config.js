@@ -18,6 +18,11 @@ export default defineConfig(({ command, mode }) => {
     throw new Error('Set VITE_SITE_URL (the public https:// address of the site) in the Vercel project settings.');
   }
   const siteUrl = (configuredSiteUrl || 'http://localhost:5173').replace(/\/$/, '');
+  const env = loadEnv(mode, envDir, ['VITE_', 'WEB3FORMS_']);
+  const formKey = env.WEB3FORMS_ACCESS_KEY || env.VITE_WEB3FORMS_ACCESS_KEY || '';
+  if (command === 'build' && (!formKey || formKey.startsWith('YOUR_'))) {
+    console.warn('\n[archio] No Web3Forms access key is set: the contact form in this build tells visitors to email instead. Set WEB3FORMS_ACCESS_KEY (see .env.example).\n');
+  }
   // Vite does not put .env values on process.env for this file, so read the tunnel host explicitly.
   const ngrokHost = loadEnv(mode, envDir, 'NGROK_').NGROK_HOST;
   // Vite also reads NODE_ENV from the shared root .env. "development" there makes `vite build` emit a

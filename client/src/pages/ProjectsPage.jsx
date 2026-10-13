@@ -61,57 +61,57 @@ export default function ProjectsPage() {
         path={ROUTES.projects}
       />
       <div className="screen">
-      <PageHead title="Projects" display />
-      <section className="container section--tight" aria-labelledby="project-list-title">
-        <h2 id="project-list-title" className="visually-hidden">Project list</h2>
-        <div className="filters">
-          <div className="chips" role="group" aria-label="Filter by category">
-            <button type="button" className="chip" aria-pressed={category === ''} onClick={() => update({ category: '', page: '' })}>All</button>
-            {PROJECT_CATEGORIES.map((item) => (
-              <button key={item.value} type="button" className="chip" aria-pressed={category === item.value} onClick={() => update({ category: item.value, page: '' })}>
-                {item.label}
-              </button>
-            ))}
-          </div>
-          <div className="filters__search">
-            <Input
-              label="Search projects"
-              type="search"
-              value={search}
-              maxLength={LIMITS.SEARCH_MAX}
-              placeholder="Try “Marina”…"
-              onChange={(event) => setSearch(event.target.value)}
-            />
-          </div>
-        </div>
-
-        {data.items.length === 0 ? (
-          <EmptyState
-            title="No projects match"
-            action={<Button variant="secondary" onClick={clearFilters}>Clear filters</Button>}
-          >
-            Try a different category or search term.
-          </EmptyState>
-        ) : (
-          <div>
-            <p className="t-small t-muted project-grid-count" role="status">{data.meta.total} {data.meta.total === 1 ? 'project' : 'projects'}</p>
-            {/* Three or four columns, so a short list fills the row instead of leaving room for a card that is not there. */}
-            <div ref={gridItems} className="project-grid project-grid--dense" style={{ '--cols': Math.min(Math.max(data.items.length, 3), 4) }}>
-              {data.items.map((project, index) => (
-                <ProjectCard key={project.slug} project={project} priority={index < 4} />
+        <PageHead title="Projects" display />
+        <section className="container section--tight" aria-labelledby="project-list-title">
+          <h2 id="project-list-title" className="visually-hidden">Project list</h2>
+          <div className="filters">
+            <div className="chips" role="group" aria-label="Filter by category">
+              <button type="button" className="chip" aria-pressed={category === ''} onClick={() => update({ category: '', page: '' })}>All</button>
+              {PROJECT_CATEGORIES.map((item) => (
+                <button key={item.value} type="button" className="chip" aria-pressed={category === item.value} onClick={() => update({ category: item.value, page: '' })}>
+                  {item.label}
+                </button>
               ))}
             </div>
-            <Pagination
-              page={data.meta.page}
-              totalPages={data.meta.totalPages}
-              onPageChange={(next) => {
-                update({ page: next > 1 ? String(next) : '' });
-                window.scrollTo({ top: 0 });
-              }}
-            />
+            <div className="filters__search">
+              <Input
+                label="Search projects"
+                type="search"
+                value={search}
+                maxLength={LIMITS.SEARCH_MAX}
+                placeholder="Try “Marina”…"
+                onChange={(event) => setSearch(event.target.value)}
+              />
+            </div>
           </div>
-        )}
-      </section>
+
+          {data.items.length === 0 ? (
+            <EmptyState
+              title="No projects match"
+              action={<Button variant="secondary" onClick={clearFilters}>Clear filters</Button>}
+            >
+              Try a different category or search term.
+            </EmptyState>
+          ) : (
+            <div>
+              <p className="t-small t-muted project-grid-count" role="status">{data.meta.total} {data.meta.total === 1 ? 'project' : 'projects'}</p>
+              {/* Three or four columns, so a short list fills the row instead of leaving room for a card that is not there. */}
+              <div ref={gridItems} className="project-grid project-grid--dense" style={{ '--cols': Math.min(Math.max(data.items.length, 3), 4) }}>
+                {data.items.map((project, index) => (
+                  <ProjectCard key={project.slug} project={project} priority={index < 4} />
+                ))}
+              </div>
+              <Pagination
+                page={data.meta.page}
+                totalPages={data.meta.totalPages}
+                onPageChange={(next) => {
+                  update({ page: next > 1 ? String(next) : '' });
+                  window.scrollTo({ top: 0 });
+                }}
+              />
+            </div>
+          )}
+        </section>
       </div>
     </>
   );

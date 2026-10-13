@@ -25,6 +25,8 @@ import * as React from "react"
 export type MorphItem = {
   /** Full-size image. Must be served with CORS headers to be morphed. */
   src: string
+  /** Used when src cannot be loaded, e.g. a JPEG for a browser that cannot decode the AVIF in src. */
+  fallbackSrc?: string
   alt?: string
 }
 
@@ -270,6 +272,10 @@ const loadImage = (src: string) =>
     img.src = src
   })
 
+// The preferred source first; a browser that cannot show it (AVIF in an older Safari) gets the fallback instead of nothing.
+const loadItem = (item: MorphItem) =>
+  loadImage(item.src).catch((error: Error) => (item.fallbackSrc ? loadImage(item.fallbackSrc) : Promise.reject(error)))
+
 export default function MorphGallery({
   items,
   height = "100svh",
@@ -495,7 +501,7 @@ export default function MorphGallery({
         let refused = 0
         await Promise.all(
           items.map((item, i) =>
-            loadImage(item.src).then(
+            loadItem(item).then(
               (img) => {
                 if (disposed) return
                 const tex = gl.createTexture()
@@ -556,17 +562,27 @@ export default function MorphGallery({
     <div className={"mg" + (className ? " " + className : "")} style={{ height }}>
       {failed ? (
         // The same gallery without the shader: stacked images, opacity only.
-        items.map((item, i) => (
-          <img
-            key={item.src}
-            src={item.src}
-            alt={item.alt ?? ""}
-            className="mg__img"
-            style={{ maxWidth: "none", opacity: i === active ? 1 : 0 }}
-            aria-hidden={i !== active}
-            onLoad={i === active ? fireReady : undefined}
-          />
-        ))
+        items.map((item, i) => {
+          const image = (
+            <img
+              src={item.fallbackSrc ?? item.src}
+              alt={item.alt ?? ""}
+              className="mg__img"
+              style={{ maxWidth: "none", opacity: i === active ? 1 : 0 }}
+              aria-hidden={i !== active}
+              onLoad={i === active ? fireReady : undefined}
+            />
+          )
+          // The preferred (smaller) source still goes first, for browsers that can read it.
+          return item.fallbackSrc ? (
+            <picture key={item.src}>
+              <source type="image/avif" srcSet={item.src} />
+              {image}
+            </picture>
+          ) : (
+            React.cloneElement(image, { key: item.src })
+          )
+        })
       ) : (
         <canvas
           ref={canvasRef}
