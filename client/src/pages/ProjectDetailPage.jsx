@@ -99,7 +99,7 @@ function ProjectDetail({ project, related }) {
           </h1>
         </div>
       </header>
-      <div className="screen screen--center">
+      <div className="screen screen--center screen--compact">
         <div id="project-facts" className="container section--tight">
           <dl className="facts">
             <div><dt>Location</dt><dd>{formatProjectLocation(project)}</dd></div>

@@ -936,3 +936,10 @@
   display: list-item; /* the base reset removes list markers; the About lists keep theirs */
   list-style: disc;
 }
+
+/* Phones: the team portraits stay circles but no longer fill the whole screen width. */
+@media (max-width: 639px) {
+  .team-card__photo {
+    width: min(100%, 15rem);
+  }
+}
