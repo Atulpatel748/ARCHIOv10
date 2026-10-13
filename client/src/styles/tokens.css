@@ -56,6 +56,8 @@
      (body, labels, buttons, navigation) is Public Sans. The brand kit's primary font is Optima: once its web licence
      is bought, add its @font-face and put 'Optima LT Pro' first here (see README). Marcellus is the free stand-in. */
   --font-serif: Marcellus, 'Palatino Linotype', Palatino, Georgia, serif;
+  /* Brand kit's third font, for long-form project text (portfolio write-ups). */
+  --font-text-serif: 'Lora Variable', Lora, Georgia, 'Times New Roman', serif;
 
   --type-display: clamp(3.5rem, 1rem + 12vw, 12rem);
   --type-h1: clamp(2rem, 0.9rem + 5.6vw, 6.5rem);

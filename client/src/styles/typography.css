@@ -155,3 +155,8 @@ button:focus-visible > .roll > span {
     transform: translateY(-50%);
   }
 }
+
+/* Project descriptions (the lead summary and the body paragraphs) are set in Lora, the brand kit's font for write-ups. */
+.project-copy {
+  font-family: var(--font-text-serif);
+}
