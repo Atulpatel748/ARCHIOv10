@@ -11,7 +11,7 @@ export function useSmoothScroll() {
     let lenis;
     let cancelled = false;
     const start = () => Promise.all([import('lenis'), import('lenis/dist/lenis.css')]).then(([{ default: Lenis }]) => {
-      if (!cancelled) lenis = new Lenis({ autoRaf: true, lerp: 0.1, anchors: true });
+      if (!cancelled) lenis = new Lenis({ autoRaf: true, lerp: 0.075, anchors: true });
     }).catch(() => {}); // decoration only: native scrolling stays if the chunk fails
     const idle = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 1));
     const handle = idle(start);
