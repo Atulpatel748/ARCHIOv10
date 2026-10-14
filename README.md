@@ -35,7 +35,7 @@ redeploy. `npm test` checks every entry against the project schema and that each
 instead of on the site. Projects show in the order of the file, and the first `featured: true` ones appear on the home
 page. The sitemap is written from the same file at build time. Year and style are optional. Areas are stored in
 square metres and shown in both m² and sq ft. The logo is the brand kit's ARCHIÓ wordmark
-(`client/public/brand/wordmark.png`, taken from `Archio Logobrand kit.pdf`, used as a CSS mask so it takes the text
+(`client/public/brand/wordmark.webp`, taken from `Archio Logobrand kit.pdf`, used as a CSS mask so it takes the text
 colour); the round submark (`client/public/brand/logo-mark.png`) is used only for the favicon, the loading screen and
 search results. An SVG of the wordmark from the designer would be sharper still at very large sizes.
 

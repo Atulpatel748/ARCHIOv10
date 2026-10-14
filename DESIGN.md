@@ -86,7 +86,7 @@ The brand kit (`Archio Logobrand kit.pdf`) names Optima as the primary font, Pub
 
 The type scale is deliberately small: no more than ten distinct rendered sizes on a page, and an automated test enforces it. The display steps are the page title (up to 11rem), `--type-h1` (the project hero title), `--type-h2` (section heads, statements, project and category names, the call-to-action heading: one size, about 68px at 1440) and `--type-h3` (card titles, legal headings); do not add a step between them.
 
-The ARCHIÓ wordmark is not set in a font: it is the brand kit's own Optima artwork, `client/public/brand/wordmark.png`, used as a mask (`.wordmark` in `site.css`) so it takes the colour of the text around it.
+The ARCHIÓ wordmark is not set in a font: it is the brand kit's own Optima artwork, `client/public/brand/wordmark.webp`, used as a mask (`.wordmark` in `site.css`) so it takes the colour of the text around it.
 
 ## Layout
 

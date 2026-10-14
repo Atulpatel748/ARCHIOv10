@@ -65,7 +65,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   height: 1em;
   aspect-ratio: 1200 / 293;
   background: currentColor;
-  mask: url('/brand/wordmark.png') center / contain no-repeat;
+  mask: url('/brand/wordmark.webp') center / contain no-repeat;
 }
 
 .site-nav {

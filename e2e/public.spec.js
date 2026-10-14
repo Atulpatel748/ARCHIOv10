@@ -193,7 +193,7 @@ test.describe('public site', () => {
 
     // The preload that public/preloader-gate.js adds names the first photo the hero gallery shows. The gallery reads the AVIF twin of
     // each photo, so that first photo is downloaded once for the preload, the gallery and the project cards together.
-    const preloaded = await page.locator('link[rel="preload"][as="image"]').getAttribute('href');
+    const preloaded = await page.locator('link[rel="preload"][as="image"][type="image/avif"]').getAttribute('href');
     expect(photoRequests.filter((path) => path === preloaded)).toHaveLength(1);
   });
 
