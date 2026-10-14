@@ -205,7 +205,7 @@ be inspected; compare in DevTools before sign-off.
 Interaction rules, enforced by `client/src/styles/interaction-css.test.js`: every `:hover` style sits inside
 `@media (hover: hover) and (pointer: fine)` so a tap on a phone never leaves it stuck on, and anything that
 hover reveals also has a `:focus-visible` twin outside that block so keyboard users get it too. Buttons, chips
-and pagination dip to `scale(0.97)` while pressed. Scroll-reveal sections (`useRevealOnScroll`) drop their
+and pagination dip to `scale(0.97)` while pressed. Scroll-reveal sections (`useRevealOnScroll`, built on `client/src/lib/reveal.js`) drop their
 classes once the animation ends, so they do not hold a compositing layer afterwards.
 
 Scroll-driven behaviour comes from two places. GSAP with ScrollTrigger drives the word-by-word reveal of the
@@ -239,7 +239,7 @@ project photo, so re-check if the photos or the shading change. With this layout
 the photo behind each piece of text on all three seeded projects, the lowest ratio is 5.0:1. With reduced motion the slideshow does not start by itself.
 Run `npm run typecheck -w client` to type-check the `.ts`/`.tsx` files; the rest of the app stays plain JavaScript.
 
-Cards, gallery photos and list rows reveal one after another as they scroll into view (`useRevealItems`, a callback
+Cards, gallery photos and list rows reveal one after another as they scroll into view (`useRevealItems`, also on `lib/reveal.js`; a callback
 ref that also picks up items added later, such as filter results). Each client-side navigation eases the new page in
 (`PageTransition`); the first page load and filter changes do not animate. Both do nothing under reduced motion.
 
