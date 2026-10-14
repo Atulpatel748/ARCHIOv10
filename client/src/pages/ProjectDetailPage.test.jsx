@@ -11,7 +11,10 @@ vi.mock('../services/projects.js', async (importOriginal) => {
   });
   return {
     ...(await importOriginal()),
-    PROJECTS: [project('home-a', 'Home A', 'residential'), project('home-b', 'Home B', 'residential'), project('office-c', 'Office C', 'commercial')],
+    PROJECTS: [
+      project('home-a', 'Home A', 'residential'), project('home-b', 'Home B', 'residential'), project('office-c', 'Office C', 'commercial'),
+      project('garden-d', 'Arabian Ranches Garden Villa', 'landscape'),
+    ],
   };
 });
 
@@ -36,6 +39,13 @@ describe('ProjectDetailPage', () => {
     expect(screen.getByRole('img', { name: 'Home A living room' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /home b/i })).toHaveAttribute('href', '/projects/home-b');
     expect(screen.queryByRole('link', { name: /office c/i })).not.toBeInTheDocument();
+  });
+
+  it('sets a long title on two lines without running the words together', () => {
+    open('garden-d');
+    const title = screen.getByRole('heading', { level: 1 });
+    expect(title.querySelectorAll('.project-hero__line')).toHaveLength(2);
+    expect(title.textContent).toBe('Arabian Ranches Garden Villa');
   });
 
   it('shows the not-found page for an unknown project, and keeps it out of search results', () => {

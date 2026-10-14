@@ -52,9 +52,18 @@ describe('Header', () => {
     expect(logo.querySelector('.wordmark')).toBeInTheDocument(); // the brand kit's ARCHIÓ, without the submark
     expect(logo.querySelector('img')).not.toBeInTheDocument();
   });
+
+  it('puts the page links before the logo, so on wide screens the Tab order runs left to right as the bar reads', () => {
+    renderWithProviders(<Header />);
+    const nav = screen.getByRole('navigation', { name: 'Primary' });
+    const logo = screen.getByRole('link', { name: /home/i });
+    const cta = screen.getByRole('link', { name: 'Let’s talk' });
+    expect(nav.compareDocumentPosition(logo) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(logo.compareDocumentPosition(cta) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
 });
 
-describe('Header "Start your project" button', () => {
+describe('Header "Let’s talk" button', () => {
   it('is always shown, on the home page and everywhere else', () => {
     for (const route of ['/', '/projects']) {
       const { container, unmount } = renderWithProviders(<Header />, { route });

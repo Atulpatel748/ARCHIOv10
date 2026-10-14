@@ -17,7 +17,9 @@
   margin-top: var(--space-4);
 }
 
-.about-list {
+/* `ul.` outranks the reset for classed lists in base.css (`ul[class] { padding: 0 }`), which otherwise pushed the bullets
+   out into the page margin, against the edge of a phone screen. */
+ul.about-list {
   display: grid;
   gap: var(--space-2);
   padding-left: 1.25em;
@@ -41,11 +43,12 @@
   }
 }
 
-/* Team and two-column text blocks */
+/* Team */
 .team-grid {
   display: grid;
   gap: var(--space-7) var(--space-6);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 20rem));
+  justify-content: center;
 }
 
 .team-card {
@@ -69,10 +72,6 @@
   content: '';
   width: min(100%, 16rem);
   border-top: var(--border-thin) solid var(--color-border-strong);
-}
-
-.team-grid {
-  justify-content: center;
 }
 
 .team-card__photo {

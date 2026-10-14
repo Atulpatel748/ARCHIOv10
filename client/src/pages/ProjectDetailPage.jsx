@@ -93,8 +93,9 @@ function ProjectDetail({ project, related }) {
         />
         <div className="project-hero__overlay container stack">
           <h1 ref={titleRef} className="project-hero__title">
-            {titleLines.map((line) => (
-              <span key={line} className="project-hero__line">{line}</span>
+            {/* The space between the lines keeps the title's text whole ("Dubai Marina Residence") for copy, search and reader views. */}
+            {titleLines.map((line, index) => (
+              <span key={index} className="project-hero__line">{index > 0 && ' '}{line}</span>
             ))}
           </h1>
         </div>

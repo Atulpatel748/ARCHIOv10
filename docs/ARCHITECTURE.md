@@ -12,14 +12,14 @@ informed approximations.
 | Header: navigation left, logo centre, "Let’s talk" CTA right | Three-zone grid header; under 1024px the navigation becomes a "Menu" button on the left (icon only under 400px) that opens a full-screen `<dialog>`, whose Close button sits in the same place |
 | Navigation links with a rolling-text hover (labels repeated in the DOM) | `RollText`: one visible label plus a decorative duplicate, hidden from assistive tech |
 | Full-screen hero with project slideshow and caption | `HeroPortal`: a full-screen WebGL photo gallery (`morph-gallery.tsx`) behind a clear header; the brand kit's ARCHIÓ wordmark with the studio descriptor under it between two thin rules, the featured-project block and a pause button sit on top |
-| Uppercase statement block with a "read more" link | `.statement` + link to About |
+| Uppercase statement block with a "read more" link | The home approach section: its heading lights up word by word (`WordReveal`), with a link to Services |
 | "We design" category list | Type only: the category names as links between a large "We" / "design", pinned while the scroll draws them apart and brings the names up one by one (`useScrollSequence` writes the scroll distance into `--seq`; the CSS derives each step from it) |
 | Table-of-contents style list with right-aligned numbers | Process list (number, title, duration) |
-| Projects page: title, discipline/category chips, location filter, 2/4 per-row toggle, bottom CTA | Category chips, literal search, 2/4 density toggle, pagination, CTA band |
+| Projects page: title, discipline/category chips, location filter, 2/4 per-row toggle, bottom CTA | Category chips, literal search, pagination; three or four cards to a row on wide screens (no toggle) |
 | Services page: list with "learn more" per service | One services page listing every service (no per-service pages) |
 | Multi-step "connect us" form | Three-step inquiry form with per-step validation |
 | Footer: legal line, socials, copyright, email, hours | Footer with giant email link, link columns, socials, legal line |
-| Not reproduced | Real hero footage (the film is a stand-in made from stills), scroll-scrubbed frame sequence, rotating globe, book promotion, careers, awards |
+| Not reproduced | Real hero footage (the hero is a photo gallery instead), scroll-scrubbed frame sequence, rotating globe, book promotion, careers, awards |
 
 ## 2. Design system
 
@@ -48,8 +48,9 @@ All tokens are CSS custom properties in `client/src/styles/tokens.css`.
 | < 640px | Single-column grids; header CTA hidden (menu has it); slideshow 4:5; form fields stack |
 | 640px | Two-column project grid and form pairs; header CTA appears |
 | 768px | offices three columns; facts grid |
-| 900px | Intro and service rows become multi-column; footer columns |
-| 1024px | Inline navigation replaces the menu dialog; 4-per-row density option; split layouts |
+| 900px | Intro and service rows become multi-column; footer: brand and contact on one row, link columns under them |
+| 1024px | Inline navigation replaces the menu dialog; three or four project cards per row; split layouts |
+| 1280px | Footer: brand, contact and the three link columns on one row |
 
 Verified with an automated scan of 11 routes at 320, 375, 390, 414, 768, 1024, 1280, 1440 and 1920px
 (no horizontal overflow, console errors, failed requests or heading-structure problems).

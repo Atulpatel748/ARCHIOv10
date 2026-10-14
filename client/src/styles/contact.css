@@ -1,7 +1,5 @@
 /* The contact page and the inquiry form's stepper. */
 
-/* Services and about */
-/* Contact and forms */
 .contact-layout {
   display: grid;
   gap: var(--space-8);

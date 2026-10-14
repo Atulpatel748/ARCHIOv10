@@ -14,6 +14,8 @@ export const routes = [
     // While a lazy page loads on the first visit, the static #app-preloader in index.html covers the screen,
     // so the router itself renders nothing (declaring it also silences React Router's missing-fallback warning).
     HydrateFallback: () => null,
+    // A crash in the layout itself (header, footer) lands here instead of React Router's default screen, which prints the stack trace.
+    errorElement: <RouteError />,
     children: [
       {
         errorElement: <RouteError />,

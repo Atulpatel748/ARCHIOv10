@@ -10,7 +10,8 @@
     <link rel="preload" as="image" type="image/webp" href="/brand/wordmark.webp" fetchpriority="high" crossorigin />
     <title>Archió | Interior design studio</title>
     <meta name="description" content="Archió is a Dubai interior design consultancy for residential, commercial and mixed-use spaces, and a unit of Beracah Trading." />
-    <link rel="canonical" href="__SITE_URL__/" />
+    <!-- No canonical link here: every address is served this file, so a fixed one would point every page at the home
+         page. Seo.jsx adds the right one for each page. -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Archió" />
     <meta property="og:title" content="Archió | Interior design studio" />
@@ -30,7 +31,7 @@
       </div>
     </div>
     <div id="root"></div>
-    <noscript>Archió needs JavaScript to run. Please enable it, or write to info@beracahlogistics.com.</noscript>
+    <noscript><p class="noscript-note">Archió needs JavaScript to run. Please enable it, or write to <a href="mailto:info@beracahlogistics.com">info@beracahlogistics.com</a>.</p></noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

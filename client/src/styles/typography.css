@@ -1,5 +1,5 @@
 /* One display voice: every heading is set in the display face (Marcellus has one weight), in capitals. */
-h1, h2, h3, .t-display, .t-h1, .t-h2, .t-h3, .statement, .state__title {
+h1, h2, h3, .t-display, .t-h1, .t-h2, .t-h3, .state__title {
   text-wrap: balance;
   font-family: var(--font-serif);
   font-weight: 400;
@@ -42,7 +42,9 @@ h3, .t-h3 {
   line-height: 1.4;
 }
 
+/* Labels are always Public Sans, also inside the Lora write-ups (the About rows). */
 .t-label {
+  font-family: var(--font-sans);
   font-size: var(--type-small);
   font-weight: 500;
   letter-spacing: var(--tracking-label);
@@ -62,12 +64,6 @@ h3, .t-h3 {
 
 .t-muted {
   color: var(--color-muted);
-}
-
-.statement {
-  max-width: 24ch;
-  font-size: var(--type-h2);
-  line-height: var(--leading-heading);
 }
 
 .prose {
@@ -102,11 +98,6 @@ h3, .t-h3 {
     color: var(--color-accent);
     text-decoration-thickness: 2px;
   }
-}
-
-.link--cta {
-  font-size: var(--type-body);
-  font-weight: 500;
 }
 
 /* Small, muted text link with an arrow, like "View projects" in the "What we do" rows. */

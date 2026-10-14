@@ -22,7 +22,7 @@ which is emailed to the studio through Web3Forms.
 
 | What | Where |
 | --- | --- |
-| Studio name, email, phone, Instagram, parent company | `client/src/constants/site.js` |
+| Studio name, email, phone, Instagram, parent company | `client/src/constants/site.js` (the email is also written once in the `<noscript>` line of `client/index.html`) |
 | About, team, services, approach, vision, mission, philosophy | `client/src/constants/content.js` |
 | Logo, favicon, social share image | `client/public/brand/`, `client/public/og-image.png` |
 | Team portraits | `client/public/images/team/` |
@@ -36,8 +36,9 @@ instead of on the site. Projects show in the order of the file, and the first `f
 page. The sitemap is written from the same file at build time. Year and style are optional. Areas are stored in
 square metres and shown in both m² and sq ft. The logo is the brand kit's ARCHIÓ wordmark
 (`client/public/brand/wordmark.webp`, taken from `Archio Logobrand kit.pdf`, used as a CSS mask so it takes the text
-colour); the round submark (`client/public/brand/logo-mark.png`) is used only for the favicon, the loading screen and
-search results. An SVG of the wordmark from the designer would be sharper still at very large sizes.
+colour); the round submark is used only for the loading screen (`client/public/brand/logo-mark.png`), the favicon
+(`favicon-32.png`) and, on beige, the home-screen icon and search results (`apple-touch-icon.png`, 180px, because Google
+asks for a logo of at least 112px). An SVG of the wordmark from the designer would be sharper still at very large sizes.
 
 **Fonts.** Public Sans for all text and Marcellus for display headings, both self-hosted through Fontsource. The brand
 kit's primary font is Optima, which needs a paid web licence (Monotype). Once it is bought: put its `.woff2` files in
@@ -74,9 +75,9 @@ want to keep them (new ones only arrive by email). The old server settings (`POR
 
 ## Features
 
-- **Public site**: home (full-screen photo gallery hero, selected projects, "we do" category list, approach,
-  studio with live Dubai time), projects (category filter, literal text search, pagination,
-  2/4-column density toggle, URL-driven state), project detail with gallery and related work,
+- **Public site**: home (full-screen photo gallery hero, approach, selected projects, the pinned "We design"
+  category list, closing call to action), projects (category filter, literal text search, pagination,
+  URL-driven state), project detail with gallery and related work,
   services, about (team, vision, mission, philosophy), contact (three-step inquiry form), privacy
   notice, terms and cookie policy.
 - **Contact**: three-step inquiry form; each request is emailed to the studio inbox (nothing is stored on the site).
@@ -99,12 +100,13 @@ want to keep them (new ones only arrive by email). The old server settings (`POR
 client/      React + Vite single-page app (components, pages, hooks, services, styles)
 shared/      Zod schemas and constants used by the site, and the portfolio (data/projects.js)
 e2e/         Playwright specs (public, inquiry, accessibility)
-docs/        ARCHITECTURE.md, SECURITY.md
+docs/        ARCHITECTURE.md, SECURITY.md, AUDIT.md (the October 2026 audit: fixes made, open items)
 ```
 
 ## Getting started
 
-Requirements: Node 20.19+ (22 recommended, see `.nvmrc`), npm 10+.
+Requirements: Node 22.22.2+ or 24.15+ (see `.nvmrc`; React Router 8 needs 22.22+, and the test tools need 22.22.2+),
+npm 10+.
 
 ```bash
 npm install
@@ -198,7 +200,7 @@ scale); typography rules in `typography.css`. Derived from the reference: brand 
 maroon and beige: beige ground (`#dacfba`, from the brand kit, also the theme colour), very dark maroon-brown type (`#2b1012`), maroon
 bands and buttons (`--color-brand`, `#4c1114`, the logo's colour), uppercase wide-set display text, rolling-text
 navigation hover, a hero that opens on a full-screen, darkened photo gallery with the large ARCHIÓ wordmark and a clear header, large page
-titles, staggered wide/narrow project grids, numbered contents-style lists and live studio clocks. A lighter maroon (`--color-accent`, `#7a2230`) is used for focus, hover and active states.
+titles, zigzag project rows on the home page and numbered contents-style lists. A lighter maroon (`--color-accent`, `#7a2230`) is used for focus, hover and active states.
 Exact pixel values are informed approximations, because computed styles of the reference could not
 be inspected; compare in DevTools before sign-off.
 

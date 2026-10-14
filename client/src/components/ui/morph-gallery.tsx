@@ -110,6 +110,8 @@ uniform float u_fit;
 
 varying vec2 v_uv;
 
+// permute() and snoise(): 2D simplex noise by Ian McEwan, Ashima Arts (https://github.com/ashima/webgl-noise).
+// Copyright (C) 2011 Ashima Arts. All rights reserved. Distributed under the MIT License.
 vec3 permute(vec3 x) {
   return mod(((x * 34.0) + 1.0) * x, 289.0);
 }
@@ -401,7 +403,7 @@ export default function MorphGallery({
     const observer = new ResizeObserver(resize)
     observer.observe(canvas)
 
-    let uniforms: Record<string, WebGLUniformLocation | null> = {}
+    const uniforms: Record<string, WebGLUniformLocation | null> = {}
 
     // Until every image is in, `from` or `to` can point at a hole. Showing the
     // nearest texture that does exist beats binding null, which draws black.

@@ -1,9 +1,10 @@
 // Copy taken from the Archió company profile. Wording is the studio's own.
 
+// The category names in the home page's "We design" section (type only, no photos).
 export const HOME_CATEGORIES = Object.freeze([
-  { value: 'residential', label: 'Residential', image: '/images/projects/dubai-marina-residence/01.jpg' },
-  { value: 'commercial', label: 'Commercial', image: '/images/projects/jlt-commercial-interior/01.jpg' },
-  { value: 'landscape', label: 'Landscape', image: '/images/projects/arabian-ranches-2-landscape/01.jpg' },
+  { value: 'residential', label: 'Residential' },
+  { value: 'commercial', label: 'Commercial' },
+  { value: 'landscape', label: 'Landscape' },
 ]);
 
 // Home hero: the line under the wordmark.

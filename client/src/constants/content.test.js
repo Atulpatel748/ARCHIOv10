@@ -16,9 +16,8 @@ describe('studio content', () => {
     for (const service of SERVICES.items) expect(existsSync(publicFile(service.image)), service.image).toBe(true);
   });
 
-  it('shows one home tile per project category, each with an image that exists', () => {
+  it('names every project category once in the home page\'s "We design" section', () => {
     expect(HOME_CATEGORIES.map((c) => c.value).sort()).toEqual([...PROJECT_CATEGORY_VALUES].sort());
-    for (const category of HOME_CATEGORIES) expect(existsSync(publicFile(category.image)), category.image).toBe(true);
   });
 
   it('has portraits for the team, the logo mark and the share image', () => {

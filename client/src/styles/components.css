@@ -156,7 +156,7 @@
 
 .field__hint {
   color: var(--color-muted);
-  font-size: 0.8125rem;
+  font-size: var(--type-small);
 }
 
 .field__error {

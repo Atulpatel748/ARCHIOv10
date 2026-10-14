@@ -51,10 +51,8 @@ export default function Header() {
         >
           <span className="menu-toggle__icon" aria-hidden="true"><i /><i /><i /></span>
         </button>
-        <Link to={ROUTES.home} className="brand" aria-label="Archió, home">
-          <span className="wordmark" aria-hidden="true" />
-        </Link>
 
+        {/* Before the logo in the source, so the Tab order follows the screen: links on the left, logo, then "Let’s talk". */}
         <nav className="site-nav" aria-label="Primary">
           <ul className="nav-list">
             {PRIMARY_LINKS.map((link) => (
@@ -64,6 +62,10 @@ export default function Header() {
             ))}
           </ul>
         </nav>
+
+        <Link to={ROUTES.home} className="brand" aria-label="Archió, home">
+          <span className="wordmark" aria-hidden="true" />
+        </Link>
 
         <div className="site-header__actions">
           <Button to={ROUTES.contact} size="sm" variant="secondary" className="header-cta">

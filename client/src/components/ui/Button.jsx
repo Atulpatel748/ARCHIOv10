@@ -8,7 +8,7 @@ const classes = ({ variant, size, block, className }) =>
     .join(' ');
 
 export default function Button({
-  variant = 'primary', size = 'md', block = false, loading = false, to, href, type = 'button', className, children, ...rest
+  variant = 'primary', size = 'md', block = false, loading = false, disabled, to, href, type = 'button', className, children, ...rest
 }) {
   const label = typeof children === 'string' ? <RollText>{children}</RollText> : children;
   const shared = { className: classes({ variant, size, block, className }), ...rest };
@@ -16,7 +16,7 @@ export default function Button({
   if (to) return <Link to={to} {...shared}>{label}</Link>;
   if (href) return <a href={href} {...shared}>{label}</a>;
   return (
-    <button type={type} disabled={loading || rest.disabled} aria-busy={loading || undefined} {...shared}>
+    <button type={type} disabled={loading || disabled} aria-busy={loading || undefined} {...shared}>
       {loading && <Spinner />}
       {label}
     </button>

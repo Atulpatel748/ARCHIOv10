@@ -4,11 +4,18 @@
   z-index: 30;
   border-bottom: var(--border-thin) solid var(--color-border-strong);
   background: var(--color-bg);
+  transition: background-color var(--duration-base), border-color var(--duration-base), color var(--duration-base);
 }
 
 /* Home page: the hero starts at the very top, behind the header. */
 .site-header--overlay {
   margin-bottom: calc(-1 * (var(--header-h) + var(--border-thin))); /* the bar plus its 1px border */
+}
+
+/* A home or project address with no hero to show (an unknown project, a page that failed to load) gets the room back,
+   so its title is not hidden under the header. */
+.site-header--overlay ~ main:not(:has(.hero-portal, .project-hero-wrap)) {
+  padding-top: calc(var(--header-h) + var(--border-thin));
 }
 
 .site-header--clear {
@@ -18,10 +25,6 @@
 }
 
 /* Home: the header's own logo waits until the big hero logo has travelled up to it; nav and button stay put. */
-.brand {
-  transition: opacity var(--duration-base) var(--ease-out);
-}
-
 html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   opacity: 0;
   pointer-events: none;
@@ -30,10 +33,6 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
 .site-header--clear .header-cta {
   --btn-fg: var(--color-inverse);
   --btn-bd: var(--color-inverse);
-}
-
-.site-header {
-  transition: background-color var(--duration-base), border-color var(--duration-base), color var(--duration-base);
 }
 
 /* Below 1024px: Menu on the left, logo in the centre, "Let’s talk" (from 640px) on the right. */
@@ -53,6 +52,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   display: inline-flex;
   font-size: 1.75rem; /* the wordmark's height */
   color: var(--color-brand);
+  transition: opacity var(--duration-base) var(--ease-out);
 }
 
 .site-header--clear .brand {
@@ -76,7 +76,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
 .nav-list {
   display: flex;
   align-items: center;
-  gap: var(--space-7, var(--space-6));
+  gap: var(--space-7);
 }
 
 .nav-link {
@@ -213,7 +213,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   display: grid;
   margin-top: auto;
   font-style: normal;
-  font-size: var(--type-small, 0.875rem);
+  font-size: var(--type-small);
 }
 
 .mobile-menu__contact a {
@@ -242,13 +242,8 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
     grid-template-areas: 'nav brand actions';
   }
 
-  .brand {
-    justify-self: center;
-  }
-
   .site-nav {
     display: block;
-    grid-area: nav;
     justify-self: start;
   }
 
@@ -358,7 +353,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   justify-content: space-between;
   gap: var(--space-1) var(--space-5);
   padding-top: var(--space-4);
-  border-top: var(--border-thin) solid rgba(218, 207, 186, 0.28);
+  border-top: var(--border-thin) solid color-mix(in srgb, var(--color-bg) 28%, transparent);
   color: var(--color-secondary);
   font-size: var(--type-small);
 }
@@ -367,24 +362,34 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   margin: 0;
 }
 
+/* From 900px the brand and the contact share the first row and the three link columns sit under them: five columns on
+   one row would squeeze the email address until it broke in the middle of a word. */
 @media (min-width: 900px) {
   .footer-grid {
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.4fr) repeat(3, minmax(0, 0.6fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     column-gap: var(--space-7);
     padding-block: var(--space-9) var(--space-5);
   }
 
   .footer-brand,
   .footer-contact {
-    grid-column: auto;
-  }
-
-  .footer-mail {
-    font-size: var(--type-h3);
+    grid-column: span 2;
   }
 
   .footer-legal {
     margin-top: var(--space-7);
+  }
+}
+
+/* From 1280px all five sit on one row; the contact column never gets narrower than the email address. */
+@media (min-width: 1280px) {
+  .footer-grid {
+    grid-template-columns: minmax(0, 1.3fr) minmax(max-content, 1.4fr) repeat(3, minmax(0, 0.6fr));
+  }
+
+  .footer-brand,
+  .footer-contact {
+    grid-column: auto;
   }
 }
 

@@ -30,13 +30,6 @@
 			"command": "npm run preview -w client -- --host 0.0.0.0",
 			"isBackground": true,
 			"problemMatcher": []
-		},
-		{
-			"label": "preview hamburger change",
-			"type": "shell",
-			"command": "npm run preview -w client -- --host 127.0.0.1",
-			"isBackground": true,
-			"problemMatcher": []
 		}
 	]
 }

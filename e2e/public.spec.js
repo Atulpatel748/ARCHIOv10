@@ -32,6 +32,16 @@ test.describe('public site', () => {
     expect((await imageResponse).status()).toBe(200);
   });
 
+  test('without JavaScript the page shows how to reach the studio instead of an endless loading screen', async ({ browser, baseURL }) => {
+    const context = await browser.newContext({ baseURL, javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto('/about');
+    await expect(page.locator('#app-preloader')).toBeHidden();
+    await expect(page.getByText(/needs JavaScript to run/)).toBeVisible();
+    await expect(page.getByRole('link', { name: /@/ })).toHaveAttribute('href', /^mailto:/);
+    await context.close();
+  });
+
   test('the loading screen plays once per tab: not again on reload, but again in a new tab', async ({ page, context }) => {
     // Without the app bundle the screen stays exactly as first painted; only public/preloader-gate.js decides it.
     await context.route('**/assets/*.js', (route) => route.abort());
@@ -104,10 +114,15 @@ test.describe('public site', () => {
   });
 
   test('unknown pages and unknown projects show a helpful not-found page', async ({ page }) => {
+    const titleTop = () => page.getByRole('heading', { name: 'Not found' }).evaluate((el) => el.getBoundingClientRect().top);
     await page.goto('/no-such-page');
     await expect(page.getByRole('heading', { name: 'Not found' })).toBeVisible();
+    const pageTitleTop = await titleTop();
     await page.goto('/projects/not-a-real-project');
     await expect(page.getByRole('heading', { name: 'Not found' })).toBeVisible();
+    // A project address normally opens on a photo behind the header; without one the title sits where it does on any
+    // other page instead of sliding up under the header.
+    expect(Math.abs((await titleTop()) - pageTitleTop)).toBeLessThan(1);
     await expect(page).toHaveTitle('Project not found | Archió');
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
     await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
@@ -505,6 +520,8 @@ test.describe('public site', () => {
     await expect(page.getByRole('heading', { name: 'Our team' })).toBeVisible();
     await expect(page.getByRole('img', { name: 'Portrait of Pooja Vijayakumar' })).toBeVisible();
     await expect(page.getByText('Co-Founder, Strategy & Growth')).toBeVisible();
+    // The bullet lists keep room for their markers inside the text column, not out in the page margin.
+    expect(await page.locator('.about-list').first().evaluate((el) => parseFloat(getComputedStyle(el).paddingLeft))).toBeGreaterThan(0);
     await expect(page.locator('.footer-follow').getByRole('link', { name: 'Instagram' })).toBeVisible();
     await expect(page.locator('.footer-contact').getByRole('link', { name: /971 55 654 1410/ }).locator('.icon-phone')).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Legal' }).getByRole('link', { name: 'Privacy notice' })).toBeVisible();
@@ -542,6 +559,19 @@ test.describe('public site', () => {
         await expect(page.locator('main')).toBeVisible();
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
         expect(overflow, `${path} overflows at ${width}px by ${overflow}px`).toBeLessThanOrEqual(0);
+      }
+    }
+  });
+
+  test('the footer keeps the email address and the legal links on one line from tablet to wide screens', async ({ page }) => {
+    for (const width of [900, 1024, 1180, 1279, 1280, 1440, 1920]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/privacy');
+      const lines = (locator) => locator.evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)));
+      expect(await lines(page.locator('.footer-mail')), `email at ${width}px`).toBe(1);
+      for (const name of ['Privacy notice', 'Terms of service', 'Cookie policy']) {
+        const link = page.getByRole('navigation', { name: 'Legal' }).getByRole('link', { name });
+        expect(await link.evaluate((el) => el.getClientRects().length), `${name} at ${width}px`).toBe(1);
       }
     }
   });

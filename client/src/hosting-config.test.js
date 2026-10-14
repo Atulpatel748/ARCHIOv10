@@ -31,6 +31,10 @@ describe('the page shell works under the content security policy', () => {
     // Both scripts are files from the site itself; neither has inline code.
     expect(html.match(/<script\b[^>]*>[^<]*/g)).toEqual(['<script src="/preloader-gate.js">', '<script type="module" src="/src/main.jsx">']);
   });
+
+  it('index.html declares no canonical link of its own, which every address would share (Seo.jsx sets one per page)', () => {
+    expect(read('index.html').replace(/<!--[\s\S]*?-->/g, '')).not.toMatch(/rel="canonical"/);
+  });
 });
 
 describe('hosting security headers', () => {

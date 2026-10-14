@@ -31,6 +31,18 @@ html[data-preloader-seen] #app-preloader {
   display: none;
 }
 
+/* Without JavaScript nothing would ever lift the screen, so it is not drawn and the <noscript> note shows instead. */
+@media (scripting: none) {
+  #app-preloader {
+    display: none;
+  }
+}
+
+.noscript-note {
+  margin: 0;
+  padding: 24px 16px;
+}
+
 .app-preloader__inner {
   display: flex;
   flex-direction: column;

@@ -9,7 +9,7 @@ export const SITE = Object.freeze({
   url: (import.meta.env.VITE_SITE_URL ?? 'http://localhost:5173').replace(/\/$/, ''),
   email: 'info@beracahlogistics.com',
   phone: '+971 55 654 1410',
-  logo: '/brand/logo-mark.png',
+  logo: '/brand/apple-touch-icon.png', // the submark for search results: Google wants a logo of at least 112x112 (this is 180)
   social: [
     { label: 'Instagram', handle: '@Archio_designstudio', href: 'https://www.instagram.com/archio_designstudio/' },
   ],
@@ -19,7 +19,7 @@ export const SITE = Object.freeze({
 // this link, which opens a Gmail compose window addressed to the studio.
 export const GMAIL_COMPOSE_URL = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SITE.email)}`;
 
-export const NAV_LINKS =Object.freeze([
+export const NAV_LINKS = Object.freeze([
   { to: '/projects', label: 'Projects' },
   { to: '/services', label: 'Services' },
   { to: '/about', label: 'About' },
