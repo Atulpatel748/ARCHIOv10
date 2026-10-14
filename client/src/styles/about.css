@@ -46,7 +46,7 @@ ul.about-list {
 /* Team */
 .team-grid {
   display: grid;
-  gap: var(--space-7) var(--space-6);
+  gap: var(--space-7) var(--space-8);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 20rem));
   justify-content: center;
 }
