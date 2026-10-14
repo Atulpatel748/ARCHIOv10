@@ -40,10 +40,9 @@ colour); the round submark is used only for the loading screen (`client/public/b
 (`favicon-32.png`) and, on beige, the home-screen icon and search results (`apple-touch-icon.png`, 180px, because Google
 asks for a logo of at least 112px). An SVG of the wordmark from the designer would be sharper still at very large sizes.
 
-**Fonts.** Public Sans for all text and Marcellus for display headings, both self-hosted through Fontsource. The brand
-kit's primary font is Optima, which needs a paid web licence (Monotype). Once it is bought: put its `.woff2` files in
-`client/public/fonts/`, add an `@font-face` for them in `client/src/styles/tokens.css`, put `'Optima LT Pro'` first in
-`--font-serif`, and add the file name to the preload filter in `client/vite.config.js`.
+**Fonts.** Public Sans for all text, Marcellus for display headings and Lora for the long-form write-ups (project
+descriptions, the About page), all self-hosted through Fontsource and licensed OFL. The brand kit's primary font is
+Optima, which needs a paid web licence (Monotype) and is not used.
 
 **Home page speed.** Three things make the home page load faster, and each is measured (Lighthouse, mobile).
 The home page ships in the main script instead of a separate download. The portfolio is built into the site, so no page waits for a request. The hero
@@ -89,7 +88,7 @@ want to keep them (new ones only arrive by email). The old server settings (`POR
 
 | Layer | Choice |
 | --- | --- |
-| Client | React 19, Vite 8, React Router 8, plain CSS with design tokens, self-hosted Public Sans and Marcellus fonts |
+| Client | React 19, Vite 8, React Router 8, plain CSS with design tokens, self-hosted Public Sans, Marcellus and Lora fonts |
 | Contact form | Zod 4 (schema shared with the form), sent from the browser to Web3Forms, which emails the studio |
 | Hosting | Vercel (static files from `client/dist`) |
 | Tests | Vitest, Testing Library, Playwright, axe-core |
@@ -229,8 +228,7 @@ at a time); a featured-project block at the bottom left with
 the project's place and a "View project" link; and a round pause / play button at the bottom right (the photos change
 by themselves every six seconds, so WCAG 2.2.2 requires a way to stop them; it is not shown with reduced motion, when
 nothing moves). The photo layer itself is `inert`: it is a backdrop, so it is neither a tab stop nor announced.
-All of it is the studio's own copy and data, none of it placeholder text. Display headings use Marcellus (standing in for
-Optima, see Fonts); Public Sans is used for everything else. On the home page the header is clear over the photo (white text and wordmark) until the page
+All of it is the studio's own copy and data, none of it placeholder text. Display headings use Marcellus (see Fonts); Public Sans is used for everything else. On the home page the header is clear over the photo (white text and wordmark) until the page
 is scrolled by a few pixels, then it is the usual solid beige. The gallery's `fit` setting (0.08 here) pulls each photo back
 from a tight full-screen crop so more of it shows; the edges that leaves are filled with a blurred copy of the same photo.
 The gallery's styles are plain CSS in `styles/morph-gallery.css` (no Tailwind) and the hero's colours and layout are in
