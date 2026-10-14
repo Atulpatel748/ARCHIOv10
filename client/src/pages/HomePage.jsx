@@ -119,7 +119,7 @@ export default function HomePage() {
                 </li>
               ))}
             </ul>
-            <Button className="do-type__button" to={ROUTES.projects} variant="secondary" size="sm">View all projects</Button>
+            <Button className="do-type__button" to={ROUTES.projects} size="sm">View all projects</Button>
           </div>
         </div>
       </section>
