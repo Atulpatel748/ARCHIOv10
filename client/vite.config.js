@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
+import { fillHeroPhoto } from './hero-photo.js';
 import { SECURITY_HEADERS } from './security-headers.js';
 import { sitemapXml } from './sitemap.js';
 
@@ -46,22 +47,23 @@ export default defineConfig(({ command, mode }) => {
               res.setHeader('Content-Type', 'application/xml; charset=utf-8');
               return res.end(sitemapXml(siteUrl));
             }
-            const filename = { '/robots.txt': 'robots.txt', '/llms.txt': 'llms.txt' }[req.url];
+            const filename = { '/robots.txt': 'robots.txt', '/llms.txt': 'llms.txt', '/preloader-gate.js': 'preloader-gate.js' }[req.url];
             if (!filename) return next();
 
             try {
-              res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-              res.end(replaceSiteUrl(await readFile(join(fileURLToPath(new URL('./public', import.meta.url)), filename), 'utf8'), siteUrl));
+              res.setHeader('Content-Type', filename.endsWith('.js') ? 'text/javascript; charset=utf-8' : 'text/plain; charset=utf-8');
+              const source = await readFile(join(fileURLToPath(new URL('./public', import.meta.url)), filename), 'utf8');
+              res.end(fillHeroPhoto(replaceSiteUrl(source, siteUrl)));
             } catch (error) {
               next(error);
             }
           });
         },
-        // Public crawler files are copied as-is, so fill their site URL placeholders after the copy.
+        // Public files are copied as-is, so fill their placeholders (site URL, hero photo) after the copy.
         writeBundle: async ({ dir }) => {
-          for (const filename of ['robots.txt', 'llms.txt']) {
+          for (const filename of ['robots.txt', 'llms.txt', 'preloader-gate.js']) {
             const file = join(dir, filename);
-            await writeFile(file, replaceSiteUrl(await readFile(file, 'utf8'), siteUrl));
+            await writeFile(file, fillHeroPhoto(replaceSiteUrl(await readFile(file, 'utf8'), siteUrl)));
           }
           await writeFile(join(dir, 'sitemap.xml'), sitemapXml(siteUrl));
         },

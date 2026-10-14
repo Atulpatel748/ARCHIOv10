@@ -28,7 +28,7 @@ which is emailed to the studio through Web3Forms.
 | Team portraits | `client/public/images/team/` |
 | Projects (text, areas, image order and alt text) | `shared/data/projects.js` (below); images in `client/public/images/projects/<slug>/NN.jpg` (`01.jpg` is the cover) or any https:// address |
 | Inquiry options (project type, budget bands in AED, timeline) | `shared/constants/index.js` |
-| First image on the home page | `HERO_IMAGE` in `client/src/constants/site.js`, and the `<link rel="preload">` in `client/index.html`. Keep both equal to the first featured project's cover; a test fails if they differ |
+| First image on the home page | Nothing to edit: it is the first featured project's cover in `shared/data/projects.js`. `client/public/preloader-gate.js` preloads it (the build fills in its `__HERO_PHOTO__` placeholder from `client/hero-photo.js`) |
 
 **Managing projects.** Edit `shared/data/projects.js` (the steps are in the comment at its top), run `npm test`, and
 redeploy. `npm test` checks every entry against the project schema and that each photo exists, so a mistake fails there
@@ -60,7 +60,7 @@ wide, which is soft on large and high-density screens (a phone shows each photo 
 hero at up to 2.7 times its size). For a photo wider than 800px the script also writes smaller steps
 (`NN-800.avif`, `-1200`, `-1600`, `-2400`, never an enlarged copy) and lists them in `client/src/generated/image-widths.json`;
 `Picture` then offers them as a `srcset` and the hero asks for a size as wide as the screen. Aim for 2400px on the hero
-covers and 1600px on gallery photos. When a hero photo gets several sizes, a test reminds you to update the hero preload. A test fails if any `.jpg` is missing its `.avif`, so this cannot be
+covers and 1600px on gallery photos. When a hero photo gets several sizes, a test fails until `client/hero-photo.js` picks a size by screen width. A test fails if any `.jpg` is missing its `.avif`, so this cannot be
 forgotten. Quality is the `QUALITY` constant in `client/scripts/make-avif.mjs` (50: smaller files, very slightly
 softer fine texture; raise it towards 65 for more detail). A photo given as an outside web address in the data file
 has no AVIF twin and are shown as they are. Your web server must send `.avif` as `image/avif`. An end-to-end test checks this
@@ -247,8 +247,9 @@ ref that also picks up items added later, such as filter results). Each client-s
 
 - There is no admin screen: a new or changed project is an edit to `shared/data/projects.js` and a redeploy. Photos
   either go in `client/public/images` or are hosted elsewhere and given as https:// addresses.
-- `client/public/preloader-gate.js` preloads the first featured project's cover on the home page. If a different project
-  becomes the first featured one, update the preload and `HERO_IMAGE` (a test keeps them equal), or that early download is wasted.
+- `client/public/preloader-gate.js` preloads the first featured project's cover on the home page, filled in at build time
+  from the portfolio (`client/hero-photo.js`), so reordering or changing the featured projects needs no other edit. A cover that
+  has several sizes (a photo wider than 800px) is not handled yet: a test fails until the preload picks a size by screen width.
 - Inquiries exist only in the studio's email, sent by Web3Forms (a third party; the privacy notice does not name it yet,
   which needs the lawyer's sign-off). If sending fails the visitor is told to try again, but nothing keeps a copy.
 - The access key is visible in the site's JavaScript; anyone can send mail to the inbox with it, so keep the domain

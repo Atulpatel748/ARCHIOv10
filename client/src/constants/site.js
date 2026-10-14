@@ -26,7 +26,3 @@ export const NAV_LINKS =Object.freeze([
   { to: '/contact', label: 'Contact' },
 ]);
 
-// The first image on the home page: the first featured project's cover, downloaded early by the <link rel="preload">
-// that client/public/preloader-gate.js adds (a test keeps the two in step). If a different project becomes the first featured one, update
-// both, or the early download is wasted.
-export const HERO_IMAGE = '/images/projects/dubai-marina-residence/01.jpg';

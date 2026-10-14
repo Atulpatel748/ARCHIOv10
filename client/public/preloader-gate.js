@@ -10,14 +10,15 @@ try {
 }
 
 // The home page opens on the hero photo, so start its download at once, alongside the script instead of after it. Only
-// there: on any other page the preload would go unused. Must match HERO_IMAGE in src/constants/site.js (a test keeps
-// them in step); the page asks for the AVIF twin, so that is what is preloaded.
-if (location.pathname === '/') {
+// there: on any other page the preload would go unused. The placeholder below is filled at build time with the first
+// featured project's AVIF (hero-photo.js); it is empty when there is nothing to preload.
+const HERO_PHOTO = '__HERO_PHOTO__';
+if (location.pathname === '/' && HERO_PHOTO.startsWith('/')) {
   const link = document.createElement('link');
   link.rel = 'preload';
   link.as = 'image';
   link.type = 'image/avif';
-  link.href = '/images/projects/dubai-marina-residence/01.avif';
+  link.href = HERO_PHOTO;
   link.fetchPriority = 'high';
   document.head.appendChild(link);
 }
