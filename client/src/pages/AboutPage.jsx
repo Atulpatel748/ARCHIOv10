@@ -1,4 +1,3 @@
-import CtaBand from '../components/common/CtaBand.jsx';
 import PageHead from '../components/common/PageHead.jsx';
 import Seo from '../components/common/Seo.jsx';
 import {
@@ -113,8 +112,6 @@ export default function AboutPage() {
           {PHILOSOPHY.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
         </AboutRow>
       </section>
-
-      <CtaBand />
     </>
   );
 }

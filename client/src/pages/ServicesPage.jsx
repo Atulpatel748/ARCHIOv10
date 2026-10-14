@@ -1,5 +1,4 @@
 import { useState, useSyncExternalStore } from 'react';
-import CtaBand from '../components/common/CtaBand.jsx';
 import PageHead from '../components/common/PageHead.jsx';
 import Picture from '../components/common/Picture.jsx';
 import Seo from '../components/common/Seo.jsx';
@@ -103,7 +102,6 @@ export default function ServicesPage() {
           </div>
         </section>
       </div>
-      <CtaBand />
     </>
   );
 }
