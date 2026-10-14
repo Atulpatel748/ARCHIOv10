@@ -51,8 +51,9 @@ export default function InquiryForm() {
       areaSqm: '', budgetRange: '', timeline: '', message: '', consent: false, website: '',
     },
     onSubmit: async (data) => {
-      await inquiryService.create(data);
-      setSent(true);
+      const result = await inquiryService.create(data);
+      if (result.ok) setSent(true);
+      return result; // a failure carries the message the form shows
     },
   });
 

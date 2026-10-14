@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { ApiError } from '../services/api.js';
+import { GENERIC_ERROR_MESSAGE } from '../constants/messages.js';
 
 const keyOf = (path) => path.map(String).join('.');
 
@@ -8,8 +8,6 @@ const errorsFromIssues = (issues) => {
   for (const issue of issues) errors[keyOf(issue.path) || '_form'] ??= issue.message;
   return errors;
 };
-
-const errorsFromDetails = (details) => Object.fromEntries(details.map(({ field, message }) => [field, message]));
 
 export function useForm({ schema, initialValues, toPayload = (values) => values, onSubmit }) {
   const [values, setValues] = useState(initialValues);
@@ -69,22 +67,16 @@ export function useForm({ schema, initialValues, toPayload = (values) => values,
       inFlight.current = true;
       setSubmitting(true);
       try {
-        await onSubmit(result.data);
-        baseline.current = JSON.stringify(values);
-        setBaselineVersion((version) => version + 1);
-      } catch (error) {
-        if (error instanceof ApiError && error.code === 'VALIDATION_ERROR' && error.details?.length) {
-          const fieldErrors = errorsFromDetails(error.details);
-          setErrors(fieldErrors);
-          // A detail no field shows (e.g. after a deploy changed the schema) would leave a bare "attention" note.
-          const shown = Object.keys(fieldErrors).some((name) => name.split('.')[0] in values);
-          setFormError(shown ? 'Some fields need attention.' : error.details[0].message);
-          requestAnimationFrame(() => form.querySelector('[aria-invalid="true"]')?.focus());
-        } else if (error instanceof ApiError) {
-          setFormError(error.message);
+        // onSubmit may answer { ok: false, message } for a failure the visitor should read; anything it throws is unexpected.
+        const outcome = await onSubmit(result.data);
+        if (outcome?.ok === false) {
+          setFormError(outcome.message);
         } else {
-          setFormError('Something went wrong. Please try again.');
+          baseline.current = JSON.stringify(values);
+          setBaselineVersion((version) => version + 1);
         }
+      } catch {
+        setFormError(GENERIC_ERROR_MESSAGE);
       } finally {
         inFlight.current = false;
         setSubmitting(false);

@@ -1,7 +1,6 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { ApiError } from '../../services/api.js';
 import { inquiryService } from '../../services/inquiry.service.js';
 import { renderWithProviders } from '../../test/render.jsx';
 import InquiryForm from './InquiryForm.jsx';
@@ -67,7 +66,7 @@ describe('InquiryForm', () => {
     expect(inquiryService.create).toHaveBeenCalledWith(expect.objectContaining({
       name: 'Ada Lovelace', email: 'ada@example.com', projectType: 'residential', areaSqm: 84, consent: true, message: MESSAGE,
     }));
-    resolve({});
+    resolve({ ok: true });
     expect(await screen.findByText(/thank you/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /browse projects/i })).toHaveAttribute('href', '/projects');
     expect(screen.queryByRole('link', { name: /track your inquiries/i })).not.toBeInTheDocument();
@@ -85,7 +84,7 @@ describe('InquiryForm', () => {
 
   it('shows a failure message and keeps the entered data when the server is unreachable', async () => {
     const user = userEvent.setup();
-    inquiryService.create.mockImplementation(() => Promise.reject(new ApiError({ code: 'NETWORK_ERROR', message: 'We could not reach the server.' })));
+    inquiryService.create.mockResolvedValue({ ok: false, message: 'We could not reach the server.' });
     renderWithProviders(<InquiryForm />);
     await reachLastStep(user);
     await user.type(screen.getByLabelText(/tell us about your space/i), MESSAGE);
@@ -96,30 +95,16 @@ describe('InquiryForm', () => {
     expect(screen.getByRole('button', { name: /send me a quote/i })).toBeEnabled();
   });
 
-  it('returns to the step that holds a server-side field error', async () => {
+  it('shows the generic message, and keeps the entered data, when sending fails in a way nobody expected', async () => {
     const user = userEvent.setup();
-    inquiryService.create.mockImplementation(() => Promise.reject(new ApiError({
-      status: 422, code: 'VALIDATION_ERROR', message: 'Some fields need attention.', details: [{ field: 'email', message: 'Enter a valid email address.' }],
-    })));
+    inquiryService.create.mockRejectedValue(new Error('boom'));
     renderWithProviders(<InquiryForm />);
     await reachLastStep(user);
     await user.type(screen.getByLabelText(/tell us about your space/i), MESSAGE);
     await user.click(screen.getByRole('checkbox'));
     await user.click(screen.getByRole('button', { name: /send me a quote/i }));
-    await waitFor(() => expect(screen.getByLabelText(/^email/i)).toBeInTheDocument());
-    expect(screen.getByLabelText(/^email/i)).toHaveAccessibleDescription(/valid email/i);
-  });
-
-  it('shows the server message itself when its error matches no field on the form', async () => {
-    const user = userEvent.setup();
-    inquiryService.create.mockImplementation(() => Promise.reject(new ApiError({
-      status: 422, code: 'VALIDATION_ERROR', message: 'Some fields need attention.', details: [{ field: '', message: 'Unrecognized key: "budget"' }],
-    })));
-    renderWithProviders(<InquiryForm />);
-    await reachLastStep(user);
-    await user.type(screen.getByLabelText(/tell us about your space/i), MESSAGE);
-    await user.click(screen.getByRole('checkbox'));
-    await user.click(screen.getByRole('button', { name: /send me a quote/i }));
-    expect(await screen.findByRole('alert')).toHaveTextContent(/unrecognized key/i);
+    expect(await screen.findByRole('alert')).toHaveTextContent('Something went wrong. Please try again.');
+    expect(screen.getByLabelText(/tell us about your space/i)).toHaveValue(MESSAGE);
+    expect(screen.getByRole('button', { name: /send me a quote/i })).toBeEnabled();
   });
 });
