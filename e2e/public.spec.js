@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
 test.describe('public site', () => {
@@ -543,6 +544,14 @@ test.describe('public site', () => {
         expect(overflow, `${path} overflows at ${width}px by ${overflow}px`).toBeLessThanOrEqual(0);
       }
     }
+  });
+
+  test('serves the security headers that vercel.json defines, so what is tested is what is shipped', async ({ page }) => {
+    const { headers } = JSON.parse(readFileSync(new URL('../client/vercel.json', import.meta.url), 'utf8'));
+    const expected = headers.find(({ source }) => source === '/(.*)').headers;
+    expect(expected.length).toBeGreaterThan(0);
+    const response = await page.goto('/');
+    for (const { key, value } of expected) expect(response.headers()[key.toLowerCase()], key).toBe(value);
   });
 
   test('keyboard users can skip to content and open the mobile menu on small screens', async ({ page }, info) => {

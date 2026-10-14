@@ -1,16 +1,24 @@
 import react from '@vitejs/plugin-react';
+import { readFileSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 import { fillHeroPhoto } from './hero-photo.js';
-import { SECURITY_HEADERS } from './security-headers.js';
 import { sitemapXml } from './sitemap.js';
 
 const envDir = fileURLToPath(new URL('..', import.meta.url));
 
 const replaceSiteUrl = (value, siteUrl) => value.replaceAll('__SITE_URL__', siteUrl);
+
+// The security headers live in vercel.json, which is what production runs; the preview server sends the same ones.
+function securityHeaders() {
+  const { headers } = JSON.parse(readFileSync(new URL('./vercel.json', import.meta.url), 'utf8'));
+  const rule = headers.find(({ source }) => source === '/(.*)');
+  if (!rule) throw new Error('vercel.json has no "/(.*)" header rule, which the preview server takes its security headers from.');
+  return Object.fromEntries(rule.headers.map(({ key, value }) => [key, value]));
+}
 
 export default defineConfig(({ command, mode }) => {
   const configuredSiteUrl = loadEnv(mode, envDir, 'VITE_').VITE_SITE_URL;
@@ -80,7 +88,7 @@ export default defineConfig(({ command, mode }) => {
       },
     ],
     server: { port: 5173, allowedHosts: ngrokHost ? [ngrokHost] : [] },
-    preview: { port: 4173, headers: SECURITY_HEADERS },
+    preview: { port: 4173, headers: securityHeaders() },
     build: { target: 'es2022', sourcemap: false },
     test: {
       environment: 'jsdom',

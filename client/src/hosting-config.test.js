@@ -1,11 +1,15 @@
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describe, expect, it } from 'vitest';
-import { CONTENT_SECURITY_POLICY, SECURITY_HEADERS } from '../security-headers.js';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { inquiryService } from './services/inquiry.service.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (relative) => readFileSync(resolve(here, '..', relative), 'utf8');
+
+// The headers the site is served with are the ones in vercel.json (the preview server sends the same, see vite.config.js).
+const CONTENT_SECURITY_POLICY = JSON.parse(read('vercel.json')).headers.find(({ source }) => source === '/(.*)').headers
+  .find(({ key }) => key === 'Content-Security-Policy').value;
 
 describe('crawler files', () => {
   it('robots.txt points at the sitemap on the real site address, filled in at build time', () => {
@@ -29,12 +33,8 @@ describe('the page shell works under the content security policy', () => {
   });
 });
 
-describe('hosting security headers stay in sync', () => {
-  it('vercel.json sends exactly the headers defined in security-headers.js', () => {
-    const vercel = JSON.parse(read('vercel.json'));
-    const sent = Object.fromEntries(vercel.headers.find((rule) => rule.source === '/(.*)').headers.map(({ key, value }) => [key, value]));
-    expect(sent).toEqual(SECURITY_HEADERS);
-  });
+describe('hosting security headers', () => {
+  afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 
   it('the policy forbids inline scripts, plugins, framing and foreign form targets', () => {
     expect(CONTENT_SECURITY_POLICY).toContain("script-src 'self'");
@@ -42,6 +42,18 @@ describe('hosting security headers stay in sync', () => {
     expect(CONTENT_SECURITY_POLICY).toContain("object-src 'none'");
     expect(CONTENT_SECURITY_POLICY).toContain("frame-ancestors 'none'");
     expect(CONTENT_SECURITY_POLICY).toContain("form-action 'self'");
+  });
+
+  it('lets the contact form reach the address it sends to (connect-src), or the browser would block it silently', async () => {
+    vi.stubEnv('WEB3FORMS_ACCESS_KEY', 'test-key');
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ success: true }) });
+    vi.stubGlobal('fetch', fetchMock);
+    await inquiryService.create({
+      name: 'Ada', email: 'ada@example.com', projectType: 'residential', propertyType: 'apartment', budgetRange: '100k_250k', timeline: '1_3_months', message: 'Hello', website: '',
+    });
+    const origin = new URL(fetchMock.mock.calls[0][0]).origin;
+    const connectSrc = CONTENT_SECURITY_POLICY.split(';').map((directive) => directive.trim().split(/\s+/)).find(([name]) => name === 'connect-src').slice(1);
+    expect(connectSrc).toContain(origin);
   });
 
   it('falls back to index.html for every client-side route', () => {
