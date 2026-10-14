@@ -5,7 +5,7 @@ import './styles/index.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
-import { holdPreloader, preloaderPainted } from './utils/preloader.js';
+import { preloaderPainted } from './utils/preloader.js';
 
 // React Router remembers scroll positions per history entry, and the first page of every load shares the key "default".
 // A fresh load (address bar, bookmark, link from elsewhere) would therefore open wherever the previous page in this tab
@@ -23,9 +23,6 @@ if (performance.getEntriesByType?.('navigation')[0]?.type === 'navigate') {
   }
 }
 
-// The home page opens on a photo gallery; keep the preloader up until its first photo is on screen (HeroPortal releases it).
-if (window.location.pathname === '/') holdPreloader('hero');
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
@@ -34,7 +31,7 @@ createRoot(document.getElementById('root')).render(
 
 // Lets the static HTML preloader (see index.html) leave once React has taken over the page.
 // Done on the next frame so the real content has actually painted, not just mounted. utils/preloader.js
-// decides the rest: it leaves now, or when the hero's first photo is ready, or after a time limit.
+// decides the rest: it leaves now, or when whatever holds it (the hero, waiting for its first photo) is ready, or after a time limit.
 requestAnimationFrame(() => {
   requestAnimationFrame(preloaderPainted);
 });

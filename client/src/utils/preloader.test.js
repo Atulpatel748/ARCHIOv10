@@ -11,12 +11,19 @@ describe('preloader', () => {
   });
   afterEach(() => vi.useRealTimers());
 
-  it('fades away as soon as React has painted and removes after the fade', () => {
+  it('fades away as soon as React has painted, and removes the node once the fade ends', () => {
     preloaderPainted();
     expect(element().classList.contains('is-hidden')).toBe(true);
-    vi.advanceTimersByTime(299);
     expect(element()).not.toBeNull();
-    vi.advanceTimersByTime(1);
+    const end = new Event('transitionend');
+    end.propertyName = 'opacity';
+    element().dispatchEvent(end);
+    expect(element()).toBeNull();
+  });
+
+  it('still removes the node if the fade never reports back', () => {
+    preloaderPainted();
+    vi.advanceTimersByTime(1300);
     expect(element()).toBeNull();
   });
 

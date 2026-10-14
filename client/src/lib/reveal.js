@@ -5,44 +5,14 @@
 // Both do nothing for people who asked for reduced motion or where IntersectionObserver is missing, so content is never
 // hidden. Both return a cleanup function. The classes (reveal, reveal-item, ...) are styled in styles/base.css.
 
+import { whenTransitionEnds } from './transition.js';
+
 const STAGGER_MS = 110;
 const MAX_STEPS = 5; // a long list should not make the last item wait seconds
-const FALLBACK_SLACK_MS = 600;
-const FALLBACK_DEFAULT_MS = 1200; // CSS declares no transition: there is nothing to wait for
 
 const motionAllowed = () =>
   typeof IntersectionObserver !== 'undefined' &&
   !(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false);
-
-const toMs = (value) => (value.trim().endsWith('ms') ? parseFloat(value) : parseFloat(value) * 1000) || 0;
-
-// How long the element's own transition can take (the longest property, delay included) plus some slack, so the
-// timeout below follows the CSS instead of repeating its durations.
-function fallbackMs(element) {
-  const style = getComputedStyle(element);
-  const delays = style.transitionDelay.split(',');
-  const longest = Math.max(0, ...style.transitionDuration.split(',').map((duration, i) => toMs(duration) + toMs(delays[i % delays.length])));
-  return longest ? longest + FALLBACK_SLACK_MS : FALLBACK_DEFAULT_MS;
-}
-
-// Calls `done` once the element's transform transition ends, or after the fallback if transitionend never fires (a
-// hidden tab). Returns a function that cancels it.
-function whenSettled(element, done) {
-  const stop = () => {
-    element.removeEventListener('transitionend', onEnd);
-    window.clearTimeout(timer);
-  };
-  const finish = () => {
-    stop();
-    done();
-  };
-  const onEnd = (event) => {
-    if (event.target === element && event.propertyName === 'transform') finish();
-  };
-  element.addEventListener('transitionend', onEnd);
-  const timer = window.setTimeout(finish, fallbackMs(element));
-  return stop;
-}
 
 // A small upward fade for one section. Once it has settled the classes are removed: the end state is identical to the
 // unstyled element, and the browser can release the compositing layer that `will-change` was holding.
@@ -56,7 +26,7 @@ export function revealElement(element) {
       if (!entry.isIntersecting) return;
       observer.disconnect();
       element.classList.add('reveal--visible');
-      cancelSettle = whenSettled(element, () => element.classList.remove('reveal', 'reveal--visible'));
+      cancelSettle = whenTransitionEnds(element, 'transform', () => element.classList.remove('reveal', 'reveal--visible'));
     },
     { threshold: 0.15, rootMargin: '0px 0px -10% 0px' },
   );
@@ -84,7 +54,7 @@ export function revealChildren(container, { stagger = STAGGER_MS } = {}) {
   const reveal = (element, step) => {
     element.style.transitionDelay = `${Math.min(step, MAX_STEPS) * stagger}ms`;
     element.classList.add('reveal-item--visible');
-    const stop = whenSettled(element, () => {
+    const stop = whenTransitionEnds(element, 'transform', () => {
       pending.delete(stop);
       tracked.delete(element);
       release(element);

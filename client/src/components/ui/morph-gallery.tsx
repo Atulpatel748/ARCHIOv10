@@ -48,10 +48,14 @@ export type MorphGalleryProps = {
   loop?: boolean
   /** The photo to show. The caller drives the slideshow: the gallery has no controls of its own. */
   index: number
-  /** Called once, when the first photo is on screen (or, without WebGL, has loaded). */
+  /** Called once, when the first photo is visible: on the canvas once its fade-in has finished (or, without WebGL, once it has loaded). */
   onReady?: () => void
   className?: string
 }
+
+// The canvas fades in over this long once the first photo lands; onReady waits for the fade to end (the timer is only
+// a safety net for when the transition never reports back, such as in a hidden tab).
+const FADE_MS = 150
 
 // #region gallery
 /** Wrap past the ends when looping, clamp at them when not. */
@@ -354,6 +358,7 @@ export default function MorphGallery({
     const textures: (WebGLTexture | null)[] = items.map(() => null)
     const aspects: number[] = items.map(() => 1)
     let raf = 0
+    let readyTimer = 0
     let disposed = false
 
     // Dissolve state, in the loop rather than in React: it changes every frame.
@@ -521,7 +526,7 @@ export default function MorphGallery({
                   running = true
                   resize()
                   setReady(true)
-                  fireReady()
+                  readyTimer = window.setTimeout(fireReady, FADE_MS * 4)
                   raf = requestAnimationFrame(frame)
                 }
               },
@@ -545,6 +550,7 @@ export default function MorphGallery({
     return () => {
       disposed = true
       cancelAnimationFrame(raf)
+      window.clearTimeout(readyTimer)
       observer.disconnect()
       canvas.removeEventListener("webglcontextlost", onLost)
       canvas.removeEventListener("webglcontextrestored", onRestored)
@@ -592,8 +598,9 @@ export default function MorphGallery({
             // avoids a black flash on a slow connection. Short, because on the
             // home page it runs under the loading screen, which waits for it.
             opacity: ready ? 1 : 0,
-            transition: "opacity 150ms ease",
+            transition: `opacity ${FADE_MS}ms ease`,
           }}
+          onTransitionEnd={fireReady}
           aria-hidden="true"
         />
       )}

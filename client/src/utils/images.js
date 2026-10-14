@@ -1,4 +1,4 @@
-import widths from '../generated/image-widths.json';
+import widths from '../generated/image-widths.json' with { type: 'json' };
 
 // Photos that live in /images/ come in two files: the original .jpg and a much smaller .avif made by
 // `npm run images`, which also makes a smaller .avif for every size step below the photo's own width (NN-1200.avif)

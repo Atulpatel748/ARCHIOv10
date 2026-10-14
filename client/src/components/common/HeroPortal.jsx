@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { HERO } from '../../constants/content.js';
 import { ROUTES } from '../../constants/routes.js';
 import { modernImageUrl } from '../../utils/images.js';
-import { releasePreloader } from '../../utils/preloader.js';
+import { holdPreloader, releasePreloader } from '../../utils/preloader.js';
 import ArrowIcon from '../ui/ArrowIcon.jsx';
 import MorphGallery from '../ui/morph-gallery';
 
@@ -12,10 +12,6 @@ const SLIDE_COUNT = 5;
 // How far each photo is pulled back from a tight crop (0 = full-screen crop, 1 = whole photo). Kept close to 0 so the
 // photo fills the screen; any edge it leaves is filled with a blurred copy of the same photo.
 const PHOTO_FIT = 0.08;
-
-// The gallery fades its canvas in over 150ms once the first photo lands (morph-gallery.tsx). The preloader waits that
-// long before it starts to lift, so the curtain lifts onto the photo, not onto the black the gallery sits on.
-const RELEASE_DELAY_MS = 150;
 
 // How far above the header the bottom row starts to fade, so it is gone by the time it would touch the header links.
 const BASE_FADE_PX = 64;
@@ -55,12 +51,17 @@ export default function HeroPortal({ projects }) {
     [slides, wantedWidth],
   );
 
-  // With no photos to wait for (no featured projects) the preloader has nothing left to hold for.
-  useEffect(() => {
-    if (count === 0) releasePreloader('hero');
-  }, [count]);
+  // The loading screen waits for the first photo to be on screen, so the visitor never sees the black box the gallery
+  // sits on while it loads. With no photos there is nothing to wait for. (A time limit in utils/preloader.js means a
+  // photo that never loads cannot trap the visitor.)
+  const hasPhotos = count > 0;
+  useLayoutEffect(() => {
+    if (!hasPhotos) return undefined;
+    holdPreloader('hero');
+    return () => releasePreloader('hero');
+  }, [hasPhotos]);
 
-  const releaseWhenPhotoShows = useCallback(() => { setTimeout(() => releasePreloader('hero'), RELEASE_DELAY_MS); }, []);
+  const releaseWhenPhotoShows = useCallback(() => releasePreloader('hero'), []);
 
   useEffect(() => {
     if (!rotates || !playing) return undefined;
