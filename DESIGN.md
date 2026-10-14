@@ -26,7 +26,7 @@ colors:
 
 typography:
   family: "Public Sans Variable, Public Sans, system-ui, sans-serif"
-  displayFamily: "Marcellus (the brand kit's Optima needs a paid web licence and is not used)"
+  displayFamily: "Marcellus; Optima (the brand kit's font) on devices that already have it, such as Apple's"
   display: { size: "clamp(3.5rem, 1rem + 12vw, 12rem)", lineHeight: 0.98, tracking: "-0.02em" }
   h1: { size: "clamp(2rem, 0.9rem + 5.6vw, 6.5rem)", lineHeight: 1.05 }
   h2: { size: "clamp(1.9rem, 1.1rem + 3.5vw, 4.4rem)", lineHeight: 1.08, tracking: "0.015em" }
@@ -82,7 +82,7 @@ Measured contrast on the beige page: ink 11.5:1, muted text 5.4:1, eyebrow label
 
 ## Typography
 
-The brand kit (`Archio Logobrand kit.pdf`) names Optima as the primary font (not used: it needs a paid web licence), Public Sans for the website and UI, and Lora for print. The site has **one display voice**: every heading (page titles, section heads, statements, project and category names, the project hero title, the menu) is Marcellus, in capitals with slightly open tracking (+0.015em, line-height about 1.08); Marcellus has one weight, so hierarchy comes from size. The page titles on Projects, Services, About and Contact are the exception in tracking (-0.02em at their very large size), and the Services rows are the exception in case (mixed case, a list of services rather than headings in capitals). Public Sans is for everything that is not a heading: body text at 16px and 1.55, lead paragraphs, labels and eyebrows, buttons, navigation and the small footer column labels. A heading is therefore Marcellus by default, with no opt-in class. Lora (the brand kit's font for write-ups) is used only for long-form text: the project descriptions and the About page paragraphs.
+The brand kit (`Archio Logobrand kit.pdf`) names Optima as the primary font (not served, it needs a paid web licence; headings use it only on devices that already have it, such as Apple's), Public Sans for the website and UI, and Lora for print. The site has **one display voice**: every heading (page titles, section heads, statements, project and category names, the project hero title, the menu) is Marcellus (or Optima on Apple devices), in capitals with slightly open tracking (+0.015em, line-height about 1.08); Marcellus has one weight, so hierarchy comes from size. The page titles on Projects, Services, About and Contact are the exception in tracking (-0.02em at their very large size), and the Services rows are the exception in case (mixed case, a list of services rather than headings in capitals). Public Sans is for everything that is not a heading: body text at 16px and 1.55, lead paragraphs, labels and eyebrows, buttons, navigation and the small footer column labels. A heading is therefore Marcellus by default, with no opt-in class. Lora (the brand kit's font for write-ups) is used only for long-form text: the project descriptions and the About page paragraphs.
 
 The type scale is deliberately small: no more than ten distinct rendered sizes on a page, and an automated test enforces it. The display steps are the page title (up to 11rem), `--type-h1` (the project hero title), `--type-h2` (section heads, statements, project and category names, the call-to-action heading: one size, about 68px at 1440) and `--type-h3` (card titles, legal headings); do not add a step between them.
 

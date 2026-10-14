@@ -1,5 +1,5 @@
 import '@fontsource-variable/public-sans'; // brand kit: website and UI text
-import '@fontsource/marcellus'; // display headings (the brand kit's Optima needs a paid web licence and is not used)
+import '@fontsource/marcellus'; // display headings; Optima (the brand kit's font) shows instead only where the device already has it
 import '@fontsource-variable/lora'; // brand kit's third font: project descriptions
 import './styles/index.css';
 import { StrictMode } from 'react';

@@ -53,9 +53,9 @@
 
   --font-sans: 'Public Sans Variable', 'Public Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   /* Every display heading (page titles, section heads, statements, project and category names, the menu); everything else
-     (body, labels, buttons, navigation) is Public Sans. The brand kit's primary font, Optima, needs a paid web licence and is
-     not used; Marcellus is the display face. */
-  --font-serif: Marcellus, 'Palatino Linotype', Palatino, Georgia, serif;
+     (body, labels, buttons, navigation) is Public Sans. The brand kit's primary font, Optima, needs a paid web licence, so it
+     is not served: it shows only on devices that already have it (Apple's), and Marcellus everywhere else. */
+  --font-serif: Optima, Marcellus, 'Palatino Linotype', Palatino, Georgia, serif;
   /* Brand kit's third font, for long-form project text (portfolio write-ups). */
   --font-text-serif: 'Lora Variable', Lora, Georgia, 'Times New Roman', serif;
 

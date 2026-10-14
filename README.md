@@ -42,7 +42,8 @@ asks for a logo of at least 112px). An SVG of the wordmark from the designer wou
 
 **Fonts.** Public Sans for all text, Marcellus for display headings and Lora for the long-form write-ups (project
 descriptions, the About page), all self-hosted through Fontsource and licensed OFL. The brand kit's primary font is
-Optima, which needs a paid web licence (Monotype) and is not used.
+Optima, which needs a paid web licence (Monotype), so it is not served: headings use it only on devices that already have
+it (Apple's: iPhone, iPad, Mac) and Marcellus everywhere else (see `--font-serif` in `client/src/styles/tokens.css`).
 
 **Home page speed.** Three things make the home page load faster, and each is measured (Lighthouse, mobile).
 The home page ships in the main script instead of a separate download. The portfolio is built into the site, so no page waits for a request. The hero

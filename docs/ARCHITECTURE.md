@@ -28,8 +28,8 @@ All tokens are CSS custom properties in `client/src/styles/tokens.css`.
 - **Colour** (brand kit): bg `#dacfba`, rose `#ceb6a8` (call-to-action band, photo placeholders), surface `#f2eadc`/`#f8f2e7`, ink `#2b1012` (11.5:1 on bg),
   muted `#5e4a45` (5.4:1 on bg), border `rgba(43,16,18,.24)`, brand `#4c1114` (cream text on it 13.1:1), accent `#7a2230`
   (6.5:1 on bg), success `#145e34`, warning `#774700`, error `#9e211a` (each 5.1:1 on bg).
-- **Type**: Public Sans variable (weight axis) for text and Marcellus for display headings (the brand kit's Optima needs a paid web
-  licence and is not used), self-hosted; the ARCHIÓ wordmark is the brand kit artwork (`brand/wordmark.webp`). Display/headings uppercase,
+- **Type**: Public Sans variable (weight axis) for text and Marcellus for display headings (self-hosted; the brand kit's Optima shows instead only on devices that
+  already have it, as it needs a paid web licence); the ARCHIÓ wordmark is the brand kit artwork (`brand/wordmark.webp`). Display/headings uppercase,
   weight 500, tracking -0.025em, leading 0.98 to 1.05. Body 16px/1.55, normal width. Scale (fluid):
   display 3.5 to 12rem, h1 2 to 6.5rem, h2 1.75 to 4rem, h3 1.125 to 1.625rem, lead 1.125 to 1.375rem,
   small 0.875rem, caption 0.75rem.
