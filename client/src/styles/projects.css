@@ -1,0 +1,112 @@
+/* Project cards and their grid, the filters on the projects page (also used by the related projects on a project page). */
+
+/* Projects */
+.project-card {
+  display: block;
+  text-decoration: none;
+}
+
+.project-card__media {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-secondary);
+}
+
+.project-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-out);
+}
+
+.project-card:focus-visible .project-card__media img {
+  transform: scale(1.035);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-card__media img {
+    transform: scale(1.035);
+  }
+}
+
+/* Category, name and place always stack, so a short name never jumps up beside the category. */
+.project-card__body {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-1);
+  padding-top: var(--space-3);
+}
+
+.project-card__title {
+  font-size: var(--type-h3);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-card__title {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.project-grid {
+  display: grid;
+  gap: var(--space-7) var(--space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .project-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-grid--dense {
+    grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
+  }
+}
+
+/* Projects page, wide screens: wide and narrow cards alternate and are staggered down the page on 12 columns. */
+@media (min-width: 1024px) {
+  .project-grid:not(.project-grid--dense) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--space-9) var(--space-5);
+  }
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-7);
+  padding-bottom: var(--space-5);
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.filters__search {
+  width: min(100%, 320px);
+}
+
+/* Full project list: the same wide / narrow staggered rhythm as the home page, on wide screens only. The dense
+   4-up view keeps its plain grid. */
+@media (min-width: 1024px) {
+  .project-grid:not(.project-grid--dense) {
+    gap: var(--space-9) var(--space-5);
+  }
+
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 1) { grid-column: 1 / span 7; margin-top: 0; }
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 2) { grid-column: 9 / span 4; margin-top: var(--space-11); }
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 3) { grid-column: 5 / span 8; margin-top: 0; }
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 4) { grid-column: 1 / span 5; margin-top: 0; }
+
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 1) .project-card__media,
+  .project-grid:not(.project-grid--dense) > :nth-child(4n + 3) .project-card__media {
+    aspect-ratio: 3 / 2;
+  }
+}
+
+.project-grid-count {
+  margin-bottom: var(--space-5);
+}

@@ -1,0 +1,324 @@
+/* The home page: selected projects, the pinned "We design" sequence, the approach split. */
+
+/* Two equal columns with a hairline between them (the approach section on the home page). */
+@media (min-width: 1024px) {
+  .split--divided {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0;
+  }
+
+  .split--divided > :first-child {
+    padding-right: var(--space-7);
+  }
+
+  .split--divided > :last-child {
+    padding-left: var(--space-7);
+    border-left: var(--border-thin) solid var(--color-border);
+  }
+}
+
+/* Selected projects: zigzag rows. Each project is one row and one link: a large photo and, beside it, the number and
+   category, the name in the display font, and the place. The rows zigzag on every screen (see the
+   media queries below). */
+.project-rows {
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.project-row {
+  display: grid;
+  gap: var(--space-5);
+  padding-block: var(--space-6);
+  border-top: var(--border-thin) solid var(--color-border);
+  text-decoration: none;
+}
+
+.project-row__media {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  background: var(--color-secondary);
+}
+
+.project-row__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms var(--ease-out);
+}
+
+.project-row__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.project-row__meta {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.project-row__name {
+  margin-block: var(--space-1);
+  font-size: var(--type-h2);
+  line-height: var(--leading-tight);
+  transition: color var(--duration-fast);
+}
+
+.project-row:focus-visible .project-row__media img {
+  transform: scale(1.035);
+}
+
+.project-row:focus-visible .project-row__name {
+  color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-row:hover .project-row__media img {
+    transform: scale(1.035);
+  }
+
+  .project-row:hover .project-row__name {
+    color: var(--color-accent);
+  }
+
+}
+
+/* Phones: a soft zigzag. The photo stays above its text but is a little narrower and keeps to one side, alternating:
+   odd rows to the right with the text on the left, even rows to the left with the text set to the right. */
+@media (max-width: 767px) {
+  .project-row__media {
+    width: 86%;
+  }
+
+  .project-rows > li:nth-child(odd) .project-row__media {
+    justify-self: end;
+  }
+
+  .project-rows > li:nth-child(even) .project-row__text {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+/* Tablets and up: photo and text side by side, swapping sides row by row (text first in the odd rows). Tablets split
+   the row in half; wide screens give the photo 7 of 12 parts. */
+@media (min-width: 768px) {
+  .project-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .project-row__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  .project-rows > li:nth-child(odd) .project-row__media {
+    order: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-row {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-9);
+    padding-block: var(--space-7);
+  }
+
+  .project-row__media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .project-rows > li:nth-child(even) .project-row {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+
+/* We do: type only. "We" and "do" sit left and right, large and in the muted ink, with the category names centred
+   between them and the one button under the names. While the scroll sequence runs (useScrollSequence, below) the
+   section is a pinned screen: the words start together in the middle and draw out to the edges. */
+.do-type {
+  position: relative;
+}
+
+.do-type__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - var(--header-h) - var(--border-thin));
+  min-height: calc(100svh - var(--header-h) - var(--border-thin));
+  padding-block: var(--section-y);
+  overflow: clip; /* not hidden: that would make the stage a scroll container and stop it pinning */
+}
+
+.do-type__big {
+  position: absolute;
+  inset: 0 max(var(--gutter), calc((100% - 1680px) / 2)); /* on very wide screens the words stop 1680px apart */
+  display: flex;
+  justify-content: space-between;
+  container-type: inline-size; /* the words measure their travel against this line (cqw) */
+  height: fit-content;
+  margin: auto 0; /* with inset 0 this centres the one line of words in the stage */
+  overflow: clip; /* the masked line the words rise out of */
+  color: var(--color-muted);
+  opacity: 0.75; /* lighter than the names, still above 3:1 for large text */
+  font-family: var(--font-serif);
+  font-size: min(clamp(4.5rem, 1rem + 16vw, 16rem), 7.6vw); /* "design" is wide: it must clear the names beside it */
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.do-type__center {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+.do-row {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  line-height: 1.05;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--duration-fast);
+}
+
+/* On a touch screen each name is a comfortable target (44px) even where the type is small. */
+@media (pointer: coarse) {
+  .do-row {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+.do-row:focus-visible {
+  color: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .do-row:hover {
+    color: var(--color-accent);
+  }
+}
+
+/* Narrow or portrait screens have no room for the names between the words, so the words sit above the names and the
+   pair is centred in the stage. */
+@media ((max-width: 1023px) or (max-aspect-ratio: 4/5)) and (min-height: 560px) {
+  .do-type__stage {
+    align-content: center;
+    row-gap: var(--space-8);
+  }
+
+  .do-type__big {
+    position: static;
+    font-size: 12.5vw; /* no names beside the words here, but "design" must fit within half the line */
+    justify-self: stretch;
+    margin: 0 var(--gutter);
+  }
+}
+
+/* Short screens (laptops, phones on their side): the framing words step down a size so they clear the names. */
+@media (min-width: 1024px) and (max-height: 820px), (max-height: 559px) {
+  .do-type__big {
+    font-size: min(calc(var(--type-h1) * 1.35), 7.6vw);
+  }
+}
+
+/* The section scrolls up from the bottom of the screen like any other, with "we do" together at the middle. Once its
+   stage touches the header it pins, and the scroll plays one step after another: "we" moves out to the left and "do"
+   to the right, the words fade back, the names come up from below one by one, each easing in over a long stretch and
+   overlapping the one before, until they stand together in a line, and the button appears last.
+   useScrollSequence sets --seq on the section, the scroll distance in svh since the stage touched the header, and
+   every step below is a function of it, so the sequence plays the same in every browser. Without it (reduced motion,
+   no script) there is no data-seq and the section is one screen with everything in place. */
+.do-type[data-seq] {
+  height: calc(240svh - var(--header-h) - var(--border-thin));
+}
+
+.do-type[data-seq] .do-type__stage {
+  position: sticky;
+  top: var(--header-h);
+}
+
+.do-type[data-seq] .do-type__big {
+  opacity: 1;
+  color: var(--color-ink);
+}
+
+/* 0 to 45svh: the words move out, easing at both ends. 45 to 66svh: they fade back. */
+.do-type[data-seq] .do-type__word {
+  --move: clamp(0, calc(var(--seq, 0) / 45), 1);
+  --eased: calc(var(--move) * var(--move) * (3 - 2 * var(--move)));
+  --fade: clamp(0, calc((var(--seq, 0) - 45) / 21), 1);
+  transform: translateX(calc((1 - var(--eased)) * var(--travel)));
+  opacity: calc(1 - 0.4 * var(--fade));
+}
+
+/* Each word starts with its inner edge on the middle line, a hair apart from the other. */
+.do-type[data-seq] .do-type__word--start {
+  --travel: calc(50cqw - 100% - 0.05em);
+}
+
+.do-type[data-seq] .do-type__word--end {
+  --travel: calc(100% + 0.05em - 50cqw);
+}
+
+/* From 56svh each name rises from below its place over 40svh while it fades in, 6svh after the one before it, and
+   settles softly (the last fifth of the rise is the slow part). */
+.do-type[data-seq] .do-type__list li {
+  --come: clamp(0, calc((var(--seq, 0) - 56 - var(--i, 0) * 6) / 40), 1);
+  --rest: calc(1 - var(--come));
+  --rise: calc(1 - var(--rest) * var(--rest) * var(--rest) * var(--rest) * var(--rest));
+  opacity: var(--rise);
+  transform: translateY(calc((1 - var(--rise)) * 28svh));
+}
+
+/* From 114svh the button fades in, last. */
+.do-type[data-seq] .do-type__button {
+  opacity: clamp(0, calc((var(--seq, 0) - 114) / 18), 1);
+}
+
+/* A keyboard user who tabs into the names would otherwise land on something still invisible, wherever the scroll is,
+   so keyboard focus shows the finished screen at once. (:focus-visible, not :focus-within: a mouse press must not move
+   the names from under the pointer.) */
+.do-type[data-seq]:has(.do-row:focus-visible, .do-type__button:focus-visible) .do-type__word {
+  transform: none;
+  opacity: 0.6;
+}
+
+.do-type[data-seq]:has(.do-row:focus-visible, .do-type__button:focus-visible) .do-type__list li {
+  opacity: 1;
+  transform: none;
+}
+
+.do-type[data-seq]:has(.do-row:focus-visible, .do-type__button:focus-visible) .do-type__button {
+  opacity: 1;
+}
+
+/* Home process list: the numerals match the point text beside them. */
+.toc--home .toc-row__num {
+  color: var(--color-ink);
+}
+
+.split {
+  display: grid;
+  gap: var(--space-7);
+}
+
+@media (min-width: 1024px) {
+  .split {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-9);
+  }
+}

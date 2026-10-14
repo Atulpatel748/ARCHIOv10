@@ -91,11 +91,6 @@
   gap: var(--space-4);
 }
 
-.page-head {
-  padding-top: clamp(40px, 7vw, 112px);
-  padding-bottom: clamp(24px, 3vw, 48px);
-}
-
 .app-shell {
   display: flex;
   min-height: 100vh;
@@ -106,21 +101,4 @@
 .app-shell > main {
   flex: 1;
   outline: none;
-}
-
-/* Two equal columns with a hairline between them (the approach section on the home page). */
-@media (min-width: 1024px) {
-  .split--divided {
-    grid-template-columns: 1fr 1fr;
-    column-gap: 0;
-  }
-
-  .split--divided > :first-child {
-    padding-right: var(--space-7);
-  }
-
-  .split--divided > :last-child {
-    padding-left: var(--space-7);
-    border-left: var(--border-thin) solid var(--color-border);
-  }
 }

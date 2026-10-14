@@ -211,7 +211,7 @@ classes once the animation ends, so they do not hold a compositing layer afterwa
 Scroll-driven behaviour comes from two places. GSAP with ScrollTrigger drives the word-by-word reveal of the
 Our Approach heading (`WordReveal`, `lib/gsapLoader.js`). The pinned "We design" section on the home page is driven by
 `useScrollSequence`, which writes how far the page has scrolled since the section touched the header into a CSS variable
-(`--seq`, in svh); `styles/pages.css` derives every step from it (words out and faded, names one by one, button last),
+(`--seq`, in svh); `styles/home.css` derives every step from it (words out and faded, names one by one, button last),
 so it plays the same in every browser instead of relying on CSS scroll-driven animations. Under reduced motion it is
 one still screen. GSAP is loaded with a dynamic `import()` only when that
 effect runs, so it sits in its own chunks and is never downloaded in tests or for people who prefer reduced motion.

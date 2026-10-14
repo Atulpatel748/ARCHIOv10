@@ -1,0 +1,141 @@
+/* The About page: the title and text rows, the team, vision and mission. */
+
+/* About page rows (the company profile's layout): title on the left, a thin rule, the text on the right. Below 900px
+   the title simply sits above its text. */
+.about-split {
+  display: grid;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.about-split__title {
+  font-size: var(--type-h2);
+  line-height: var(--leading-heading);
+}
+
+.about-split__body > * + * {
+  margin-top: var(--space-4);
+}
+
+.about-list {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: 1.25em;
+  list-style: disc outside;
+}
+
+@media (min-width: 900px) {
+  .about-split {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 0;
+  }
+
+  .about-split__title {
+    padding-right: var(--space-6);
+  }
+
+  .about-split__body {
+    max-width: 44rem;
+    padding: var(--space-5) 0 var(--space-5) var(--space-8);
+    border-left: var(--border-thin) solid var(--color-border-strong);
+  }
+}
+
+/* Team and two-column text blocks */
+.team-grid {
+  display: grid;
+  gap: var(--space-7) var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 20rem));
+}
+
+.team-card {
+  display: grid;
+  gap: var(--space-1);
+  justify-items: center;
+  text-align: center;
+}
+
+/* "Our team": the title centred with a short rule under it, the portraits centred below (as in the company profile). */
+.about-team__title {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  font-size: var(--type-h2);
+  text-align: center;
+}
+
+.about-team__title::after {
+  content: '';
+  width: min(100%, 16rem);
+  border-top: var(--border-thin) solid var(--color-border-strong);
+}
+
+.team-grid {
+  justify-content: center;
+}
+
+.team-card__photo {
+  width: 100%;
+  aspect-ratio: 1;
+  margin-bottom: var(--space-3);
+  border-radius: 50%;
+  background: var(--color-surface-strong);
+  object-fit: cover;
+}
+
+/* Vision and mission share one row with a rule between them. On wide screens the vision title is at the top left with
+   its text at the foot, and the mission is the mirror image: text at the top, title at the foot, right-aligned. */
+.vision-mission {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.vision-mission__half {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.vision-mission__half > .lora > * + * {
+  margin-top: var(--space-4);
+}
+
+@media (min-width: 900px) {
+  .vision-mission {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .vision-mission__half {
+    justify-content: space-between;
+    gap: var(--space-8);
+    min-height: 26rem;
+  }
+
+  .vision-mission__half:first-child {
+    padding-right: var(--space-8);
+    border-right: var(--border-thin) solid var(--color-border-strong);
+  }
+
+  .vision-mission__half:last-child {
+    flex-direction: column-reverse;
+    padding-left: var(--space-8);
+  }
+
+  .vision-mission__half:last-child .about-split__title {
+    text-align: right;
+  }
+}
+
+.about-list li {
+  display: list-item; /* the base reset removes list markers; the About lists keep theirs */
+  list-style: disc;
+}
+
+/* Phones: the team portraits stay circles but no longer fill the whole screen width. */
+@media (max-width: 639px) {
+  .team-card__photo {
+    width: min(100%, 15rem);
+  }
+}

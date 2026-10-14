@@ -1,0 +1,47 @@
+/* The contact page and the inquiry form's stepper. */
+
+/* Services and about */
+/* Contact and forms */
+.contact-layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .contact-layout {
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-9);
+  }
+}
+
+.form-panel {
+  padding: clamp(20px, 3vw, 48px);
+  border: var(--border-thin) solid var(--color-border-strong);
+  background: var(--color-surface);
+}
+
+.stepper {
+  display: flex;
+  gap: var(--space-4);
+  margin: 0 0 var(--space-6);
+  padding: 0;
+  list-style: none;
+}
+
+.stepper li {
+  flex: 1;
+  padding-top: var(--space-3);
+  border-top: 3px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: var(--type-small);
+}
+
+.stepper li[data-done='true'],
+.stepper li[aria-current='step'] {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.stepper li[aria-current='step'] {
+  font-weight: 600;
+}

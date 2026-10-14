@@ -31,9 +31,10 @@ describe('interaction CSS', () => {
   it('keeps every hover effect available to keyboard users through :focus-visible', () => {
     const typography = readFileSync(join(dir, 'typography.css'), 'utf8');
     expect(typography).toMatch(/a:focus-visible > \.roll > span/);
-    const pages = readFileSync(join(dir, 'pages.css'), 'utf8');
-    expect(pages).toMatch(/\.project-card:focus-visible \.project-card__media img/);
-    expect(pages).toMatch(/\.do-row:focus-visible/);
+    const projects = readFileSync(join(dir, 'projects.css'), 'utf8');
+    expect(projects).toMatch(/\.project-card:focus-visible \.project-card__media img/);
+    const home = readFileSync(join(dir, 'home.css'), 'utf8');
+    expect(home).toMatch(/\.do-row:focus-visible/);
   });
 
   it('gives buttons, chips and pagination a pressed state', () => {
