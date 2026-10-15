@@ -220,7 +220,8 @@ export default function HeroPortal({ projects }) {
         <div className="hero-portal__base container">
           <div className="hero-portal__featured">
             <div className="hero-portal__project">
-              <p className="hero-portal__place"><PinIcon /> {current.city}</p>
+              {/* Keyed, so each photo's place name is a new element and fades in (hero-portal.css). */}
+              <p className="hero-portal__place" key={current.slug}><PinIcon /> {current.city}</p>
             </div>
             <Link className="hero-portal__view" to={ROUTES.project(current.slug)}>
               <span>View project</span>
@@ -234,7 +235,7 @@ export default function HeroPortal({ projects }) {
               aria-label={playing ? 'Pause slideshow' : 'Play slideshow'}
               onClick={() => setPlaying((value) => !value)}
             >
-              <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
+              <svg key={playing ? 'pause' : 'play'} viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
                 {playing ? <path d="M5 3v10M11 3v10" stroke="currentColor" strokeWidth="1.5" /> : <path d="M5 3l8 5-8 5z" fill="currentColor" />}
               </svg>
             </button>

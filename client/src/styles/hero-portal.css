@@ -121,6 +121,16 @@
   align-items: center;
   gap: var(--space-2);
   letter-spacing: 0.18em;
+  transition: opacity var(--duration-base) var(--ease-out), filter var(--duration-base) var(--ease-out);
+}
+
+/* A new place name (one per photo) comes in softly while the photos dissolve, instead of switching in one frame; the
+   slight blur makes the old and new name read as one change. */
+@starting-style {
+  .hero-portal__place {
+    opacity: 0;
+    filter: blur(2px);
+  }
 }
 
 .hero-portal__view {
@@ -155,6 +165,18 @@
 
 .hero-portal__toggle:active {
   transform: scale(0.97);
+}
+
+/* Pause and play swap icons; the new one grows in a touch (from 0.9, never from nothing). */
+.hero-portal__toggle svg {
+  transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+}
+
+@starting-style {
+  .hero-portal__toggle svg {
+    opacity: 0;
+    transform: scale(0.9);
+  }
 }
 
 .hero-portal__toggle:focus-visible {

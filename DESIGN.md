@@ -120,7 +120,9 @@ Motion explains what is new, nothing more. Everything animates `transform` and `
 | Section reveal | 600ms | rises 24px, once per element |
 | Card and gallery reveal | 600ms | rises 24px, 60ms apart, first load only (filter results simply show), classes removed after settling |
 | Page change | 300ms | new page fades in, rising 8px; not replayed for filter-only changes |
-| Photo hover zoom | 800ms | settles to 1.035 (1.04 in the gallery) |
+| Photo hover zoom | 800ms in, 300ms out | settles to 1.035 (1.04 in the gallery); lets go quickly so a pointer crossing a grid leaves nothing zoomed behind it |
+| Hero place name, pause / play icon | 300ms / 150ms | the name fades in from a 2px blur with each new photo; the new icon grows in from 0.9 |
+| Sending spinner, field error | 150ms | the spinner fades in; an error fades in, settling 2px |
 | Text roll on hover | 150ms | nav links and buttons |
 | Card and row press | 150ms | the photo (not the whole card) scales to 0.98; category names and menu links to 0.97 |
 | Phone menu | 150ms | fades in on open (no slide), closes at once |

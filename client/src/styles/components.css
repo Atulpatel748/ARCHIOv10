@@ -91,6 +91,14 @@
   border-right-color: transparent;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+/* Fades in when a button starts sending, so the button changes state instead of jumping. */
+@starting-style {
+  .spinner {
+    opacity: 0;
+  }
 }
 
 @keyframes spin {
@@ -163,6 +171,15 @@
   color: var(--color-error);
   font-size: var(--type-small);
   font-weight: 500;
+  transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+}
+
+/* Arrives like the form's alerts: a short fade, settling 2px down from under its field. */
+@starting-style {
+  .field__error {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
 }
 
 .input,

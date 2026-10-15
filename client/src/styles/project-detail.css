@@ -83,11 +83,12 @@
   height: 100%;
   object-fit: cover;
   background: var(--color-secondary);
-  transition: transform var(--duration-slow) var(--ease-out);
+  transition: transform var(--duration-base) var(--ease-out); /* leaving is quick; settling in is slow (below) */
 }
 
 @media (hover: hover) and (pointer: fine) {
   .gallery figure:hover img {
+    transition-duration: var(--duration-slow);
     transform: scale(1.04);
   }
 }
