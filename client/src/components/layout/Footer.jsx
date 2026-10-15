@@ -1,11 +1,11 @@
 import { Link } from 'react-router';
-import { NAV_LINKS, SITE } from '../../constants/site.js';
+import { SITE } from '../../constants/site.js';
 import EmailLink from '../common/EmailLink.jsx';
 import { ROUTES } from '../../constants/routes.js';
 
-// The wordmark and a line about the studio, then the contact, studio, legal and follow columns (site.css), and the
-// copyright and company line at the base. Contact is left out of the studio column: the closing band and the
-// header already lead there.
+// The wordmark and a line about the studio, then two columns: how to reach the studio (email, phone, Instagram) and the
+// legal pages (site.css), with the copyright and company line at the base. The site's own pages are not listed again:
+// the header carries them on every screen.
 export default function Footer() {
   return (
     <footer className="site-footer">
@@ -25,14 +25,9 @@ export default function Footer() {
             </svg>
             {SITE.phone}
           </a>
-        </div>
-        <div className="footer-col">
-          <h2>Studio</h2>
-          <ul className="footer-list">
-            {NAV_LINKS.filter((link) => link.to !== ROUTES.contact).map((link) => (
-              <li key={link.to}><Link to={link.to}>{link.label}</Link></li>
-            ))}
-          </ul>
+          {SITE.social.map((item) => (
+            <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a>
+          ))}
         </div>
         <nav className="footer-col" aria-label="Legal">
           <h2>Legal</h2>
@@ -42,16 +37,6 @@ export default function Footer() {
             <li><Link to={ROUTES.cookies}>Cookie policy</Link></li>
           </ul>
         </nav>
-        <div className="footer-col footer-follow">
-          <h2>Follow</h2>
-          <ul className="footer-list">
-            {SITE.social.map((item) => (
-              <li key={item.label}>
-                <a href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
         <div className="footer-legal">
           <p>&copy; {new Date().getFullYear()} {SITE.name}. {SITE.address}.</p>
           <p>{SITE.licenceNumber && <>Trade Licence: {SITE.licenceNumber} &nbsp;·&nbsp; </>}{SITE.parent}</p>

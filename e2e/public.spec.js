@@ -522,20 +522,26 @@ test.describe('public site', () => {
     await expect(page.getByText('Co-Founder, Strategy & Growth')).toBeVisible();
     // The bullet lists keep room for their markers inside the text column, not out in the page margin.
     expect(await page.locator('.about-list').first().evaluate((el) => parseFloat(getComputedStyle(el).paddingLeft))).toBeGreaterThan(0);
-    await expect(page.locator('.footer-follow').getByRole('link', { name: 'Instagram' })).toBeVisible();
+    await expect(page.locator('.footer-contact').getByRole('link', { name: 'Instagram' })).toBeVisible();
     await expect(page.locator('.footer-contact').getByRole('link', { name: /971 55 654 1410/ }).locator('.icon-phone')).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Legal' }).getByRole('link', { name: 'Privacy notice' })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Legal' }).getByRole('link', { name: 'Terms of service' })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Legal' }).getByRole('link', { name: 'Cookie policy' })).toBeVisible();
     await expect(page.locator('.footer-legal').getByText('Beracah Trading', { exact: true })).toBeVisible();
-    // "Contact" is not repeated in the footer's studio column (the header and the closing band lead there).
-    await expect(page.locator('.site-footer').getByRole('link', { name: 'Contact', exact: true })).toHaveCount(0);
+    // The site's own pages are not listed again in the footer: the header carries them on every screen.
+    for (const name of ['Contact', 'Projects', 'Services', 'About']) {
+      await expect(page.locator('.site-footer').getByRole('link', { name, exact: true })).toHaveCount(0);
+    }
 
-    const [copyright, company, studio, legal] = await Promise.all(['.footer-legal p:first-child', '.footer-legal p:last-child', '.footer-grid > :nth-child(3)', '.footer-grid > :nth-child(4)']
+    const [copyright, company, contact, legal] = await Promise.all(['.footer-legal p:first-child', '.footer-legal p:last-child', '.footer-contact', '.footer-grid > nav']
       .map((selector) => page.locator(selector).boundingBox()));
-    expect(Math.abs(studio.y - legal.y)).toBeLessThan(1); // Studio and Legal always sit side by side
-    if ((page.viewportSize()?.width ?? 0) >= 900) expect(copyright.x + copyright.width / 2).toBeLessThan(company.x + company.width / 2); // copyright left, company right
-    expect(studio.x).toBeLessThan(legal.x);
+    if ((page.viewportSize()?.width ?? 0) >= 900) {
+      expect(Math.abs(contact.y - legal.y)).toBeLessThan(1); // Contact and Legal side by side
+      expect(contact.x).toBeLessThan(legal.x);
+      expect(copyright.x + copyright.width / 2).toBeLessThan(company.x + company.width / 2); // copyright left, company right
+    } else {
+      expect(legal.y).toBeGreaterThan(contact.y); // one column on phones: Legal under Contact
+    }
   });
 
   test('project page shows the area in both units and hides an unspecified year and style', async ({ page }) => {

@@ -187,7 +187,7 @@
 .textarea {
   width: 100%;
   min-height: 48px;
-  padding: 12px 14px;
+  padding: var(--space-3) var(--space-4);
   border: var(--border-thin) solid var(--color-ink);
   border-radius: var(--radius-none);
   background: var(--color-surface-strong);
@@ -209,10 +209,28 @@
 
 .select {
   appearance: none;
-  padding-right: 40px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%232b1012' stroke-width='1.6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
+  padding-right: var(--space-7);
+}
+
+/* The chevron is drawn by the wrapper (a select cannot hold a pseudo-element), in the ink token through a mask, so it
+   follows the palette instead of carrying its own hard-coded colour. */
+.select-wrap {
+  position: relative;
+  display: block;
+}
+
+.select-wrap::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: var(--space-4);
+  width: 12px;
+  height: 8px;
+  margin-top: -4px;
+  background: var(--color-ink);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat center / contain;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='black' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat center / contain;
+  pointer-events: none;
 }
 
 .input[aria-invalid='true'],
@@ -226,6 +244,7 @@
 .select:disabled,
 .textarea:disabled {
   opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .check {

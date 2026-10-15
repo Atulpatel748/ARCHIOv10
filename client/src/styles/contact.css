@@ -10,6 +10,13 @@
     grid-template-columns: 5fr 7fr;
     gap: var(--space-9);
   }
+
+  /* The details are shorter than the form; they stay in view beside it instead of ending above an empty column. */
+  .contact-layout > :first-child {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-6));
+    align-self: start;
+  }
 }
 
 .form-panel {

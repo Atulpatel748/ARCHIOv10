@@ -270,9 +270,9 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   }
 }
 
-/* Footer: the wordmark and a line about the studio, then the contact, studio, legal and follow columns, and the company
-   line at the base. As tall as its content (not a full screen), so a page without a call to action is not left with an
-   empty band. Phones: brand and contact full width, the link lists two to a row. */
+/* Footer: the wordmark and a line about the studio, then the contact column (email, phone, Instagram) and the legal
+   links, and the company line at the base. As tall as its content (not a full screen), so a page without a call to
+   action is not left with an empty band. Phones: everything in one column. */
 .site-footer {
   background: var(--color-brand);
   color: var(--color-inverse);
@@ -280,7 +280,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
 
 .footer-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6) var(--space-5);
   padding-block: var(--space-7) var(--space-5);
   color: var(--color-bg); /* brand beige on the maroon, as the brand kit shows the wordmark */
@@ -380,34 +380,21 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   margin: 0;
 }
 
-/* From 900px the brand and the contact share the first row and the three link columns sit under them: five columns on
-   one row would squeeze the email address until it broke in the middle of a word. */
+/* From 900px brand, contact and legal share one row; the contact column never gets narrower than the email address. */
 @media (min-width: 900px) {
   .footer-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.2fr) minmax(max-content, 1.4fr) minmax(0, 0.8fr);
     column-gap: var(--space-7);
     padding-block: var(--space-9) var(--space-5);
   }
 
   .footer-brand,
   .footer-contact {
-    grid-column: span 2;
+    grid-column: auto;
   }
 
   .footer-legal {
     margin-top: var(--space-7);
-  }
-}
-
-/* From 1280px all five sit on one row; the contact column never gets narrower than the email address. */
-@media (min-width: 1280px) {
-  .footer-grid {
-    grid-template-columns: minmax(0, 1.3fr) minmax(max-content, 1.4fr) repeat(3, minmax(0, 0.6fr));
-  }
-
-  .footer-brand,
-  .footer-contact {
-    grid-column: auto;
   }
 }
 

@@ -67,7 +67,7 @@
   --type-body: 1rem;
   --type-small: 0.875rem;
   --type-caption: 0.75rem;
-  --leading-tight: 0.98;
+  --leading-tight: 1; /* the floor for display type: tighter and a descender (the J of JLT) meets the line below */
   --leading-heading: 1.08;
   --leading-body: 1.55;
   --tracking-heading: 0.015em;
