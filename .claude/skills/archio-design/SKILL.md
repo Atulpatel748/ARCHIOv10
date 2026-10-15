@@ -1,6 +1,6 @@
 ---
 name: archio-design
-description: "Design rules for the Archio interior-design studio website (React + plain CSS in client/). Use this whenever you add or change any page, component, style, animation, image, copy or colour on this site, even for small tweaks like a button, a spacing change or a new section. It keeps the quiet editorial look consistent: beige canvas, maroon brand colour, dark maroon-brown ink, one typeface, large type, photography first, and motion that only uses transform and opacity."
+description: "Design rules for the Archio interior-design studio website (React + plain CSS in client/). Use this whenever you add or change any page, component, style, animation, image, copy or colour on this site, even for small tweaks like a button, a spacing change or a new section. It keeps the quiet editorial look consistent: beige canvas, maroon brand colour, dark maroon-brown ink, the brand kit fonts, large type, photography first, and motion that only uses transform and opacity."
 ---
 
 # Archio design rules
@@ -10,7 +10,7 @@ Read `DESIGN.md` in the project root first. It holds the exact tokens and is the
 ## Always
 
 1. **Maroon and beige only.** Beige `--color-bg`, maroon `--color-brand` for buttons and dark bands, `--color-ink` for text, and the lighter maroon `--color-accent` only for the active row, hover and focus. No new colours, no pure black or grey.
-2. **Brand kit fonts.** Public Sans for all text, plus the display font (Marcellus; Optima, the brand kit's font, only where the device already has it) only for `.t-serif` headings and the featured project's name. The ARCHIÓ wordmark is the brand kit artwork (`.wordmark`), never typed text. Keep the page to the existing type scale (at most ten rendered sizes; an e2e test checks it).
+2. **Brand kit fonts.** Public Sans for text and UI; the display font (Marcellus; Optima, the brand kit's font, only where the device already has it) for every heading and the featured project's name; Lora only for long-form write-ups (project descriptions, About paragraphs). The ARCHIÓ wordmark is the brand kit artwork (`.wordmark`), never typed text. Keep the page to the existing type scale (at most ten rendered sizes; an e2e test checks it).
 3. **Photography leads.** No overlays, badges, captions-as-decoration or gradients on project photos.
 4. **Square corners, pill buttons.** Do not add a third corner style. No card shadows, no glass effects.
 5. **Touch targets of 44px.** Any new link or button needs a 44px hit area on touch screens (see the `@media (pointer: coarse)` block in `site.css`).

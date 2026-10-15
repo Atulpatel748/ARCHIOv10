@@ -120,10 +120,10 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .services-split .toc-row {
-    transition: color 0.35s ease;
+    transition: color var(--duration-base) var(--ease-out);
   }
 
   .services-photo img {
-    transition: opacity 0.35s ease;
+    transition: opacity var(--duration-base) var(--ease-out);
   }
 }

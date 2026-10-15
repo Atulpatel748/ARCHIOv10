@@ -27,6 +27,7 @@ colors:
 typography:
   family: "Public Sans Variable, Public Sans, system-ui, sans-serif"
   displayFamily: "Marcellus; Optima (the brand kit's font) on devices that already have it, such as Apple's"
+  textFamily: "Lora Variable, Lora, Georgia, serif (project descriptions and About paragraphs only)"
   display: { size: "clamp(3.5rem, 1rem + 12vw, 12rem)", lineHeight: 0.98, tracking: "-0.02em" }
   h1: { size: "clamp(2rem, 0.9rem + 5.6vw, 6.5rem)", lineHeight: 1.05 }
   h2: { size: "clamp(1.9rem, 1.1rem + 3.5vw, 4.4rem)", lineHeight: 1.08, tracking: "0.015em" }
@@ -105,7 +106,7 @@ Depth comes from rules and surface steps, not shadows. Corners are square (`none
 - **Eyebrow label.** A small uppercase label (`.eyebrow t-label`) above a heading, list or card title: "Our approach", "Our consultancy-led process ensures:", "Get started", and each project's category on its card. In the Approach section the process numbers (01–04) use the same body size and font as the points beside them. Ink at 75% opacity, which measures 6.8:1 on beige and 7.9:1 on the maroon band; do not go lighter.
 - **Project card.** Photo, uppercase title, one small meta line. No overlays or badges on the photo.
 - **Project detail gallery.** Photos sit in paired frames; desktop alternates wider and narrower images so each row uses the full grid without empty columns, while smaller screens keep the simpler responsive grid.
-- **Call-to-action band.** Rose, at the end of Home, Services, About and project pages. A small label ("Get started") over a full-width hairline; below it the display heading on the left, its last word in the accent maroon, and on wide screens a vertical hairline, then the text and the maroon "Let’s talk" button with an arrow on the right. No photo.
+- **Call-to-action band.** Rose, at the end of the home page and each project page only (About, Services and the rest go straight to the footer). Everything on one centred axis: "Get started" between two short rules, the display heading with its last word on its own line in the accent maroon, the lead paragraph in a narrow measure, then the maroon "Let’s talk" button with an arrow. No photo.
 - **Footer.** Maroon, as tall as its content, under the page's rose call-to-action band, left-aligned: the brand kit ARCHIÓ wordmark in cream (about 19rem wide) with a one-line description of the studio under it; then the columns (two to a row on phones, brand and contact full width; from 900px brand and contact share the first row with the three link columns under them; from 1280px all five sit on one row, and the contact column never gets narrower than the email address): "Contact" (the email in the display font at h3 size, and the phone), "Studio" (Projects, Services, About; Contact is not repeated, the header and the closing band lead there), "Legal" (Privacy notice, Terms of service, Cookie policy) and "Follow" (Instagram). Column labels are caption-size, softened cream. After a hairline, the copyright on the left and Beracah Trading on the right (stacked on phones).
 
 ## Motion
@@ -129,7 +130,7 @@ Reduced motion disables the intro animations, and the reveal classes are never a
 
 ## Do's and don'ts
 
-- Do keep one accent, one typeface, one theme per page.
+- Do keep one accent and one theme per page, and the three brand fonts in their roles: the display face for headings, Public Sans for text and UI, Lora for long-form write-ups only.
 - Do let photographs lead and keep copy short.
 - Do keep every tap target at least 44px on touch screens.
 - Don't add gradients, glass effects, drop shadows on cards, or badges over images.
