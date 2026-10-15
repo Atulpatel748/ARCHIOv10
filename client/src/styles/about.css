@@ -58,6 +58,13 @@ ul.about-list {
   text-align: center;
 }
 
+/* Side by side, every second portrait sits lower: two people with their own place, not a row of identical cards. */
+@media (min-width: 768px) {
+  .team-card:nth-child(even) {
+    margin-top: var(--space-9);
+  }
+}
+
 /* "Our team": the title centred with a short rule under it, the portraits centred below (as in the company profile). */
 .about-team__title {
   display: grid;

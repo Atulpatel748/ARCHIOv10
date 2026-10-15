@@ -63,11 +63,23 @@ export default function HeroPortal({ projects }) {
 
   const releaseWhenPhotoShows = useCallback(() => releasePreloader('hero'), []);
 
+  // The slideshow only runs while the hero is on screen: scrolled away, a dissolve nobody sees would still keep the GPU
+  // busy every few seconds (and drain a phone's battery). Without IntersectionObserver it simply always runs.
+  const heroRef = useRef(null);
+  const [inView, setInView] = useState(true);
   useEffect(() => {
-    if (!rotates || !playing) return undefined;
+    const hero = heroRef.current;
+    if (!rotates || !hero || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting));
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, [rotates]);
+
+  useEffect(() => {
+    if (!rotates || !playing || !inView) return undefined;
     const timer = setInterval(() => { if (!document.hidden) setIndex((value) => (value + 1) % count); }, INTERVAL_MS);
     return () => clearInterval(timer);
-  }, [rotates, playing, count]);
+  }, [rotates, playing, inView, count]);
 
   // The big wordmark travels up with the scroll and lands on the header's wordmark (the same artwork), then fades into it.
   // Until it lands the header logo is hidden (html[data-hero-undocked], see site.css). The studio line under it rides up
@@ -191,7 +203,7 @@ export default function HeroPortal({ projects }) {
   const current = count ? slides[position] : null;
 
   return (
-    <section className="hero-portal" aria-label="Archió">
+    <section ref={heroRef} className="hero-portal" aria-label="Archió">
       {/* Backdrop only: the featured project is named and linked below. Inert keeps the photos (and, without WebGL,
           their <img> alt text) away from keyboard and screen-reader users. */}
       <div className="hero-portal__media" inert>

@@ -73,7 +73,7 @@
 
 .project-row:focus-visible .project-row__media img {
   transition-duration: var(--duration-slow);
-  transform: scale(1.035);
+  transform: scale(1.02);
 }
 
 .project-row:focus-visible .project-row__name {
@@ -83,7 +83,7 @@
 @media (hover: hover) and (pointer: fine) {
   .project-row:hover .project-row__media img {
     transition-duration: var(--duration-slow);
-    transform: scale(1.035);
+    transform: scale(1.02);
   }
 
   .project-row:hover .project-row__name {

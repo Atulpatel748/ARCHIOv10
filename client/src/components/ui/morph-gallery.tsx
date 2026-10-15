@@ -560,6 +560,9 @@ export default function MorphGallery({
       if (buffer) gl.deleteBuffer(buffer)
       if (program) gl.deleteProgram(program)
       textures.fill(null)
+      // Hand the GPU context back at once when the gallery has left the page (browsers cap live contexts at about 16
+      // and drop the oldest with a warning); not when the effect merely re-runs on the same canvas, which still needs it.
+      if (!canvas.isConnected) gl.getExtension("WEBGL_lose_context")?.loseContext()
     }
     // `active` is read once to seed the first frame; changes arrive through
     // `request` instead, which is why it is deliberately not a dependency.

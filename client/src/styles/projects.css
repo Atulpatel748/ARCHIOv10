@@ -27,13 +27,13 @@
 
 .project-card:focus-visible .project-card__media img {
   transition-duration: var(--duration-slow);
-  transform: scale(1.035);
+  transform: scale(1.02);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .project-card:hover .project-card__media img {
     transition-duration: var(--duration-slow);
-    transform: scale(1.035);
+    transform: scale(1.02);
   }
 }
 

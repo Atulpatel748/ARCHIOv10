@@ -51,30 +51,8 @@ export default function HomePage() {
       {/* Full-screen morphing photo gallery behind the clear header. The h1 (the wordmark) sits inside it. */}
       <HeroPortal projects={FEATURED} />
 
-      <section id="home-approach" ref={processReveal} className="screen screen--center section container section--ruled section--soft reveal-section" aria-labelledby="process-title">
-        <div className="split split--divided">
-          <div className="stack">
-            <p className="eyebrow t-label">{APPROACH.eyebrow}</p>
-            <WordReveal as="h2" id="process-title" text={APPROACH.heading} className="t-h2" />
-            <p className="t-lead">{APPROACH.principle}</p>
-            <p>{APPROACH.intro}</p>
-            <Link className="link link--quiet" to={ROUTES.services}>View our services <ArrowIcon /></Link>
-          </div>
-          <div className="stack">
-            <p className="eyebrow t-label">{APPROACH.lead}</p>
-            <ol ref={processItems} className="toc toc--home">
-              {APPROACH.points.map((point, index) => (
-                <li key={point} className="toc-row">
-                  <span className="toc-row__num">{String(index + 1).padStart(2, '0')}</span>
-                  <p>{point}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      <section ref={featuredReveal} className="screen screen--center home-featured section container section--ruled section--soft reveal-section" aria-labelledby="featured-title">
+      {/* The work comes first (projects, then the categories), and the studio's approach after it has earned attention. */}
+      <section id="home-featured" ref={featuredReveal} className="screen screen--center home-featured section container section--ruled section--soft reveal-section" aria-labelledby="featured-title">
         <div className="section__head section__head--stacked">
           {/* "View all projects" lives once, as the button in "We design" just below. */}
           <h2 id="featured-title" className="t-h2">Selected projects</h2>
@@ -118,6 +96,29 @@ export default function HomePage() {
               ))}
             </ul>
             <Button className="do-type__button" to={ROUTES.projects} size="sm">View all projects</Button>
+          </div>
+        </div>
+      </section>
+
+      <section id="home-approach" ref={processReveal} className="screen screen--center section container section--ruled section--soft reveal-section" aria-labelledby="process-title">
+        <div className="split split--divided">
+          <div className="stack">
+            <p className="eyebrow t-label">{APPROACH.eyebrow}</p>
+            <WordReveal as="h2" id="process-title" text={APPROACH.heading} className="t-h2" />
+            <p className="t-lead">{APPROACH.principle}</p>
+            <p>{APPROACH.intro}</p>
+            <Link className="link link--quiet" to={ROUTES.services}>View our services <ArrowIcon /></Link>
+          </div>
+          <div className="stack">
+            <p className="eyebrow t-label">{APPROACH.lead}</p>
+            <ol ref={processItems} className="toc toc--home">
+              {APPROACH.points.map((point, index) => (
+                <li key={point} className="toc-row">
+                  <span className="toc-row__num">{String(index + 1).padStart(2, '0')}</span>
+                  <p>{point}</p>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>

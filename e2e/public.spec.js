@@ -263,13 +263,13 @@ test.describe('public site', () => {
     expect(await descriptor.evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m42)).toBeLessThan(0);
     await expect(header).toHaveClass(/site-header--clear/);
     await page.evaluate(() => window.scrollTo(0, 300));
-    await expect.poll(() => page.locator('#home-approach').evaluate((el) => el.classList.contains('reveal'))).toBe(false);
+    await expect.poll(() => page.locator('#home-featured').evaluate((el) => el.classList.contains('reveal'))).toBe(false);
     await page.evaluate(() => window.scrollTo(0, 0));
-    const [approachTop, headerHeight] = await Promise.all([
-      page.locator('#home-approach').evaluate((el) => el.getBoundingClientRect().top + window.scrollY),
+    const [nextTop, headerHeight] = await Promise.all([
+      page.locator('#home-featured').evaluate((el) => el.getBoundingClientRect().top + window.scrollY),
       header.evaluate((el) => el.getBoundingClientRect().height),
     ]);
-    const transitionEnd = approachTop - headerHeight;
+    const transitionEnd = nextTop - headerHeight;
     const initialMark = await mark.boundingBox();
     const initialGap = await gap();
 
@@ -287,7 +287,7 @@ test.describe('public site', () => {
     await expect(headerBrand).toHaveCSS('opacity', '1');
     await expect(header).toHaveClass(/site-header--clear/);
 
-    // Once the Our Approach section reaches the header the header turns solid and the big logo has handed over.
+    // Once the section after the hero (Selected projects) reaches the header the header turns solid and the big logo has handed over.
     await page.evaluate((end) => window.scrollTo(0, end), transitionEnd);
     await expect.poll(() => mark.evaluate((el) => Number(getComputedStyle(el).opacity))).toBeLessThan(0.000001);
     await expect(header).not.toHaveClass(/site-header--clear/);

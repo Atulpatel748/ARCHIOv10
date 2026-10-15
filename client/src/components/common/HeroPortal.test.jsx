@@ -26,6 +26,25 @@ describe('HeroPortal', () => {
     expect(screen.getByRole('button', { name: 'Pause slideshow' })).toBeInTheDocument();
   });
 
+  it('moves on to the next photo only while the hero is on screen', () => {
+    vi.useFakeTimers();
+    let report;
+    vi.stubGlobal('IntersectionObserver', class {
+      constructor(callback) { report = (isIntersecting) => callback([{ isIntersecting }]); }
+      observe() {}
+      disconnect() {}
+    });
+    renderWithProviders(<HeroPortal projects={[{ ...project('a'), city: 'First' }, { ...project('b'), city: 'Second' }]} />);
+    const link = () => screen.getByRole('link', { name: /view project/i });
+    act(() => report(false)); // scrolled away
+    act(() => vi.advanceTimersByTime(13_000));
+    expect(link()).toHaveAttribute('href', '/projects/a');
+    act(() => report(true)); // back on screen
+    act(() => vi.advanceTimersByTime(6_000));
+    expect(link()).toHaveAttribute('href', '/projects/b');
+    vi.unstubAllGlobals();
+  });
+
   it('keeps the photo backdrop out of the tab order and away from screen readers', () => {
     const { container } = renderWithProviders(<HeroPortal projects={PROJECTS} />);
     expect(container.querySelector('.hero-portal__media')).toHaveAttribute('inert');

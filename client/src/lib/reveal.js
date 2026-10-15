@@ -15,7 +15,8 @@ const motionAllowed = () =>
   !(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false);
 
 // A small upward fade for one section. Once it has settled the classes are removed: the end state is identical to the
-// unstyled element, and the browser can release the compositing layer that `will-change` was holding.
+// unstyled element. It starts as soon as the section's top passes 85% of the screen height, not after a share of the
+// section is visible: a share of a tall section (three project rows) would leave a blank band under the one above.
 export function revealElement(element) {
   if (!element || !motionAllowed()) return () => {};
 
@@ -28,7 +29,7 @@ export function revealElement(element) {
       element.classList.add('reveal--visible');
       cancelSettle = whenTransitionEnds(element, 'transform', () => element.classList.remove('reveal', 'reveal--visible'));
     },
-    { threshold: 0.15, rootMargin: '0px 0px -10% 0px' },
+    { threshold: 0, rootMargin: '0px 0px -15% 0px' },
   );
   observer.observe(element);
   return () => {
