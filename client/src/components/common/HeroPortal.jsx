@@ -100,6 +100,7 @@ export default function HeroPortal({ projects }) {
     let target;
     let endScroll;
     let frame = 0;
+    let base = null; // the bottom row, found once (see update)
 
     // The big wordmark is position: fixed, so scrolling cannot pull it out of line with the header logo (a transform that is
     // corrected on every scroll event trails the page by a frame). Its slot keeps the room it takes in the hero.
@@ -133,8 +134,9 @@ export default function HeroPortal({ projects }) {
     const update = () => {
       frame = 0;
       // The place line, "View project" and the pause button leave before they reach the (clear) header, so they never
-      // sit on top of its links. The base row may appear after the first render, so it is looked up each time.
-      const base = hero.querySelector('.hero-portal__base');
+      // sit on top of its links. The base row may appear after the first render, so it is looked up until found (and
+      // again if it is ever replaced), not searched for on every frame.
+      if (!base?.isConnected) base = hero.querySelector('.hero-portal__base');
       if (base) {
         const room = base.getBoundingClientRect().top - header.getBoundingClientRect().bottom;
         const visible = Math.min(Math.max(room / BASE_FADE_PX, 0), 1);

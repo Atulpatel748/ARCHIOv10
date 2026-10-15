@@ -54,7 +54,7 @@ motion:
   ease-out: "cubic-bezier(0.23, 1, 0.32, 1)"
   fast: 150ms
   base: 300ms
-  slow: 800ms
+  slow: 500ms
 ---
 
 # Archio design system
@@ -119,10 +119,10 @@ Motion explains what is new, nothing more. Everything animates `transform` and `
 | --- | --- | --- |
 | Button press | 150ms | scale 0.97 |
 | Link / colour change | 150ms | colour only |
-| Section reveal | 600ms | rises 24px, once per element |
-| Card and gallery reveal | 600ms | rises 24px, 60ms apart, first load only (filter results simply show), classes removed after settling |
+| Section reveal | 500ms | rises 24px, once per element |
+| Card and gallery reveal | 500ms | rises 24px, 60ms apart, first load only (filter results simply show), classes removed after settling |
 | Page change | 300ms | new page fades in, rising 8px; not replayed for filter-only changes |
-| Photo hover zoom | 800ms in, 300ms out | project cards and home rows only (links), settles to 1.02; lets go quickly so a pointer crossing a grid leaves nothing zoomed behind it |
+| Photo hover zoom | 500ms in, 300ms out | project cards and home rows only (links), settles to 1.02; lets go quickly so a pointer crossing a grid leaves nothing zoomed behind it |
 | Hero place name, pause / play icon | 300ms / 150ms | the name fades in from a 2px blur with each new photo; the new icon grows in from 0.9 |
 | Sending spinner, field error | 150ms | the spinner fades in; an error fades in, settling 2px |
 | Text roll on hover | 150ms | nav links and buttons |

@@ -49,7 +49,7 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --duration-fast: 150ms;
   --duration-base: 300ms;
-  --duration-slow: 800ms;
+  --duration-slow: 500ms; /* large surfaces: reveals and the photo hover zoom */
 
   --font-sans: 'Public Sans Variable', 'Public Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   /* Every display heading (page titles, section heads, statements, project and category names, the menu); everything else
