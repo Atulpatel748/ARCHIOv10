@@ -30,10 +30,11 @@ export default function ContactPage() {
                   <dt>{instagram.label}</dt>
                   <dd><a className="link" href={instagram.href} rel="noopener noreferrer">{instagram.handle}</a></dd>
                 </dl>
-                <p className="t-muted">Three short steps. The more you tell us, the more useful our first reply will be.</p>
               </div>
             </div>
+            {/* The note introduces the form, so it sits on it; on phones that also brings the form up the first screen. */}
             <div className="form-panel">
+              <p className="t-muted form-panel__note">Three short steps. The more you tell us, the more useful our first reply will be.</p>
               <InquiryForm />
             </div>
           </div>

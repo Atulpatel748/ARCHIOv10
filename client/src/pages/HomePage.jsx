@@ -104,8 +104,8 @@ export default function HomePage() {
         <div className="split split--divided">
           <div className="stack">
             <p className="eyebrow t-label">{APPROACH.eyebrow}</p>
-            <WordReveal as="h2" id="process-title" text={APPROACH.heading} className="t-h2" />
-            <p className="t-lead">{APPROACH.principle}</p>
+            {/* The principle is the heading: "We execute what we design" right after the big "We design" read as an echo. */}
+            <WordReveal as="h2" id="process-title" text={APPROACH.principle} className="t-h2" />
             <p>{APPROACH.intro}</p>
             <Link className="link link--quiet" to={ROUTES.services}>View our services <ArrowIcon /></Link>
           </div>

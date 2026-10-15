@@ -25,6 +25,10 @@
   background: var(--color-surface);
 }
 
+.form-panel__note {
+  margin: 0 0 var(--space-5);
+}
+
 .stepper {
   display: flex;
   gap: var(--space-4);

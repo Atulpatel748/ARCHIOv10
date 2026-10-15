@@ -30,7 +30,6 @@ const Bullets = ({ items }) => (
 export default function AboutPage() {
   const teamReveal = useRevealOnScroll();
   const approachReveal = useRevealOnScroll();
-  const servicesReveal = useRevealOnScroll();
   const visionReveal = useRevealOnScroll();
   const whyReveal = useRevealOnScroll();
   const philosophyReveal = useRevealOnScroll();
@@ -44,7 +43,8 @@ export default function AboutPage() {
       <div className="screen">
         <PageHead title="About" display />
         <section className="container section--tight" aria-labelledby="about-title">
-          <AboutRow id="about-title" title="About us">
+          {/* Not "About us": the page title right above already says About. */}
+          <AboutRow id="about-title" title="The studio">
             <p className="t-lead">{ABOUT.lead}</p>
             {ABOUT.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           </AboutRow>
@@ -71,17 +71,12 @@ export default function AboutPage() {
         </ul>
       </section>
 
-      {/* The approach and the services lists are set out on the home page and the Services page; here they get a line
-          each and a way through, so the About page tells the studio's story without repeating them. */}
+      {/* The approach and the services lists are set out on the home page and the Services page; here they share one
+          section, a few lines and a way through, so the About page tells the studio's story without repeating them. */}
       <section ref={approachReveal} className={SECTION} aria-labelledby="approach-title">
         <AboutRow id="approach-title" title="Our approach">
           <p>{APPROACH.intro}</p>
           <p>{APPROACH.principle}</p>
-        </AboutRow>
-      </section>
-
-      <section ref={servicesReveal} className={SECTION} aria-labelledby="services-title">
-        <AboutRow id="services-title" title="Our services">
           <p>{SERVICES.lead}</p>
           <p><Link className="link link--quiet" to={ROUTES.services}>View our services <ArrowIcon /></Link></p>
         </AboutRow>

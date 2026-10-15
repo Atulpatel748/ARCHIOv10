@@ -28,7 +28,6 @@ export const TEAM = Object.freeze([
 
 export const APPROACH = Object.freeze({
   eyebrow: 'Our approach',
-  heading: 'We execute what we design',
   intro: 'Every project begins with a clear understanding of the client\u2019s needs, constraints, and expectations. From there, we translate ideas into structured design strategies balancing creativity with feasibility.',
   principle: 'We don\u2019t just design spaces. We guide decisions.',
   lead: 'Our consultancy-led process ensures:',
