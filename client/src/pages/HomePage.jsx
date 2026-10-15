@@ -14,7 +14,6 @@ import { useRevealOnScroll } from '../hooks/useRevealOnScroll.js';
 import { useRevealItems } from '../hooks/useRevealItems.js';
 import { useScrollSequence } from '../hooks/useScrollSequence.js';
 import { PROJECTS, featuredProjects } from '../services/projects.js';
-import { formatProjectLocation } from '../utils/format.js';
 import Picture from '../components/common/Picture.jsx';
 
 const ORGANIZATION = {
@@ -77,8 +76,8 @@ export default function HomePage() {
 
       <section ref={featuredReveal} className="screen screen--center home-featured section container section--ruled section--soft reveal-section" aria-labelledby="featured-title">
         <div className="section__head section__head--stacked">
+          {/* "View all projects" lives once, as the button in "We design" just below. */}
           <h2 id="featured-title" className="t-h2">Selected projects</h2>
-          <Link className="link link--quiet" to={ROUTES.projects}>View all projects <ArrowIcon /></Link>
         </div>
         {FEATURED.length === 0 ? (
           <EmptyState title="Projects are coming soon">We are preparing our portfolio. Check back shortly.</EmptyState>
@@ -95,7 +94,6 @@ export default function HomePage() {
                       {project.category && <span>{labelFor(PROJECT_CATEGORIES, project.category)}</span>}
                     </span>
                     <h3 className="project-row__name">{project.title}</h3>
-                    <span className="t-small t-muted">{formatProjectLocation(project)}</span>
                   </span>
                 </Link>
               </li>

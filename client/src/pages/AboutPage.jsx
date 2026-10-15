@@ -1,4 +1,6 @@
+import { Link } from 'react-router';
 import PageHead from '../components/common/PageHead.jsx';
+import ArrowIcon from '../components/ui/ArrowIcon.jsx';
 import Seo from '../components/common/Seo.jsx';
 import {
   ABOUT, APPROACH, PHILOSOPHY, SERVICES, TEAM, VISION_MISSION, WHY_CHOOSE_US,
@@ -69,20 +71,19 @@ export default function AboutPage() {
         </ul>
       </section>
 
+      {/* The approach and the services lists are set out on the home page and the Services page; here they get a line
+          each and a way through, so the About page tells the studio's story without repeating them. */}
       <section ref={approachReveal} className={SECTION} aria-labelledby="approach-title">
         <AboutRow id="approach-title" title="Our approach">
-          <p className="eyebrow t-label">{APPROACH.heading}</p>
           <p>{APPROACH.intro}</p>
           <p>{APPROACH.principle}</p>
-          <p>{APPROACH.lead}</p>
-          <Bullets items={APPROACH.points} />
         </AboutRow>
       </section>
 
       <section ref={servicesReveal} className={SECTION} aria-labelledby="services-title">
         <AboutRow id="services-title" title="Our services">
           <p>{SERVICES.lead}</p>
-          <Bullets items={SERVICES.items.map((item) => item.title)} />
+          <p><Link className="link link--quiet" to={ROUTES.services}>View our services <ArrowIcon /></Link></p>
         </AboutRow>
       </section>
 

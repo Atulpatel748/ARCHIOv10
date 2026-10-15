@@ -13,8 +13,9 @@ which is emailed to the studio through Web3Forms.
 > professional (open points: the notice promises a 24-month deletion of old inquiries that nothing
 > performs yet, and the cookie policy now states that the site sets no cookies, which should be confirmed).
 > Project titles are derived from the profile's locations because it gives no names, and year and
-> style are left unset because it gives none. Confirm the images are yours to publish, and replace
-> the two reception renders that show a placeholder "LOGO" if you prefer. The hero gallery
+> style are left unset because it gives none. Confirm the images are yours to publish. The two JLT
+> reception renders that showed a placeholder "LOGO" were taken off the site; add final renders back as 10.jpg and
+> 11.jpg (with their descriptions in `shared/data/projects.js`) when the client has them. The hero gallery
 > (`client/src/components/ui/morph-gallery.tsx`) names no source or licence; confirm where it came from
 > before launch.
 

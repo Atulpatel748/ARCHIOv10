@@ -15,7 +15,7 @@ export const HERO = Object.freeze({
 export const ABOUT = Object.freeze({
   lead: 'An interior design consultancy focused on creating spaces that work functionally, aesthetically, and commercially.',
   paragraphs: Object.freeze([
-    'Not driven by trends or superficial styling. We work closely with clients to understand how a space needs to perform, then design solutions that align with real-life use, business goals, and long-term value.',
+    'We work closely with clients to understand how a space needs to perform, then design solutions that align with real-life use, business goals, and long-term value.',
     'Our team brings a strong foundation in luxury residential and high-end commercial design, with a track record of delivering spaces that balance refined aesthetics with real-world function.',
     'We apply that same rigour to Dubai\u2019s market across residential, commercial, and mixed-use environments, prioritising clarity, practicality, and thoughtful design decisions over unnecessary complexity.',
   ]),
@@ -80,7 +80,7 @@ export const VISION_MISSION = Object.freeze([
   {
     title: 'Our vision',
     paragraphs: Object.freeze([
-      'To create purposeful spaces that balance design integrity with everyday usability where form always serves function, not the other way around.',
+      'To create purposeful spaces that balance design integrity with everyday usability, where form always serves function.',
       'We move beyond surface-level styling toward environments that genuinely improve how people live, work, and do business.',
     ]),
   },
@@ -96,11 +96,11 @@ export const VISION_MISSION = Object.freeze([
 export const WHY_CHOOSE_US = Object.freeze({
   lead: 'We measure success in outcomes, not optics.',
   points: Object.freeze([
-    'Function carries equal weight to aesthetics, never an afterthought',
-    'Advice that\u2019s unbiased and consultancy-driven, not sales-driven',
-    'Solutions shaped by real constraints, not idealised scenarios',
+    'Function carries equal weight to aesthetics',
+    'Advice that\u2019s unbiased and consultancy-driven',
+    'Solutions shaped by real constraints',
     'Clarity in communication, from first brief to final handover',
-    'Involvement where it matters, not where it adds noise',
+    'Involvement where it matters',
   ]),
 });
 

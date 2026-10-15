@@ -57,8 +57,6 @@ const SOURCE = [
       'Executive office with a desk and a seating area before a marble wall',
       'Office kitchenette with timber upper cabinets and white base units',
       'Pantry with a built-in coffee station and glazed doors',
-      'Reception lounge with a marble wall carrying a placeholder logo, ring light fittings and curved seating',
-      'Reception area with a marble feature wall, a placeholder logo and a glazed entrance',
     ],
   },
   {

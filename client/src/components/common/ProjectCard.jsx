@@ -1,7 +1,6 @@
 import { Link } from 'react-router';
 import { PROJECT_CATEGORIES, labelFor } from '@archio/shared/constants';
 import { ROUTES } from '../../constants/routes.js';
-import { formatProjectLocation } from '../../utils/format.js';
 import Picture from './Picture.jsx';
 
 export default function ProjectCard({ project, priority = false }) {
@@ -23,8 +22,8 @@ export default function ProjectCard({ project, priority = false }) {
           {project.category && (
             <p className="eyebrow t-label project-card__category">{labelFor(PROJECT_CATEGORIES, project.category)}</p>
           )}
+          {/* No location line: every project is in Dubai and its name already says where; the project page has it. */}
           <h3 className="project-card__title">{project.title}</h3>
-          <p className="t-small t-muted">{formatProjectLocation(project)}</p>
         </div>
       </Link>
     </article>
