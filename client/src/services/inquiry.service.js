@@ -20,7 +20,9 @@ const sent = { ok: true };
 const failed = (message) => ({ ok: false, message });
 
 // One POST to Web3Forms. It answers success: false when it refuses the message (for example a key restricted to another
-// domain); that and any HTTP error are a generic failure, a dead connection or a slow one get their own wording.
+// domain); that and any HTTP error are a generic failure, a dead connection or a slow one get their own wording. A slow
+// one is an unknown, not a failure: the message may already have arrived, so it does not invite a resend (which would
+// email the studio twice) but gives the address to follow up on.
 async function post(payload) {
   const controller = new AbortController();
   let timedOut = false;
@@ -36,7 +38,7 @@ async function post(payload) {
     return response.ok && result?.success !== false ? sent : failed(GENERIC_ERROR_MESSAGE);
   } catch {
     return failed(timedOut
-      ? 'The request took too long. Check your connection and try again.'
+      ? `We could not confirm your request was sent. If you do not hear from us within a working day, please email us at ${SITE.email}.`
       : 'We could not reach the server. Check your connection and try again.');
   } finally {
     clearTimeout(timer);

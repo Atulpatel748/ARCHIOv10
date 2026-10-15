@@ -172,7 +172,10 @@ Browser -> api.web3forms.com -> studio inbox (contact form only)
 ```
 
 1. Import the repository in Vercel with **Root Directory** `client` (the monorepo's `shared/` package is installed
-   with it). `client/vercel.json` sets the CSP and security headers and sends every other path to `index.html`.
+   with it). `client/vercel.json` sets the CSP and security headers and sends every page address to `index.html`. Addresses of
+   files (anything with a dot, or under `/assets/`, `/images/`, `/brand/`) are not rewritten, so a missing file is a real
+   404 rather than the page's HTML; a tab left open across a deploy reloads once when its old page chunk is gone
+   (`vite:preloadError` in `client/src/main.jsx`).
 2. Set `VITE_SITE_URL` to the public URL (it is used at build time for canonical links, `robots.txt` and the
    sitemap; a Vercel build without it stops with an error), and `WEB3FORMS_ACCESS_KEY` (or `VITE_WEB3FORMS_ACCESS_KEY`) to the key for the studio
    inbox. Restrict the key to the site's domain in the Web3Forms dashboard.

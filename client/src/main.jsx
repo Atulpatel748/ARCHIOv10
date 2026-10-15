@@ -23,6 +23,29 @@ if (performance.getEntriesByType?.('navigation')[0]?.type === 'navigate') {
   }
 }
 
+// Every deploy replaces the hashed JavaScript chunks, so a tab opened before one asks for a page chunk that no longer
+// exists. Load the new build instead of showing the error page, at the page the visitor was going to: a link click has
+// not changed the address yet when its chunk fails (Back/Forward has, so the current address is right then). The
+// timestamp stops a loop when the chunk is missing for another reason: a second failure within a minute is left to the
+// error page.
+let lastLink = null;
+document.addEventListener('click', (event) => {
+  const href = event.target.closest?.('a[href^="/"]')?.getAttribute('href');
+  if (href) lastLink = { href, at: Date.now() };
+}, true);
+window.addEventListener('vite:preloadError', (event) => {
+  try {
+    const key = 'archio-chunk-reload';
+    if (Date.now() - Number(sessionStorage.getItem(key) ?? 0) < 60_000) return;
+    sessionStorage.setItem(key, String(Date.now()));
+  } catch {
+    return; // storage blocked: no loop guard, so do not reload
+  }
+  event.preventDefault();
+  if (lastLink && Date.now() - lastLink.at < 10_000) window.location.assign(lastLink.href);
+  else window.location.reload();
+});
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />

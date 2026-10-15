@@ -75,7 +75,7 @@ describe('inquiryService.create', () => {
     expect(await inquiryService.create(INQUIRY)).toEqual({ ok: false, message: expect.stringMatching(/could not reach the server/i) });
   });
 
-  it('gives up on a slow connection after 15 seconds, with its own message', async () => {
+  it('gives up on a slow connection after 15 seconds without inviting a resend, since the request may have arrived', async () => {
     vi.useFakeTimers();
     fetchMock.mockImplementation((_url, { signal }) => new Promise((_resolve, reject) => {
       signal.addEventListener('abort', () => reject(signal.reason));
@@ -84,6 +84,10 @@ describe('inquiryService.create', () => {
     await vi.advanceTimersByTimeAsync(14_900);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     await vi.advanceTimersByTimeAsync(200);
-    expect(await outcome).toEqual({ ok: false, message: expect.stringMatching(/took too long/i) });
+    const { ok, message } = await outcome;
+    expect(ok).toBe(false);
+    expect(message).toMatch(/could not confirm/i);
+    expect(message).toContain('@'); // the email address to follow up on
+    expect(message).not.toMatch(/try again/i);
   });
 });
