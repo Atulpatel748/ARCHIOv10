@@ -63,6 +63,13 @@ a {
   color: inherit;
 }
 
+/* The pressed state is the tap feedback; the browser's own grey flash on top of it would be a second one. Keyboard focus
+   keeps its ring. */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
 button, input, select, textarea {
   font: inherit;
   color: inherit;

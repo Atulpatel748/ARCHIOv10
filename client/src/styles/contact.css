@@ -32,6 +32,7 @@
   border-top: 3px solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--type-small);
+  transition: border-color var(--duration-base) ease, color var(--duration-base) ease; /* the bar visibly fills on Next */
 }
 
 .stepper li[data-done='true'],

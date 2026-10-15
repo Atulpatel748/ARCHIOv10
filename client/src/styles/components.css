@@ -239,6 +239,17 @@
   grid-template-columns: 1fr;
 }
 
+/* A new step's fields fade in, so Next and Back visibly move the form on instead of swapping it in one frame. */
+.form-grid > * {
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+@starting-style {
+  .form-grid > * {
+    opacity: 0;
+  }
+}
+
 .form-actions {
   display: flex;
   flex-wrap: wrap;
@@ -262,6 +273,15 @@
   padding: var(--space-4);
   border: var(--border-thin) solid currentColor;
   font-size: var(--type-small);
+  transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+}
+
+/* A message arrives as an answer: a short fade and a 4px settle instead of a pop. */
+@starting-style {
+  .alert {
+    opacity: 0;
+    transform: translateY(4px);
+  }
 }
 
 .alert--error { color: var(--color-error); background: var(--color-error-bg); }

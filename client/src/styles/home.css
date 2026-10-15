@@ -37,6 +37,12 @@
   overflow: hidden;
   aspect-ratio: 3 / 2;
   background: var(--color-secondary);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+/* Press feedback: the whole row is the link, but only its photo dips. */
+.project-row:active .project-row__media {
+  transform: scale(0.98);
 }
 
 .project-row__media img {
@@ -190,7 +196,11 @@
   letter-spacing: 0.015em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: color var(--duration-fast);
+  transition: color var(--duration-fast), transform var(--duration-fast) var(--ease-out);
+}
+
+.do-row:active {
+  transform: scale(0.97);
 }
 
 /* On a touch screen each name is a comfortable target (44px) even where the type is small. */

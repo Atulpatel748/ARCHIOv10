@@ -10,6 +10,12 @@
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--color-secondary);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+/* Press feedback: the photo dips, not the whole card, so a big card does not lurch. */
+.project-card:active .project-card__media {
+  transform: scale(0.98);
 }
 
 .project-card__media img {

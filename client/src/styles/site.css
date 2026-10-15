@@ -186,6 +186,18 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   color: var(--color-text);
 }
 
+/* Opening fades the menu in rather than swapping the whole screen in one frame; nothing slides, so Close appears exactly
+   where Menu was. Closing is instant: the visitor has already chosen where to go. */
+.mobile-menu[open] {
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+@starting-style {
+  .mobile-menu[open] {
+    opacity: 0;
+  }
+}
+
 .mobile-menu__inner {
   display: flex;
   min-height: 100%;
@@ -234,6 +246,12 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   letter-spacing: var(--tracking-heading);
   text-decoration: none;
   text-transform: uppercase;
+  transform-origin: left; /* pressed, the name dips toward its own start instead of sliding */
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.mobile-menu__link:active {
+  transform: scale(0.97);
 }
 
 @media (min-width: 1024px) {

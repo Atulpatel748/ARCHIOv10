@@ -122,6 +122,9 @@ Motion explains what is new, nothing more. Everything animates `transform` and `
 | Page change | 300ms | new page fades in, rising 8px; not replayed for filter-only changes |
 | Photo hover zoom | 800ms | settles to 1.035 (1.04 in the gallery) |
 | Text roll on hover | 150ms | nav links and buttons |
+| Card and row press | 150ms | the photo (not the whole card) scales to 0.98; category names and menu links to 0.97 |
+| Phone menu | 150ms | fades in on open (no slide), closes at once |
+| Form step, stepper, message | 150ms / 300ms | a new step's fields fade in; the stepper bar fills (300ms); an alert fades and settles 4px |
 
 The loading screen (`client/src/styles/preloader.css`, shown before the app starts, once per browser tab: a reload or a later visit in the same tab skips it, see `client/public/preloader-gate.js`) uses a full-screen, cover-cropped architectural background (`client/public/images/preloader-architecture.webp`) beneath its existing intro: the logo mark fades in, the letters of ARCHIÓ rise one after another, and a hairline sweeps beneath them. Once loading finishes, the whole screen fades out over 300ms and is removed. The mobile crop favors the curved opening.
 
