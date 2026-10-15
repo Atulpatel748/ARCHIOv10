@@ -131,26 +131,26 @@ button {
 /* Scroll-reveal: sections fade and lift gently into place as they enter the viewport.
    `.reveal` is only added by JS once we know motion is allowed, so the content is never
    hidden for people without JavaScript or who prefer reduced motion. */
+/* No will-change while waiting: a page of photos still below the fold would each hold a GPU layer for nothing. The
+   browser promotes an element by itself for the length of its transition. */
 .reveal {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.6s var(--ease-out, ease-out), transform 0.6s var(--ease-out, ease-out);
-  will-change: opacity, transform;
 }
 
 .reveal--visible {
   opacity: 1;
   transform: none;
-  will-change: auto; /* the layer is only needed while it moves */
 }
 
 /* Item reveal: cards, gallery photos and list rows come in one after another. The classes are added by
-   useRevealItems only when motion is allowed, and removed again once the item has settled. */
+   useRevealItems only when motion is allowed, and removed again once the item has settled. Same rise and pace as a
+   section, so the two never look like different systems. */
 .reveal-item {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.9s var(--ease-out, ease-out), transform 1s var(--ease-out, ease-out);
-  will-change: opacity, transform;
+  transform: translateY(24px);
+  transition: opacity 0.6s var(--ease-out, ease-out), transform 0.6s var(--ease-out, ease-out);
 }
 
 .reveal-item--visible {
@@ -160,21 +160,23 @@ button {
 
 /* Page transition: the new page eases in after each client-side navigation. */
 .page--enter {
-  animation: page-enter 700ms var(--ease-out, ease-out) backwards;
+  animation: page-enter var(--duration-base) var(--ease-out, ease-out) backwards;
 }
 
 @keyframes page-enter {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(8px);
   }
 }
 
+/* Reduced motion means nothing moves, not that nothing changes gently: keyframe animations stop, and transitions keep
+   only their fades and colour changes, so a hover or a header turning solid still eases instead of snapping. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-property: opacity, visibility, color, background-color, border-color !important;
     scroll-behavior: auto !important;
   }
 }

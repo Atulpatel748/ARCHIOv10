@@ -113,7 +113,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   border-radius: 50%;
   background: transparent;
   color: var(--color-ink);
-  transition: transform var(--duration-fast);
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .site-header--clear .menu-toggle {
@@ -133,7 +133,7 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
   width: 100%;
   height: 2px;
   background: currentColor;
-  transition: opacity var(--duration-fast), transform var(--duration-fast);
+  transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .menu-toggle__icon--close {

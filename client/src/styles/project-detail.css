@@ -83,7 +83,7 @@
   height: 100%;
   object-fit: cover;
   background: var(--color-secondary);
-  transition: transform 1100ms var(--ease-out);
+  transition: transform var(--duration-slow) var(--ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {

@@ -7,7 +7,7 @@
 
 import { whenTransitionEnds } from './transition.js';
 
-const STAGGER_MS = 110;
+const STAGGER_MS = 60;
 const MAX_STEPS = 5; // a long list should not make the last item wait seconds
 
 const motionAllowed = () =>
@@ -38,8 +38,8 @@ export function revealElement(element) {
 }
 
 // The direct children of `container` come in one after another. Items that arrive together (a row of cards) are
-// staggered; the rest reveal as the person reaches them. Children added later (a filter changing the results) are
-// picked up too.
+// staggered; the rest reveal as the person reaches them. Children added later (a filter changing the results) are left
+// alone and simply show: a filter is used again and again, and its results must not wait for an entrance each time.
 export function revealChildren(container, { stagger = STAGGER_MS } = {}) {
   if (!container || !motionAllowed()) return () => {};
 
@@ -75,22 +75,14 @@ export function revealChildren(container, { stagger = STAGGER_MS } = {}) {
     { threshold: 0.12, rootMargin: '0px 0px -8% 0px' },
   );
 
-  const track = (element) => {
-    if (!(element instanceof HTMLElement) || tracked.has(element)) return;
+  Array.from(container.children).forEach((element) => {
     tracked.add(element);
     element.classList.add('reveal-item');
     observer.observe(element);
-  };
-
-  Array.from(container.children).forEach(track);
-  const mutations = new MutationObserver((records) => {
-    records.forEach((record) => record.addedNodes.forEach(track));
   });
-  mutations.observe(container, { childList: true });
 
   return () => {
     observer.disconnect();
-    mutations.disconnect();
     pending.forEach((stop) => stop());
     tracked.forEach(release);
     tracked.clear();

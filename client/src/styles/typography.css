@@ -126,7 +126,7 @@ h3, .t-h3 {
 
 .roll > span {
   display: block;
-  transition: transform var(--duration-base) var(--ease-out);
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .roll > span::after {

@@ -57,10 +57,17 @@ describe('interaction CSS', () => {
     expect(components).toMatch(/@media \(pointer: coarse\) \{\s*\.chip,\s*\.btn--sm \{\s*min-height: 44px/);
   });
 
-  it('uses a strong ease-out curve and releases will-change after a reveal', () => {
+  it('uses a strong ease-out curve and holds no GPU layer for content still waiting to be revealed', () => {
     const tokens = readFileSync(join(dir, 'tokens.css'), 'utf8');
     expect(tokens).toContain('--ease-out: cubic-bezier(0.23, 1, 0.32, 1)');
     const base = readFileSync(join(dir, 'base.css'), 'utf8');
-    expect(base).toMatch(/\.reveal--visible \{[^}]*will-change: auto/s);
+    expect(base).not.toMatch(/\.reveal(-item)? \{[^}]*will-change/s);
+  });
+
+  it('keeps fades and colour changes under reduced motion, and drops the movement', () => {
+    const base = readFileSync(join(dir, 'base.css'), 'utf8');
+    const block = base.slice(base.indexOf('@media (prefers-reduced-motion: reduce)'));
+    expect(block).toMatch(/transition-property: opacity, visibility, color, background-color, border-color !important/);
+    expect(block).not.toMatch(/transition-duration/);
   });
 });

@@ -16,7 +16,7 @@ which is emailed to the studio through Web3Forms.
 > style are left unset because it gives none. Confirm the images are yours to publish, and replace
 > the two reception renders that show a placeholder "LOGO" if you prefer. The hero gallery
 > (`client/src/components/ui/morph-gallery.tsx`) names no source or licence; confirm where it came from
-> before launch. GSAP ships under its own "Standard no-charge" licence (gsap.com/standard-license), not MIT.
+> before launch.
 
 ## Content
 
@@ -210,13 +210,13 @@ hover reveals also has a `:focus-visible` twin outside that block so keyboard us
 and pagination dip to `scale(0.97)` while pressed. Scroll-reveal sections (`useRevealOnScroll`, built on `client/src/lib/reveal.js`) drop their
 classes once the animation ends, so they do not hold a compositing layer afterwards.
 
-Scroll-driven behaviour comes from two places. GSAP with ScrollTrigger drives the word-by-word reveal of the
-Our Approach heading (`WordReveal`, `lib/gsapLoader.js`). The pinned "We design" section on the home page is driven by
+Scroll-driven behaviour comes from two places, both plain scroll listeners batched to one update per frame. The
+word-by-word reveal of the Our Approach heading (`WordReveal`) lights a share of the words matching how far the line
+has travelled from 80% to 55% of the screen. The pinned "We design" section on the home page is driven by
 `useScrollSequence`, which writes how far the page has scrolled since the section touched the header into a CSS variable
 (`--seq`, in svh); `styles/home.css` derives every step from it (words out and faded, names one by one, button last),
-so it plays the same in every browser instead of relying on CSS scroll-driven animations. Under reduced motion it is
-one still screen. GSAP is loaded with a dynamic `import()` only when that
-effect runs, so it sits in its own chunks and is never downloaded in tests or for people who prefer reduced motion.
+so it plays the same in every browser instead of relying on CSS scroll-driven animations. Under reduced motion both are
+still: the heading is plain and the section is one screen.
 The project-detail title overlay puts white text over a photo;
 its dark gradient was set by measuring contrast against the real cover images, so re-check it when a cover photo is replaced.
 
@@ -241,7 +241,7 @@ the photo behind each piece of text on all three seeded projects, the lowest rat
 Run `npm run typecheck -w client` to type-check the `.ts`/`.tsx` files; the rest of the app stays plain JavaScript.
 
 Cards, gallery photos and list rows reveal one after another as they scroll into view (`useRevealItems`, also on `lib/reveal.js`; a callback
-ref that also picks up items added later, such as filter results). Each client-side navigation eases the new page in
+ref; results a filter brings in later simply show, without the entrance). Each client-side navigation eases the new page in
 (`PageTransition`); the first page load and filter changes do not animate. Both do nothing under reduced motion.
 
 ## Known limitations

@@ -88,7 +88,7 @@ describe.each(ENTRIES)('$name', ({ hidden, shown, setup }) => {
     expect(el.className).toBe('');
   });
 
-  it('removes its classes once the transform transition ends, so will-change is released', () => {
+  it('removes its classes once the transform transition ends, leaving a plain element', () => {
     const { el, start } = setup();
     start();
     observers[0].emit(el);
@@ -164,14 +164,14 @@ describe('revealChildren', () => {
     expect(el.style.transitionDelay).toBe('');
   });
 
-  it('picks up children added later, such as a filter changing the results', async () => {
+  it('leaves children added later alone, so a filter changing the results shows them at once', async () => {
     const grid = makeGrid(1);
     revealChildren(grid);
     const added = document.createElement('article');
     grid.appendChild(added);
-    await Promise.resolve(); // MutationObserver callbacks run as a microtask
-    expect(added).toHaveClass('reveal-item');
-    expect(observers[0].watched.has(added)).toBe(true);
+    await Promise.resolve();
+    expect(added.className).toBe('');
+    expect(observers[0].watched.has(added)).toBe(false);
   });
 
   it('leaves plain elements behind when cleaned up', () => {

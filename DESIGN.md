@@ -118,15 +118,17 @@ Motion explains what is new, nothing more. Everything animates `transform` and `
 | Button press | 150ms | scale 0.97 |
 | Link / colour change | 150ms | colour only |
 | Section reveal | 600ms | rises 24px, once per element |
-| Card and gallery reveal | 900ms to 1000ms | rises 40px, staggered, classes removed after settling |
-| Page change | 700ms | new page eases in; not replayed for filter-only changes |
+| Card and gallery reveal | 600ms | rises 24px, 60ms apart, first load only (filter results simply show), classes removed after settling |
+| Page change | 300ms | new page fades in, rising 8px; not replayed for filter-only changes |
+| Photo hover zoom | 800ms | settles to 1.035 (1.04 in the gallery) |
+| Text roll on hover | 150ms | nav links and buttons |
 
 The loading screen (`client/src/styles/preloader.css`, shown before the app starts, once per browser tab: a reload or a later visit in the same tab skips it, see `client/public/preloader-gate.js`) uses a full-screen, cover-cropped architectural background (`client/public/images/preloader-architecture.webp`) beneath its existing intro: the logo mark fades in, the letters of ARCHIÓ rise one after another, and a hairline sweeps beneath them. Once loading finishes, the whole screen fades out over 300ms and is removed. The mobile crop favors the curved opening.
 
 One deliberate exception to the rules above, explained in a comment in that file:
 - The screen sits at `opacity: 0.999`, not 1. Browsers skip painting what is behind a fully opaque layer, so the hero was only drawn once the curtain began to lift and showed black for a few hundred milliseconds. At 0.999 it looks identical and the hero is already painted when revealed. Do not "tidy" this back to 1.
 
-Reduced motion disables the intro animations, and the reveal classes are never added, so content is never hidden. The loading screen fades out without sliding in either mode.
+Reduced motion disables the intro animations, and the reveal classes are never added, so content is never hidden. Nothing moves, but fades and colour changes keep their timing (a hover, the header turning solid), so the page changes gently instead of snapping. The loading screen fades out without sliding in either mode.
 
 ## Do's and don'ts
 
