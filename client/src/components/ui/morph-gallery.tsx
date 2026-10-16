@@ -228,38 +228,48 @@ void main() {
 }
 `
 
-const compile = (gl: WebGLRenderingContext, type: number, src: string) => {
-  const shader = gl.createShader(type)
-  if (!shader) throw new Error("could not create shader")
-  gl.shaderSource(shader, src)
-  gl.compileShader(shader)
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    const log = gl.getShaderInfoLog(shader)
-    gl.deleteShader(shader)
-    throw new Error("shader compile failed: " + log)
+// Compiles and links without making the page wait for the GPU. Reading a compile or link status straight away blocks
+// the main thread until the driver has finished (a long task on a phone for this shader); with
+// KHR_parallel_shader_compile the work runs in the background and we check once a frame until it is done. The logs
+// are read only when the link failed.
+const link = async (gl: WebGLRenderingContext, vertSrc: string, fragSrc: string) => {
+  const parallel = gl.getExtension("KHR_parallel_shader_compile")
+  const shader = (type: number, src: string) => {
+    const created = gl.createShader(type)
+    if (!created) throw new Error("could not create shader")
+    gl.shaderSource(created, src)
+    gl.compileShader(created)
+    return created
   }
-  return shader
-}
-
-const link = (gl: WebGLRenderingContext, vertSrc: string, fragSrc: string) => {
-  const vert = compile(gl, gl.VERTEX_SHADER, vertSrc)
-  const frag = compile(gl, gl.FRAGMENT_SHADER, fragSrc)
+  const vert = shader(gl.VERTEX_SHADER, vertSrc)
+  const frag = shader(gl.FRAGMENT_SHADER, fragSrc)
   const program = gl.createProgram()
   if (!program) throw new Error("could not create program")
   gl.attachShader(program, vert)
   gl.attachShader(program, frag)
   gl.linkProgram(program)
+  // shortcut: without the extension (older browsers) the status read below still blocks once, as it always did
+  if (parallel) {
+    while (!gl.getProgramParameter(program, parallel.COMPLETION_STATUS_KHR)) {
+      await new Promise((done) => requestAnimationFrame(done))
+    }
+  }
+  const linked = gl.getProgramParameter(program, gl.LINK_STATUS)
+  const log = linked ? "" : `${gl.getShaderInfoLog(vert)} ${gl.getShaderInfoLog(frag)} ${gl.getProgramInfoLog(program)}`
   // The shaders are owned by the program once attached; drop our references
   // now so they are freed with it rather than leaking per mount.
   gl.deleteShader(vert)
   gl.deleteShader(frag)
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    const log = gl.getProgramInfoLog(program)
+  if (!linked) {
     gl.deleteProgram(program)
     throw new Error("program link failed: " + log)
   }
   return program
 }
+
+// For work that can wait for a quiet moment: uploading the slides not yet on screen.
+const whenIdle = (task: () => void) =>
+  typeof window.requestIdleCallback === "function" ? window.requestIdleCallback(task, { timeout: 1000 }) : setTimeout(task, 0) // Safari has none
 
 const loadImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
@@ -273,7 +283,8 @@ const loadImage = (src: string) =>
       img.crossOrigin = "anonymous"
     }
     img.decoding = "async"
-    img.onload = () => resolve(img)
+    // Decoded before it is handed over, so the texture upload does not also decode on the main thread.
+    img.onload = () => img.decode().then(() => resolve(img), () => resolve(img))
     img.onerror = () => reject(new Error("could not load " + src))
     img.src = src
   })
@@ -477,7 +488,8 @@ export default function MorphGallery({
 
     const start = async () => {
       try {
-        program = link(gl, VERT, FRAG)
+        program = await link(gl, VERT, FRAG)
+        if (disposed) return
         gl.useProgram(program)
 
         buffer = gl.createBuffer()
@@ -506,31 +518,37 @@ export default function MorphGallery({
         // the whole first impression.
         let running = false
         let refused = 0
+        const upload = (img: HTMLImageElement, i: number) => {
+          if (disposed) return
+          const tex = gl.createTexture()
+          gl.bindTexture(gl.TEXTURE_2D, tex)
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
+          // Photos are not powers of two, so mipmaps and repeat are both
+          // off the table in WebGL1 — clamp and linear are the only
+          // legal pair, and the wrong one renders black with no error.
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+          textures[i] = tex
+          aspects[i] = img.naturalWidth / Math.max(img.naturalHeight, 1)
+          dirty = true // a slide that was standing in for this one can now show the real photo
+          if (!running) {
+            running = true
+            resize()
+            setReady(true)
+            readyTimer = window.setTimeout(fireReady, FADE_MS * 4)
+            raf = requestAnimationFrame(frame)
+          }
+        }
         await Promise.all(
           items.map((item, i) =>
             loadItem(item).then(
               (img) => {
-                if (disposed) return
-                const tex = gl.createTexture()
-                gl.bindTexture(gl.TEXTURE_2D, tex)
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
-                // Photos are not powers of two, so mipmaps and repeat are both
-                // off the table in WebGL1 — clamp and linear are the only
-                // legal pair, and the wrong one renders black with no error.
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
-                textures[i] = tex
-                aspects[i] = img.naturalWidth / Math.max(img.naturalHeight, 1)
-                dirty = true // a slide that was standing in for this one can now show the real photo
-                if (!running) {
-                  running = true
-                  resize()
-                  setReady(true)
-                  readyTimer = window.setTimeout(fireReady, FADE_MS * 4)
-                  raf = requestAnimationFrame(frame)
-                }
+                // The first photo to arrive goes up at once, since it is the one on screen; the rest wait for an idle
+                // moment, well before the first dissolve. Until then pick() stands another slide in for them.
+                if (!running) upload(img, i)
+                else whenIdle(() => upload(img, i))
               },
               () => {
                 // One broken URL should cost one slide, not the effect. Only
