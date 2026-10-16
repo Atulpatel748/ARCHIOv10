@@ -11,6 +11,9 @@ import Picture from '../components/common/Picture.jsx';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll.js';
 import { useRevealItems } from '../hooks/useRevealItems.js';
 
+// The summary is the concept heading; a write-up that opens with the very same sentence would print it twice.
+const withoutLead = (text, lead) => (text.startsWith(lead) ? text.slice(lead.length).trim() : text);
+
 function ProjectDetail({ project, related, next }) {
   const relatedReveal = useRevealOnScroll();
   const galleryReveal = useRevealOnScroll();
@@ -35,7 +38,6 @@ function ProjectDetail({ project, related, next }) {
         <Picture className="project-cover__photo" src={project.coverImage.url} alt={project.coverImage.alt} width="1600" height="1200" sizes="100vw" loading="eager" fetchPriority="high" />
         <div className="container project-cover__bar">
           <h1 className="project-hero__title">{project.title}</h1>
-          <p className="t-label">{labelFor(PROJECT_CATEGORIES, project.category)}</p>
         </div>
       </header>
       <section className="project-facts" aria-label="Project facts">
@@ -56,7 +58,7 @@ function ProjectDetail({ project, related, next }) {
         <p className="t-label">Concept</p>
         <h2 id="project-concept-title" className="project-concept__statement">{project.summary}</h2>
         <div className="project-concept__copy">
-          {paragraphs(project.description).map((text, index) => <p key={index}>{text}</p>)}
+          {paragraphs(withoutLead(project.description, project.summary)).map((text, index) => <p key={index}>{text}</p>)}
         </div>
       </section>
       {after.length > 0 && (

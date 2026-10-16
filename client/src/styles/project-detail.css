@@ -24,7 +24,8 @@
   justify-content: space-between;
   gap: var(--space-5);
   padding-top: var(--space-10);
-  padding-bottom: var(--space-6);
+  /* Clear of the home indicator on phones with no bottom bezel, as on the home hero. */
+  padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
   color: var(--color-inverse);
   background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-scrim) 55%, transparent));
 }
@@ -98,6 +99,7 @@
   max-width: 22ch;
   margin: 0;
   font-weight: 400; /* Marcellus has one weight; a heading's default bold would be faked */
+  text-wrap: balance;
   font-family: var(--font-serif);
   font-size: var(--type-h2);
   line-height: var(--leading-tight);

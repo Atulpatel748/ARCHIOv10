@@ -4,9 +4,9 @@ import { renderRoutes } from '../test/render.jsx';
 import ProjectDetailPage from './ProjectDetailPage.jsx';
 
 vi.mock('../services/projects.js', async (importOriginal) => {
-  const project = (slug, title, category) => ({
+  const project = (slug, title, category, description = 'First paragraph.\n\nSecond paragraph.') => ({
     slug, title, category, city: 'Dubai', country: 'United Arab Emirates', areaSqm: 232.26, summary: `${title} summary text.`,
-    description: 'First paragraph.\n\nSecond paragraph.', coverImage: { url: `/images/projects/${slug}/01.jpg`, alt: `${title} cover` },
+    description, coverImage: { url: `/images/projects/${slug}/01.jpg`, alt: `${title} cover` },
     gallery: [{ url: `/images/projects/${slug}/02.jpg`, alt: `${title} living room` }],
   });
   return {
@@ -14,6 +14,7 @@ vi.mock('../services/projects.js', async (importOriginal) => {
     PROJECTS: [
       project('home-a', 'Home A', 'residential'), project('home-b', 'Home B', 'residential'), project('office-c', 'Office C', 'commercial'),
       project('garden-d', 'Arabian Ranches Garden Villa', 'landscape'),
+      project('echo-e', 'Echo Office', 'commercial', 'Echo Office summary text. Then the rest of the write-up.'),
     ],
   };
 });
@@ -43,8 +44,15 @@ describe('ProjectDetailPage', () => {
   });
 
   it('links the last project round to the first', () => {
-    open('garden-d');
+    open('echo-e');
     expect(screen.getByRole('link', { name: /^Next project Home A/ })).toHaveAttribute('href', '/projects/home-a');
+  });
+
+  it('does not repeat the summary when the write-up opens with it', () => {
+    open('echo-e');
+    expect(screen.getByRole('heading', { level: 2, name: 'Echo Office summary text.' })).toBeInTheDocument();
+    expect(screen.getAllByText(/Echo Office summary text/)).toHaveLength(1);
+    expect(screen.getByText('Then the rest of the write-up.')).toBeInTheDocument();
   });
 
   it('names the project in the one h1 and opens the concept with an h2', () => {
