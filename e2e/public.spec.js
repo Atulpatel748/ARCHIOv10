@@ -299,7 +299,11 @@ test.describe('public site', () => {
     await page.evaluate(() => window.scrollTo(0, 0));
     await expect(headerBrand).toHaveCSS('opacity', '0');
     await expect.poll(() => mark.evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
-    expect(await mark.boundingBox()).toEqual(initialMark);
+    // Waits for the logo to settle (it may still be easing back) and allows sub-pixel rounding.
+    await expect.poll(async () => {
+      const box = await mark.boundingBox();
+      return Math.max(...['x', 'y', 'width', 'height'].map((key) => Math.abs(box[key] - initialMark[key])));
+    }).toBeLessThan(1);
     await expect(base).toHaveCSS('opacity', '1');
     await expect(header).toHaveClass(/site-header--clear/);
   });
