@@ -149,8 +149,7 @@ button:focus-visible > .roll > span {
 }
 
 /* Lora is the brand kit's font for write-ups: project descriptions and the About page paragraphs. */
-.lora,
-.project-copy {
+.lora {
   font-family: var(--font-text-serif);
 }
 

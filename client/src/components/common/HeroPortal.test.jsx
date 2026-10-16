@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { renderWithProviders } from '../../test/render.jsx';
 import { preloaderPainted, resetPreloaderForTests } from '../../utils/preloader.js';
 import HeroPortal from './HeroPortal.jsx';
+import { link } from '../ui/morph-gallery.tsx';
 
 const project = (slug) => ({ slug, city: 'Dubai', coverImage: { url: `/images/projects/${slug}/01.jpg`, alt: `${slug} cover` } });
 const PROJECTS = [project('a'), project('b')];
@@ -90,5 +91,20 @@ describe('HeroPortal', () => {
     renderWithProviders(<HeroPortal projects={[]} />);
     preloaderPainted();
     expect(document.getElementById('app-preloader')).toHaveClass('is-hidden');
+  });
+});
+
+describe('hero shader link', () => {
+  // A lost WebGL context answers every status check with null, so the background-compile wait must stop on its own.
+  it('stops waiting and throws when the context is lost mid-compile', async () => {
+    let lost = false;
+    const gl = {
+      VERTEX_SHADER: 1, FRAGMENT_SHADER: 2, LINK_STATUS: 3,
+      getExtension: () => ({ COMPLETION_STATUS_KHR: 4 }),
+      createShader: () => ({}), shaderSource() {}, compileShader() {}, createProgram: () => ({}),
+      attachShader() {}, linkProgram() {}, deleteShader() {}, deleteProgram() {},
+      getProgramParameter: () => { lost = true; return null; },
+    };
+    await expect(link(gl, 'v', 'f', () => lost)).rejects.toThrow(/context lost/);
   });
 });

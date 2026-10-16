@@ -231,8 +231,9 @@ void main() {
 // Compiles and links without making the page wait for the GPU. Reading a compile or link status straight away blocks
 // the main thread until the driver has finished (a long task on a phone for this shader); with
 // KHR_parallel_shader_compile the work runs in the background and we check once a frame until it is done. The logs
-// are read only when the link failed.
-const link = async (gl: WebGLRenderingContext, vertSrc: string, fragSrc: string) => {
+// are read only when the link failed. `abandoned` stops the wait when the gallery unmounts or the context is lost: a
+// lost context answers the status check with null forever, which would otherwise poll every frame for good.
+export const link = async (gl: WebGLRenderingContext, vertSrc: string, fragSrc: string, abandoned: () => boolean) => {
   const parallel = gl.getExtension("KHR_parallel_shader_compile")
   const shader = (type: number, src: string) => {
     const created = gl.createShader(type)
@@ -250,10 +251,11 @@ const link = async (gl: WebGLRenderingContext, vertSrc: string, fragSrc: string)
   gl.linkProgram(program)
   // shortcut: without the extension (older browsers) the status read below still blocks once, as it always did
   if (parallel) {
-    while (!gl.getProgramParameter(program, parallel.COMPLETION_STATUS_KHR)) {
+    while (!abandoned() && !gl.getProgramParameter(program, parallel.COMPLETION_STATUS_KHR)) {
       await new Promise((done) => requestAnimationFrame(done))
     }
   }
+  if (abandoned()) throw new Error("gallery gone or context lost while linking")
   const linked = gl.getProgramParameter(program, gl.LINK_STATUS)
   const log = linked ? "" : `${gl.getShaderInfoLog(vert)} ${gl.getShaderInfoLog(frag)} ${gl.getProgramInfoLog(program)}`
   // The shaders are owned by the program once attached; drop our references
@@ -488,7 +490,7 @@ export default function MorphGallery({
 
     const start = async () => {
       try {
-        program = await link(gl, VERT, FRAG)
+        program = await link(gl, VERT, FRAG, () => disposed || gl.isContextLost())
         if (disposed) return
         gl.useProgram(program)
 
