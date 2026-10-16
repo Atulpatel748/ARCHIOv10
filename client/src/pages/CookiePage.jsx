@@ -20,9 +20,11 @@ export default function CookiePage() {
             <section className="stack--sm">
               <h2 className="t-h3">What cookies we use</h2>
               <p>
-                None. This website does not set cookies. It does use two temporary notes in your browser tab only: the last
-                scroll position on pages you visited, so the Back button returns you to the same place, and a note that the
-                opening loading screen has already been shown, so it does not replay on refresh. These notes are not
+                None. This website does not set cookies. It does use up to three temporary notes in your browser tab only:
+                the last scroll position on pages you visited, so the Back button returns you to the same place; a note that
+                the opening loading screen has already been shown, so it does not replay on refresh; and, only after we
+                update the website while your tab is open, the time the page reloaded itself to fetch the new version, so it
+                does not reload again in a loop. These notes are not
                 cookies, they are stored only in the current tab, and they are erased when the tab is closed. We do not use
                 analytics, advertising, or tracking technologies, and we do not share data about your visit with third
                 parties.

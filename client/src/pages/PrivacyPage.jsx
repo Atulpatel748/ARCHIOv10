@@ -46,8 +46,8 @@ export default function PrivacyPage() {
               <h2 className="t-h3">Cookies</h2>
               <p>
                 This website does not set cookies. It does use temporary browser storage in the current tab to remember
-                how far you have scrolled on the pages you visited and whether the opening loading screen has already been
-                shown. These notes are not cookies, they are stored only in your current browser tab, and they are erased
+                how far you have scrolled on the pages you visited, whether the opening loading screen has already been
+                shown, and, after a website update, when the page last reloaded itself to fetch the new version. These notes are not cookies, they are stored only in your current browser tab, and they are erased
                 when the tab is closed. We do not use analytics, advertising, or tracking technologies. For full details,
                 see our <Link className="link" to={ROUTES.cookies}>Cookie policy</Link>.
               </p>
@@ -65,7 +65,8 @@ export default function PrivacyPage() {
             <section className="stack--sm">
               <h2 className="t-h3">Who processes it</h2>
               <p>
-                Our hosting and email providers process data on our behalf under their standard data-processing terms. We
+                Our hosting provider (Vercel), the form service that delivers your inquiry to our inbox (Web3Forms), and our
+                email provider process data on our behalf under their standard data-processing terms. We
                 do not share your personal data with any third party for marketing or analytics purposes.
               </p>
             </section>
