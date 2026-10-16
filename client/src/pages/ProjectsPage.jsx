@@ -95,10 +95,10 @@ export default function ProjectsPage() {
           ) : (
             <div>
               <p className="t-small t-muted project-grid-count" role="status">{data.meta.total} {data.meta.total === 1 ? 'project' : 'projects'}</p>
-              {/* An editorial spread on wide screens: a large photo, a smaller one beside it, then a large one shifted right. */}
-              <div ref={gridItems} className="project-grid project-grid--editorial">
+              {/* Three or four columns, so a short list fills the row instead of leaving room for a card that is not there. */}
+              <div ref={gridItems} className="project-grid project-grid--dense" style={{ '--cols': Math.min(Math.max(data.items.length, 3), 4) }}>
                 {data.items.map((project, index) => (
-                  <ProjectCard key={project.slug} project={project} priority={index < 4} number={(data.meta.page - 1) * data.meta.limit + index + 1} />
+                  <ProjectCard key={project.slug} project={project} priority={index < 4} />
                 ))}
               </div>
               <Pagination

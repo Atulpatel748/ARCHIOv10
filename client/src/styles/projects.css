@@ -75,26 +75,6 @@
   }
 }
 
-/* The Projects page on wide screens: a spread rather than a row of equal cards. In each run of three, a large photo
-   (7 of 12 columns), a smaller upright one beside it (5) on the same foot line, then a large one shifted right (8). */
-@media (min-width: 1024px) {
-  .project-grid--editorial {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    align-items: end;
-    row-gap: var(--space-9);
-  }
-
-  .project-grid--editorial > :nth-child(3n + 1) { grid-column: 1 / span 7; }
-  .project-grid--editorial > :nth-child(3n + 1) .project-card__media { aspect-ratio: 16 / 11; }
-  .project-grid--editorial > :nth-child(3n + 2) { grid-column: 8 / span 5; }
-  .project-grid--editorial > :nth-child(3n + 3) { grid-column: 5 / span 8; }
-  .project-grid--editorial > :nth-child(3n + 3) .project-card__media { aspect-ratio: 16 / 10; }
-}
-
-.project-card__number {
-  font-variant-numeric: tabular-nums;
-}
-
 .filters {
   display: flex;
   flex-wrap: wrap;

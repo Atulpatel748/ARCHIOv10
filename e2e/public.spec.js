@@ -82,18 +82,6 @@ test.describe('public site', () => {
     await expect(page).toHaveURL(/\/projects$/);
   });
 
-  test('projects page: wide screens show a spread, a large photo beside a smaller one, not equal cards', async ({ page }) => {
-    await page.goto('/projects');
-    const cards = await page.locator('.project-grid > article').evaluateAll((items) => items.slice(0, 3).map((item) => item.getBoundingClientRect().toJSON()));
-    const width = page.viewportSize()?.width ?? 0;
-    if (width >= 1024) {
-      expect(cards[0].width).toBeGreaterThan(cards[1].width * 1.2);
-      expect(Math.abs(cards[0].bottom - cards[1].bottom)).toBeLessThan(2); // one foot line
-      expect(cards[2].x).toBeGreaterThan(cards[0].x + 100); // the third is shifted right
-    }
-    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
-  });
-
   test('filters and searches projects, reflecting state in the URL', async ({ page }) => {
     await page.goto('/projects');
     await expect(page.getByLabel('Search projects')).toHaveAttribute('placeholder', /\u2026$/); // ends with an ellipsis, as a hint
