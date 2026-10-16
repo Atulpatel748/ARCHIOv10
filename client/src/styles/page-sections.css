@@ -33,52 +33,71 @@
 /* CTA: the rose top of the footer block (drawn into the footer), so beige, rose and maroon follow each other. Everything
    sits on one centred axis, like the last page of a monograph: the label between two short rules, the statement with
    its last word on a line of its own, the paragraph in a narrow measure, then the one button. */
+/* Closing band: the label with a rule running to the edge, the statement on the left (its last word in the accent,
+   slanted), and on the right, past a hairline, the line of copy and the button. Stacks on phones. */
 .cta-band {
-  padding-block: calc(var(--section-y) * 1.25);
+  padding-block: var(--section-y);
   background: var(--color-secondary);
   color: var(--color-ink);
-  text-align: center;
 }
 
 .cta-band__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  gap: var(--space-6);
 }
 
 .cta-band__eyebrow {
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  margin: 0 0 var(--space-6);
+  margin: 0;
+  opacity: 1;
 }
 
-.cta-band__eyebrow::before,
 .cta-band__eyebrow::after {
   content: '';
-  width: var(--space-7);
-  border-top: var(--border-thin) solid var(--color-border-strong);
+  flex: 1;
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.cta-band__title {
+  margin: 0;
 }
 
 /* The lighter maroon, so the word reads apart from the near-black ink (5.2:1 on the rose). */
 .cta-band__accent {
   display: block;
   color: var(--color-accent);
+  font-style: italic;
 }
 
 .cta-band__aside {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-7);
-  margin-top: var(--space-6);
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
 }
 
 .cta-band__aside > p {
-  max-width: 42rem; /* wide enough for the question to sit on one line */
-  font-size: var(--type-lead);
+  max-width: 34rem;
   line-height: var(--leading-body);
   text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  .cta-band__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+    column-gap: var(--space-8);
+    align-items: center;
+  }
+
+  .cta-band__eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .cta-band__aside {
+    padding-left: var(--space-6);
+    border-left: var(--border-thin) solid var(--color-border);
+  }
 }
 
 /* Page titles on Projects, Services, About and Contact: set large, with a rule under them. */
