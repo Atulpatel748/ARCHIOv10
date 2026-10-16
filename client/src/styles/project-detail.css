@@ -27,7 +27,8 @@
   /* Clear of the home indicator on phones with no bottom bezel, as on the home hero. */
   padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
   color: var(--color-inverse);
-  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-scrim) 55%, transparent));
+  /* Dark enough under the small cream name for 4.5:1 over the brightest cover (measured on all three, desktop and phone). */
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-scrim) 70%, transparent) 55%);
 }
 
 /* A wash at the top for the clear header's links. */
@@ -36,8 +37,9 @@
   position: absolute;
   inset: 0 0 auto;
   z-index: 1;
-  height: 22svh;
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 55%, transparent), transparent);
+  height: max(22svh, 160px);
+  /* Holds the clear header's cream links at 4.5:1 or better over the brightest cover (measured on all three, desktop and phone). */
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 72%, transparent), color-mix(in srgb, var(--color-scrim) 62%, transparent) 45%, transparent);
   pointer-events: none;
 }
 
