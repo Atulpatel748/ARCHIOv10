@@ -304,74 +304,31 @@ test.describe('public site', () => {
     await expect(header).toHaveClass(/site-header--clear/);
   });
 
-  test('project hero: header turns solid when its photo scrolls clear of it', async ({ page }) => {
+  test('project page: the header is clear over the cover and turns solid below it', async ({ page }) => {
     await page.goto('/projects/dubai-marina-residence');
     const header = page.locator('.site-header');
-    const hero = page.locator('.project-hero-wrap');
-    const title = page.locator('.project-hero__title');
-    await expect(hero).toBeVisible();
     await expect(page.getByRole('link', { name: 'All projects' })).toHaveCount(0);
-    await expect(header).toHaveClass(/site-header--overlay/);
     await expect(header).toHaveClass(/site-header--clear/);
-    expect(await header.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe('rgba(0, 0, 0, 0)');
-    await expect(title).toHaveCSS('opacity', '1');
-
-    const fadePoints = await page.evaluate(() => {
-      const titleBounds = document.querySelector('.project-hero__title').getBoundingClientRect();
-      const headerBottom = document.querySelector('.site-header').getBoundingClientRect().bottom;
-      return {
-        start: Math.round(window.scrollY + titleBounds.top - headerBottom - titleBounds.height),
-        end: Math.round(window.scrollY + titleBounds.top - headerBottom),
-      };
-    });
-    await page.evaluate((scrollY) => window.scrollTo(0, scrollY), Math.round((fadePoints.start + fadePoints.end) / 2));
-    await expect.poll(() => title.evaluate((el) => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.35);
-    await expect.poll(() => title.evaluate((el) => Number(getComputedStyle(el).opacity))).toBeLessThan(0.65);
-    await page.evaluate((scrollY) => window.scrollTo(0, scrollY), fadePoints.end + 1);
-    await expect(title).toHaveCSS('opacity', '0');
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.evaluate((scrollY) => window.scrollTo(0, scrollY), Math.round((fadePoints.start + fadePoints.end) / 2));
-    await expect(title).toHaveCSS('opacity', '1');
-
-    const [heroBottom, headerHeight] = await Promise.all([
-      hero.evaluate((el) => el.getBoundingClientRect().bottom + window.scrollY),
-      header.evaluate((el) => el.getBoundingClientRect().height),
-    ]);
-    await page.evaluate(({ bottom, height }) => window.scrollTo(0, bottom - height - 1), { bottom: heroBottom, height: headerHeight });
-    await expect(header).toHaveClass(/site-header--clear/);
-    await page.evaluate(() => window.scrollBy(0, 2));
+    await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.5));
     await expect(header).not.toHaveClass(/site-header--clear/);
     await expect(header).toHaveCSS('background-color', 'rgb(218, 207, 186)');
   });
 
-  test('project gallery: photos use varied desktop frames and remain full-width on mobile', async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/projects/dubai-marina-residence');
-    const gallery = page.locator('.gallery');
-    await gallery.scrollIntoViewIfNeeded();
-    const frames = await gallery.locator('figure').evaluateAll((figures) =>
-      figures.slice(0, 6).map((figure) => {
-        const { x, y, width, bottom } = figure.getBoundingClientRect();
-        return { x, y, width, bottom };
-      }),
-    );
-    const viewportWidth = page.viewportSize()?.width ?? 0;
 
-    if (viewportWidth >= 1024) {
-      expect(frames[0].width).toBeGreaterThan(frames[1].width);
-      expect(frames[2].width).toBeLessThan(frames[3].width);
-      expect(frames[4].width).toBeGreaterThan(frames[5].width);
-      expect(Math.abs(frames[0].y - frames[1].y)).toBeLessThan(1);
-      expect(Math.abs(frames[2].y - frames[3].y)).toBeLessThan(1);
-      expect(Math.abs(frames[4].y - frames[5].y)).toBeLessThan(1);
-      expect(Math.abs(frames[0].bottom - frames[1].bottom)).toBeLessThan(16);
-      expect(Math.abs(frames[2].bottom - frames[3].bottom)).toBeLessThan(16);
-      expect(Math.abs(frames[4].bottom - frames[5].bottom)).toBeLessThan(16);
-    } else {
-      expect(Math.abs(frames[1].width - frames[2].width)).toBeLessThan(1);
-      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(viewportWidth);
-    }
+
+  test('project gallery: photos edge to edge, one after another, without widening the page', async ({ page }) => {
+    await page.goto('/projects/dubai-marina-residence');
+    const frames = await page.locator('.gallery figure').evaluateAll((figures) => figures.slice(0, 2).map((figure) => figure.getBoundingClientRect().toJSON()));
+    const width = page.viewportSize()?.width;
+    expect(Math.round(frames[0].width)).toBe(width);
+    expect(frames[1].y).toBeGreaterThanOrEqual(frames[0].bottom - 1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
   });
+
+
+
+
+
 
   test('header: menu on the left, logo in the centre, "Let’s talk" with an arrow on the right', async ({ page }) => {
     test.skip((page.viewportSize()?.width ?? 0) < 1024, 'the full menu shows from 1024px up');

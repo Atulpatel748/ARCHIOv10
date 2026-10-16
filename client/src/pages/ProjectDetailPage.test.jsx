@@ -37,8 +37,14 @@ describe('ProjectDetailPage', () => {
     expect(screen.getByText('Location').nextElementSibling).toHaveTextContent('Dubai, United Arab Emirates');
     expect(screen.getByText('First paragraph.')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Home A living room' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /home b/i })).toHaveAttribute('href', '/projects/home-b');
+    for (const link of screen.getAllByRole('link', { name: /home b/i })) expect(link).toHaveAttribute('href', '/projects/home-b');
+    expect(screen.getByRole('link', { name: /^Next project Home B/ })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /office c/i })).not.toBeInTheDocument();
+  });
+
+  it('links the last project round to the first', () => {
+    open('garden-d');
+    expect(screen.getByRole('link', { name: /^Next project Home A/ })).toHaveAttribute('href', '/projects/home-a');
   });
 
   it('sets a long title on two lines without running the words together', () => {

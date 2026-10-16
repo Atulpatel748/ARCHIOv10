@@ -1,114 +1,173 @@
-/* A project page: the cover photo with its title, the facts, the gallery. */
+/* A project page after the YODEZEEN project pages: the cover full screen with a small name at its foot, a light strip of
+   facts spread across the width, photos edge to edge, a centred "Concept" statement in the display face, and the next
+   project announced in the centre above its own photo. */
 
-/* Project detail: full-bleed cover photo with the title overlaid at the foot, mirroring the home hero. */
-.project-hero-wrap {
+/* Cover: the photo fills the screen; the name and category sit small at its foot, as a caption would. */
+.yz-hero {
   position: relative;
-}
-
-.project-hero {
-  display: block;
-  width: 100%;
   height: 100vh;
   height: 100svh;
-  object-fit: cover;
-  background: var(--color-secondary);
+  background: var(--color-photo-ground);
 }
 
-.project-hero__overlay {
+.yz-hero__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.yz-hero__bar {
   position: absolute;
-  inset: 0;
+  inset: auto 0 0;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: var(--space-4);
-  padding-top: calc(var(--header-h) + var(--space-6));
-  padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-top: var(--space-10);
+  padding-bottom: var(--space-6);
   color: var(--color-inverse);
-  /* Deep at the top as well as the foot: the clear header's cream links sit over the photo's brightest parts. */
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 70%, transparent), color-mix(in srgb, var(--color-scrim) 62%, transparent) 8%, color-mix(in srgb, var(--color-scrim) 18%, transparent) 26%, color-mix(in srgb, var(--color-scrim) 14%, transparent) 36%, color-mix(in srgb, var(--color-scrim) 30%, transparent) 52%, color-mix(in srgb, var(--color-scrim) 68%, transparent) 84%, color-mix(in srgb, var(--color-scrim) 90%, transparent));
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-scrim) 55%, transparent));
+}
+
+/* A wash at the top for the clear header's links. */
+.yz-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  height: 22svh;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 55%, transparent), transparent);
+  pointer-events: none;
 }
 
 .project-hero__title {
-  display: block;
   margin: 0;
-  max-width: 100%;
-  font-size: var(--type-h1);
-  line-height: var(--leading-tight);
+  font-family: var(--font-sans);
+  font-size: var(--type-small);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  line-height: var(--leading-body);
+  text-transform: uppercase;
 }
 
 .project-hero__line {
-  display: block;
+  display: inline;
+}
+
+/* Facts: one row of small capitals spread across the whole width, on a light strip. */
+.yz-facts {
+  background: var(--color-surface);
 }
 
 .facts {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-5);
-  padding-block: var(--space-6);
-  border-block: var(--border-thin) solid var(--color-border-strong);
-}
-
-.facts dt {
-  color: var(--color-muted);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-5) var(--space-7);
+  margin: 0 auto;
+  padding-block: var(--space-9);
   font-size: var(--type-caption);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
 
+.facts dt {
+  color: var(--color-muted);
+}
+
 .facts dd {
-  font-weight: 500;
+  font-weight: 600;
 }
 
-@media (min-width: 1024px) {
-  /* Location, the longest value, gets a double column so it stays on one line; the other four facts fit beside it. */
-  .facts {
-    grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr));
-  }
-}
-
-.gallery {
-  display: grid;
-  gap: var(--space-4);
-}
-
-/* The frame carries the shape and the photo fills it, so the two frames of a row stretch to one height. */
-.gallery figure {
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
+/* Photos edge to edge, whole, one after another. */
+.gallery figure img {
+  display: block;
+  width: 100%;
+  height: auto;
   background: var(--color-secondary);
 }
 
-/* No hover zoom here: gallery photos are not links, and a zoom would promise a click that does nothing. */
-.gallery img {
+/* Concept: a small label, the statement in Marcellus capitals, the write-up in Lora, all centred. Only the brand's three
+   faces: Marcellus for headings, Public Sans for labels and facts, Lora for descriptions. */
+.yz-concept {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-6);
+  padding-block: var(--space-11);
+  text-align: center;
+}
+
+.yz-concept__statement {
+  max-width: 22ch;
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+}
+
+.yz-concept__copy {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 38rem;
+  font-family: var(--font-text-serif);
+  font-size: var(--type-lead);
+}
+
+/* Next project: the label, the name in Marcellus capitals and its category, centred, then its cover edge to edge. */
+.yz-next {
+  display: block;
+  text-decoration: none;
+}
+
+.yz-next__text {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-11);
+  text-align: center;
+}
+
+.yz-next__title {
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.yz-next__kind {
+  color: var(--color-muted);
+  font-size: var(--type-small);
+}
+
+.yz-next__photo {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: 70vh;
+  height: 70svh;
   object-fit: cover;
   background: var(--color-secondary);
 }
 
-@media (min-width: 768px) {
-  .gallery {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
+.yz-next:active .yz-next__title {
+  transform: scale(0.97);
 }
 
-@media (min-width: 1024px) {
-  .gallery {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+@media (hover: hover) and (pointer: fine) {
+  .yz-next:hover .yz-next__title {
+    color: var(--color-accent);
+  }
+}
+
+@media (max-width: 767px) {
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-block: var(--space-7);
   }
 
-  .gallery figure:nth-child(4n + 1),
-  .gallery figure:nth-child(4n + 4) {
-    grid-column: span 7;
-    aspect-ratio: 28 / 15;
+  .yz-concept,
+  .yz-next__text {
+    padding-block: var(--space-9);
   }
-  .gallery figure:nth-child(4n + 2),
-  .gallery figure:nth-child(4n + 3) { grid-column: span 5; aspect-ratio: auto; position: relative; }
-  /* The narrow frame takes the height of the wide one beside it (a frame with a ratio of its own would not stretch). */
-  .gallery figure:nth-child(4n + 2) img,
-  .gallery figure:nth-child(4n + 3) img { position: absolute; inset: 0; }
-  /* Alone in its row (an odd photo count) there is no wide frame to borrow a height from. */
-  .gallery figure:nth-child(4n + 3):last-child { aspect-ratio: 4 / 3; }
-  .gallery figure:nth-child(4n + 3):last-child img { position: static; }
 }
