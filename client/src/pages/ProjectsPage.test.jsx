@@ -64,10 +64,11 @@ describe('ProjectsPage', () => {
     expect(screen.getByRole('link', { name: /project 2/i })).toBeInTheDocument();
   });
 
-  it('uses the four-column project grid without density controls', () => {
+  it('lays the projects out as a numbered editorial spread without density controls', () => {
     open('/projects');
     expect(screen.queryByRole('button', { name: /per row/i })).not.toBeInTheDocument();
-    expect(document.querySelector('.project-grid--dense')).toBeInTheDocument();
+    expect(document.querySelector('.project-grid--editorial')).toBeInTheDocument();
+    expect(document.querySelector('.project-card__number')).toHaveTextContent('01');
   });
 
   it('clears the search box when the address drops the search, as the header Projects link does', async () => {
