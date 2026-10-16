@@ -70,6 +70,7 @@
   --leading-tight: 1; /* the floor for display type: tighter and a descender (the J of JLT) meets the line below */
   --leading-heading: 1.08;
   --leading-body: 1.55;
+  --tracking-display: -0.02em; /* the largest titles (page heads), set slightly tight */
   --tracking-heading: 0.015em;
   --tracking-label: 0.04em;
 }

@@ -111,7 +111,7 @@
   font-size: clamp(2.75rem, 0.5rem + 11vw, 11rem);
   font-weight: 400; /* Marcellus has one weight */
   line-height: var(--leading-tight);
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-display);
 }
 
 .toc-row__title {
