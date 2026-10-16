@@ -68,6 +68,7 @@ h3, .t-h3 {
 
 .prose {
   max-width: 62ch;
+  text-wrap: pretty; /* no single word left alone on a paragraph's last line */
 }
 
 /* Lit word-by-word by WordReveal.jsx as the statement scrolls through the middle of the screen; words start at a

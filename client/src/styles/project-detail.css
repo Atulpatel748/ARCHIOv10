@@ -101,7 +101,6 @@
   max-width: 22ch;
   margin: 0;
   font-weight: 400; /* Marcellus has one weight; a heading's default bold would be faked */
-  text-wrap: balance;
   font-family: var(--font-serif);
   font-size: var(--type-h2);
   line-height: var(--leading-tight);
@@ -110,6 +109,7 @@
 
 .project-concept__copy {
   display: grid;
+  text-wrap: pretty;
   gap: var(--space-4);
   max-width: 38rem;
   font-family: var(--font-text-serif);
@@ -135,7 +135,7 @@
   font-size: var(--type-h2);
   line-height: var(--leading-tight);
   text-transform: uppercase;
-  transition: color var(--duration-base) var(--ease-out);
+  transition: color var(--duration-base) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .project-next__kind {
