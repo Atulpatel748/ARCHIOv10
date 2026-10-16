@@ -11,31 +11,11 @@ import Picture from '../components/common/Picture.jsx';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll.js';
 import { useRevealItems } from '../hooks/useRevealItems.js';
 
-function splitProjectTitle(title) {
-  const words = title.trim().split(/\s+/);
-  if (words.length < 2 || title.length <= 18) return [title];
-
-  let bestSplit = 1;
-  let smallestDifference = Infinity;
-  for (let index = 1; index < words.length; index += 1) {
-    const firstLine = words.slice(0, index).join(' ');
-    const secondLine = words.slice(index).join(' ');
-    const difference = Math.abs(firstLine.length - secondLine.length);
-    if (difference < smallestDifference) {
-      bestSplit = index;
-      smallestDifference = difference;
-    }
-  }
-
-  return [words.slice(0, bestSplit).join(' '), words.slice(bestSplit).join(' ')];
-}
-
 function ProjectDetail({ project, related, next }) {
   const relatedReveal = useRevealOnScroll();
   const galleryReveal = useRevealOnScroll();
   const galleryItems = useRevealItems();
   const relatedItems = useRevealItems();
-  const titleLines = splitProjectTitle(project.title);
   // Two photos open the gallery; the concept statement comes after them, then the rest.
   const before = project.gallery.slice(0, 2);
   const after = project.gallery.slice(2);
@@ -47,26 +27,18 @@ function ProjectDetail({ project, related, next }) {
   return (
     <article className="project-page">
       <Seo title={project.title} description={project.summary} path={ROUTES.project(project.slug)} image={project.coverImage.url} />
-      {/* After the YODEZEEN project pages: the cover full screen with a small name at its foot, a light strip of facts
+      {/* The cover full screen with a small name at its foot, a light strip of facts
           spread across the width, photos edge to edge, a centred "Concept" statement part way down, and the next project
           announced in the centre above its own photo. The whole cover carries project-hero-wrap, which keeps the header
           clear over it. */}
-      <header className="project-hero-wrap yz-hero">
-        <Picture className="yz-hero__photo" src={project.coverImage.url} alt={project.coverImage.alt} width="1600" height="1200" sizes="100vw" loading="eager" fetchPriority="high" />
-        <div className="container yz-hero__bar">
-          <h1 className="project-hero__title">
-            {/* The space between the lines keeps the title's text whole ("Dubai Marina Residence") for copy, search and reader views. */}
-            {titleLines.map((line, index) => (
-              <span key={index} className="project-hero__line">
-                {index > 0 && ' '}
-                {line}
-              </span>
-            ))}
-          </h1>
+      <header className="project-hero-wrap project-cover">
+        <Picture className="project-cover__photo" src={project.coverImage.url} alt={project.coverImage.alt} width="1600" height="1200" sizes="100vw" loading="eager" fetchPriority="high" />
+        <div className="container project-cover__bar">
+          <h1 className="project-hero__title">{project.title}</h1>
           <p className="t-label">{labelFor(PROJECT_CATEGORIES, project.category)}</p>
         </div>
       </header>
-      <section className="yz-facts" aria-label="Project facts">
+      <section className="project-facts" aria-label="Project facts">
         <dl id="project-facts" className="container facts">
           <div><dt>Location</dt><dd>{formatProjectLocation(project)}</dd></div>
           {project.year && <div><dt>Year</dt><dd>{project.year}</dd></div>}
@@ -80,10 +52,10 @@ function ProjectDetail({ project, related, next }) {
           {before.map(photo)}
         </div>
       )}
-      <section className="container yz-concept" aria-label="Concept">
+      <section className="container project-concept" aria-labelledby="project-concept-title">
         <p className="t-label">Concept</p>
-        <p className="yz-concept__statement">{project.summary}</p>
-        <div className="yz-concept__copy">
+        <h2 id="project-concept-title" className="project-concept__statement">{project.summary}</h2>
+        <div className="project-concept__copy">
           {paragraphs(project.description).map((text, index) => <p key={index}>{text}</p>)}
         </div>
       </section>
@@ -105,13 +77,13 @@ function ProjectDetail({ project, related, next }) {
         </section>
       )}
       {next && (
-        <Link to={ROUTES.project(next.slug)} className="yz-next">
-          <span className="container yz-next__text">
+        <Link to={ROUTES.project(next.slug)} className="project-next">
+          <span className="container project-next__text">
             <span className="t-label">Next project</span>{' '}
-            <span className="yz-next__title">{next.title}</span>{' '}
-            <span className="yz-next__kind">{labelFor(PROJECT_CATEGORIES, next.category)}</span>
+            <span className="project-next__title">{next.title}</span>{' '}
+            <span className="project-next__kind">{labelFor(PROJECT_CATEGORIES, next.category)}</span>
           </span>
-          <Picture className="yz-next__photo" src={next.coverImage.url} alt="" width="1600" height="1200" sizes="100vw" loading="lazy" decoding="async" />
+          <Picture className="project-next__photo" src={next.coverImage.url} alt="" width="1600" height="1200" sizes="100vw" loading="lazy" decoding="async" />
         </Link>
       )}
       <CtaBand title="Planning something similar?" />

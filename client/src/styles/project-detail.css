@@ -1,22 +1,22 @@
-/* A project page after the YODEZEEN project pages: the cover full screen with a small name at its foot, a light strip of
+/* A project page: the cover full screen with a small name at its foot, a light strip of
    facts spread across the width, photos edge to edge, a centred "Concept" statement in the display face, and the next
    project announced in the centre above its own photo. */
 
 /* Cover: the photo fills the screen; the name and category sit small at its foot, as a caption would. */
-.yz-hero {
+.project-cover {
   position: relative;
   height: 100vh;
   height: 100svh;
   background: var(--color-photo-ground);
 }
 
-.yz-hero__photo {
+.project-cover__photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.yz-hero__bar {
+.project-cover__bar {
   position: absolute;
   inset: auto 0 0;
   display: flex;
@@ -30,7 +30,7 @@
 }
 
 /* A wash at the top for the clear header's links. */
-.yz-hero::before {
+.project-cover::before {
   content: '';
   position: absolute;
   inset: 0 0 auto;
@@ -50,12 +50,9 @@
   text-transform: uppercase;
 }
 
-.project-hero__line {
-  display: inline;
-}
 
 /* Facts: one row of small capitals spread across the whole width, on a light strip. */
-.yz-facts {
+.project-facts {
   background: var(--color-surface);
 }
 
@@ -89,7 +86,7 @@
 
 /* Concept: a small label, the statement in Marcellus capitals, the write-up in Lora, all centred. Only the brand's three
    faces: Marcellus for headings, Public Sans for labels and facts, Lora for descriptions. */
-.yz-concept {
+.project-concept {
   display: grid;
   justify-items: center;
   gap: var(--space-6);
@@ -97,15 +94,17 @@
   text-align: center;
 }
 
-.yz-concept__statement {
+.project-concept__statement {
   max-width: 22ch;
+  margin: 0;
+  font-weight: 400; /* Marcellus has one weight; a heading's default bold would be faked */
   font-family: var(--font-serif);
   font-size: var(--type-h2);
   line-height: var(--leading-tight);
   text-transform: uppercase;
 }
 
-.yz-concept__copy {
+.project-concept__copy {
   display: grid;
   gap: var(--space-4);
   max-width: 38rem;
@@ -114,12 +113,12 @@
 }
 
 /* Next project: the label, the name in Marcellus capitals and its category, centred, then its cover edge to edge. */
-.yz-next {
+.project-next {
   display: block;
   text-decoration: none;
 }
 
-.yz-next__text {
+.project-next__text {
   display: grid;
   justify-items: center;
   gap: var(--space-3);
@@ -127,7 +126,7 @@
   text-align: center;
 }
 
-.yz-next__title {
+.project-next__title {
   font-family: var(--font-serif);
   font-size: var(--type-h2);
   line-height: var(--leading-tight);
@@ -135,12 +134,12 @@
   transition: color var(--duration-base) var(--ease-out);
 }
 
-.yz-next__kind {
+.project-next__kind {
   color: var(--color-muted);
   font-size: var(--type-small);
 }
 
-.yz-next__photo {
+.project-next__photo {
   display: block;
   width: 100%;
   height: 70vh;
@@ -149,12 +148,12 @@
   background: var(--color-secondary);
 }
 
-.yz-next:active .yz-next__title {
+.project-next:active .project-next__title {
   transform: scale(0.97);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .yz-next:hover .yz-next__title {
+  .project-next:hover .project-next__title {
     color: var(--color-accent);
   }
 }
@@ -166,8 +165,8 @@
     padding-block: var(--space-7);
   }
 
-  .yz-concept,
-  .yz-next__text {
+  .project-concept,
+  .project-next__text {
     padding-block: var(--space-9);
   }
 }

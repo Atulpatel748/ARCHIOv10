@@ -29,7 +29,7 @@ export default defineConfig({
         command: 'npm run build -w client && npm run preview -w client -- --port 4173 --strictPort',
         env: { WEB3FORMS_ACCESS_KEY: 'e2e-test-key' },
         url: baseURL,
-        reuseExistingServer: true,
+        reuseExistingServer: false, // never test an old build left running on 4173; a stray server fails the start loudly instead
         timeout: 120_000,
       },
 });

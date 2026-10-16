@@ -47,11 +47,10 @@ describe('ProjectDetailPage', () => {
     expect(screen.getByRole('link', { name: /^Next project Home A/ })).toHaveAttribute('href', '/projects/home-a');
   });
 
-  it('sets a long title on two lines without running the words together', () => {
+  it('names the project in the one h1 and opens the concept with an h2', () => {
     open('garden-d');
-    const title = screen.getByRole('heading', { level: 1 });
-    expect(title.querySelectorAll('.project-hero__line')).toHaveLength(2);
-    expect(title.textContent).toBe('Arabian Ranches Garden Villa');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Arabian Ranches Garden Villa');
+    expect(screen.getByRole('heading', { level: 2, name: 'Arabian Ranches Garden Villa summary text.' })).toBeInTheDocument();
   });
 
   it('shows the not-found page for an unknown project, and keeps it out of search results', () => {
