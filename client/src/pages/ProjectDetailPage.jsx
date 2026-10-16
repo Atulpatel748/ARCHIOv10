@@ -24,7 +24,7 @@ function ProjectDetail({ project, related, next }) {
   const after = project.gallery.slice(2);
   const photo = (image) => (
     <figure key={image.url}>
-      <Picture src={image.url} alt={image.alt} width="1600" height="1200" sizes="100vw" loading="lazy" decoding="async" />
+      <Picture src={image.url} alt={image.alt} width="1600" height="1200" sizes="(min-width: 768px) 50vw, 100vw" loading="lazy" decoding="async" />
     </figure>
   );
   return (
@@ -50,7 +50,7 @@ function ProjectDetail({ project, related, next }) {
         </dl>
       </section>
       {project.gallery.length > 0 && (
-        <div className="gallery">
+        <div className="gallery gallery__list">
           {before.map(photo)}
         </div>
       )}
@@ -63,7 +63,7 @@ function ProjectDetail({ project, related, next }) {
       </section>
       {after.length > 0 && (
         <section ref={galleryReveal} className="gallery reveal-section" aria-label="Gallery">
-          <div ref={galleryItems}>{after.map(photo)}</div>
+          <div ref={galleryItems} className="gallery__list">{after.map(photo)}</div>
         </section>
       )}
       {related.length > 0 && (

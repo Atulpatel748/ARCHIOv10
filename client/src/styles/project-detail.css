@@ -79,12 +79,35 @@
   font-weight: 600;
 }
 
-/* Photos edge to edge, whole, one after another. */
+/* On phones the photos run whole, one under another, edge to edge. From tablet up they sit in pairs, each about the
+   size of the ~800px originals: one at full width would be taller than the screen (up to twice) and soft. */
 .gallery figure img {
   display: block;
   width: 100%;
   height: auto;
   background: var(--color-secondary);
+}
+
+@media (min-width: 768px) {
+  .gallery__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  /* The two of a pair share one square frame, so neither leaves a gap under it. The photos run from 0.8 to 1.25 wide
+     to tall, so a square trims at most about a tenth from each edge. */
+  .gallery__list > figure img {
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  /* An odd photo out at the end keeps the pair width, centred, rather than stretching across. */
+  .gallery__list > figure:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - var(--space-1));
+  }
 }
 
 /* Concept: a small label, the statement in Marcellus capitals, the write-up in Lora, all centred. Only the brand's three

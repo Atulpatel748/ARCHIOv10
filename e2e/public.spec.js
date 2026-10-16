@@ -320,14 +320,20 @@ test.describe('public site', () => {
 
 
 
-  test('project gallery: photos edge to edge, one after another, without widening the page', async ({ page }) => {
+  test('project gallery: photos whole, in pairs from tablet up and one under another on phones', async ({ page }) => {
     await page.goto('/projects/dubai-marina-residence');
     const frames = await page.locator('.gallery figure').evaluateAll((figures) => figures.slice(0, 2).map((figure) => figure.getBoundingClientRect().toJSON()));
-    const width = page.viewportSize()?.width;
-    expect(Math.round(frames[0].width)).toBe(width);
-    expect(frames[1].y).toBeGreaterThanOrEqual(frames[0].bottom - 1);
+    const width = page.viewportSize()?.width ?? 0;
+    if (width >= 768) {
+      expect(Math.abs(frames[0].y - frames[1].y)).toBeLessThan(1); // side by side
+      expect(frames[0].width).toBeLessThan(width / 2);
+    } else {
+      expect(Math.round(frames[0].width)).toBe(width);
+      expect(frames[1].y).toBeGreaterThanOrEqual(frames[0].bottom - 1);
+    }
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
   });
+
 
 
 
