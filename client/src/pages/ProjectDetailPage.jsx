@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router';
+import { useEffect } from 'react';
 import { PROJECT_CATEGORIES, PROJECT_STYLES, labelFor } from '@archio/shared/constants';
 import CtaBand from '../components/common/CtaBand.jsx';
 import ProjectCard from '../components/common/ProjectCard.jsx';
@@ -8,6 +9,7 @@ import { PROJECTS, getProject, relatedProjects } from '../services/projects.js';
 import { formatArea, formatProjectLocation, paragraphs } from '../utils/format.js';
 import { NotFoundContent } from './NotFoundPage.jsx';
 import Picture from '../components/common/Picture.jsx';
+import ArrowIcon from '../components/ui/ArrowIcon.jsx';
 import { useRevealOnScroll } from '../hooks/useRevealOnScroll.js';
 import { useRevealItems } from '../hooks/useRevealItems.js';
 
@@ -19,6 +21,13 @@ function ProjectDetail({ project, related, next }) {
   const galleryReveal = useRevealOnScroll();
   const galleryItems = useRevealItems();
   const relatedItems = useRevealItems();
+  const position = Math.max(0, PROJECTS.findIndex((item) => item.slug === project.slug)) + 1;
+  const nextPosition = next ? Math.max(0, PROJECTS.findIndex((item) => item.slug === next.slug)) + 1 : 0;
+  // Always begin a project detail at its own introduction, never at the previous page's scroll position.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [project.slug]);
+
   // Two photos open the gallery; the concept statement comes after them, then the rest.
   const before = project.gallery.slice(0, 2);
   const after = project.gallery.slice(2);
@@ -30,16 +39,38 @@ function ProjectDetail({ project, related, next }) {
   return (
     <article className="project-page">
       <Seo title={project.title} description={project.summary} path={ROUTES.project(project.slug)} image={project.coverImage.url} />
-      {/* The cover full screen with a small name at its foot, a light strip of facts
-          spread across the width, photos edge to edge, a centred "Concept" statement part way down, and the next project
-          announced in the centre above its own photo. The whole cover carries project-hero-wrap, which keeps the header
-          clear over it. */}
-      <header className="project-hero-wrap project-cover">
-        <Picture className="project-cover__photo" src={project.coverImage.url} alt={project.coverImage.alt} width="1600" height="1200" sizes="100vw" loading="eager" fetchPriority="high" />
-        <div className="container project-cover__bar">
-          <h1 className="project-hero__title">{project.title}</h1>
+
+      {/* Unlike the home hero, a project opens as an editorial case study: clear context first, imagery second. */}
+      <header className="project-detail-intro">
+        <div className="container">
+          <div className="project-detail-intro__rail">
+            <Link className="project-detail-intro__back" to={ROUTES.projects}>
+              <ArrowIcon /> <span>All projects</span>
+            </Link>
+            <span className="t-label">PROJECT {String(position).padStart(2, '0')} <i aria-hidden="true">/</i> {String(PROJECTS.length).padStart(2, '0')}</span>
+          </div>
+          <div className="project-detail-intro__main">
+            <div className="project-detail-intro__heading">
+              <p className="project-detail-intro__category t-label">{labelFor(PROJECT_CATEGORIES, project.category)} <span aria-hidden="true">/</span> {project.city.split(',')[0]}</p>
+              <h1 className="project-detail-intro__title">{project.title}</h1>
+            </div>
+            <div className="project-detail-intro__aside">
+              <p className="t-label">PROJECT OVERVIEW</p>
+              <p className="project-detail-intro__location">{formatProjectLocation(project)}</p>
+              <p className="project-detail-intro__cue">Scroll to explore <span aria-hidden="true">↓</span></p>
+            </div>
+          </div>
         </div>
       </header>
+
+      <figure className="project-cover project-cover--editorial">
+        <Picture className="project-cover__photo" src={project.coverImage.url} alt={project.coverImage.alt} width="1800" height="1200" sizes="(min-width: 1440px) 1280px, calc(100vw - 2 * var(--gutter))" loading="eager" fetchPriority="high" />
+        <figcaption className="project-cover__caption container">
+          <span className="t-label">{String(position).padStart(2, '0')} / FEATURED PROJECT</span>
+          <span className="t-label">{labelFor(PROJECT_CATEGORIES, project.category)} <i aria-hidden="true">/</i> {project.city.split(',')[0]}</span>
+        </figcaption>
+      </figure>
+
       <section className="project-facts" aria-label="Project facts">
         <dl id="project-facts" className="container facts">
           <div><dt>Location</dt><dd>{formatProjectLocation(project)}</dd></div>
@@ -68,9 +99,10 @@ function ProjectDetail({ project, related, next }) {
       )}
       {related.length > 0 && (
         <section ref={relatedReveal} className="screen screen--center container section reveal-section" aria-labelledby="related-title">
-          <h2 id="related-title" className="t-h2 section__head">
-            Similar projects
-          </h2>
+          <div className="project-related__heading">
+            <p className="t-label">KEEP EXPLORING</p>
+            <h2 id="related-title" className="t-h2 section__head">Related projects</h2>
+          </div>
           <div ref={relatedItems} className="project-grid project-grid--dense">
             {related.map((item) => (
               <ProjectCard key={item.slug} project={item} />
@@ -79,14 +111,30 @@ function ProjectDetail({ project, related, next }) {
         </section>
       )}
       {next && (
-        <Link to={ROUTES.project(next.slug)} className="project-next">
-          <span className="container project-next__text">
-            <span className="t-label">Next project</span>{' '}
-            <span className="project-next__title">{next.title}</span>{' '}
-            <span className="project-next__kind">{labelFor(PROJECT_CATEGORIES, next.category)}</span>
-          </span>
-          <Picture className="project-next__photo" src={next.coverImage.url} alt="" width="1600" height="1200" sizes="100vw" loading="lazy" decoding="async" />
-        </Link>
+        <section className="project-next-section" aria-label="Continue to next project">
+          <div className="container project-next-section__head">
+            <p className="t-label">Continue exploring</p>
+            <span className="t-label">{String(nextPosition).padStart(2, '0')} <i aria-hidden="true">/</i> {String(PROJECTS.length).padStart(2, '0')}</span>
+          </div>
+          <Link
+            to={ROUTES.project(next.slug)}
+            className="project-next"
+          >
+            <span className="project-next__body">
+              <span className="project-next__eyebrow t-label">Next project</span>{' '}
+              <span className="project-next__title">{next.title}</span>{' '}
+              <span className="project-next__kind">{labelFor(PROJECT_CATEGORIES, next.category)} <i aria-hidden="true">/</i> {next.city.split(',')[0]}</span>
+              <span className="project-next__bottom">
+                <span>View project</span>
+                <span className="project-next__arrow" aria-hidden="true"><ArrowIcon /></span>
+              </span>
+            </span>
+            <span className="project-next__media">
+              <Picture className="project-next__photo" src={next.coverImage.url} alt="" width="1200" height="1000" sizes="(min-width: 1024px) 44vw, 100vw" loading="lazy" decoding="async" />
+              <span className="project-next__media-label t-label" aria-hidden="true">{String(nextPosition).padStart(2, '0')} / {String(PROJECTS.length).padStart(2, '0')}</span>
+            </span>
+          </Link>
+        </section>
       )}
       <CtaBand title="Planning something similar?" />
     </article>

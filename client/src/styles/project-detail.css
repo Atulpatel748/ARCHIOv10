@@ -139,7 +139,7 @@
   font-size: var(--type-lead);
 }
 
-/* Next project: the label, the name in Marcellus capitals and its category, centred, then its cover edge to edge. */
+/* The Next Project transition uses a full-bleed cover image with its title and action layered above it. */
 .project-next {
   display: block;
   text-decoration: none;
@@ -175,14 +175,8 @@
   background: var(--color-secondary);
 }
 
-.project-next:active .project-next__title {
-  transform: scale(0.97);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .project-next:hover .project-next__title {
-    color: var(--color-accent);
-  }
+.project-next:active .project-next__arrow {
+  transform: scale(0.96);
 }
 
 @media (max-width: 767px) {

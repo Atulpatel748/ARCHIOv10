@@ -44,31 +44,37 @@ export const SERVICES = Object.freeze({
   items: Object.freeze([
     {
       title: 'Interior design consultation',
+      description: 'A focused first step to understand the brief, priorities, constraints and the right direction for the space.',
       image: '/images/projects/dubai-marina-residence/01.jpg',
       alt: 'Double-height living room with marble-clad feature walls and a crystal chandelier',
     },
     {
       title: 'Concept development',
+      description: 'A clear design vision that brings together atmosphere, proportion, materials and the way a space should feel.',
       image: '/images/projects/dubai-marina-residence/02.jpg',
       alt: 'Marble and dark stone feature wall with built-in shelving and a chandelier',
     },
     {
       title: 'Space planning',
+      description: 'Layouts shaped around circulation, comfort and efficient use of every square metre.',
       image: '/images/projects/jlt-commercial-interior/05.jpg',
       alt: 'Open-plan office with white workstations and linear lighting',
     },
     {
       title: 'Material & finish selection',
+      description: 'A considered palette of surfaces, textures and finishes selected for their character and practical performance.',
       image: '/images/projects/dubai-marina-residence/05.jpg',
       alt: 'White kitchen with warm timber cabinetry and a central island',
     },
     {
       title: 'Design review & advisory',
+      description: 'Independent review and practical guidance to help keep design choices coherent, achievable and on brief.',
       image: '/images/projects/jlt-commercial-interior/02.jpg',
       alt: 'Meeting room with a ceiling grid, a wall screen and a long conference table',
     },
     {
       title: 'Project coordination support',
+      description: 'Structured support across key decisions, with clear communication between the client and project team.',
       image: '/images/projects/arabian-ranches-2-landscape/02.jpg',
       alt: 'Villa entrance at dusk with lit palms and planting',
     },

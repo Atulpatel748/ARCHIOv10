@@ -2,7 +2,6 @@ import { Link } from 'react-router';
 import CtaBand from '../components/common/CtaBand.jsx';
 import Button from '../components/ui/Button.jsx';
 import HeroPortal from '../components/common/HeroPortal.jsx';
-import WordReveal from '../components/common/WordReveal.jsx';
 import { PROJECT_CATEGORIES, labelFor } from '@archio/shared/constants';
 import Seo from '../components/common/Seo.jsx';
 import EmptyState from '../components/ui/EmptyState.jsx';
@@ -30,15 +29,16 @@ const ORGANIZATION = {
   sameAs: SITE.social.map((item) => item.href),
 };
 
-// The portfolio is static, so the featured list is worked out once rather than on every scroll-driven render.
 const FEATURED = featuredProjects(PROJECTS);
+const SELECTED = FEATURED.slice(0, 3);
+const projectCategory = (project) => labelFor(PROJECT_CATEGORIES, project.category);
 
 export default function HomePage() {
-  const featuredReveal = useRevealOnScroll();
-  const processReveal = useRevealOnScroll();
-  const featuredItems = useRevealItems();
-  const processItems = useRevealItems();
+  const workReveal = useRevealOnScroll();
+  const workItems = useRevealItems();
   const doSequence = useScrollSequence();
+  const leadProject = SELECTED[0];
+  const supportingProjects = SELECTED.slice(1);
 
   return (
     <>
@@ -48,40 +48,81 @@ export default function HomePage() {
         jsonLd={ORGANIZATION}
       />
 
-      {/* Full-screen morphing photo gallery behind the clear header. The h1 (the wordmark) sits inside it. */}
+      {/* The established ARCHIÓ wordmark/hero treatment stays intact. The rest of the page takes a new editorial direction. */}
       <HeroPortal projects={FEATURED} />
 
-      {/* The work comes first (projects, then the categories), and the studio's approach after it has earned attention. */}
-      <section id="home-featured" ref={featuredReveal} className="screen screen--center home-featured section container section--ruled section--soft reveal-section" aria-labelledby="featured-title">
-        <div className="section__head section__head--stacked">
-          {/* "View all projects" lives once, as the button in "We design" just below. */}
-          <h2 id="featured-title" className="t-h2">Selected projects</h2>
+      <section className="home-manifesto container" aria-labelledby="home-manifesto-title">
+        <div className="home-manifesto__rail t-label">
+          <span>ARCHIÓ / STUDIO NOTE 01</span>
+          <span>Dubai · UAE</span>
         </div>
+        <div className="home-manifesto__body">
+          <h2 id="home-manifesto-title">A space should feel <em>inevitable.</em></h2>
+          <div className="home-manifesto__copy">
+            <p>{APPROACH.intro}</p>
+            <Link className="link link--quiet" to={ROUTES.about}>Meet the studio <ArrowIcon /></Link>
+          </div>
+        </div>
+      </section>
+
+      <section ref={workReveal} className="home-work container reveal-section" aria-labelledby="featured-title">
+        <div className="home-work__heading">
+          <div>
+            <p className="t-label">01 — Selected work</p>
+            <h2 id="featured-title" className="home-work__title">Selected work</h2>
+          </div>
+          <Link className="home-work__all link link--quiet" to={ROUTES.projects}>Explore the full portfolio <ArrowIcon /></Link>
+        </div>
+
         {FEATURED.length === 0 ? (
           <EmptyState title="Projects are coming soon">We are preparing our portfolio. Check back shortly.</EmptyState>
         ) : (
-          <ol ref={featuredItems} className="project-rows">
-            {FEATURED.slice(0, 3).map((project) => (
-              <li key={project.slug}>
-                <Link className="project-row" to={ROUTES.project(project.slug)}>
-                  <span className="project-row__media">
-                    <Picture src={project.coverImage.url} alt="" width="1600" height="1200" sizes="(min-width: 1024px) 58vw, (min-width: 768px) 50vw, 86vw" loading="lazy" decoding="async" />
-                  </span>
-                  <span className="project-row__text">
-                    <span className="project-row__meta t-label">
-                      {project.category && <span>{labelFor(PROJECT_CATEGORIES, project.category)}</span>}
+          <div className="home-work__layout">
+            {leadProject && (
+              <Link className="home-feature" to={ROUTES.project(leadProject.slug)}>
+                <span className="home-feature__image">
+                  <Picture src={leadProject.coverImage.url} alt="" width="1800" height="1400" sizes="(min-width: 1024px) 66vw, 100vw" loading="lazy" decoding="async" />
+                  <span className="home-feature__index">01 / {String(SELECTED.length).padStart(2, '0')}</span>
+                  <span className="home-feature__open" aria-hidden="true"><ArrowIcon /></span>
+                </span>
+                <span className="home-feature__caption">
+                  <span className="t-label">{projectCategory(leadProject)} <span aria-hidden="true">/</span> {leadProject.city.split(',')[0]}</span>
+                  <span className="home-feature__name">{leadProject.title}</span>
+                </span>
+              </Link>
+            )}
+
+            <ol ref={workItems} className="home-project-index" aria-label="More selected projects">
+              {supportingProjects.length === 0 && (
+                <li className="home-project-index__empty">More work is in progress.</li>
+              )}
+              {supportingProjects.map((project, index) => (
+                <li key={project.slug}>
+                  <Link className="home-index-row" to={ROUTES.project(project.slug)}>
+                    <span className="home-index-row__top">
+                      <span className="home-index-row__number">{String(index + 2).padStart(2, '0')}</span>
+                      <span className="t-label">{projectCategory(project)}</span>
+                      <span className="home-index-row__arrow" aria-hidden="true"><ArrowIcon /></span>
                     </span>
-                    <h3 className="project-row__name">{project.title}</h3>
-                  </span>
-                </Link>
+                    <span className="home-index-row__image">
+                      <Picture src={project.coverImage.url} alt="" width="900" height="680" sizes="(min-width: 1024px) 24vw, 45vw" loading="lazy" decoding="async" />
+                    </span>
+                    <span className="home-index-row__details">
+                      <span className="home-index-row__name">{project.title}</span>
+                      <span className="t-small t-muted">{project.city.split(',')[0]}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+              <li className="home-project-index__footer">
+                <Link className="link link--quiet" to={ROUTES.projects}>All projects <ArrowIcon /></Link>
               </li>
-            ))}
-          </ol>
+            </ol>
+          </div>
         )}
       </section>
 
-      {/* We do: type only. "We" and "design" start together in the middle of a pinned screen, then draw out to the left and
-          right edges while the category names gather between them (driven by scroll, transform and opacity only). */}
+      {/* Category index: a concise bridge from selected projects to the wider portfolio. */}
       <section ref={doSequence} className="do-type section--ruled section--soft" aria-labelledby="do-title">
         <div className="do-type__stage">
           <h2 id="do-title" className="do-type__big">
@@ -100,28 +141,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="home-approach" ref={processReveal} className="screen screen--center section container section--ruled section--soft reveal-section" aria-labelledby="process-title">
-        <div className="split split--divided">
-          <div className="stack">
-            <p className="eyebrow t-label">{APPROACH.eyebrow}</p>
-            {/* The principle is the heading: "We execute what we design" right after the big "We design" read as an echo. */}
-            <WordReveal as="h2" id="process-title" text={APPROACH.principle} className="t-h2" />
-            <p>{APPROACH.intro}</p>
-            <Link className="link link--quiet" to={ROUTES.services}>View our services <ArrowIcon /></Link>
-          </div>
-          <div className="stack">
-            <p className="eyebrow t-label">{APPROACH.lead}</p>
-            <ol ref={processItems} className="toc toc--home">
-              {APPROACH.points.map((point, index) => (
-                <li key={point} className="toc-row">
-                  <span className="toc-row__num">{String(index + 1).padStart(2, '0')}</span>
-                  <p>{point}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </section>
+
 
       <CtaBand />
     </>

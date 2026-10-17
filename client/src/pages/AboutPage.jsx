@@ -42,12 +42,23 @@ export default function AboutPage() {
       />
       <div className="screen">
         <PageHead title="About" display />
-        <section className="container section--tight" aria-labelledby="about-title">
+        <section className="container section--tight about-intro" aria-labelledby="about-title">
           {/* Not "About us": the page title right above already says About. */}
           <AboutRow id="about-title" title="The studio">
             <p className="t-lead">{ABOUT.lead}</p>
             {ABOUT.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
           </AboutRow>
+          <figure className="about-intro__visual">
+            <Picture
+              src="/images/projects/dubai-marina-residence/01.jpg"
+              alt="Warm, light-filled living space with sculptural lighting and considered stone finishes"
+              width="1600"
+              height="1200"
+              loading="eager"
+              fetchPriority="high"
+            />
+            <figcaption className="t-label">Architecture, material & light — in balance.</figcaption>
+          </figure>
         </section>
       </div>
 

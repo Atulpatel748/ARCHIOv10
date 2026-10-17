@@ -64,10 +64,13 @@ describe('ProjectsPage', () => {
     expect(screen.getByRole('link', { name: /project 2/i })).toBeInTheDocument();
   });
 
-  it('uses the four-column project grid without density controls', () => {
+  it('uses the visual gallery by default and can switch to the numbered project index', async () => {
     open('/projects');
-    expect(screen.queryByRole('button', { name: /per row/i })).not.toBeInTheDocument();
-    expect(document.querySelector('.project-grid--dense')).toBeInTheDocument();
+    expect(document.querySelector('.project-grid--catalog')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Gallery' })).toHaveAttribute('aria-pressed', 'true');
+    await userEvent.setup().click(screen.getByRole('button', { name: 'Index' }));
+    await waitFor(() => expect(document.querySelector('.project-grid--list')).toBeInTheDocument());
+    expect(screen.getByRole('button', { name: 'Index' })).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('clears the search box when the address drops the search, as the header Projects link does', async () => {

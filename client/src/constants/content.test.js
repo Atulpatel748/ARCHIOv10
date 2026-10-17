@@ -13,7 +13,10 @@ describe('studio content', () => {
   it('lists the six consultancy services from the company profile', () => {
     expect(SERVICES.items).toHaveLength(6);
     expect(new Set(SERVICES.items.map((service) => service.title)).size).toBe(6);
-    for (const service of SERVICES.items) expect(existsSync(publicFile(service.image)), service.image).toBe(true);
+    for (const service of SERVICES.items) {
+      expect(existsSync(publicFile(service.image)), service.image).toBe(true);
+      expect(service.description.trim().length).toBeGreaterThan(20);
+    }
   });
 
   it('names every project category once in the home page\'s "We design" section', () => {

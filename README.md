@@ -5,6 +5,8 @@ as a static React 19 site (Vite) hosted on Vercel; the contact form posts straig
 typography and interaction patterns are derived from the layout of the reference site (`yodezeen.com`). The
 copy, team, contact details and project images come from the Archió company profile.
 
+> **Latest feedback revision (v4).** Our Approach now precedes Selected Work. The home portfolio uses one featured project with two restrained, numbered supporting entries. Project details open as distinct editorial case studies (not a second fullscreen landing hero), return to the top on entry, and use a more professional Next Project preview. Services has a new typographic introduction, contained project image and numbered interactive capabilities index. Existing brand fonts and color tokens are unchanged. See `REDESIGN_NOTES.md` for details and validation status.
+
 There are no user accounts, no sign-in, no admin screen and no database. The portfolio is a file in the repository
 (`shared/data/projects.js`, see "Content") built into the site, and the only thing visitors can send is the contact form,
 which is emailed to the studio through Web3Forms.
@@ -76,9 +78,7 @@ want to keep them (new ones only arrive by email). The old server settings (`POR
 
 ## Features
 
-- **Public site**: home (full-screen photo gallery hero, approach, selected projects, the pinned "We design"
-  category list, closing call to action), projects (category filter, literal text search, pagination,
-  URL-driven state), project detail with gallery and related work,
+- **Public site**: home (full-screen photo gallery hero, studio manifesto, featured project and numbered index, pinned category moment, image-led approach, closing call to action), projects (category filters, literal text search, Gallery / Index view, pagination, URL-driven state), project detail with a cinematic cover, editorial gallery and related work,
   services, about (team, vision, mission, philosophy), contact (three-step inquiry form), privacy
   notice, terms and cookie policy.
 - **Contact**: three-step inquiry form; each request is emailed to the studio inbox (nothing is stored on the site).
@@ -204,7 +204,7 @@ scale); typography rules in `typography.css`. Derived from the reference: brand 
 maroon and beige: beige ground (`#dacfba`, from the brand kit, also the theme colour), very dark maroon-brown type (`#2b1012`), maroon
 bands and buttons (`--color-brand`, `#4c1114`, the logo's colour), uppercase wide-set display text, rolling-text
 navigation hover, a hero that opens on a full-screen, darkened photo gallery with the large ARCHIÓ wordmark and a clear header, large page
-titles, zigzag project rows on the home page and numbered contents-style lists. A lighter maroon (`--color-accent`, `#7a2230`) is used for focus, hover and active states.
+titles, a dominant featured project beside a numbered home-page index, and a Projects catalogue that switches between an editorial image gallery and a numbered index. A lighter maroon (`--color-accent`, `#7a2230`) is used for focus, hover and active states.
 Exact pixel values are informed approximations, because computed styles of the reference could not
 be inspected; compare in DevTools before sign-off.
 

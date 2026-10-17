@@ -16,16 +16,15 @@ export default function Header() {
 
   useEffect(() => setMenuOpen(false), [pathname]);
 
-  // Keep the header clear only while the hero photo remains underneath it.
+  // Only the immersive home hero uses a transparent overlay; case-study pages keep a solid header.
   const onHome = pathname === ROUTES.home;
-  const onProject = pathname.startsWith(`${ROUTES.projects}/`);
-  const overlayPage = onHome || onProject;
+  const overlayPage = onHome;
   const [heroBehindHeader, setHeroBehindHeader] = useState(true);
   useEffect(() => {
     if (!overlayPage) return undefined;
     const update = () => {
       const header = headerRef.current;
-      const hero = document.querySelector(onHome ? '.hero-portal' : '.project-hero-wrap');
+      const hero = document.querySelector('.hero-portal');
       setHeroBehindHeader(Boolean(hero && header && hero.getBoundingClientRect().bottom > header.getBoundingClientRect().bottom));
     };
     update();

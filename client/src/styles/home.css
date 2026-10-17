@@ -255,7 +255,8 @@
    every step below is a function of it, so the sequence plays the same in every browser. Without it (reduced motion,
    no script) there is no data-seq and the section is one screen with everything in place. */
 .do-type[data-seq] {
-  height: calc(240svh - var(--header-h) - var(--border-thin));
+  /* Shorter pinned distance: the category links and final action should arrive in about two deliberate scrolls. */
+  height: calc(190svh - var(--header-h) - var(--border-thin));
 }
 
 .do-type[data-seq] .do-type__stage {
@@ -268,11 +269,11 @@
   color: var(--color-ink);
 }
 
-/* 0 to 45svh: the words move out, easing at both ends. 45 to 66svh: they fade back. */
+/* The words begin separating first; the category links start appearing before the words reach their full distance. */
 .do-type[data-seq] .do-type__word {
-  --move: clamp(0, calc(var(--seq, 0) / 45), 1);
+  --move: clamp(0, calc(var(--seq, 0) / 34), 1);
   --eased: calc(var(--move) * var(--move) * (3 - 2 * var(--move)));
-  --fade: clamp(0, calc((var(--seq, 0) - 45) / 21), 1);
+  --fade: clamp(0, calc((var(--seq, 0) - 34) / 12), 1);
   transform: translateX(calc((1 - var(--eased)) * var(--travel)));
   opacity: calc(1 - 0.4 * var(--fade));
 }
@@ -286,19 +287,18 @@
   --travel: calc(100% + 0.05em - 50cqw);
 }
 
-/* From 56svh each name rises from below its place over 40svh while it fades in, 6svh after the one before it, and
-   settles softly (the last fifth of the rise is the slow part). */
+/* Category names start around the middle of the word movement, then rise in a shorter, staggered sequence. */
 .do-type[data-seq] .do-type__list li {
-  --come: clamp(0, calc((var(--seq, 0) - 56 - var(--i, 0) * 6) / 40), 1);
+  --come: clamp(0, calc((var(--seq, 0) - 18 - var(--i, 0) * 4) / 27), 1);
   --rest: calc(1 - var(--come));
   --rise: calc(1 - var(--rest) * var(--rest) * var(--rest) * var(--rest) * var(--rest));
   opacity: var(--rise);
   transform: translateY(calc((1 - var(--rise)) * 28svh));
 }
 
-/* From 114svh the button fades in, last. */
+/* The final button arrives while there is still room in the pinned sequence, not at the very end. */
 .do-type[data-seq] .do-type__button {
-  opacity: clamp(0, calc((var(--seq, 0) - 114) / 18), 1);
+  opacity: clamp(0, calc((var(--seq, 0) - 56) / 13), 1);
 }
 
 /* A keyboard user who tabs into the names would otherwise land on something still invisible, wherever the scroll is,

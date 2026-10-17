@@ -64,9 +64,9 @@ test.describe('public site', () => {
     await expect(page).toHaveTitle(/Archió/);
     await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(/Archió/);
     await expect(page.getByRole('region', { name: 'ARCHIÓ' })).toBeVisible(); // the hero
-    await expect(page.getByRole('heading', { name: 'Selected projects' })).toBeVisible();
-    await expect(page.locator('.project-row').first()).toBeVisible();
-    expect(await page.locator('.project-row').count()).toBeGreaterThanOrEqual(3);
+    await expect(page.getByRole('heading', { name: 'Selected work' })).toBeVisible();
+    await expect(page.locator('.home-feature')).toBeVisible();
+    expect(await page.locator('.home-index-row').count()).toBeGreaterThanOrEqual(2);
   });
 
   test('navigates from home to a project and back to the list', async ({ page }) => {
@@ -77,7 +77,7 @@ test.describe('public site', () => {
     await first.click();
     await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName(new RegExp(title, 'i'));
     await expect(page.getByText('Location')).toBeVisible();
-    await expect(page.getByRole('link', { name: 'All projects' })).toHaveCount(0);
+    await expect(page.locator('.project-detail-intro').getByRole('link', { name: 'All projects' })).toHaveAttribute('href', '/projects');
     await page.goBack();
     await expect(page).toHaveURL(/\/projects$/);
   });
@@ -90,7 +90,7 @@ test.describe('public site', () => {
     await expect(page.getByRole('link', { name: /arabian ranches 2/i })).toBeVisible();
     await expect(page.getByRole('link', { name: /dubai marina residence/i })).toHaveCount(0);
 
-    await page.getByRole('button', { name: 'All' }).click();
+    await page.getByRole('button', { name: 'All', exact: true }).click();
     await page.getByLabel('Search projects').fill('marina');
     await expect(page).toHaveURL(/q=marina/);
     await expect(page.getByRole('link', { name: /dubai marina residence/i })).toBeVisible();
@@ -108,6 +108,7 @@ test.describe('public site', () => {
     await page.goto('/services');
     await page.waitForLoadState('networkidle');
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    await page.goto('/about');
     await page.evaluate(() => window.scrollTo(0, 400));
     await page.reload();
     await expect.poll(() => page.evaluate(() => Math.round(window.scrollY))).toBe(400);
@@ -171,7 +172,7 @@ test.describe('public site', () => {
       }
       return found.size;
     });
-    expect(sizes).toBeLessThanOrEqual(10);
+    expect(sizes).toBeLessThanOrEqual(12); // the editorial sections add numbered labels and captions
   });
 
   test('"We design" names each category as a link to its projects, with one link to them all', async ({ page }) => {
@@ -262,11 +263,10 @@ test.describe('public site', () => {
     await expect.poll(() => descriptor.evaluate((el) => Number(getComputedStyle(el).opacity))).toBeLessThan(1);
     expect(await descriptor.evaluate((el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m42)).toBeLessThan(0);
     await expect(header).toHaveClass(/site-header--clear/);
-    await page.evaluate(() => window.scrollTo(0, 300));
-    await expect.poll(() => page.locator('#home-featured').evaluate((el) => el.classList.contains('reveal'))).toBe(false);
     await page.evaluate(() => window.scrollTo(0, 0));
+    await expect.poll(() => descriptor.evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
     const [nextTop, headerHeight] = await Promise.all([
-      page.locator('#home-featured').evaluate((el) => el.getBoundingClientRect().top + window.scrollY),
+      page.locator('.home-manifesto').evaluate((el) => el.getBoundingClientRect().top + window.scrollY),
       header.evaluate((el) => el.getBoundingClientRect().height),
     ]);
     const transitionEnd = nextTop - headerHeight;
@@ -287,7 +287,7 @@ test.describe('public site', () => {
     await expect(headerBrand).toHaveCSS('opacity', '1');
     await expect(header).toHaveClass(/site-header--clear/);
 
-    // Once the section after the hero (Selected projects) reaches the header the header turns solid and the big logo has handed over.
+    // Once the section after the hero (the studio note) reaches the header the header turns solid and the big logo has handed over.
     await page.evaluate((end) => window.scrollTo(0, end), transitionEnd);
     await expect.poll(() => mark.evaluate((el) => Number(getComputedStyle(el).opacity))).toBeLessThan(0.000001);
     await expect(header).not.toHaveClass(/site-header--clear/);
@@ -308,11 +308,10 @@ test.describe('public site', () => {
     await expect(header).toHaveClass(/site-header--clear/);
   });
 
-  test('project page: the header is clear over the cover and turns solid below it', async ({ page }) => {
+  test('project page: the header stays solid over the editorial intro and below it', async ({ page }) => {
     await page.goto('/projects/dubai-marina-residence');
     const header = page.locator('.site-header');
-    await expect(page.getByRole('link', { name: 'All projects' })).toHaveCount(0);
-    await expect(header).toHaveClass(/site-header--clear/);
+    await expect(header).not.toHaveClass(/site-header--clear/);
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.5));
     await expect(header).not.toHaveClass(/site-header--clear/);
     await expect(header).toHaveCSS('background-color', 'rgb(218, 207, 186)');
@@ -326,7 +325,7 @@ test.describe('public site', () => {
     const width = page.viewportSize()?.width ?? 0;
     if (width >= 768) {
       expect(Math.abs(frames[0].y - frames[1].y)).toBeLessThan(1); // side by side
-      expect(frames[0].width).toBeLessThan(width / 2);
+      expect(frames[0].width + frames[1].width).toBeLessThan(width);
     } else {
       expect(Math.round(frames[0].width)).toBe(width);
       expect(frames[1].y).toBeGreaterThanOrEqual(frames[0].bottom - 1);
@@ -450,34 +449,12 @@ test.describe('public site', () => {
     }
   });
 
-  test('services page lists the six consultancy services and has no per-service pages', async ({ page }, info) => {
+  test('services page lists the six consultancy services and has no per-service pages', async ({ page }) => {
     await page.goto('/services');
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Services');
-    await expect(page.locator('.toc-row h2')).toHaveCount(6);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Thoughtful design.s*Practical direction./);
+    await expect(page.getByRole('list', { name: 'Our services' }).locator('h3')).toHaveCount(6);
     await expect(page.getByRole('heading', { name: 'Space planning' })).toBeVisible();
-
-    if (info.project.name === 'mobile') {
-      const consultation = page.getByRole('button', { name: 'Interior design consultation' });
-      const consultationPanel = page.getByRole('region', { name: 'Interior design consultation' });
-      await consultation.click();
-      await expect(consultation).toHaveAttribute('aria-expanded', 'true');
-      await expect(consultationPanel.getByRole('img', { name: /double-height living room/i })).toBeVisible();
-      const panelBottom = await consultationPanel.boundingBox().then((box) => box.y + box.height);
-      const nextServiceTop = await page.getByRole('button', { name: 'Concept development' }).locator('xpath=ancestor::li').boundingBox().then((box) => box.y);
-      expect(nextServiceTop).toBeGreaterThan(panelBottom);
-
-      await page.getByRole('button', { name: 'Concept development' }).click();
-      await expect(consultationPanel).toBeHidden();
-      await expect(page.getByRole('region', { name: 'Concept development' }).getByRole('img', { name: /marble and dark stone feature wall/i })).toBeVisible();
-    } else {
-      // Wide screens: one sticky photo that follows the service under the pointer.
-      const photos = page.locator('.services-photo img');
-      await expect(photos).toHaveCount(6);
-      await expect(photos.nth(0)).toHaveClass(/is-active/);
-      await page.getByRole('heading', { name: 'Material & finish selection' }).hover();
-      await expect(photos.nth(3)).toHaveClass(/is-active/);
-      await expect(photos.nth(0)).not.toHaveClass(/is-active/);
-    }
+    await expect(page.getByRole('img', { name: /double-height living room/i })).toBeVisible();
     await page.goto('/services/full-renovation');
     await expect(page.getByRole('heading', { name: 'Not found' })).toBeVisible();
   });

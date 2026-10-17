@@ -18,6 +18,7 @@ const PAGE_SIZE = 12;
 export default function ProjectsPage() {
   const [params, setParams] = useSearchParams();
   const gridItems = useRevealItems();
+  const view = params.get('view') === 'list' ? 'list' : 'grid';
   const rawCategory = params.get('category');
   const category = PROJECT_CATEGORY_VALUES.includes(rawCategory) ? rawCategory : '';
   const page = Math.min(Math.max(Number.parseInt(params.get('page') ?? '1', 10) || 1, 1), LIMITS.PAGE_MAX);
@@ -61,7 +62,9 @@ export default function ProjectsPage() {
         path={ROUTES.projects}
       />
       <div className="screen">
-        <PageHead title="Projects" display />
+        <PageHead title="Projects" display>
+          <p className="t-lead prose projects-lead">A portfolio of considered interiors and outdoor spaces, from private residences to places made for work and gathering.</p>
+        </PageHead>
         <section className="container section--tight" aria-labelledby="project-list-title">
           <h2 id="project-list-title" className="visually-hidden">Project list</h2>
           <div className="filters">
@@ -73,15 +76,21 @@ export default function ProjectsPage() {
                 </button>
               ))}
             </div>
-            <div className="filters__search">
-              <Input
-                label="Search projects"
-                type="search"
-                value={search}
-                maxLength={LIMITS.SEARCH_MAX}
-                placeholder="Try “Marina”…"
-                onChange={(event) => setSearch(event.target.value)}
-              />
+            <div className="filters__tools">
+              <div className="filters__search">
+                <Input
+                  label="Search projects"
+                  type="search"
+                  value={search}
+                  maxLength={LIMITS.SEARCH_MAX}
+                  placeholder="Try “Marina”…"
+                  onChange={(event) => setSearch(event.target.value)}
+                />
+              </div>
+              <div className="portfolio-view" role="group" aria-label="Project presentation">
+                <button type="button" className="portfolio-view__button" aria-pressed={view === 'grid'} onClick={() => update({ view: '' })}>Gallery</button>
+                <button type="button" className="portfolio-view__button" aria-pressed={view === 'list'} onClick={() => update({ view: 'list' })}>Index</button>
+              </div>
             </div>
           </div>
 
@@ -95,10 +104,10 @@ export default function ProjectsPage() {
           ) : (
             <div>
               <p className="t-small t-muted project-grid-count" role="status">{data.meta.total} {data.meta.total === 1 ? 'project' : 'projects'}</p>
-              {/* Three or four columns, so a short list fills the row instead of leaving room for a card that is not there. */}
-              <div ref={gridItems} className="project-grid project-grid--dense" style={{ '--cols': Math.min(Math.max(data.items.length, 3), 4) }}>
+              {/* The gallery is image-led by default; Index mode exposes a more compact, numbered scan of the same projects. */}
+              <div ref={gridItems} className={`project-grid project-grid--catalog${view === 'list' ? ' project-grid--list' : ' project-grid--gallery'}`}>
                 {data.items.map((project, index) => (
-                  <ProjectCard key={project.slug} project={project} priority={index < 4} />
+                  <ProjectCard key={project.slug} project={project} number={(data.meta.page - 1) * PAGE_SIZE + index + 1} priority={index < 4} />
                 ))}
               </div>
               <Pagination

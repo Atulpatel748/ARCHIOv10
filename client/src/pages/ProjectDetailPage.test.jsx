@@ -34,7 +34,11 @@ describe('ProjectDetailPage', () => {
   it('shows the project, its facts, its gallery and similar projects, all at once', () => {
     open('home-a');
     expect(screen.getByRole('heading', { level: 1, name: 'Home A' })).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'All projects' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'All projects' })).toHaveAttribute('href', '/projects');
+    expect(screen.getByText('PROJECT OVERVIEW')).toBeInTheDocument();
+    expect(document.querySelector('.project-cover--editorial')).toBeInTheDocument();
+    expect(document.querySelector('.project-hero-wrap')).not.toBeInTheDocument();
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, left: 0, behavior: 'auto' });
     expect(screen.getByText('Location').nextElementSibling).toHaveTextContent('Dubai, United Arab Emirates');
     expect(screen.getByText('First paragraph.')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Home A living room' })).toBeInTheDocument();

@@ -1,25 +1,23 @@
-import { useState, useSyncExternalStore } from 'react';
-import PageHead from '../components/common/PageHead.jsx';
+import { useLayoutEffect } from 'react';
+import { Link } from 'react-router';
 import Picture from '../components/common/Picture.jsx';
 import Seo from '../components/common/Seo.jsx';
+import ArrowIcon from '../components/ui/ArrowIcon.jsx';
 import { SERVICES } from '../constants/content.js';
 import { ROUTES } from '../constants/routes.js';
 import { useRevealItems } from '../hooks/useRevealItems.js';
-
-// Wide screens show one large photo beside the list; narrower ones keep the open-in-place accordion.
-const WIDE = '(min-width: 1024px)';
-const watchWide = (notify) => {
-  const query = window.matchMedia(WIDE);
-  query.addEventListener?.('change', notify);
-  return () => query.removeEventListener?.('change', notify);
-};
-const isWide = () => window.matchMedia(WIDE).matches;
+import { scrollToTop } from '../hooks/useSmoothScroll.js';
 
 export default function ServicesPage() {
-  const rows = useRevealItems();
-  const wide = useSyncExternalStore(watchWide, isWide, () => false);
-  const [openService, setOpenService] = useState(null);
-  const [activeService, setActiveService] = useState(0);
+  // Services always opens at the start, even if the visitor left this page mid-scroll.
+  useLayoutEffect(() => {
+    scrollToTop();
+    // Router scroll restoration can run during navigation as well; reset once more on the next frame.
+    const frame = window.requestAnimationFrame(scrollToTop);
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  const rows = useRevealItems({ stagger: 45 });
 
   return (
     <>
@@ -28,78 +26,87 @@ export default function ServicesPage() {
         description="Consultancy-based interior design in Dubai: concept development, space planning, material and finish selection, design review and project coordination."
         path={ROUTES.services}
       />
-      <div className="screen">
-        <PageHead title="Services" display>
-          <p className="t-lead prose">{SERVICES.lead}</p>
-        </PageHead>
-        <section className="container section--tight" aria-label="All services">
-          <div className={wide ? 'services-split' : undefined}>
-            <ol ref={rows} className="toc toc--large">
+      <div className="screen services-page services-page--editorial">
+        <header className="container services-a-hero">
+          <div className="services-a__meta t-label">
+            <span>Studio / Services</span>
+            <span>Dubai · UAE</span>
+          </div>
+          <div className="services-a__hero-grid">
+            <div className="services-a__hero-copy">
+              <h1 className="services-a__title">
+                Thoughtful design.
+                <em>Practical direction.</em>
+              </h1>
+              <p className="services-a__lead">{SERVICES.lead}</p>
+              <Link className="link services-a__cta-link" to={ROUTES.contact}>
+                Discuss your project <ArrowIcon />
+              </Link>
+            </div>
+            <figure className="services-a__hero-image">
+              <Picture
+                className="services-a__hero-photo"
+                src="/images/projects/dubai-marina-residence/01.jpg"
+                alt="A refined double-height living room with marble detailing and a sculptural chandelier"
+                width="1800"
+                height="1200"
+                sizes="(min-width: 1440px) 720px, (min-width: 901px) 54vw, calc(100vw - 2 * var(--gutter))"
+                loading="eager"
+                fetchPriority="high"
+              />
+              <figcaption className="services-a__hero-caption">
+                <span>01—06 / Capabilities in practice</span>
+                <span>Residential · Commercial · Landscape</span>
+              </figcaption>
+            </figure>
+          </div>
+        </header>
+
+        <section className="container services-a-capabilities" aria-labelledby="services-a-heading">
+          <div className="services-a__kicker t-label">
+            <span>Our capabilities / 01—06</span>
+            <span>How we help</span>
+          </div>
+          <div className="services-a__section-head">
+            <h2 id="services-a-heading">Clarity at every stage.</h2>
+            <p>From the first brief to the final decision, we help make complex choices feel considered, connected and achievable.</p>
+          </div>
+
+          <div className="services-a__service-layout">
+            <ol ref={rows} className="services-a__rows" aria-label="Our services">
               {SERVICES.items.map((service, index) => (
-                <li
-                  key={service.title}
-                  className={`toc-row${wide && activeService === index ? ' is-active' : ''}`}
-                  onMouseEnter={wide ? () => setActiveService(index) : undefined}
-                >
-                  <span className="toc-row__num">{String(index + 1).padStart(2, '0')}</span>
-                  <div className="service-row">
-                    {wide ? (
-                      <h2 className="toc-row__title">{service.title}</h2>
-                    ) : (
-                      <>
-                        <h2 className="toc-row__title">
-                          <button
-                            id={`service-trigger-${index}`}
-                            className="service-trigger"
-                            type="button"
-                            aria-expanded={openService === index}
-                            aria-controls={`service-panel-${index}`}
-                            onClick={() => setOpenService(openService === index ? null : index)}
-                          >
-                            <span>{service.title}</span>
-                            <span className="service-trigger__indicator" aria-hidden="true" />
-                          </button>
-                        </h2>
-                        <div
-                          id={`service-panel-${index}`}
-                          className="service-panel"
-                          role="region"
-                          aria-labelledby={`service-trigger-${index}`}
-                          hidden={openService !== index}
-                        >
-                          {openService === index && (
-                            <Picture
-                              src={service.image}
-                              alt={service.alt}
-                              width="1600"
-                              height="900"
-                            />
-                          )}
-                        </div>
-                      </>
-                    )}
+                <li className="services-a__row" key={service.title}>
+                  <span className="services-a__num" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                  <div className="services-a__service-copy">
+                    <h3>{service.title}</h3>
+                    <p>{service.description}</p>
                   </div>
+                  <span className="services-a__row-arrow" aria-hidden="true">↗</span>
                 </li>
               ))}
             </ol>
-            {wide && (
-              // Decorative: the heading beside each photo already names the service. All six sit stacked and
-              // cross-fade, so a photo is never loaded on hover.
-              <div className="services-photo" aria-hidden="true">
-                {SERVICES.items.map((service, index) => (
-                  <Picture
-                    key={service.image}
-                    className={activeService === index ? 'is-active' : undefined}
-                    src={service.image}
-                    alt=""
-                    width="1600"
-                    height="900"
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                  />
-                ))}
-              </div>
-            )}
+
+            <figure className="services-a__preview">
+              <Picture
+                className="services-a__preview-photo"
+                src="/images/projects/dubai-marina-residence/02.jpg"
+                alt="A considered mix of marble, dark stone, built-in shelving and warm architectural lighting"
+                width="1400"
+                height="1800"
+                sizes="(min-width: 1440px) 510px, 35vw"
+                loading="lazy"
+              />
+              <figcaption className="services-a__preview-caption">
+                <span>Materiality / Light / Form</span>
+                <span>02 — 06</span>
+              </figcaption>
+            </figure>
           </div>
+
+          <aside className="services-a__bottom-cta">
+            <h2>Good decisions begin with a conversation.</h2>
+            <Link to={ROUTES.contact}>Let&rsquo;s talk <ArrowIcon /></Link>
+          </aside>
         </section>
       </div>
     </>
