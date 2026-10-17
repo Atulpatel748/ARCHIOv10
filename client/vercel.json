@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/((?!assets/|images/|brand/)[^.]*)",
-      "destination": "/index.html"
+      "source": "/((?!assets/|images/|brand/)[^.]+)",
+      "destination": "/shell.html"
     }
   ],
   "headers": [

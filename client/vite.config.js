@@ -1,9 +1,9 @@
 import react from '@vitejs/plugin-react';
 import { readFileSync } from 'node:fs';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { loadEnv } from 'vite';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { build, loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 import { fillHeroPhoto } from './hero-photo.js';
 import { sitemapXml } from './sitemap.js';
@@ -18,6 +18,55 @@ function securityHeaders() {
   const rule = headers.find(({ source }) => source === '/(.*)');
   if (!rule) throw new Error('vercel.json has no "/(.*)" header rule, which the preview server takes its security headers from.');
   return Object.fromEntries(rule.headers.map(({ key, value }) => [key, value]));
+}
+
+// The home page is the entry for most visits, and its largest element (the hero wordmark) used to wait for the whole
+// script before it could paint. After the client build this renders the home page to HTML (src/prerender.jsx) and puts
+// it in index.html, so the first paint already shows it. Every other page gets shell.html, the same file with an empty
+// root: vercel.json sends every address except "/" there, and the preview server below does the same.
+function prerenderHome() {
+  let outDir = 'dist';
+  const isPage = (path) => path !== '/' && path !== '/index.html' && !path.includes('.') && !/^\/(assets|images|brand)\//.test(path);
+  return {
+    name: 'archio-prerender',
+    configResolved: (config) => { outDir = join(config.root, config.build.outDir); },
+    configurePreviewServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        const [path, query] = req.url.split('?');
+        if (req.method === 'GET' && isPage(path)) req.url = `/shell.html${query ? `?${query}` : ''}`;
+        next();
+      });
+    },
+    async closeBundle() {
+      // A separate server build of src/prerender.jsx, imported once and then deleted. (A Vite dev server with
+      // ssrLoadModule rendered the same, but never let the build process exit.)
+      const root = fileURLToPath(new URL('.', import.meta.url));
+      const tmp = join(root, 'node_modules', '.archio-prerender');
+      try {
+        await build({
+          configFile: false,
+          root,
+          envDir,
+          envPrefix: ['VITE_', 'WEB3FORMS_'],
+          logLevel: 'error',
+          plugins: [react()],
+          resolve: { alias: { '@': join(root, 'src') } },
+          build: { ssr: 'src/prerender.jsx', outDir: tmp, emptyOutDir: true },
+        });
+        const { renderHome } = await import(pathToFileURL(join(tmp, 'prerender.js')).href);
+        // style="" attributes in static HTML are inline styles, which the CSP (style-src 'self') blocks with a console
+        // error each. React sets the same ones through the DOM once it renders, so the static copy goes without them.
+        const markup = (await renderHome()).replace(/ style="[^"]*"/g, '');
+        const indexFile = join(outDir, 'index.html');
+        const shell = await readFile(indexFile, 'utf8');
+        if (!shell.includes('<div id="root"></div>')) throw new Error('index.html has no empty <div id="root"></div> to prerender into.');
+        await writeFile(join(outDir, 'shell.html'), shell);
+        await writeFile(indexFile, shell.replace('<div id="root"></div>', `<div id="root">${markup}</div>`));
+      } finally {
+        await rm(tmp, { recursive: true, force: true });
+      }
+    },
+  };
 }
 
 export default defineConfig(({ command, mode }) => {
@@ -76,6 +125,7 @@ export default defineConfig(({ command, mode }) => {
           await writeFile(join(dir, 'sitemap.xml'), sitemapXml(siteUrl));
         },
       },
+      prerenderHome(),
       {
         // Headings are set in Marcellus and everything else in Public Sans. Their files get a new hash on every build, so
         // the preload tags are written from the finished bundle; without them the first paint uses fallback fonts, and

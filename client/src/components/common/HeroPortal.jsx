@@ -16,7 +16,8 @@ const PHOTO_FIT = 0.08;
 // How far above the header the bottom row starts to fade, so it is gone by the time it would touch the header links.
 const BASE_FADE_PX = 64;
 
-const prefersReducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+// The home page is also rendered at build time (prerender.jsx), where there is no window: assume motion, a 1600px screen.
+const prefersReducedMotion = () => (typeof window === 'undefined' ? false : window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false);
 
 const PinIcon = () => (
   <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
@@ -40,7 +41,7 @@ export default function HeroPortal({ projects }) {
   const wordmarkRef = useRef(null);
 
   // The hero fills the screen, so ask for a photo as wide as the screen is in device pixels (the largest size made, at most).
-  const [wantedWidth] = useState(() => Math.round(window.innerWidth * (window.devicePixelRatio || 1)));
+  const [wantedWidth] = useState(() => (typeof window === 'undefined' ? 1600 : Math.round(window.innerWidth * (window.devicePixelRatio || 1))));
   // The AVIF twin of each photo is a fraction of the JPEG's size; WebGL can read either. A browser that cannot decode
   // AVIF falls back to the JPEG.
   const items = useMemo(

@@ -60,14 +60,16 @@ describe('hosting security headers', () => {
     expect(connectSrc).toContain(origin);
   });
 
-  it('falls back to index.html for every client-side route, but lets a missing file be a real 404', () => {
-    // A missing file answered with index.html came back as "200 text/html" and, under /assets/, cached for a year: a tab
-    // opened before a deploy then got HTML for its old JavaScript chunk and the page failed to load.
+  it('sends every client-side route except "/" to the empty shell, but lets a missing file be a real 404', () => {
+    // A missing file answered with HTML came back as "200 text/html" and, under /assets/, cached for a year: a tab
+    // opened before a deploy then got HTML for its old JavaScript chunk and the page failed to load. "/" itself is the
+    // prerendered index.html (vite.config.js), which no other page may be served, or it would flash the home page.
     const { rewrites } = JSON.parse(read('vercel.json'));
     expect(rewrites).toHaveLength(1);
-    expect(rewrites[0].destination).toBe('/index.html');
+    expect(rewrites[0].destination).toBe('/shell.html');
     const toIndex = new RegExp(`^${rewrites[0].source}$`);
-    for (const route of ['/', '/about', '/projects', '/projects/jlt-commercial-interior', '/no-such-page']) {
+    expect(toIndex.test('/'), '/').toBe(false);
+    for (const route of ['/about', '/projects', '/projects/jlt-commercial-interior', '/no-such-page']) {
       expect(toIndex.test(route), route).toBe(true);
     }
     for (const file of ['/assets/index-old.js', '/assets/missing.css', '/images/projects/x/10.jpg', '/brand/x.webp', '/missing.png']) {
