@@ -385,7 +385,7 @@
   padding-block: clamp(44px, 6vw, 88px);
   border-top: var(--border-thin) solid var(--color-border);
   border-bottom: var(--border-thin) solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-bg);
 }
 
 .project-next-section__head {

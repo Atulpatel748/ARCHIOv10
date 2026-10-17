@@ -517,7 +517,7 @@
 /* -------------------------------------------------------------------------- */
 .do-type {
   border-top-color: var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-bg);
 }
 
 .do-type__stage {
@@ -970,7 +970,7 @@
 
 .project-facts {
   border-bottom: var(--border-thin) solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-bg);
 }
 
 .facts {

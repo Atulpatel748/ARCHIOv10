@@ -362,7 +362,7 @@
 
 .project-facts {
   border-block: var(--border-thin) solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-bg);
 }
 
 .facts > div {
@@ -380,7 +380,7 @@
 .project-next-section {
   padding-block: clamp(48px, 6.5vw, 92px);
   border-block: var(--border-thin) solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-bg);
 }
 
 .project-next-section__head {

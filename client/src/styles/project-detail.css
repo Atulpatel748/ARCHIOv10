@@ -56,7 +56,7 @@
 
 /* Facts: one row of small capitals spread across the whole width, on a light strip. */
 .project-facts {
-  background: var(--color-surface);
+  background: var(--color-bg);
 }
 
 .facts {
