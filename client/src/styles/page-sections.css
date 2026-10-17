@@ -36,9 +36,22 @@
 /* Closing band: the label with a rule running to the edge, the statement on the left (its last word in the accent,
    slanted), and on the right, past a hairline, the line of copy and the button. Stacks on phones. */
 .cta-band {
+  /* Its spacing stays as before; only the colour fades into the maroon footer below it (::after). */
+  position: relative;
   padding-block: var(--section-y);
-  background: var(--color-secondary);
+  background: var(--color-bg);
   color: var(--color-ink);
+}
+
+/* The fade covers the band's bottom space and the top of the footer. */
+.cta-band::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% - var(--section-y));
+  height: calc(var(--section-y) + var(--footer-fade-tail));
+  background: var(--fade-into-footer);
+  pointer-events: none;
 }
 
 .cta-band__inner {

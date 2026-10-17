@@ -73,10 +73,39 @@
   --tracking-display: -0.02em; /* the largest titles (page heads), set slightly tight */
   --tracking-heading: 0.015em;
   --tracking-label: 0.04em;
+  /* Beige into the maroon footer with no visible edge. The stops follow a smootherstep curve: a straight fade shows a
+     line where it starts and ends, an eased one does not. */
+  --fade-into-footer: linear-gradient(
+    to bottom,
+    var(--color-bg),
+    color-mix(in oklab, var(--color-brand) 0.2%, var(--color-bg)) 6.25%,
+    color-mix(in oklab, var(--color-brand) 1.6%, var(--color-bg)) 12.5%,
+    color-mix(in oklab, var(--color-brand) 4.9%, var(--color-bg)) 18.75%,
+    color-mix(in oklab, var(--color-brand) 10.4%, var(--color-bg)) 25%,
+    color-mix(in oklab, var(--color-brand) 18%, var(--color-bg)) 31.25%,
+    color-mix(in oklab, var(--color-brand) 27.5%, var(--color-bg)) 37.5%,
+    color-mix(in oklab, var(--color-brand) 38.4%, var(--color-bg)) 43.75%,
+    color-mix(in oklab, var(--color-brand) 50%, var(--color-bg)) 50%,
+    color-mix(in oklab, var(--color-brand) 61.6%, var(--color-bg)) 56.25%,
+    color-mix(in oklab, var(--color-brand) 72.5%, var(--color-bg)) 62.5%,
+    color-mix(in oklab, var(--color-brand) 82%, var(--color-bg)) 68.75%,
+    color-mix(in oklab, var(--color-brand) 89.6%, var(--color-bg)) 75%,
+    color-mix(in oklab, var(--color-brand) 95.1%, var(--color-bg)) 81.25%,
+    color-mix(in oklab, var(--color-brand) 98.4%, var(--color-bg)) 87.5%,
+    color-mix(in oklab, var(--color-brand) 99.8%, var(--color-bg)) 93.75%,
+    var(--color-brand)
+  );
+  --footer-fade-tail: 32px; /* how far a fade runs on into the footer's top space, short of its first line */
 }
 
 @media (min-width: 1024px) {
   :root {
     --header-h: 72px;
+  }
+}
+
+@media (min-width: 900px) {
+  :root {
+    --footer-fade-tail: 56px;
   }
 }

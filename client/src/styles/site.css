@@ -313,8 +313,28 @@ html[data-hero-undocked] .site-header--clear .brand:not(:focus-visible) {
    links, and the company line at the base. As tall as its content (not a full screen), so a page without a call to
    action is not left with an empty band. Phones: everything in one column. */
 .site-footer {
+  position: relative;
   background: var(--color-brand);
   color: var(--color-inverse);
+}
+
+/* A page without the closing band meets the footer straight from the beige, so the same fade as the band's covers the
+   empty space at the page's end (--footer-fade-up, under the smallest such space measured) and the top of the footer. */
+.site-footer:not(:has(.cta-band))::before {
+  --footer-fade-up: 20px;
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: calc(-1 * var(--footer-fade-up));
+  height: calc(var(--footer-fade-up) + var(--footer-fade-tail));
+  background: var(--fade-into-footer);
+  pointer-events: none;
+}
+
+@media (min-width: 900px) {
+  .site-footer:not(:has(.cta-band))::before {
+    --footer-fade-up: 64px;
+  }
 }
 
 .footer-grid {
