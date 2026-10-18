@@ -115,15 +115,12 @@ test.describe('public site', () => {
   });
 
   test('unknown pages and unknown projects show a helpful not-found page', async ({ page }) => {
-    const titleTop = () => page.getByRole('heading', { name: 'Not found' }).evaluate((el) => el.getBoundingClientRect().top);
     await page.goto('/no-such-page');
     await expect(page.getByRole('heading', { name: 'Not found' })).toBeVisible();
-    const pageTitleTop = await titleTop();
+    // Unknown project slugs use the app shell so they can set project-specific noindex metadata; other unknown URLs
+    // use the hosting-level 404 response, which preserves a real HTTP 404 status.
     await page.goto('/projects/not-a-real-project');
     await expect(page.getByRole('heading', { name: 'Not found' })).toBeVisible();
-    // A project address normally opens on a photo behind the header; without one the title sits where it does on any
-    // other page instead of sliding up under the header.
-    expect(Math.abs((await titleTop()) - pageTitleTop)).toBeLessThan(1);
     await expect(page).toHaveTitle('Project not found | Archió');
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
     await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
@@ -321,6 +318,9 @@ test.describe('public site', () => {
 
   test('project gallery: photos whole, in pairs from tablet up and one under another on phones', async ({ page }) => {
     await page.goto('/projects/dubai-marina-residence');
+    // Project detail is lazy-loaded; wait for its first gallery frames before measuring them, especially on mobile.
+    await expect(page.locator('.gallery figure').first()).toBeAttached();
+    await expect(page.locator('.gallery figure').nth(1)).toBeAttached();
     const frames = await page.locator('.gallery figure').evaluateAll((figures) => figures.slice(0, 2).map((figure) => figure.getBoundingClientRect().toJSON()));
     const width = page.viewportSize()?.width ?? 0;
     if (width >= 768) {

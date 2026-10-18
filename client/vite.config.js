@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react';
+import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -6,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build, loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 import { fillHeroPhoto } from './hero-photo.js';
-import { sitemapXml } from './sitemap.js';
+import { sitePaths, sitemapXml } from './sitemap.js';
 
 const envDir = fileURLToPath(new URL('..', import.meta.url));
 
@@ -23,18 +24,42 @@ function securityHeaders() {
 // The home page is the entry for most visits, and its largest element (the hero wordmark) used to wait for the whole
 // script before it could paint. After the client build this renders the home page to HTML (src/prerender.jsx) and puts
 // it in index.html, so the first paint already shows it. Every other page gets shell.html, the same file with an empty
-// root: vercel.json sends every address except "/" there, and the preview server below does the same.
+// root: vercel.json rewrites known app routes there; the preview server mirrors those routes and returns a 404 for unknown clean paths.
 function prerenderHome() {
   let outDir = 'dist';
-  const isPage = (path) => path !== '/' && path !== '/index.html' && !path.includes('.') && !/^\/(assets|images|brand)\//.test(path);
+  const knownPages = new Set(sitePaths().filter((path) => path !== '/'));
+  const normalizePath = (path) => path === '/' ? '/' : path.replace(/\/+$/, '');
+  const isPage = (path) => knownPages.has(normalizePath(path));
+  const isCleanUnknownPath = (path) => path !== '/' && !path.includes('.') && !/^\/(assets|images|brand)\//.test(path) && !isPage(path);
   return {
     name: 'archio-prerender',
     configResolved: (config) => { outDir = join(config.root, config.build.outDir); },
     configurePreviewServer(server) {
-      server.middlewares.use((req, _res, next) => {
+      server.middlewares.use(async (req, res, next) => {
         const [path, query] = req.url.split('?');
-        if (req.method === 'GET' && isPage(path)) req.url = `/shell.html${query ? `?${query}` : ''}`;
-        next();
+        if (req.method !== 'GET') return next();
+        if (isPage(path)) {
+          req.url = `/shell.html${query ? `?${query}` : ''}`;
+          return next();
+        }
+        // Project detail URLs use the app shell even when the slug is unknown, so React can provide its
+        // project-specific noindex metadata. Other unknown clean URLs return the real static HTTP 404 page.
+        if (/^\/projects\/[^/]+\/?$/.test(path)) {
+          req.url = `/shell.html${query ? `?${query}` : ''}`;
+          return next();
+        }
+        if (isCleanUnknownPath(path)) {
+          try {
+            const notFound = await readFile(join(outDir, '404.html'), 'utf8');
+            res.statusCode = 404;
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.end(notFound);
+            return;
+          } catch (error) {
+            return next(error);
+          }
+        }
+        return next();
       });
     },
     async closeBundle() {
@@ -95,6 +120,14 @@ export default defineConfig(({ command, mode }) => {
     resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
     plugins: [
       react(),
+      {
+        // Enforce asset signatures even when the deployment invokes `vite build` directly instead of `npm run build`.
+        name: 'archio-asset-integrity',
+        apply: 'build',
+        buildStart() {
+          execFileSync(process.execPath, [fileURLToPath(new URL('../scripts/check-assets.mjs', import.meta.url))], { stdio: 'inherit' });
+        },
+      },
       {
         name: 'archio-site-url',
         transformIndexHtml: (html) => replaceSiteUrl(html, siteUrl),

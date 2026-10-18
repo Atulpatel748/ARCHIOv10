@@ -38,7 +38,7 @@ async function post(payload) {
     return response.ok && result?.success !== false ? sent : failed(GENERIC_ERROR_MESSAGE);
   } catch {
     return failed(timedOut
-      ? `We could not confirm your request was sent. If you do not hear from us within a working day, please email us at ${SITE.email}.`
+      ? `We could not confirm your request was sent. If you do not hear from us within two working days, please email us at ${SITE.email}.`
       : 'We could not reach the server. Check your connection and try again.');
   } finally {
     clearTimeout(timer);

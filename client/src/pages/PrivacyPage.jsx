@@ -26,18 +26,20 @@ export default function PrivacyPage() {
             <section className="stack--sm">
               <h2 className="t-h3">What we collect</h2>
               <p>
-                When you send an inquiry, we collect your name, email address, optional phone number and city, and the
-                details you provide about your project. We do not collect sensitive personal data such as financial
-                details, health information, or government identification numbers.
+                When you send an inquiry, we collect your name and email address; optional phone number and city; and
+                the project type, property type, approximate area, budget range, preferred timeline, and message you submit.
+                Please do not include sensitive information, identity documents, payment-card details, or information about
+                other people in the message.
               </p>
             </section>
 
             <section className="stack--sm">
               <h2 className="t-h3">Why we collect it</h2>
               <p>
-                We use this information to respond to your request, assess your project, and discuss a potential scope of
-                work. We do not sell your personal data and we do not use it for advertising or marketing purposes. By
-                submitting an inquiry, you confirm that you have read and agreed to our{' '}
+                We use this information to respond to your request, assess whether the studio may be able to help, and
+                discuss a potential scope of work. We do not sell inquiry information or use it for advertising purposes.
+                The form asks you to confirm that you have read this notice and agree to be contacted about the request.
+                It also links to our{' '}
                 <Link className="link" to={ROUTES.terms}>Terms of service</Link>.
               </p>
             </section>
@@ -45,29 +47,33 @@ export default function PrivacyPage() {
             <section className="stack--sm">
               <h2 className="t-h3">Cookies</h2>
               <p>
-                This website does not set cookies. It does use temporary browser storage in the current tab to remember
-                how far you have scrolled on the pages you visited, whether the opening loading screen has already been
-                shown, and, after a website update, when the page last reloaded itself to fetch the new version. These notes are not cookies, they are stored only in your current browser tab, and they are erased
-                when the tab is closed. We do not use analytics, advertising, or tracking technologies. For full details,
-                see our <Link className="link" to={ROUTES.cookies}>Cookie policy</Link>.
+                The site code does not intentionally use analytics or advertising cookies. It uses session storage in your
+                current browser tab for scroll restoration, the opening loading screen, and a guard against repeated reloads
+                after a deployment. This browser storage is not a cookie and ordinarily clears when the tab session ends.
+                The contact form sends the information you submit to Web3Forms for delivery to the studio. For more detail,
+                see our <Link className="link" to={ROUTES.cookies}>Cookie policy</Link>. Cookie and storage behavior must
+                be rechecked after deployment and whenever integrations change.
               </p>
             </section>
 
             <section className="stack--sm">
               <h2 className="t-h3">How long we keep it</h2>
               <p>
-                We keep inquiry emails only for as long as needed to respond to your request and manage our business
-                relationship. If an inquiry does not become a project, we delete it after 24 months unless we are legally
-                required to retain it.
+                Inquiries are delivered to the studio by email; this website does not have an inquiry database or an
+                automated deletion job. The studio should retain messages only as long as needed to respond, manage a
+                potential or existing business relationship, meet applicable legal obligations, and resolve disputes, then
+                delete them under its own documented retention process. No fixed deletion period is promised by this site.
               </p>
             </section>
 
             <section className="stack--sm">
               <h2 className="t-h3">Who processes it</h2>
               <p>
-                Our hosting provider (Vercel), the form service that delivers your inquiry to our inbox (Web3Forms), and our
-                email provider process data on our behalf under their standard data-processing terms. We
-                do not share your personal data with any third party for marketing or analytics purposes.
+                Vercel hosts this website. When you submit an inquiry, Web3Forms receives the submitted form information
+                and processes it to deliver the message to the studio's email inbox; the studio's email provider then handles
+                the message. These providers may also process technical information required to operate their services.
+                Review each provider's current privacy and data-processing terms before launch. We do not share inquiry
+                information with third parties for advertising or analytics.
               </p>
             </section>
 

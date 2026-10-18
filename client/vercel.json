@@ -2,7 +2,91 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/((?!assets/|images/|brand/)[^.]+)",
+      "source": "/projects",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/projects/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/projects/:slug",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/projects/:slug/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/services/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/about/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/contact/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/privacy/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/terms/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/cookies",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/cookies/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/projects/dubai-marina-residence",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/projects/dubai-marina-residence/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/projects/jlt-commercial-interior",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/projects/jlt-commercial-interior/",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/projects/arabian-ranches-2-landscape",
+      "destination": "/shell.html"
+    },
+    {
+      "source": "/projects/arabian-ranches-2-landscape/",
       "destination": "/shell.html"
     }
   ],
