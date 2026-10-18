@@ -18,7 +18,7 @@ const SECTIONS = [
   },
   {
     title: 'Intellectual property',
-    text: `All content on this website, including text, images, layouts, and branding, is owned by ${SITE.name} or used with permission. You may not reproduce, distribute, or use any content from this website without prior written permission.`,
+    text: `Text, branding, photographs, architectural renders, layouts, and project details displayed on this website may be protected by intellectual-property rights. Visiting this website does not grant permission to reproduce, distribute, publish, or commercially use that material. Obtain written permission from the relevant rights-holder before reuse. Third-party names and marks remain the property of their respective owners.`,
   },
   {
     title: 'No warranties',
@@ -30,7 +30,7 @@ const SECTIONS = [
   },
   {
     title: 'Privacy and data protection',
-    text: `We process inquiries in line with our Privacy notice and applicable data-protection laws. By submitting an inquiry, you agree to the collection and use of your information as described there.`,
+    text: `The inquiry form asks you to confirm that you have read the Privacy notice and agree to be contacted about the request. Please review the Privacy notice to understand what information is sent to the studio and its service providers. The final wording and any required consent must be reviewed for the jurisdictions in which the studio operates.`,
   },
   {
     title: 'Governing law',

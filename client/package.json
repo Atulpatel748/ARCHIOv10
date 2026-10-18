@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "images": "node scripts/make-avif.mjs",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "prebuild": "node ../scripts/check-assets.mjs",
+    "pretest": "node ../scripts/check-assets.mjs"
   },
   "dependencies": {
     "@archio/shared": "*",
@@ -35,5 +37,8 @@
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
     "vitest": "^5.0.2"
+  },
+  "engines": {
+    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
   }
 }

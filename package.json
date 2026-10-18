@@ -17,7 +17,10 @@
     "test": "npm run test -w shared && npm run test -w client",
     "test:e2e": "playwright test",
     "audit:deps": "npm audit --audit-level=moderate",
-    "images": "npm run images -w client"
+    "images": "npm run images -w client --",
+    "check:assets": "node scripts/check-assets.mjs",
+    "prebuild": "npm run check:assets",
+    "pretest": "npm run check:assets"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

@@ -156,6 +156,6 @@ Layout is fluid from 320px to 1920px (checked at nine widths with no horizontal 
 
 ## Known gaps
 
-- The project photos are 707 to 800px wide, so the hero gallery and the project covers are soft on large and high-density screens (13 of 13 photos on a project page at 3x). `npm run images` already makes smaller steps and a `srcset` for any photo wider than 800px, so supplying 1600 to 2400px originals is all that is left to do.
+- Many Dubai Marina and JLT project photos are 626 to 800px wide, so the covers and gallery can look soft on large and high-density screens. The Arabian Ranches renders are 3200×2560, and the team portrait is 1920×1920. `npm run images` makes smaller AVIF steps and a `srcset` for sources wider than 800px; the studio still needs to supply 1600–2400px originals for the lower-resolution projects.
 - There is no dark mode; the site is intentionally light, closing with the maroon footer (and, on the home and project pages, a rose call-to-action band above it).
 - Project categories in the portfolio data are Residential, Commercial and Landscape only.
