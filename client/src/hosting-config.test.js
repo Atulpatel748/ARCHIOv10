@@ -3,7 +3,6 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { inquiryService } from './services/inquiry.service.js';
-import { PROJECTS } from '@archio/shared/projects';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (relative) => readFileSync(resolve(here, '..', relative), 'utf8');
@@ -61,29 +60,20 @@ describe('hosting security headers', () => {
     expect(connectSrc).toContain(origin);
   });
 
-  it('rewrites only known client routes and lets unknown paths use the custom 404 document', () => {
-    // A wildcard SPA rewrite made every miss look like a successful 200 response. Exact route entries preserve direct
-    // links to known pages while unknown page paths and missing assets fall through to Vercel's real 404 handling.
+  it('sends every client-side route except "/" to the empty shell, but lets a missing file be a real 404', () => {
+    // A missing file answered with HTML came back as "200 text/html" and, under /assets/, cached for a year: a tab
+    // opened before a deploy then got HTML for its old JavaScript chunk and the page failed to load. "/" itself is the
+    // prerendered index.html (vite.config.js), which no other page may be served, or it would flash the home page.
     const { rewrites } = JSON.parse(read('vercel.json'));
-    const sources = new Set(rewrites.map(({ source }) => source));
-    expect(rewrites.every(({ destination }) => destination === '/shell.html')).toBe(true);
-    const staticRoutes = ['/projects', '/services', '/about', '/contact', '/privacy', '/terms', '/cookies'];
-    for (const route of staticRoutes) {
-      expect(sources.has(route), route).toBe(true);
-      expect(sources.has(`${route}/`), `${route}/`).toBe(true);
-    }
-    for (const project of PROJECTS) {
-      const route = `/projects/${project.slug}`;
-      expect(sources.has(route), route).toBe(true);
-      expect(sources.has(`${route}/`), `${route}/`).toBe(true);
-    }
-    for (const unknown of ['/', '/no-such-page', '/projects/no-such-project']) {
-      expect(sources.has(unknown), unknown).toBe(false);
+    expect(rewrites).toHaveLength(1);
+    expect(rewrites[0].destination).toBe('/shell.html');
+    const toIndex = new RegExp(`^${rewrites[0].source}$`);
+    expect(toIndex.test('/'), '/').toBe(false);
+    for (const route of ['/about', '/projects', '/projects/jlt-commercial-interior', '/no-such-page']) {
+      expect(toIndex.test(route), route).toBe(true);
     }
     for (const file of ['/assets/index-old.js', '/assets/missing.css', '/images/projects/x/10.jpg', '/brand/x.webp', '/missing.png']) {
-      expect(sources.has(file), file).toBe(false);
+      expect(toIndex.test(file), file).toBe(false);
     }
-    expect(read('public/404.html')).toContain('<meta name="robots" content="noindex, nofollow">');
-    expect(read('public/404.html')).toContain('Page not found | Archió');
   });
 });

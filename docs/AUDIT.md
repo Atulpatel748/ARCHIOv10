@@ -1,45 +1,98 @@
-# ARCHIO v10 — Source remediation audit (19 October 2026)
+# Audit, October 2026
 
-This report describes changes made to the source archive in this delivery. It is not a legal opinion, licence clearance, live deployment check, or certification that the full test suite passes.
+A full pass over the site (code, security, dependencies, accessibility, SEO, performance, assets, licensing), with the
+fixes made and what is left for the studio to decide. Everything below was checked on this repository; nothing here is
+legal advice.
 
-## Fixed in this delivery
+## Stack found
 
-- **Secret hygiene:** the release source package excludes `.env`, `.env.local`, `.vercel/`, local AI/editor tooling, installed dependencies, caches, and previous test/build artifacts. The uploaded archive contained a Vercel OIDC token file; its value is not reproduced here. The prior audit notes that token had expired on 12 October 2026, but the account owner should still check the Vercel account and revoke any active/reusable credential if the token or session could remain valid.
-- **Image MIME/extension correctness:** seven Arabian Ranches renders and one team portrait had PNG bytes under `.jpg` names. The JPEG fallback files have been re-encoded as real JPEGs at their original dimensions, preserving their visual content. AVIF variants are present; run `npm run images -- --force` with the supported Node toolchain before final deployment to regenerate variants from the corrected JPEG fallbacks.
-- **Prevent recurrence:** `scripts/check-assets.mjs` now verifies image file signatures, JPEG-to-AVIF twins, and every responsive image variant in `image-widths.json`. It runs automatically before root test/build scripts, as the client workspace lifecycle pre-scripts, and inside the Vite production-build hook (including direct `vite build` deployment commands). The AVIF generator also refuses files with non-JPEG data under a `.jpg` extension.
-- **Privacy accuracy:** the Privacy notice now lists all form fields collected, identifies Vercel/Web3Forms/email handling, advises visitors not to submit sensitive details, and no longer promises an unimplemented 24-month deletion job. It says inquiries are delivered by email and the studio must follow a documented retention process.
-- **Cookie/storage wording:** the Cookie policy no longer makes an unsupported categorical claim that no cookies can be set in every browser/runtime. It describes the site's use of session storage and the Web3Forms form handoff, and flags production-domain verification.
-- **Contact promise:** form timeout guidance now matches the form's stated two-working-day response window.
-- **Node version repeatability:** `.nvmrc` now pins Node `24.15.0`, which satisfies the repository's declared engine range. The README uses `npm ci` and documents the asset-integrity command.
-- **Terms wording:** the IP clause no longer asserts that every image, render, layout, and brand asset is already owned or licensed. It no longer makes an unsupported blanket ownership/licence claim; asset-rights confirmation remains a launch blocker.
+Static React 19 site (Vite 8, React Router 8, plain CSS), npm workspaces `client/` and `shared/`, hosted on Vercel.
+The contact form posts to Web3Forms. There is no server, database, sign-in or admin screen any more (README: "Upgrading
+from the version with the Express API and MongoDB"), so the backend, database and admin checks do not apply; the old
+`/admin` and `/login` addresses show "Not found" (an e2e test covers this).
 
-## Checks run for this delivery
+## How it was checked
 
-- `node scripts/check-assets.mjs` — **passed**: 105 public image assets were scanned; 31 JPEG sources have AVIF equivalents; the responsive image manifest and referenced variants are present.
-- File-signature scan after conversion — all `.jpg` files under `client/public/images` now contain actual JPEG data.
-- Full automated test suite, typecheck, production build, Playwright/axe run, and `npm audit` — **not verified here**. The working container provides Node `22.16.0`, below the supported project range, and `npm ci` did not complete because package installation stalled. Use Node `24.15.0` or a compatible newer version with registry access, then run the commands below.
+| Check | Before | After |
+| --- | --- | --- |
+| `npm test` (shared, client) | 11 and 143 passed | 11 and 148 passed |
+| `npm run typecheck -w client` | clean | clean |
+| `npm run build` | builds | builds |
+| `npm run test:e2e` (Playwright, desktop and phone, axe WCAG 2.2 AA) | 72 passed, 2 skipped by design | 76 passed, 2 skipped by design |
+| `npm audit --audit-level=moderate` | 0 vulnerabilities | 0 vulnerabilities |
+| Browser sweep: 15 addresses at 320, 375, 390, 414, 768, 1024, 1280, 1440 and 1920px | see fixes | no horizontal overflow, clipped or off-screen elements, broken or distorted images, targets under 24px, CSP violations, script errors or failed requests |
+| Element positions, original build against fixed build, 12 addresses at the same nine widths | | only the intended changes below moved anything |
 
-```bash
-npm ci
-npm run images -- --force
-npm run check:assets
-npm test
-npm run typecheck -w client
-npm run build
-npm run test:e2e
-npm run audit:deps
-```
+The "after" results come from the packaged project itself: unzipped into an empty folder, `npm ci` on Node 24.21, then
+every command above.
 
-## Still requires the client or account owner
+Lighthouse on the local preview (mobile emulation, headless Chromium, indicative only): accessibility, best practices and
+SEO 100 on the home, projects, project and contact pages; performance 71 on the home page and 93 to 95 on the others. The
+home page's blocking time is dominated by the WebGL hero running in software in headless Chromium; re-measure on a real
+phone (PageSpeed Insights) after deploying.
 
-1. Confirm the legally registered entity name, actual studio email, address, phone, and UAE trade-licence details in `client/src/constants/site.js`. The code cannot reliably infer these facts from the brand or parent company name.
-2. Add `VITE_SITE_URL` for the final production domain and the Web3Forms key in Vercel; restrict the public key to the production domain and send a real end-to-end inquiry to verify delivery.
-3. Confirm rights to every project render, team portrait, the preloader background image, brand-kit assets, and the source/licence for `client/src/components/ui/morph-gallery.tsx`. Replace any item whose rights cannot be documented. Only add the two missing JLT reception renders after final, approved files are supplied.
-4. Supply higher-resolution source photos for Dubai Marina and JLT. Many source images are only 626–800px wide; enlarging them in code will not restore missing detail. The Arabian Ranches renders remain 3200×2560; the Pooja team portrait remains 1920×1920.
-5. Have qualified counsel review the Privacy notice, Cookie policy, Terms, jurisdiction, processor disclosures, data subject rights, and the studio's actual email retention procedure. The text is made more honest by this delivery but is not legal sign-off.
-6. Verify live Vercel behavior after deployment: security headers, that every known route loads through the explicit rewrites, that unknown paths return HTTP 404 and display `404.html`, `image/avif` content type, canonical/OG metadata on inner routes, mobile performance, and form delivery. Unknown-path fallthrough and the matching local preview middleware are now implemented, but the live deployment has not been tested. The current static app pre-renders the home route; non-home routes still rely on the client app/shell, so full route-by-route crawler previews need a separately tested pre-rendering/server-rendering change.
-7. Check mobile/desktop visual quality with the supplied originals and confirm the design/assets are distinct enough from any reference inspiration. A source-code review cannot confirm contractual, ownership, or originality facts.
+## Fixes made
 
-## Release position
+**Code**
+- The root route had no error boundary: a crash in the header, footer or layout showed React Router's built-in screen,
+  which prints the error message and stack trace. It now shows the site's own error page (`routes/index.jsx`, `routes.test.jsx`).
+- `Button`: a caller passing `disabled={false}` re-enabled the button while it was loading (`Button.test.jsx`).
+- A project title set on two lines read "Dubai MarinaResidence" as text (copy, reader view, crawlers), and its lines were
+  keyed by their text. Fixed and tested.
 
-**Not yet production-certified.** The code-level fixes above are applied to the attached source package, but business facts, third-party access, asset rights, legal sign-off, live hosting behavior, and automated tests remain open. Do not describe this as “everything legally cleared” or “all tests passed” until those steps are completed.
+**Layout and responsive**
+- On a home or project address without its photo (an unknown project, `/projects/` with a trailing slash, a page that
+  failed to load) the header still pulled the page up behind itself, so the title sat under the header (hidden on phones).
+- Footer from 900 to 1279px: five columns squeezed the email address until it broke mid-word ("…logistic / s.com") and
+  wrapped the legal links. Brand and contact now share the first row with the link columns under them; all five sit on
+  one row from 1280px, where the contact column never gets narrower than the address.
+- About page lists: the base reset for classed lists overrode their indent, so the bullets sat in the page margin and
+  were clipped at the edge of a 320px screen.
+- Without JavaScript the loading screen never left and hid the `<noscript>` note; it is now hidden when scripting is off,
+  and the note's address is a mailto link.
+
+**Typography**
+- The eyebrow label in the About write-ups rendered in Lora; labels are Public Sans everywhere else (DESIGN.md).
+- Form hints used a one-off 13px size; they now use the scale's small size.
+
+**Accessibility**
+- From 1024px the Tab order (logo, then the links on its left) did not follow the bar as it reads (WCAG 2.4.3). The
+  links now come first in the source; the layout is unchanged.
+
+**Security**
+- The delivered archive contained `.env.local` with a Vercel CLI token (expired 2026-10-12) and `.vercel/project.json`.
+  Both are git-ignored and are left out of the cleaned package, with the machine-local tooling (`.claude/skills/impeccable`,
+  which includes a Windows executable, `.claude/agents`, `.claude/settings.local.json`, `.impeccable/`).
+
+**SEO**
+- `index.html` declared a canonical link to the home page, which every address shares, so the raw HTML of each inner page
+  named the home page as its canonical. Removed; `Seo.jsx` sets the right one per page (unit test).
+- The Organization JSON-LD logo was 90 × 88px; Google asks for at least 112px. It now points at the 180px submark.
+
+**Dependencies**
+- `engines.node` said `>=20.19.0`, but React Router 8 needs Node 22.22+ and the test tools (Vitest 5, jsdom 30) need
+  `^22.22.2 || ^24.15.0 || >=26`. Corrected here and in the README. No packages were added, removed or upgraded: all are
+  used, the lockfile resolves only from registry.npmjs.org with integrity hashes, and audit is clean.
+
+**Licensing**
+- The hero shader's `permute()`/`snoise()` are Ashima Arts' MIT-licensed webgl-noise; the attribution is now in the code.
+- Checked: Public Sans, Marcellus and Lora are OFL-1.1 (Fontsource); React, React Router, Zod and Lenis are MIT; GSAP is
+  under its own "Standard no-charge" licence.
+
+**Clean-up**
+- Removed CSS for the old staggered project grid and other unused rules, merged duplicate rules, replaced a hard-coded
+  colour with its token, dropped unused `image` fields from `HOME_CATEGORIES`, removed a stray VS Code task, and brought
+  README, DESIGN.md and ARCHITECTURE.md back in line with the site (no density toggle, no clock, no film hero).
+
+## Left for the studio
+
+| What | Why it is not fixed here | What to do |
+| --- | --- | --- |
+| Contact details: the address is `info@beracahlogistics.com` for a unit of Beracah Trading, and the trade licence number is empty (`site.js` says to update both before launch) | Business facts | Confirm both in `client/src/constants/site.js`; the email also appears in the `<noscript>` line of `client/index.html` |
+| Web3Forms key and `VITE_SITE_URL` | Deployment settings, not code | Set both on Vercel, restrict the key to the site's domain, redeploy and send a test inquiry |
+| Privacy notice is draft: it does not name Web3Forms as a processor and promises a 24-month deletion | Legal copy needs sign-off (DESIGN.md) | Have it reviewed by a qualified professional |
+| Rights to confirm: where `morph-gallery.tsx` came from (no source recorded), the preloader background photo, the project renders (two JLT renders show a placeholder "LOGO"), consent for the team portraits, and how closely the layout follows the reference studio site named in the README | Ownership cannot be determined from the files | Confirm with the owners; replace anything that cannot be cleared |
+| Photos are 626 to 800px wide, soft on large and high-density screens | Larger originals are needed | Supply 1600 to 2400px originals and run `npm run images` (see README) |
+| Client-rendered site: crawlers that do not run JavaScript see only the default share tags, and unknown addresses answer HTTP 200 (marked noindex in the page) | Needs pre-rendering or server rendering, an architecture change | Consider pre-rendering the routes if search or share previews matter |
+| Vercel deployment not verified from here | No access to the project | After deploying, check the headers, `content-type: image/avif` on a photo, and the form |
+| The page hides the scrollbar | A deliberate design choice (base.css) | Reconsider for mouse users who drag the scrollbar |
