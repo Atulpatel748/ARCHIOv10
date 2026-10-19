@@ -2,20 +2,20 @@
   position: sticky;
   top: 0;
   z-index: 30;
-  border-bottom: var(--border-thin) solid var(--color-border-strong);
+  border-bottom: 0; /* Seamless header: remove the dark divider beneath the navigation. */
   background: var(--color-bg);
   transition: background-color var(--duration-base), border-color var(--duration-base), color var(--duration-base), box-shadow var(--duration-base);
 }
 
 /* Home page: the hero starts at the very top, behind the header. */
 .site-header--overlay {
-  margin-bottom: calc(-1 * (var(--header-h) + var(--border-thin))); /* the bar plus its 1px border */
+  margin-bottom: calc(-1 * var(--header-h)); /* overlap only the header bar; no bottom border remains */
 }
 
 /* A home or project address with no hero to show (an unknown project, a page that failed to load) gets the room back,
    so its title is not hidden under the header. */
 .site-header--overlay ~ main:not(:has(.hero-portal, .project-hero-wrap)) {
-  padding-top: calc(var(--header-h) + var(--border-thin));
+  padding-top: var(--header-h);
 }
 
 .site-header--clear {
