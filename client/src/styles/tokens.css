@@ -1,8 +1,8 @@
 :root {
-  --color-bg: #dacfba; /* beige, from the brand kit */
-  --color-surface: #f2eadc;
-  --color-surface-strong: #f8f2e7;
-  --color-secondary: #ceb6a8; /* rose, from the brand kit: the call-to-action band, and where photos sit while they load */
+  --color-bg: #DACFBA; /* warm beige canvas */
+  --color-surface: #CEB6A8; /* muted rose-beige for elevated content surfaces */
+  --color-surface-strong: color-mix(in srgb, #DACFBA 82%, #CEB6A8); /* a softer beige surface, derived only from the palette */
+  --color-secondary: #CEB6A8; /* rose-beige accent surface */
   --color-ink: #2b1012; /* text and lines: a very dark maroon-brown, never pure black */
   --color-brand: #4c1114; /* maroon, the logo's colour: buttons, dark bands, selected states */
   --color-inverse: #f6efe2; /* cream, for text on maroon and on photos */
@@ -16,11 +16,12 @@
   --color-warning: #774700;
   --color-error: #9e211a; /* status colours keep 5:1 on the beige page */
   --color-error-strong: #8c1c15; /* the error colour while hovered */
-  --color-success-bg: #d9ecdf;
-  --color-error-bg: #f3dcda;
-  --color-hover: rgba(43, 16, 18, 0.08); /* a faint ink wash behind a hovered chip */
-  --color-photo-ground: #14090a; /* behind a photo while it loads: a near-black maroon */
-  --color-scrim: #000; /* the neutral darkening laid over photos, used only as a partial wash (8 to 90 percent) */
+  --color-success-bg: color-mix(in srgb, #DACFBA 72%, #CEB6A8);
+  --color-error-bg: color-mix(in srgb, #DACFBA 72%, #CEB6A8);
+  --color-hover: color-mix(in srgb, #CEB6A8 32%, transparent); /* a faint palette-tinted wash behind a hovered chip */
+  --color-photo-ground: #4C1114; /* brand maroon behind a photo while it loads */
+  --color-scrim: #000; /* existing dark shadow tint, retained for non-background shadow effects */
+  --color-background-scrim: #4C1114; /* palette-only tint for photo/background overlays */
   --color-focus: var(--color-accent);
 
   --space-1: 4px;

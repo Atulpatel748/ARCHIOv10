@@ -20,20 +20,21 @@ export default function CookiePage() {
             <section className="stack--sm">
               <h2 className="t-h3">What cookies we use</h2>
               <p>
-                The website code does not intentionally set cookies for analytics or advertising. It uses session storage
-                in the current browser tab for scroll restoration, the opening loading screen, and a guard against repeated
-                reloads after a deployment. Session storage is separate from cookies and ordinarily clears when the tab
-                session ends. When you submit the contact form, the information you enter is sent to Web3Forms for delivery
-                to the studio; that provider may process technical data needed to operate its service. Recheck browser
-                storage and network behavior on the production domain before launch and after integrations change.
+                None. This website does not set cookies. It does use up to three temporary notes in your browser tab only:
+                the last scroll position on pages you visited, so the Back button returns you to the same place; a note that
+                the opening loading screen has already been shown, so it does not replay on refresh; and, only after we
+                update the website while your tab is open, the time the page reloaded itself to fetch the new version, so it
+                does not reload again in a loop. These notes are not
+                cookies, they are stored only in the current tab, and they are erased when the tab is closed. We do not use
+                analytics, advertising, or tracking technologies, and we do not share data about your visit with third
+                parties.
               </p>
             </section>
             <section className="stack--sm">
               <h2 className="t-h3">Do we need your consent?</h2>
               <p>
-                This site currently does not include analytics or advertising integrations and therefore does not show a cookie banner.
-                If analytics, advertising, or other non-essential tracking is added, this policy and any consent controls will
-                be reviewed and updated where required.
+                Because we do not use cookies, we do not show a cookie consent banner. If we ever add analytics,
+                advertising, or any other tracking technology, we will update this policy and ask for your consent first.
               </p>
             </section>
             <section className="stack--sm">

@@ -5,20 +5,21 @@ as a static React 19 site (Vite) hosted on Vercel; the contact form posts straig
 typography and interaction patterns are derived from the layout of the reference site (`yodezeen.com`). The
 copy, team, contact details and project images come from the Archió company profile.
 
-> **Latest feedback revision (v4).** Our Approach now precedes Selected Work. The home portfolio uses one featured project with two restrained, numbered supporting entries. Project details open as distinct editorial case studies (not a second fullscreen landing hero), return to the top on entry, and use a more professional Next Project preview. Services has a new typographic introduction, contained project image and numbered interactive capabilities index. Existing brand fonts and color tokens are unchanged. See `docs/AUDIT.md` for the source-remediation status and remaining release checks.
+> **Latest feedback revision (v4).** Our Approach now precedes Selected Work. The home portfolio uses one featured project with two restrained, numbered supporting entries. Project details open as distinct editorial case studies (not a second fullscreen landing hero), return to the top on entry, and use a more professional Next Project preview. Services has a new typographic introduction, contained project image and numbered interactive capabilities index. Existing brand fonts and color tokens are unchanged. See `REDESIGN_NOTES.md` for details and validation status.
 
 There are no user accounts, no sign-in, no admin screen and no database. The portfolio is a file in the repository
 (`shared/data/projects.js`, see "Content") built into the site, and the only thing visitors can send is the contact form,
 which is emailed to the studio through Web3Forms.
 
-> **Before launch.** The privacy notice and terms are drafts and need review by a qualified professional. This static site
-> does not automatically delete inquiry emails, so the privacy notice does not promise a fixed deletion period; the studio
-> must approve and follow a documented retention schedule. Verify cookie/session-storage behavior on the production domain.
-> The studio must confirm the official registered name, contact email and trade-licence details in `client/src/constants/site.js`.
-> Project years and styles are intentionally omitted when unknown. Confirm permission to publish all images and team portraits.
-> Two JLT reception renders that showed a placeholder “LOGO” are not included; add approved final images as `10.jpg` and
-> `11.jpg` only after the client provides them. The source/licence for `client/src/components/ui/morph-gallery.tsx` and the
-> preloader background photo must be recorded before launch.
+> **Before launch.** The privacy notice is draft text and must be reviewed by a qualified
+> professional (open points: the notice promises a 24-month deletion of old inquiries that nothing
+> performs yet, and the cookie policy now states that the site sets no cookies, which should be confirmed).
+> Project titles are derived from the profile's locations because it gives no names, and year and
+> style are left unset because it gives none. Confirm the images are yours to publish. The two JLT
+> reception renders that showed a placeholder "LOGO" were taken off the site; add final renders back as 10.jpg and
+> 11.jpg (with their descriptions in `shared/data/projects.js`) when the client has them. The hero gallery
+> (`client/src/components/ui/morph-gallery.tsx`) names no source or licence; confirm where it came from
+> before launch.
 
 ## Content
 
@@ -32,12 +33,10 @@ which is emailed to the studio through Web3Forms.
 | Inquiry options (project type, budget bands in AED, timeline) | `shared/constants/index.js` |
 | First image on the home page | Nothing to edit: it is the first featured project's cover in `shared/data/projects.js`. `client/public/preloader-gate.js` preloads it (the build fills in its `__HERO_PHOTO__` placeholder from `client/hero-photo.js`) |
 
-**Managing projects.** Edit `shared/data/projects.js` (the steps are in the comment at its top), add matching clean and
-trailing-slash route rewrites for the new slug to `client/vercel.json`, then run `npm test` and redeploy. The hosting-config
-test checks that every portfolio slug has a rewrite; without one, a valid deep link would return a 404. Unknown slugs
-fall through to `client/public/404.html` with a 404 status. `npm test` also checks each project entry and its photos.
-Projects show in the order of the file, and the first `featured: true` ones appear on the home page. The sitemap is written
-from the same file at build time. Year and style are optional. Areas are stored in
+**Managing projects.** Edit `shared/data/projects.js` (the steps are in the comment at its top), run `npm test`, and
+redeploy. `npm test` checks every entry against the project schema and that each photo exists, so a mistake fails there
+instead of on the site. Projects show in the order of the file, and the first `featured: true` ones appear on the home
+page. The sitemap is written from the same file at build time. Year and style are optional. Areas are stored in
 square metres and shown in both m² and sq ft. The logo is the brand kit's ARCHIÓ wordmark
 (`client/public/brand/wordmark.webp`, taken from `Archio Logobrand kit.pdf`, used as a CSS mask so it takes the text
 colour); the round submark is used only for the loading screen (`client/public/brand/logo-mark.png`), the favicon
@@ -83,7 +82,7 @@ want to keep them (new ones only arrive by email). The old server settings (`POR
   services, about (team, vision, mission, philosophy), contact (three-step inquiry form), privacy
   notice, terms and cookie policy.
 - **Contact**: three-step inquiry form; each request is emailed to the studio inbox (nothing is stored on the site).
-  No accounts or authentication cookies. The browser uses session storage for the router's scroll position, the loading-screen flag, and a reload-loop guard (this tab only).
+  No accounts and no cookies; the browser keeps only the router's scroll position for the Back button and a note that the tab has already shown the loading screen (session storage, this tab only).
 - **Platform**: sitemap, robots.txt, per-page titles/meta/canonical/Open Graph, JSON-LD,
   keyboard-first UI, reduced-motion support, strict CSP for the static site.
 
@@ -111,9 +110,8 @@ Requirements: Node 22.22.2+ or 24.15+ (see `.nvmrc`; React Router 8 needs 22.22+
 npm 10+.
 
 ```bash
-npm ci
+npm install
 cp .env.example .env        # review the values, see below
-npm run check:assets        # validates image signatures, AVIF twins and responsive variants
 npm run dev                 # the site on :5173
 ```
 
@@ -141,7 +139,6 @@ Project Settings > Environment Variables, then redeploy.
 | `npm test` | Unit tests for shared and client (including the contact-form service) |
 | `npm run test:e2e` | Playwright against the production build (it builds the site first, with a stand-in form key, and starts the preview server; it reuses one already running on :4173) |
 | `npm run images` | Make a smaller `.avif` next to every photo in `client/public/images` (see "Adding photos") |
-| `npm run check:assets` | Check image signatures, AVIF twins and responsive variants |
 | `npm run audit:deps` | `npm audit` at moderate level |
 
 ## Testing
@@ -174,7 +171,11 @@ Browser -> Vercel -> client/dist (static pages, sitemap.xml)
 Browser -> api.web3forms.com -> studio inbox (contact form only)
 ```
 
-1. Import the repository in Vercel with **Root Directory** `client` and confirm the deployment can install the workspace's `shared/` package. `client/vercel.json` sets CSP/security headers and rewrites only the known clean app routes to the generated `shell.html`; the home page stays in `index.html`. Missing files and unknown routes are not rewritten, so Vercel can return its custom `404.html` with a 404 status. A tab left open across a deploy reloads once when its old page chunk is gone (`vite:preloadError` in `client/src/main.jsx`).
+1. Import the repository in Vercel with **Root Directory** `client` (the monorepo's `shared/` package is installed
+   with it). `client/vercel.json` sets the CSP and security headers and sends every page address to `index.html`. Addresses of
+   files (anything with a dot, or under `/assets/`, `/images/`, `/brand/`) are not rewritten, so a missing file is a real
+   404 rather than the page's HTML; a tab left open across a deploy reloads once when its old page chunk is gone
+   (`vite:preloadError` in `client/src/main.jsx`).
 2. Set `VITE_SITE_URL` to the public URL (it is used at build time for canonical links, `robots.txt` and the
    sitemap; a Vercel build without it stops with an error), and `WEB3FORMS_ACCESS_KEY` (or `VITE_WEB3FORMS_ACCESS_KEY`) to the key for the studio
    inbox. Restrict the key to the site's domain in the Web3Forms dashboard.
@@ -183,7 +184,10 @@ Browser -> api.web3forms.com -> studio inbox (contact form only)
 
 ## Security
 
-There are no user accounts, authentication sessions, admin screen or first-party inquiry database. The contact form is the only visitor submission: the browser checks it against the strict Zod schema (tag-stripped plain text), drops honeypot submissions, and sends it to Web3Forms, which emails the studio. The studio inbox, Web3Forms account, and email provider still need appropriate access controls and retention. Rate limiting and spam filtering are Web3Forms' (see "Production").
+There are no accounts, sessions, cookies, admin screen or database, so there is nothing to sign in to and nothing
+stored to leak. The one input is the contact form: the browser checks it against the same strict Zod schema (tag-stripped plain
+text), drops honeypot submissions, and sends it to Web3Forms, which emails the studio. Rate limiting and spam
+filtering are Web3Forms' (see "Production").
 The browser bundle runs Zod in `jitless` mode (`client/src/schemas/zod-csp.js`) so validation never
 attempts `new Function`, which the site's CSP (`script-src 'self'`, no `unsafe-eval`) would block and report.
 `docs/SECURITY.md` maps each control to the code and the tests that exercise it, and lists residual
@@ -249,21 +253,19 @@ ref; results a filter brings in later simply show, without the entrance). Each c
 - There is no admin screen: a new or changed project is an edit to `shared/data/projects.js` and a redeploy. Photos
   either go in `client/public/images` or are hosted elsewhere and given as https:// addresses.
 - `client/public/preloader-gate.js` preloads the first featured project's cover on the home page, filled in at build time
-  from the portfolio (`client/hero-photo.js`), so reordering or changing the featured projects needs no other edit. The
-  current featured cover is only 707px wide and has one size; if a larger cover with responsive AVIF variants becomes the
-  first featured item, update the preloader to choose the same width the hero requests.
-- Inquiries exist only in the studio's email, sent by Web3Forms. If sending fails the visitor is shown a message and no
-  copy is retained by this website. The access key is visible in the site's JavaScript by design; restrict it to the
-  production domain in Web3Forms and send a test inquiry after deployment.
-- The site pre-renders the home page, but the other pages still render in the browser. Social crawlers that do not run
-  JavaScript may see the default Open Graph tags from `index.html` on those routes. Route rewrites and a real 404 response
-  are now explicit; route-specific previews would need a separately tested route pre-render or server-rendering change.
-- Many Dubai Marina and JLT photos are only 626–800px wide and look soft on large or high-density screens. Arabian Ranches
-  renders are 3200×2560 and the team portrait is 1920×1920. Replacing the low-resolution assets requires original files
-  from the studio; enlarging them in code will not restore missing detail. The reference site's scroll-scrubbed image
-  sequence and rotating globe are not reproduced. The scroll effects are the heading word reveal and the pinned "We design"
-  section described above; there is no parallax layout.
+  from the portfolio (`client/hero-photo.js`), so reordering or changing the featured projects needs no other edit. A cover that
+  has several sizes (a photo wider than 800px) is not handled yet: a test fails until the preload picks a size by screen width.
+- Inquiries exist only in the studio's email, sent by Web3Forms (a third party; the privacy notice does not name it yet,
+  which needs the lawyer's sign-off). If sending fails the visitor is told to try again, but nothing keeps a copy.
+- The access key is visible in the site's JavaScript; anyone can send mail to the inbox with it, so keep the domain
+  restriction on in Web3Forms.
+- The site is a client-rendered SPA: social crawlers that do not run JavaScript see only the
+  default Open Graph tags from `index.html`.
+- The project photos are 800px wide, so on large screens the hero gallery is soft; it needs higher-resolution
+  photos. The reference site's scroll-scrubbed image sequence and rotating globe are not
+  reproduced. The scroll effects are the heading word reveal and the pinned "We design" section described above; there is no
+  parallax layout.
 
 ## Design system
 
-`DESIGN.md` (project root) documents the visual system: tokens, colours with measured contrast, type, shapes, components, motion and do's and don'ts.
+`DESIGN.md` (project root) documents the visual system: tokens, colours with measured contrast, type, shapes, components, motion and do's and don'ts. `.claude/skills/archio-design/SKILL.md` turns the same rules into a short checklist for anyone (or any assistant) editing the site.

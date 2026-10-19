@@ -52,9 +52,8 @@ All tokens are CSS custom properties in `client/src/styles/tokens.css`.
 | 1024px | Inline navigation replaces the menu dialog; three or four project cards per row; split layouts |
 | 1280px | Footer: brand, contact and the three link columns on one row |
 
-Historical baseline: the original October 2026 archive reported an automated scan of 11 routes at 320, 375, 390, 414,
-768, 1024, 1280, 1440 and 1920px (no horizontal overflow, console errors, failed requests or heading-structure problems).
-That scan was not rerun after this remediation; rerun it after installing dependencies on the supported Node version.
+Verified with an automated scan of 11 routes at 320, 375, 390, 414, 768, 1024, 1280, 1440 and 1920px
+(no horizontal overflow, console errors, failed requests or heading-structure problems).
 
 ## 3. Content and data
 

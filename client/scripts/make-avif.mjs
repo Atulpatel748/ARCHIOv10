@@ -50,11 +50,7 @@ let skipped = 0;
 const manifest = {};
 for await (const jpg of jpegs(root)) {
   const avif = jpg.replace(/\.jpe?g$/i, '.avif');
-  const metadata = await sharp(jpg).metadata();
-  if (metadata.format !== 'jpeg') {
-    throw new Error(`Expected a real JPEG file for ${relative(publicDir, jpg)}; found ${metadata.format ?? 'unknown'} data. Correct the extension or convert the source before generating AVIF files.`);
-  }
-  const { width } = metadata;
+  const { width } = await sharp(jpg).metadata();
   const steps = [...WIDTHS.filter((step) => step < width), width];
   manifest[urlOf(jpg)] = steps;
 

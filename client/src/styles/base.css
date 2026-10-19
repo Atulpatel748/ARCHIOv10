@@ -6,14 +6,27 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  /* Anchor and focus scrolling stop exactly under the seamless header bar. */
-  scroll-padding-top: var(--header-h);
-  scrollbar-width: none; /* Firefox; the rule below does the same in Chrome, Edge and Safari */
+  /* Anchor and focus scrolling stop exactly under the header (bar plus its hairline). */
+  scroll-padding-top: calc(var(--header-h) + var(--border-thin));
+  /* Keep the native page scrollbar visible and usable in Firefox. */
+  scrollbar-width: thin;
+  scrollbar-color: #4C1114 #DACFBA;
 }
 
-/* No visible scrollbar: the page still scrolls by wheel, touch, trackpad and keyboard. */
+/* A clear, branded scrollbar remains available for mouse users as well as wheel, touch and keyboard users. */
 ::-webkit-scrollbar {
-  width: 0;
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #DACFBA;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4C1114;
+  border: 3px solid #DACFBA;
+  border-radius: 999px;
 }
 
 body {
