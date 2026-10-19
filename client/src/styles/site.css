@@ -2,14 +2,14 @@
   position: sticky;
   top: 0;
   z-index: 30;
-  border-bottom: 0; /* Seamless header: remove the dark divider beneath the navigation. */
+  border-bottom: 0; /* Seamless header: remove the dark divider beneath navigation. */
   background: var(--color-bg);
   transition: background-color var(--duration-base), border-color var(--duration-base), color var(--duration-base), box-shadow var(--duration-base);
 }
 
 /* Home page: the hero starts at the very top, behind the header. */
 .site-header--overlay {
-  margin-bottom: calc(-1 * var(--header-h)); /* overlap only the header bar; no bottom border remains */
+  margin-bottom: calc(-1 * var(--header-h)); /* overlap the header bar; there is no bottom border */
 }
 
 /* A home or project address with no hero to show (an unknown project, a page that failed to load) gets the room back,
