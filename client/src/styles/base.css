@@ -11,10 +11,10 @@ html {
   scrollbar-width: none; /* Firefox; the rule below does the same in Chrome, Edge and Safari */
 }
 
-/* No visible scrollbar: the page still scrolls by wheel, touch, trackpad and keyboard. */
+/* No visible scrollbar: the page still scrolls by wheel, touch, trackpad and keyboard.
 ::-webkit-scrollbar {
   width: 0;
-}
+} */
 
 body {
   margin: 0;
