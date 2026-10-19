@@ -12,9 +12,9 @@ html {
 }
 
 /* No visible scrollbar: the page still scrolls by wheel, touch, trackpad and keyboard. */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 0;
-}
+}  */
 
 body {
   margin: 0;
