@@ -28,7 +28,7 @@
   padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
   color: var(--color-inverse);
   /* Dark enough under the small cream name for 4.5:1 over the brightest cover (measured on all three, desktop and phone). */
-  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-background-scrim) 70%, transparent) 55%);
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-scrim) 70%, transparent) 55%);
 }
 
 /* A wash at the top for the clear header's links. */
@@ -39,7 +39,7 @@
   z-index: 1;
   height: max(22svh, 160px);
   /* Holds the clear header's cream links at 4.5:1 or better over the brightest cover (measured on all three, desktop and phone). */
-  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-background-scrim) 72%, transparent), color-mix(in srgb, var(--color-background-scrim) 62%, transparent) 45%, transparent);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 72%, transparent), color-mix(in srgb, var(--color-scrim) 62%, transparent) 45%, transparent);
   pointer-events: none;
 }
 

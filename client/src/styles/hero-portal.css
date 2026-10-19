@@ -28,16 +28,16 @@
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 52% 26% at 50% 40%, color-mix(in srgb, var(--color-background-scrim) 24%, transparent), transparent),
-    linear-gradient(to bottom, color-mix(in srgb, var(--color-background-scrim) 48%, transparent), color-mix(in srgb, var(--color-background-scrim) 12%, transparent) 22%, color-mix(in srgb, var(--color-background-scrim) 12%, transparent) 55%, color-mix(in srgb, var(--color-background-scrim) 58%, transparent));
+    radial-gradient(ellipse 52% 26% at 50% 40%, color-mix(in srgb, var(--color-scrim) 24%, transparent), transparent),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 48%, transparent), color-mix(in srgb, var(--color-scrim) 12%, transparent) 22%, color-mix(in srgb, var(--color-scrim) 12%, transparent) 55%, color-mix(in srgb, var(--color-scrim) 58%, transparent));
 }
 
 /* On a phone the centred block spans most of the width, so the soft shadow behind it does too. */
 @media (max-width: 639px) {
   .hero-portal__scrim {
     background:
-      radial-gradient(ellipse 100% 22% at 50% 40%, color-mix(in srgb, var(--color-background-scrim) 30%, transparent), transparent),
-      linear-gradient(to bottom, color-mix(in srgb, var(--color-background-scrim) 48%, transparent), color-mix(in srgb, var(--color-background-scrim) 12%, transparent) 22%, color-mix(in srgb, var(--color-background-scrim) 12%, transparent) 55%, color-mix(in srgb, var(--color-background-scrim) 58%, transparent));
+      radial-gradient(ellipse 100% 22% at 50% 40%, color-mix(in srgb, var(--color-scrim) 30%, transparent), transparent),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 48%, transparent), color-mix(in srgb, var(--color-scrim) 12%, transparent) 22%, color-mix(in srgb, var(--color-scrim) 12%, transparent) 55%, color-mix(in srgb, var(--color-scrim) 58%, transparent));
   }
 }
 

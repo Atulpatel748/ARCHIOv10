@@ -1,0 +1,19 @@
+ARCHIO — Motion / Framer Motion source patch
+
+IMPORTANT
+The real Motion dependency is now referenced in client/package.json, but this environment could not download it from npm. The included package-lock.json is still the original lockfile.
+
+On a PC with internet access:
+1. Extract this source ZIP.
+2. Open terminal in the folder that contains the root package.json.
+3. Run: npm install
+4. Run: npm run build
+5. Run: npm test
+6. Run: npm run dev
+
+Use `npm install` first (not `npm ci`) so npm updates package-lock.json with the new dependency. If npm install fails on your PC, send me the exact terminal error.
+
+The original uploaded archive was not modified. This is a separate working copy. Review build and tests before deploying.
+
+PRIVATE CONFIG NOTE
+The private .env.local file has been left out of this ZIP. Keep and merge the version from your original local project privately; do not publish any access keys or secrets.
