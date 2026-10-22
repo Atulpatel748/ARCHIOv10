@@ -1,0 +1,192 @@
+/* Studio facts, testimonial, process strip and project brief (components/common/Additions.jsx). */
+.sample-tag {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-thin) dashed var(--color-accent);
+  color: var(--color-accent);
+  font-size: var(--type-caption);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.studio-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+  padding-block: clamp(28px, 4vw, 56px);
+  background: var(--color-surface);
+  border-block: var(--border-thin) solid var(--color-border);
+}
+
+.studio-facts div {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.studio-facts b {
+  font: 400 var(--type-h2) / 1 var(--font-serif);
+  letter-spacing: 0.01em;
+}
+
+.studio-facts span {
+  color: var(--color-muted);
+  font-size: var(--type-caption);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.testimonial {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: clamp(24px, 6vw, 96px);
+  align-items: start;
+  padding-block: var(--section-y);
+}
+
+.testimonial figure {
+  margin: 0;
+}
+
+.testimonial blockquote {
+  margin: 0;
+  font: 400 clamp(1.8rem, 2.7vw, 3.15rem) / 1.15 var(--font-serif); /* the same size as the home feature name */
+}
+
+.testimonial figcaption {
+  margin-top: var(--space-5);
+  color: var(--color-muted);
+  font-size: var(--type-small);
+}
+
+.process {
+  padding-block: var(--section-y);
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.process__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-5);
+  margin-bottom: clamp(28px, 4vw, 56px);
+}
+
+.process h2 {
+  margin: 0;
+  font: 400 var(--type-h2) / 1.05 var(--font-serif);
+  text-transform: uppercase;
+}
+
+.process__steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.process__steps li {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: var(--border-thick) solid var(--color-ink);
+}
+
+.process__num {
+  color: var(--color-muted);
+  font-size: var(--type-small);
+  letter-spacing: var(--tracking-label);
+}
+
+.process__steps h3 {
+  margin: 0;
+  font: 400 var(--type-h3) / 1.15 var(--font-serif);
+  text-transform: uppercase;
+}
+
+.process__steps p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: var(--type-small);
+  line-height: 1.5;
+}
+
+.process__gives {
+  font-size: var(--type-caption);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.project-brief {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: clamp(20px, 3vw, 48px);
+  align-items: start;
+  padding-block: var(--section-y);
+  background: var(--color-surface);
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.project-brief h3 {
+  margin: 0 0 var(--space-3);
+  color: var(--color-muted);
+  font: 500 var(--type-caption) / 1.4 var(--font-sans);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.project-brief p,
+.project-brief li {
+  margin: 0;
+  font-family: var(--font-text-serif);
+  line-height: 1.6;
+}
+
+.project-brief ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-brief li {
+  padding-bottom: var(--space-2);
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.project-brief__plan {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  border: var(--border-thin) dashed var(--color-ink);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 23px, var(--color-border) 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, var(--color-border) 23px 24px);
+  color: var(--color-muted);
+  font-size: var(--type-caption);
+  letter-spacing: var(--tracking-label);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .process__steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-brief,
+  .testimonial {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .process__steps,
+  .studio-facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

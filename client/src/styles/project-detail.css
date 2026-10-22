@@ -1,0 +1,193 @@
+/* A project page: the cover full screen with a small name at its foot, a light strip of
+   facts spread across the width, photos edge to edge, a centred "Concept" statement in the display face, and the next
+   project announced in the centre above its own photo. */
+
+/* Cover: the photo fills the screen; the name and category sit small at its foot, as a caption would. */
+.project-cover {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  background: var(--color-photo-ground);
+}
+
+.project-cover__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-cover__bar {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-top: var(--space-10);
+  /* Clear of the home indicator on phones with no bottom bezel, as on the home hero. */
+  padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+  color: var(--color-inverse);
+  /* Dark enough under the small cream name for 4.5:1 over the brightest cover (measured on all three, desktop and phone). */
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--color-scrim) 70%, transparent) 55%);
+}
+
+/* A wash at the top for the clear header's links. */
+.project-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  height: max(22svh, 160px);
+  /* Holds the clear header's cream links at 4.5:1 or better over the brightest cover (measured on all three, desktop and phone). */
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-scrim) 72%, transparent), color-mix(in srgb, var(--color-scrim) 62%, transparent) 45%, transparent);
+  pointer-events: none;
+}
+
+.project-hero__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--type-small);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  line-height: var(--leading-body);
+  text-transform: uppercase;
+}
+
+
+/* Facts: one row of small capitals spread across the whole width, on a light strip. */
+.project-facts {
+  background: var(--color-bg);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-5) var(--space-7);
+  margin: 0 auto;
+  padding-block: var(--space-9);
+  font-size: var(--type-caption);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.facts dt {
+  color: var(--color-muted);
+}
+
+.facts dd {
+  font-weight: 600;
+}
+
+/* On phones the photos run whole, one under another, edge to edge. From tablet up they sit in pairs, each about the
+   size of the ~800px originals: one at full width would be taller than the screen (up to twice) and soft. */
+.gallery figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--color-secondary);
+}
+
+@media (min-width: 768px) {
+  .gallery__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  /* The two of a pair share one square frame, so neither leaves a gap under it. The photos run from 0.8 to 1.25 wide
+     to tall, so a square trims at most about a tenth from each edge. */
+  .gallery__list > figure img {
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+
+  /* An odd photo out at the end keeps the pair width, centred, rather than stretching across. */
+  .gallery__list > figure:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - var(--space-1));
+  }
+}
+
+/* Concept: a small label, the statement in Marcellus capitals, the write-up in Lora, all centred. Only the brand's three
+   faces: Marcellus for headings, Public Sans for labels and facts, Lora for descriptions. */
+.project-concept {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-6);
+  padding-block: var(--space-11);
+  text-align: center;
+}
+
+.project-concept__statement {
+  max-width: 22ch;
+  margin: 0;
+  font-weight: 400; /* Marcellus has one weight; a heading's default bold would be faked */
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+}
+
+.project-concept__copy {
+  display: grid;
+  text-wrap: pretty;
+  gap: var(--space-4);
+  max-width: 38rem;
+  font-family: var(--font-text-serif);
+  font-size: var(--type-lead);
+}
+
+/* The Next Project transition uses a full-bleed cover image with its title and action layered above it. */
+.project-next {
+  display: block;
+  text-decoration: none;
+}
+
+.project-next__text {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-11);
+  text-align: center;
+}
+
+.project-next__title {
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+  transition: color var(--duration-base) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+}
+
+.project-next__kind {
+  color: var(--color-muted);
+  font-size: var(--type-small);
+}
+
+.project-next__photo {
+  display: block;
+  width: 100%;
+  height: 70vh;
+  height: 70svh;
+  object-fit: cover;
+  background: var(--color-secondary);
+}
+
+.project-next:active .project-next__arrow {
+  transform: scale(0.96);
+}
+
+@media (max-width: 767px) {
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-block: var(--space-7);
+  }
+
+  .project-concept,
+  .project-next__text {
+    padding-block: var(--space-9);
+  }
+}

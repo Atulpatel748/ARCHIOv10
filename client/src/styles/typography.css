@@ -1,0 +1,146 @@
+/* One display voice: every heading is set in the display face (Marcellus has one weight), in capitals. */
+h1, h2, h3, .t-display, .t-h1, .t-h2, .t-h3, .state__title {
+  text-wrap: balance;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: var(--tracking-heading);
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+
+.t-display {
+  font-size: var(--type-display);
+  line-height: var(--leading-tight);
+}
+
+h1, .t-h1 {
+  font-size: var(--type-h1);
+  line-height: var(--leading-tight);
+}
+
+h2, .t-h2 {
+  font-size: var(--type-h2);
+  line-height: var(--leading-heading);
+}
+
+h3, .t-h3 {
+  font-size: var(--type-h3);
+  line-height: 1.2;
+}
+
+.t-lead {
+  font-size: var(--type-lead);
+  line-height: 1.45;
+}
+
+.t-small {
+  font-size: var(--type-small);
+}
+
+.t-caption {
+  font-size: var(--type-caption);
+  line-height: 1.4;
+}
+
+/* Labels are always Public Sans, also inside the Lora write-ups (the About rows). */
+.t-label {
+  font-family: var(--font-sans);
+  font-size: var(--type-small);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+/* Small tracked tag used above section headings ("Our approach", "Get started") and on project
+   cards (category). Dims against whatever text colour is already in play, light or dark. */
+.eyebrow {
+  margin-bottom: var(--space-3);
+  opacity: 0.75;
+}
+
+.project-card__category {
+  margin-bottom: var(--space-1);
+}
+
+.t-muted {
+  color: var(--color-muted);
+}
+
+.prose {
+  max-width: 62ch;
+  text-wrap: pretty; /* no single word left alone on a paragraph's last line */
+}
+
+.prose > * + * {
+  margin-top: var(--space-4);
+}
+
+.link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  transition: color var(--duration-fast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    color: var(--color-accent);
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* Small, muted text link with an arrow, like "View projects" in the "What we do" rows. */
+.link--quiet {
+  display: inline-flex; /* inline links ignore the margin .stack puts between items */
+  align-items: center;
+  min-height: 24px; /* a comfortable target (WCAG 2.5.8) */
+  font-size: var(--type-small);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.icon-arrow {
+  display: inline-block;
+  margin-left: 0.2em;
+  vertical-align: -0.12em;
+}
+
+.roll {
+  display: inline-block;
+  height: 1.25em;
+  overflow: hidden;
+  line-height: 1.25;
+  vertical-align: bottom;
+}
+
+.roll > span {
+  display: block;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.roll > span::after {
+  content: attr(data-text);
+  content: attr(data-text) / '';
+  display: block;
+}
+
+a:focus-visible > .roll > span,
+button:focus-visible > .roll > span {
+  transform: translateY(-50%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover > .roll > span,
+  button:hover > .roll > span {
+    transform: translateY(-50%);
+  }
+}
+
+/* Lora is the brand kit's font for write-ups: project descriptions and the About page paragraphs. */
+.lora {
+  font-family: var(--font-text-serif);
+}
+
+.nowrap {
+  white-space: nowrap;
+}

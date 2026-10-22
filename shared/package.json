@@ -1,0 +1,20 @@
+{
+  "name": "@archio/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./constants": "./constants/index.js",
+    "./schemas": "./schemas/index.js",
+    "./projects": "./data/projects.js"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "vitest": "^5.0.2"
+  }
+}

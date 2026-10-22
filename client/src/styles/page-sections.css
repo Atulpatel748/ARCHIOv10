@@ -1,0 +1,134 @@
+/* Pieces shared by several pages: the page title block, the closing call-to-action band, the contents-style list. */
+
+.page-head {
+  padding-top: clamp(40px, 7vw, 112px);
+  padding-bottom: clamp(24px, 3vw, 48px);
+}
+
+/* Contents-style list (process) */
+.toc-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-5);
+  align-items: baseline;
+  padding-block: calc(var(--space-5) + var(--space-1));
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.toc-row:last-child {
+  border-bottom: var(--border-thin) solid var(--color-border);
+}
+
+.toc-row__num {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .toc-row {
+    grid-template-columns: 4rem 1fr;
+  }
+}
+
+/* CTA: the rose top of the footer block (drawn into the footer), so beige, rose and maroon follow each other. Everything
+   sits on one centred axis, like the last page of a monograph: the label between two short rules, the statement with
+   its last word on a line of its own, the paragraph in a narrow measure, then the one button. */
+/* Closing band: the label with a rule running to the edge, the statement on the left (its last word in the accent,
+   slanted), and on the right, past a hairline, the line of copy and the button. Stacks on phones. */
+.cta-band {
+  /* Its spacing stays as before; only the colour fades into the maroon footer below it (::after). */
+  position: relative;
+  padding-block: var(--section-y);
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+/* The fade covers the band's bottom space and the top of the footer. */
+.cta-band::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: calc(100% - var(--section-y));
+  height: calc(var(--section-y) + var(--footer-fade-tail));
+  background: var(--fade-into-footer);
+  pointer-events: none;
+}
+
+.cta-band__inner {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.cta-band__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0;
+  opacity: 1;
+}
+
+.cta-band__eyebrow::after {
+  content: '';
+  flex: 1;
+  border-top: var(--border-thin) solid var(--color-border);
+}
+
+.cta-band__title {
+  margin: 0;
+}
+
+/* The lighter maroon, so the word reads apart from the near-black ink (5.2:1 on the rose). */
+.cta-band__accent {
+  display: block;
+  color: var(--color-accent);
+  font-style: italic;
+}
+
+.cta-band__aside {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+}
+
+.cta-band__aside > p {
+  max-width: 34rem;
+  line-height: var(--leading-body);
+  text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  .cta-band__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+    column-gap: var(--space-8);
+    align-items: center;
+  }
+
+  .cta-band__eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .cta-band__aside {
+    padding-left: var(--space-6);
+    border-left: var(--border-thin) solid var(--color-border);
+  }
+}
+
+/* Page titles on Projects, Services, About and Contact: set large, with a rule under them. */
+.page-head--display {
+  padding-bottom: var(--space-6);
+  border-bottom: var(--border-thin) solid var(--color-border-strong);
+}
+
+.page-head__display {
+  font-family: var(--font-serif);
+  font-size: clamp(2.75rem, 0.5rem + 11vw, 11rem);
+  font-weight: 400; /* Marcellus has one weight */
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+}
+
+.toc-row__title {
+  font-size: var(--type-h2);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
