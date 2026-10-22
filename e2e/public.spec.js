@@ -314,7 +314,7 @@ test.describe('public site', () => {
     await expect(header).not.toHaveClass(/site-header--clear/);
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.5));
     await expect(header).not.toHaveClass(/site-header--clear/);
-    await expect(header).toHaveCSS('background-color', 'rgb(246, 243, 236)');
+    await expect(header).toHaveCSS('background-color', 'rgb(231, 227, 220)');
   });
 
 

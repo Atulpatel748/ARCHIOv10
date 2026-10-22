@@ -4,9 +4,9 @@ name: Archio
 description: An image-led architecture and interior-design portfolio with a cinematic hero, editorial project imagery, restrained metadata, and a numbered portfolio index. Existing Archió maroon/beige palette and font families are preserved.
 
 colors:
-  canvas: "#f6f3ec"
-  surface: "#ffffff"
-  surface-strong: "#fbf9f5"
+  canvas: "#e7e3dc"
+  surface: "#f4f2ee"
+  surface-strong: "#f9f8f5"
   secondary: "#ceb6a8"
   ink: "#2b1012"
   brand: "#4c1114"
@@ -69,7 +69,7 @@ The tone is calm and confident. Short labels, uppercase for navigation and headi
 
 ## Colors
 
-- **Warm ivory canvas `#f6f3ec`** is the page. Cards and panels (`surface`, `surface-strong`) are white or near-white.
+- **Soft stone canvas `#e7e3dc`** is the page. Cards and panels (`surface`, `surface-strong`) are lighter stone tones.
 - **Maroon `#4c1114`** is the brand colour, taken exactly from the logo. It fills primary buttons, selected chips and menu items, and the footer.
 - **Ink `#2b1012`** is all text and thin lines: a very dark maroon-brown, so there is no pure black or grey on the page itself.
 - **Accent `#7a2230`** is a lighter maroon for the hovered "what we do" row, link hover, button hover and focus. Do not use it for large fills.

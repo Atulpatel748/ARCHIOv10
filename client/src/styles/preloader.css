@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f6f3ec url('/images/preloader-architecture.webp') center / cover no-repeat;
+  background: #e7e3dc url('/images/preloader-architecture.webp') center / cover no-repeat;
   /* Deliberately not 1. The browser skips painting whatever sits behind a fully opaque layer, so the hero
      underneath was only drawn once the curtain started to lift: its lower part showed black for a few
      hundred milliseconds. At 0.999 the screen looks identical but the hero is already painted when it is

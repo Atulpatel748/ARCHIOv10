@@ -1,7 +1,7 @@
 :root {
-  --color-bg: #f6f3ec; /* warm ivory page background */
-  --color-surface: #ffffff;
-  --color-surface-strong: #fbf9f5;
+  --color-bg: #e7e3dc; /* soft stone page background */
+  --color-surface: #f4f2ee;
+  --color-surface-strong: #f9f8f5;
   --color-secondary: #ceb6a8; /* rose, from the brand kit: the call-to-action band, and where photos sit while they load */
   --color-ink: #2b1012; /* text and lines: a very dark maroon-brown, never pure black */
   --color-brand: #4c1114; /* maroon, the logo's colour: buttons, dark bands, selected states */

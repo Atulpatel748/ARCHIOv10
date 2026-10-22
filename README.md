@@ -201,7 +201,7 @@ There is no API of our own. The form posts JSON to `https://api.web3forms.com/su
 
 Tokens live in `client/src/styles/tokens.css` (colour, spacing scale, radii, shadows, motion, type
 scale); typography rules in `typography.css`. Derived from the reference: brand palette of
-maroon and ivory: warm ivory ground (`#f6f3ec`, also the theme colour), very dark maroon-brown type (`#2b1012`), maroon
+maroon and stone: soft stone ground (`#e7e3dc`, also the theme colour), very dark maroon-brown type (`#2b1012`), maroon
 bands and buttons (`--color-brand`, `#4c1114`, the logo's colour), uppercase wide-set display text, rolling-text
 navigation hover, a hero that opens on a full-screen, darkened photo gallery with the large ARCHIÓ wordmark and a clear header, large page
 titles, a dominant featured project beside a numbered home-page index, and a Projects catalogue that switches between an editorial image gallery and a numbered index. A lighter maroon (`--color-accent`, `#7a2230`) is used for focus, hover and active states.

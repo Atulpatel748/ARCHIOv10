@@ -8,7 +8,7 @@ informed approximations.
 
 | Reference pattern | Archió implementation |
 | --- | --- |
-| Light ground, dark type, monochrome UI | Maroon and ivory palette: warm ivory `--color-bg: #f6f3ec` (theme colour), dark maroon-brown text `--color-ink: #2b1012`, maroon `--color-brand: #4c1114` for buttons and dark bands; photography carries the rest |
+| Light ground, dark type, monochrome UI | Maroon and stone palette: soft stone `--color-bg: #e7e3dc` (theme colour), dark maroon-brown text `--color-ink: #2b1012`, maroon `--color-brand: #4c1114` for buttons and dark bands; photography carries the rest |
 | Header: navigation left, logo centre, "Let’s talk" CTA right | Three-zone grid header; under 1024px the navigation becomes a "Menu" button on the left (icon only under 400px) that opens a full-screen `<dialog>`, whose Close button sits in the same place |
 | Navigation links with a rolling-text hover (labels repeated in the DOM) | `RollText`: one visible label plus a decorative duplicate, hidden from assistive tech |
 | Full-screen hero with project slideshow and caption | `HeroPortal`: a full-screen WebGL photo gallery (`morph-gallery.tsx`) behind a clear header; the brand kit's ARCHIÓ wordmark with the studio descriptor under it between two thin rules, the featured-project block and a pause button sit on top |
@@ -25,7 +25,7 @@ informed approximations.
 
 All tokens are CSS custom properties in `client/src/styles/tokens.css`.
 
-- **Colour** (brand kit): bg `#f6f3ec`, rose `#ceb6a8` (call-to-action band, photo placeholders), surface `#ffffff`/`#fbf9f5`, ink `#2b1012` (about 15:1 on bg),
+- **Colour** (brand kit): bg `#e7e3dc`, rose `#ceb6a8` (call-to-action band, photo placeholders), surface `#f4f2ee`/`#f9f8f5`, ink `#2b1012` (about 15:1 on bg),
   muted `#5e4a45` (5.4:1 on bg), border `rgba(43,16,18,.24)`, brand `#4c1114` (cream text on it 13.1:1), accent `#7a2230`
   (6.5:1 on bg), success `#145e34`, warning `#774700`, error `#9e211a` (each 5.1:1 on bg).
 - **Type**: Public Sans variable (weight axis) for text and Marcellus for display headings (self-hosted; the brand kit's Optima shows instead only on devices that
