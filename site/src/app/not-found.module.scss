@@ -1,0 +1,8 @@
+.wrap {
+  min-height: 80dvh; display: flex; align-items: center; background: var(--oxblood); color: var(--paper);
+  padding-top: calc(var(--header-h) + 48px); padding-bottom: 96px;
+  :global(.container) { display: grid; gap: 22px; justify-items: start; }
+  :global(.label) { color: var(--blush); }
+}
+.text { max-width: 44ch; color: var(--sand); }
+.links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }

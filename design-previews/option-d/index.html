@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Option D: Cinematic Light | ARCHIÓ design preview</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#140708">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Lora:ital@0;1&family=Public+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="../shared/logo-monogram.svg">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<p class="preview-flag">Design preview, option D: Cinematic Light. Not the live site.</p>
+
+<header class="site-header">
+  <a class="brand" href="#top" aria-label="ARCHIÓ home"><span class="logo logo--wordmark" aria-hidden="true"></span></a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#work">Work</a>
+    <a href="#services">Services</a>
+    <a href="#studio">Studio</a>
+    <a class="nav-cta" href="#contact">Start a conversation</a>
+  </nav>
+  <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu"><span data-menu-label>Menu</span></button>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <nav aria-label="Mobile">
+    <a href="#work">Work</a>
+    <a href="#services">Services</a>
+    <a href="#studio">Studio</a>
+    <a href="#contact">Start a conversation</a>
+  </nav>
+  <p class="menu-contact">+971 55 654 1410<br>info@beracahlogistics.com</p>
+</div>
+
+<main id="main">
+  <!-- Hero: real-time 3D Ó in plaster, lit by a moving sun. The text is real HTML and readable before WebGL loads. -->
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero-stage" data-hero-stage>
+      <span class="logo logo--monogram hero-fallback" aria-hidden="true"></span>
+    </div>
+    <div class="hero-copy">
+      <h1 id="hero-title" class="kinetic-lines"><span class="line"><span>Spaces</span></span><span class="line"><span>that work.</span></span></h1>
+      <div class="hero-foot">
+        <p>An interior design consultancy in Dubai for homes, workplaces, mixed-use spaces and landscape.</p>
+        <a class="button" href="#contact">Start a conversation</a>
+      </div>
+    </div>
+    <p class="hero-hint" aria-hidden="true">Move to shift the light</p>
+  </section>
+
+  <!-- Statement: words light up as light passes over them -->
+  <section class="statement" aria-label="Philosophy">
+    <p class="statement-text" data-light-words>Good design is not about making something look expensive. It's about making it work efficiently, intuitively and consistently.</p>
+  </section>
+
+  <!-- Projects: pinned scenes; each render starts dark and a light sweep turns the room on -->
+  <section class="work" id="work" aria-labelledby="work-title">
+    <h2 id="work-title" class="visually-hidden">Work</h2>
+
+    <article class="scene" data-scene>
+      <div class="scene-sticky">
+        <div class="scene-media" data-sweep>
+          <img src="../assets/profile-extract/p10-707x800-645fd877.png" width="707" height="800" alt="Double-height living room with book-matched marble wall panels and a sculptural chandelier, design visualisation" loading="lazy">
+        </div>
+        <div class="scene-copy">
+          <p class="scene-kind">Residential, Dubai Marina</p>
+          <h3>Dubai Marina<br>residence</h3>
+          <dl class="scene-facts"><div><dt>Area</dt><dd>2,500 sq ft</dd></div><div><dt>Status</dt><dd>Design visualisation</dd></div></dl>
+        </div>
+      </div>
+    </article>
+
+    <article class="scene scene--right" data-scene>
+      <div class="scene-sticky">
+        <div class="scene-media" data-sweep>
+          <img src="../assets/profile-extract/p17-800x640-df053516.png" width="800" height="640" alt="Boardroom with a white stone table, cream leather chairs and a perforated ceiling, design visualisation" loading="lazy">
+        </div>
+        <div class="scene-copy">
+          <p class="scene-kind">Commercial, JLT</p>
+          <h3>JLT<br>office</h3>
+          <dl class="scene-facts"><div><dt>Area</dt><dd>2,000 sq ft</dd></div><div><dt>Status</dt><dd>Design visualisation</dd></div></dl>
+        </div>
+      </div>
+    </article>
+
+    <article class="scene" data-scene>
+      <div class="scene-sticky">
+        <div class="scene-media" data-sweep>
+          <img src="../assets/profile-extract/p22-800x640-decaf640.png" width="800" height="640" alt="Pergola with an outdoor kitchen beside a pool at dusk, design visualisation" loading="lazy">
+        </div>
+        <div class="scene-copy">
+          <p class="scene-kind">Landscape, Arabian Ranches 2</p>
+          <h3>Arabian Ranches 2<br>garden</h3>
+          <dl class="scene-facts"><div><dt>Area</dt><dd>6,500 sqm</dd></div><div><dt>Status</dt><dd>Design visualisation</dd></div></dl>
+        </div>
+      </div>
+    </article>
+    <p class="work-note">Project names are working titles. Every image on this site is a design visualisation.</p>
+  </section>
+
+  <!-- Services: four kinds of space; hover or focus brings the light up on a render behind the list -->
+  <section class="services" id="services" aria-labelledby="services-title">
+    <div class="services-light" aria-hidden="true">
+      <img data-for="residential" src="../assets/profile-extract/p15-800x707-53dae932.png" alt="" loading="lazy">
+      <img data-for="commercial" src="../assets/profile-extract/p19-626x800-5f1878b5.png" alt="" loading="lazy">
+      <img data-for="landscape" src="../assets/profile-extract/p23-800x640-2e386427.png" alt="" loading="lazy">
+    </div>
+    <h2 id="services-title" class="services-title">Four kinds of space</h2>
+    <ul class="kinds" data-kinds>
+      <li><button type="button" data-kind="residential" aria-describedby="kind-res"><span class="kind-name">Residential</span></button><p id="kind-res">Interiors shaped around how our clients actually live, from feature walls and joinery to lighting and finishing details.</p></li>
+      <li><button type="button" data-kind="commercial" aria-describedby="kind-com"><span class="kind-name">Commercial</span></button><p id="kind-com">Reception areas, lounges and offices that make the right first impression and support how people work and meet.</p></li>
+      <li><button type="button" data-kind="mixed-use" aria-describedby="kind-mix"><span class="kind-name">Mixed-use</span></button><p id="kind-mix" class="placeholder">Description to be written with the studio.</p></li>
+      <li><button type="button" data-kind="landscape" aria-describedby="kind-lan"><span class="kind-name">Landscape</span></button><p id="kind-lan">Outdoor spaces where architecture and nature meet, from softscape and hardscape to pools and lighting.</p></li>
+    </ul>
+  </section>
+
+  <section class="studio" id="studio" aria-labelledby="studio-title">
+    <h2 id="studio-title" class="kinetic-lines" data-reveal><span class="line"><span>We don't just design spaces.</span></span><span class="line"><span>We guide decisions.</span></span></h2>
+    <p class="stages-sentence" data-reveal>We work in three stages. To <em>define</em> a project: Interior Design Consultation and Space Planning. To <em>design</em> it: Concept Development and Material and Finish Selection. To <em>support</em> it: Design Review and Advisory, and Project Coordination Support.</p>
+    <dl class="founders" data-reveal>
+      <div><dt>Pooja Vijayakumar</dt><dd>Co-founder, Design</dd></div>
+      <div><dt>S. Harshitha</dt><dd>Co-founder, Strategy and Growth</dd></div>
+    </dl>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="contact-slit" aria-hidden="true"></div>
+    <div class="contact-intro">
+      <h2 id="contact-title" data-reveal>Start a conversation</h2>
+      <p data-reveal>Tell us about the space and what it needs to do. We will reply to arrange a first conversation.</p>
+      <ul class="contact-list">
+        <li><span>WhatsApp or call</span><a href="https://wa.me/971556541410">+971 55 654 1410</a></li>
+        <li><span>Email</span><a href="mailto:info@beracahlogistics.com">info@beracahlogistics.com</a></li>
+        <li><span>Instagram</span><a href="https://www.instagram.com/archio_designstudio/">@archio_designstudio</a></li>
+      </ul>
+    </div>
+    <form class="form" data-preview-form novalidate>
+      <div class="field"><label for="d-name">Name</label><input id="d-name" name="name" autocomplete="name" required><p class="error" data-error-for="name" hidden>Please add your name.</p></div>
+      <div class="field"><label for="d-reply">Email or phone</label><input id="d-reply" name="reply" autocomplete="email" required><p class="error" data-error-for="reply" hidden>Please add an email address or phone number.</p></div>
+      <fieldset class="field">
+        <legend>Type of project</legend>
+        <div class="choices">
+          <label><input type="radio" name="type" value="residential" required> Residential</label>
+          <label><input type="radio" name="type" value="commercial"> Commercial</label>
+          <label><input type="radio" name="type" value="mixed-use"> Mixed-use</label>
+          <label><input type="radio" name="type" value="landscape"> Landscape</label>
+        </div>
+        <p class="error" data-error-for="type" hidden>Please choose a type of project.</p>
+      </fieldset>
+      <div class="field"><label for="d-message">About the space <span class="optional">(optional)</span></label><textarea id="d-message" name="message" rows="3"></textarea></div>
+      <div class="field consent">
+        <label><input type="checkbox" name="consent" required> <span>I agree to Archió using these details to reply to my enquiry, as described in the <a href="#contact">privacy notice</a>.</span></label>
+        <p class="error" data-error-for="consent" hidden>Please confirm so we can reply.</p>
+      </div>
+      <button class="button" type="submit">Send enquiry</button>
+      <p class="form-status" data-form-status role="status"></p>
+    </form>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span class="logo logo--wordmark footer-mark" role="img" aria-label="ARCHIÓ"></span>
+  <div class="footer-row">
+    <nav aria-label="Footer"><a href="#work">Work</a><a href="#services">Services</a><a href="#studio">Studio</a><a href="#contact">Contact</a></nav>
+    <p>Archió Interior Design Studio is a unit of Beracah Trading. Dubai, UAE. All project images are design visualisations.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script type="module" src="../shared/preview.js"></script>
+<script type="module" src="scenes.js"></script>
+<script type="module" src="hero-3d.js"></script>
+</body>
+</html>

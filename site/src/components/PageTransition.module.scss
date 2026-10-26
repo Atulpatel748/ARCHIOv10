@@ -1,0 +1,10 @@
+.curtain {
+  position: fixed; inset: 0; z-index: 90; display: grid; place-content: center; justify-items: center; gap: 22px;
+  background: var(--oxblood); color: var(--sand); pointer-events: none;
+  /* Fallback: if JavaScript never runs, the curtain still lifts. */
+  animation: curtain-fallback 0.8s cubic-bezier(0.76, 0, 0.24, 1) 2.6s forwards;
+  :global(html.intro-seen) & { transform: translateY(-100%); animation: none; }
+}
+@keyframes curtain-fallback { to { transform: translateY(-100%); } }
+.mark { height: clamp(88px, 12vw, 132px); opacity: 0; }
+.word { height: clamp(22px, 2.6vw, 30px); opacity: 0; }

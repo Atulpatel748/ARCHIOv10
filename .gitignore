@@ -1,0 +1,17 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets (contact form keys live in env vars, never in git)
+.env
+.env*.local
+
+# Client's original source files: confidential and not needed by the site
+*.pdf
+/logo.png
+
+# Local tooling
+.claude/settings.local.json

@@ -1,0 +1,42 @@
+@use '../../styles/tokens' as *;
+
+.about {
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 40px clamp(32px, 6vw, 112px); align-items: start;
+  @include tablet-down { grid-template-columns: 1fr; }
+}
+.lead { line-height: 1.15; }
+.body { display: grid; gap: 20px; padding-top: 10px; }
+
+.vm { background: var(--sand); }
+.vmGrid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px clamp(32px, 6vw, 112px);
+  > div { display: grid; gap: 20px; align-content: start; }
+  .serif { font-size: 1.125rem; line-height: 1.75; }
+  @include phone { grid-template-columns: 1fr; }
+}
+
+.split {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 48px clamp(32px, 6vw, 112px); align-items: center;
+  @include phone { grid-template-columns: 1fr; }
+}
+.media img { width: 100%; height: auto; }
+.why {
+  display: grid; gap: 22px;
+  ul { border-top: 1px solid var(--line); margin-top: 8px; }
+  li { padding: 16px 0; border-bottom: 1px solid var(--line); }
+}
+
+.philosophy {
+  background: var(--oxblood); color: var(--paper); text-align: center;
+  .label { color: var(--blush); margin-bottom: 28px; }
+  blockquote { display: grid; gap: 28px; justify-items: center; }
+  .display { max-width: 18ch; }
+  .serif { max-width: 52ch; color: var(--sand); font-size: 1.125rem; line-height: 1.7; }
+}
+
+.team {
+  margin-top: clamp(32px, 4vw, 56px); display: grid; grid-template-columns: repeat(2, minmax(0, 360px)); gap: 48px var(--gutter);
+  li { display: grid; gap: 8px; }
+  img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; background: var(--sand); margin-bottom: 12px; border-radius: 999px 999px 0 0; }
+  @include phone { grid-template-columns: 1fr; }
+}

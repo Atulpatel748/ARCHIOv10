@@ -1,0 +1,30 @@
+@use '../styles/tokens' as *;
+
+.grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(40px, 5vw, 80px) var(--gutter); margin-top: clamp(28px, 3vw, 44px);
+  li { display: grid; gap: 12px; align-content: start; }
+  @include phone { grid-template-columns: 1fr; }
+}
+.wide { grid-column: 1 / -1; .thumb { aspect-ratio: 16 / 9; } }
+.thumb {
+  position: relative; display: block; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; background: var(--sand);
+  img { object-fit: cover; transition: transform 900ms var(--ease); }
+  @include hover { &:hover img { transform: scale(1.03); } }
+  @include phone { aspect-ratio: 4 / 3; }
+}
+.caption { font-family: var(--font-body); font-style: italic; font-size: 1rem; max-width: 60ch; }
+
+.lightbox {
+  width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 24px var(--margin);
+  border: 0; background: rgb(20 6 7 / 0.96); color: var(--paper);
+  &[open] { display: grid; grid-template-rows: 1fr auto; gap: 16px; }
+  &::backdrop { background: rgb(20 6 7 / 0.6); }
+}
+.figure { display: grid; grid-template-rows: 1fr auto; gap: 12px; min-height: 0; }
+.full { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+.figure figcaption { display: flex; justify-content: space-between; gap: 16px; font-size: 0.875rem; color: var(--sand); }
+.controls {
+  display: flex; justify-content: center; gap: 12px;
+  button { min-height: 44px; padding: 0 22px; border: 1px solid rgb(248 247 244 / 0.5); border-radius: 999px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; }
+  button:focus-visible { outline-color: var(--paper); }
+}

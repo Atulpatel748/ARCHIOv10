@@ -1,0 +1,15 @@
+@use '../../styles/tokens' as *;
+
+.grid {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px clamp(32px, 6vw, 112px); align-items: start;
+  @include tablet-down { grid-template-columns: 1fr; }
+}
+.info { display: grid; gap: 32px; justify-items: start; }
+.details {
+  display: grid; gap: 0; width: 100%; border-top: 1px solid var(--line);
+  > div { display: grid; grid-template-columns: 8rem 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  dt { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; padding-top: 3px; }
+  dd { margin: 0; overflow-wrap: anywhere; }
+  a { display: inline-block; padding: 4px 0; text-decoration: none; @include hover { &:hover { text-decoration: underline; } } }
+}
+.formWrap { display: grid; gap: 28px; padding: clamp(24px, 3.5vw, 48px); background: #FFFFFF80; border: 1px solid var(--line); }

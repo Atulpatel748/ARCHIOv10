@@ -1,0 +1,55 @@
+@use '../styles/tokens' as *;
+
+.sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 40px; pointer-events: none; }
+
+.header {
+  position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h);
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 0 var(--margin); color: var(--paper);
+  background: linear-gradient(rgb(20 6 7 / 0.45), rgb(20 6 7 / 0)); /* keeps light text legible over any hero image */
+  transition: background-color 300ms var(--ease), color 300ms var(--ease), box-shadow 300ms var(--ease);
+}
+.solid { background: var(--paper); color: var(--oxblood); box-shadow: 0 1px 0 var(--line); }
+.onMenu { background: transparent; color: var(--paper); }
+
+.brand { display: block; padding: 8px 0; }
+.logo { height: 46px; @include phone { height: 38px; } }
+.right { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 32px); }
+.enquire {
+  padding: 10px 0; font-size: 0.9375rem; font-weight: 500; text-decoration: none;
+  background: linear-gradient(currentColor 0 0) left calc(100% - 4px) / 100% 1px no-repeat;
+  @include phone { display: none; }
+}
+
+/* Round menu button with two lines that cross when open */
+.toggle {
+  position: relative; width: 52px; height: 52px; border-radius: 50%; background: var(--oxblood); color: var(--paper);
+  transition: transform 300ms var(--ease), background-color 300ms var(--ease);
+  @include hover { &:hover { transform: scale(1.06); } }
+  span { position: absolute; left: 17px; right: 17px; height: 1.5px; background: currentColor; transition: transform 400ms var(--ease), top 400ms var(--ease); }
+  span:first-child { top: 22px; }
+  span:last-child { top: 29px; }
+}
+.toggleOpen {
+  background: var(--paper); color: var(--oxblood);
+  span:first-child { top: 25.5px; transform: rotate(45deg); }
+  span:last-child { top: 25.5px; transform: rotate(-45deg); }
+}
+
+.menu {
+  position: fixed; inset: 0; z-index: 40; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); align-items: center; gap: 48px var(--gutter);
+  padding: calc(var(--header-h) + 32px) var(--margin) 48px; background: var(--deep); color: var(--paper); --accent-color: var(--blush);
+  visibility: hidden; clip-path: circle(0% at calc(100% - var(--margin) - 26px) calc(var(--header-h) / 2));
+  transition: clip-path 600ms var(--ease), visibility 0s 600ms;
+  @include tablet-down { grid-template-columns: 1fr; align-content: start; overflow-y: auto; }
+}
+.menuOpen { visibility: visible; clip-path: circle(150% at calc(100% - var(--margin) - 26px) calc(var(--header-h) / 2)); transition: clip-path 900ms var(--ease), visibility 0s; }
+.menuNav {
+  display: grid; gap: 2px;
+  a { justify-self: start; font: 400 clamp(2.5rem, 1.4rem + 4vw, 5rem)/1.12 var(--font-display); text-decoration: none; padding: 2px 0; transition: color 300ms var(--ease), translate 500ms var(--ease); }
+  a[aria-current='page'] { font-family: var(--font-body); font-style: italic; color: var(--blush); }
+  @include hover { a:hover { translate: 12px 0; color: var(--sand); } }
+}
+.menuSide { display: grid; gap: 24px; justify-items: start; }
+.menuLead { font-family: var(--font-display); font-size: clamp(1.75rem, 1.3rem + 1.2vw, 2.5rem); line-height: 1.15; }
+.menuContact { display: grid; gap: 4px; a { color: var(--sand); text-decoration: none; padding: 6px 0; } }

@@ -1,0 +1,30 @@
+@use '../styles/tokens' as *;
+
+.footer { --accent-color: var(--blush); background: var(--oxblood); color: var(--sand); }
+.footer h2 { color: var(--paper); }
+.footer a { text-decoration: none; }
+
+.cta {
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px var(--gutter); align-items: end;
+  padding-top: var(--section); padding-bottom: clamp(64px, 8vw, 112px); border-bottom: 1px solid rgb(218 207 186 / 0.2);
+  h2 { max-width: 12ch; }
+  @include tablet-down { grid-template-columns: 1fr; }
+}
+.ctaSide { display: grid; gap: 28px; justify-items: start; p { max-width: 44ch; } }
+
+.grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px var(--gutter); padding-top: 64px; padding-bottom: 64px;
+  @include tablet-down { grid-template-columns: 1fr 1fr; }
+  @include phone { grid-template-columns: 1fr; }
+}
+.brand { display: grid; gap: 20px; align-content: start; color: var(--paper); p { color: var(--sand); } }
+.logo { height: 64px; }
+.col {
+  display: grid; gap: 4px; align-content: start;
+  .label { color: var(--blush); margin-bottom: 8px; }
+  a { padding: 6px 0; color: var(--paper); @include hover { &:hover { color: var(--sand); } } }
+}
+.bottom {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 32px; padding-top: 24px; padding-bottom: 32px;
+  border-top: 1px solid rgb(218 207 186 / 0.2); font-size: 0.8125rem; color: var(--blush);
+}

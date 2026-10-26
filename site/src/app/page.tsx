@@ -1,0 +1,150 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import HeroSlider from '@/components/HeroSlider';
+import ProjectCard from '@/components/ProjectCard';
+import Split from '@/components/Split';
+import { projects } from '@/content/projects';
+import { about, philosophy, processSteps, services, team } from '@/content/site';
+import styles from './home.module.scss';
+
+const slides = projects.map((p) => ({
+  src: p.cover.src, alt: p.cover.alt, title: p.title, meta: `${p.category}, ${p.location}. ${p.status}`, href: `/projects/${p.slug}`,
+}));
+
+// Services grouped by stage (proposed grouping, owner to confirm), each with a render.
+const stages = [
+  { name: 'Define', items: [services[0], services[2]], image: '/images/projects/dubai-marina-residence/study-wall.png', alt: 'Study wall with timber joinery and lit shelving, design visualisation' },
+  { name: 'Design', items: [services[1], services[3]], image: '/images/projects/dubai-marina-residence/media-wall-marble.png', alt: 'Media wall in book-matched marble framed by timber panelling, design visualisation' },
+  { name: 'Support', items: [services[4], services[5]], image: '/images/projects/jlt-office/boardroom-screen.png', alt: 'Boardroom facing a media wall with timber joinery, design visualisation' },
+];
+
+export default function HomePage() {
+  const [flagship, ...others] = projects;
+  return (
+    <>
+      {/* Hero: Wood & Weave's composition over YODEZEEN-style project slides */}
+      <HeroSlider slides={slides}>
+        <p className="label">Interior design consultancy, Dubai</p>
+        <Split as="h1" className={styles.heroTitle} text="Spaces that" accent="work." />
+        <p className={styles.heroIntro}>{about.lead}</p>
+        <div className={styles.heroActions}>
+          <Link href="/projects" className="btn btn--light">See the work <span aria-hidden="true">→</span></Link>
+          <Link href="/contact" className="btn btn--outline-light">Start a project</Link>
+        </div>
+      </HeroSlider>
+
+      {/* The position */}
+      <section className={`section container ${styles.position}`}>
+        <p className="label" data-reveal>Our position</p>
+        <div className={styles.positionBody}>
+          <Split as="p" className={styles.positionLead} text={about.body[0]} />
+          <div className={styles.positionCols}>
+            <p data-reveal>{about.body[1]}</p>
+            <p data-reveal>{about.body[2]}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* What we do */}
+      <section className={`section ${styles.whatWeDo}`}>
+        <div className="container">
+          <div className={styles.headRow}>
+            <p className="label" data-reveal>What we do</p>
+            <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to handover." />
+          </div>
+          <ol className={styles.stages}>
+            {stages.map((s) => (
+              <li key={s.name} data-reveal>
+                <div className={styles.stageMedia} data-mask>
+                  <Image src={s.image} alt={s.alt} fill sizes="(max-width: 767px) 100vw, 30vw" />
+                </div>
+                <h3 className={styles.stageName}>{s.name}</h3>
+                {s.items.map((it) => (
+                  <div key={it.title} className={styles.stageItem}>
+                    <h4>{it.title}</h4>
+                    <p>{it.text}</p>
+                  </div>
+                ))}
+              </li>
+            ))}
+          </ol>
+          <Link href="/services" className={`text-link ${styles.onDark}`} data-reveal>All services</Link>
+        </div>
+      </section>
+
+      {/* The work: a flagship with a facts card, then the other projects */}
+      <section className={`section ${styles.work}`}>
+        <div className="container">
+          <p className="label" data-reveal>The work</p>
+          <Split className={styles.big} text="Three spaces," accent="designed in full." />
+        </div>
+        <div className={`container ${styles.flagship}`}>
+          <Link href={`/projects/${flagship.slug}`} className={styles.flagshipMedia} data-cursor="View" data-mask>
+            <Image src={flagship.hero.src} alt={flagship.hero.alt} fill sizes="(max-width: 1023px) 100vw, 60vw" />
+          </Link>
+          <div className={styles.factsCard} data-reveal>
+            <h3>{flagship.title}</h3>
+            <p className="serif">{flagship.summary}</p>
+            <dl>
+              <div><dt>Where</dt><dd>{flagship.location}</dd></div>
+              <div><dt>Area</dt><dd>{flagship.area}</dd></div>
+              <div><dt>What it is</dt><dd>{flagship.status}</dd></div>
+            </dl>
+            <Link href={`/projects/${flagship.slug}`} className="btn btn--solid">See the project <span aria-hidden="true">→</span></Link>
+          </div>
+        </div>
+        <div className={`container ${styles.others}`}>
+          {others.map((p) => <ProjectCard key={p.slug} project={p} />)}
+        </div>
+      </section>
+
+      {/* How it goes */}
+      <section className={`section ${styles.process}`}>
+        <div className="container">
+          <p className="label" data-reveal>How it goes</p>
+          <Split className={styles.big} text="From the first conversation" accent="to the final handover." />
+          <ol className={styles.steps}>
+            {processSteps.map((s, i) => (
+              <li key={s.title} data-reveal>
+                <span className={styles.stepNum}>{String(i + 1).padStart(2, '0')}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </li>
+            ))}
+          </ol>
+          <Link href="/contact" className="btn btn--light" data-reveal>Start a project</Link>
+        </div>
+      </section>
+
+      {/* Who you get: founders in arched frames (after Wood & Weave) */}
+      <section className={`section container ${styles.founders}`}>
+        <div className={styles.foundersHead}>
+          <p className="label" data-reveal>Who you work with</p>
+          <Split className={styles.big} text="The people behind" accent="Archió." />
+          <Link href="/about" className="text-link" data-reveal>About the studio</Link>
+        </div>
+        <ul className={styles.foundersGrid}>
+          {team.map((m) => (
+            <li key={m.name} data-reveal>
+              <div className={styles.arch}>
+                <Image src={m.image} alt={`Portrait of ${m.name}`} width={479} height={720} sizes="(max-width: 767px) 80vw, 26vw" />
+              </div>
+              <h3>{m.name}</h3>
+              <p>{m.role}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Philosophy over a full-bleed image */}
+      <section className={styles.philosophy}>
+        <Image data-parallax src="/images/projects/dubai-marina-residence/living-room.png" alt="" fill sizes="100vw" className={styles.philosophyImage} />
+        <div className={styles.philosophyShade} aria-hidden="true" />
+        <blockquote className={`container ${styles.philosophyInner}`}>
+          <Split as="p" className={styles.quote} text="Good design is not about making something" accent="look expensive." />
+          <p className={`serif ${styles.philosophyBody}`} data-reveal>{philosophy.body}</p>
+        </blockquote>
+      </section>
+    </>
+  );
+}

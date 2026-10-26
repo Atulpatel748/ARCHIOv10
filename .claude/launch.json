@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "design-previews",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["design-previews/serve.mjs", "4173"],
+      "port": 4173
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "site", "run", "start"],
+      "port": 3000
+    }
+  ]
+}
