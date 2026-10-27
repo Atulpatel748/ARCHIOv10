@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import HeroSlider from '@/components/HeroSlider';
 import ProjectCard from '@/components/ProjectCard';
+import Journey from '@/components/Journey';
 import Sequence from '@/components/Sequence';
 import StageList from '@/components/StageList';
 import Split from '@/components/Split';
@@ -132,21 +133,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How it goes */}
+      {/* How it goes: the heading stays put while the four steps draw down a road */}
       <section className={`section ${styles.process}`}>
-        <div className="container">
-          <p className="label" data-reveal>How it goes</p>
-          <Split className={styles.big} text="From the first conversation" accent="to the final handover." />
-          <ol className={styles.steps}>
-            {processSteps.map((s, i) => (
-              <li key={s.title} data-reveal>
-                <span className={styles.stepNum}>{String(i + 1).padStart(2, '0')}</span>
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
-              </li>
-            ))}
-          </ol>
-          <Link href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
+        <div className={`container ${styles.processGrid}`}>
+          <div className={styles.processHead}>
+            <p className="label" data-reveal>How it goes</p>
+            <Split className={styles.big} text="From the first conversation" accent="to the final handover." />
+            <Link href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
+          </div>
+          <Journey steps={processSteps} />
         </div>
       </section>
     </>

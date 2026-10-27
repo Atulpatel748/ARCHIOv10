@@ -78,17 +78,10 @@
 }
 .others { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px var(--gutter); margin-top: clamp(64px, 8vw, 120px); @include phone { grid-template-columns: 1fr; } }
 
-/* How it goes (plain paper, ruled) */
+/* How it goes: a sticky heading beside the road (see Journey) */
 .process { :global(.label) { margin-bottom: 22px; } }
-.steps {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px var(--gutter); margin: clamp(48px, 6vw, 88px) 0 56px;
-  li { position: relative; display: grid; gap: 12px; align-content: start; padding-top: 28px; border-top: 1px solid var(--line); }
-  li::before { content: ''; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--oxblood); }
-  h3 { font-size: 1.5rem; line-height: 1.2; }
-  @include tablet-down { grid-template-columns: 1fr 1fr; }
-  @include phone { grid-template-columns: 1fr; }
-}
-.stepNum { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; color: var(--accent-color); }
+.processGrid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px clamp(32px, 6vw, 112px); align-items: start; @include tablet-down { grid-template-columns: 1fr; } }
+.processHead { display: grid; justify-items: start; gap: 0; position: sticky; top: calc(var(--header-h) + 32px); .big { font-size: clamp(2.25rem, 1rem + 3vw, 4.5rem); line-height: 1; margin-bottom: 40px; } @include tablet-down { position: static; } }
 
 /* Founders in arches */
 .founders {
