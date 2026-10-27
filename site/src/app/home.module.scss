@@ -1,7 +1,8 @@
 @use '../styles/tokens' as *;
 
 .heroMark { display: grid; justify-items: center; gap: clamp(14px, 1.6vw, 22px); animation: rise 1.4s ease-out 0.2s both; }
-.heroLogo { width: clamp(260px, 37vw, 660px); color: var(--paper); filter: drop-shadow(0 2px 24px rgb(20 6 7 / 0.35)); }
+/* An invisible placeholder: the header logo is drawn over it, then scrolls up into the header */
+.heroLogo { width: clamp(260px, 37vw, 660px); visibility: hidden; }
 /* Small caps line between two rules */
 .heroTag {
   display: flex; align-items: center; gap: 16px; font: 500 clamp(0.6875rem, 0.6rem + 0.2vw, 0.875rem)/1 var(--font-ui); letter-spacing: 0.28em; text-transform: uppercase;
@@ -20,22 +21,20 @@
 }
 .seqRow {
   container-type: inline-size; width: 100%; padding-inline: var(--margin); display: flex; justify-content: space-between; align-items: baseline;
-  font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; white-space: nowrap; font-size: 4.1vw;
-  @include phone { flex-direction: column; align-items: center; gap: 0.1em; font-size: 12vw; }
+  font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.9; white-space: nowrap; font-size: 17vw;
+  color: rgb(76 17 20 / 0.5); /* soft grey-brown, like the reference's grey words */
 }
-.seqMid { color: var(--accent-color); }
+.seqList {
+  display: grid; justify-items: center; gap: 0.1em; font: 600 clamp(1.5rem, 1rem + 2.2vw, 3.25rem)/1.1 var(--font-ui); letter-spacing: 0.01em; text-transform: uppercase; text-align: center;
+}
 .sequence[data-seq] {
   height: calc(165svh - var(--header-h) - 1px);
   .seqStage { position: sticky; top: var(--header-h); }
   .seqStart, .seqEnd { --move: clamp(0, calc(var(--seq, 0) / 34), 1); --eased: calc(var(--move) * var(--move) * (3 - 2 * var(--move))); }
-  /* The outer words start side by side at the centre, then travel to the edges, revealing the middle word */
+  /* "We" and "Do" start side by side at the centre, then travel to the edges */
   .seqStart { transform: translateX(calc((1 - var(--eased)) * (50cqw - 100% - 0.05em))); }
   .seqEnd { transform: translateX(calc((1 - var(--eased)) * (100% - 50cqw + 0.05em))); }
-  .seqMid { opacity: clamp(0, calc((var(--seq, 0) - 16) / 18), 1); }
-  @include phone {
-    .seqStart { transform: translateX(calc((1 - var(--eased)) * -20cqw)); opacity: var(--eased); }
-    .seqEnd { transform: translateX(calc((1 - var(--eased)) * 20cqw)); opacity: var(--eased); }
-  }
+  .seqList { opacity: clamp(0, calc((var(--seq, 0) - 14) / 18), 1); }
 }
 
 /* The position */

@@ -1,21 +1,36 @@
 @use '../styles/tokens' as *;
 
-.sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 40px; pointer-events: none; }
-
 /* No bar: a transparent frame holding the logo, the pill and the menu button. Only the logo slides away on scroll. */
 .header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); pointer-events: none; color: var(--oxblood); transition: color 300ms var(--ease); }
 .dark { color: var(--paper); }
 .onMenu { color: var(--paper); }
 
+/* The logo is positioned from --p (0 = big, over the hero; 1 = in the header), which the page sets while scrolling on the home page */
 .brand {
-  position: absolute; top: 0; left: var(--margin); height: 100%; display: flex; align-items: center; pointer-events: auto;
-  transition: translate 700ms var(--ease), opacity 500ms var(--ease), visibility 0s;
+  --p: 1; --y0: 50vh; --s0: 1; --w1: 128px; --fx: 50vw;
+  position: absolute; z-index: 2; display: block; pointer-events: auto;
+  left: calc(var(--p) * var(--fx) + (1 - var(--p)) * 50vw);
+  top: calc(var(--p) * var(--header-h) / 2 + (1 - var(--p)) * var(--y0));
+  translate: -50% -50%;
+  scale: calc(1 + (1 - var(--p)) * (var(--s0) - 1));
+  transition: opacity 400ms var(--ease), transform 700ms var(--ease), visibility 0s;
+  @include tablet-down { --fx: calc(var(--margin) + var(--w1) / 2); }
+  @include phone { --w1: 104px; }
 }
-/* Hidden while scrolling down; on the home page also before scrolling, where the hero's big wordmark stands in for the logo */
-.hidden .brand, .heroTop .brand {
-  translate: 0 -100%; opacity: 0; visibility: hidden; transition: translate 700ms var(--ease), opacity 400ms var(--ease), visibility 0s linear 700ms;
+/* Before the page's script has run, home starts with the logo big and mid-screen */
+.onHome .brand { --p: 0; --y0: calc(50vh - 20px); --s0: 4.2; }
+.hidden .brand { opacity: 0; visibility: hidden; transform: translateY(-100%); transition: opacity 400ms var(--ease), transform 700ms var(--ease), visibility 0s linear 700ms; }
+.logo { width: var(--w1); }
+/* Links on the left, desktop only */
+.nav {
+  position: absolute; top: 0; left: var(--margin); height: 100%; display: flex; align-items: center; gap: clamp(20px, 2.4vw, 36px); pointer-events: auto;
+  a {
+    padding: 12px 0; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+    background: linear-gradient(currentColor 0 0) left calc(100% - 6px) / 0 1px no-repeat; transition: background-size 400ms var(--ease);
+  }
+  a[aria-current='page'] { background-size: 100% 1px; }
+  @include tablet-down { display: none; }
 }
-.logo { height: 46px; @include phone { height: 38px; } }
 .right {
   position: absolute; inset: 0 var(--margin) 0 auto; z-index: 1; display: flex; align-items: center; gap: clamp(10px, 1.4vw, 16px); pointer-events: auto;
 }
@@ -32,15 +47,6 @@
 .onMenu .talk { background: var(--paper); color: var(--oxblood); }
 
 /* Round menu button (after Wood & Weave): two lines, the lower one shorter and right-aligned; it lengthens on hover and the lines cross when open */
-.nav {
-  display: flex; gap: clamp(20px, 2.4vw, 36px); margin-right: clamp(8px, 1.4vw, 20px);
-  a {
-    padding: 12px 0; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
-    background: linear-gradient(currentColor 0 0) left calc(100% - 6px) / 0 1px no-repeat; transition: background-size 400ms var(--ease);
-  }
-  a[aria-current='page'] { background-size: 100% 1px; }
-  @include tablet-down { display: none; }
-}
 /* The menu button is for phones and tablets; on a desktop window the links sit in the header instead */
 .toggle {
   position: relative; display: none; @include tablet-down { display: grid; } place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--oxblood); color: var(--paper);

@@ -28,21 +28,24 @@ export default function HomePage() {
       <HeroSlider slides={slides}>
         <h1 className={styles.heroMark}>
           <span className="visually-hidden">Archió, interior design studio in Dubai</span>
-          <span className={`logo logo--wordmark ${styles.heroLogo}`} aria-hidden="true" />
+          <span className={`logo logo--wordmark ${styles.heroLogo}`} data-hero-mark aria-hidden="true" />
           <span className={styles.heroTag} aria-hidden="true">Interior design studio</span>
         </h1>
       </HeroSlider>
 
-      {/* We design: pinned while you scroll, the words part to the edges and the middle one appears */}
+      {/* We do (after YODEZEEN): two huge words part to the edges while the sectors come up beneath */}
       <Sequence className={styles.sequence}>
         <div className={styles.seqStage}>
-          <h2 className="visually-hidden">We design residential, landscape and commercial spaces</h2>
-          <p className="label" aria-hidden="true">We design</p>
+          <h2 className="visually-hidden">We do residential, commercial and landscape design</h2>
           <div className={styles.seqRow} aria-hidden="true">
-            <span className={styles.seqStart}>Residential</span>
-            <span className={styles.seqMid}>Landscape</span>
-            <span className={styles.seqEnd}>Commercial</span>
+            <span className={styles.seqStart}>We</span>
+            <span className={styles.seqEnd}>Do</span>
           </div>
+          <ul className={styles.seqList} aria-hidden="true">
+            <li>Residential</li>
+            <li>Commercial</li>
+            <li>Landscape</li>
+          </ul>
           <Link href="/projects" className="text-link"><Roll>See the work</Roll></Link>
         </div>
       </Sequence>
