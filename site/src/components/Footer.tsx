@@ -17,8 +17,8 @@ export default function Footer() {
 
       <div className={`container ${styles.grid}`}>
         <div className={styles.brand}>
-          <span className={`logo logo--lockup ${styles.logo}`} role="img" aria-label="Archió" />
-          <p>{site.descriptor}<br />{site.city}</p>
+          <span className={`logo logo--wordmark ${styles.logo}`} role="img" aria-label="Archió" />
+          <p>{site.footerLine}</p>
         </div>
         <nav aria-label="Footer" className={styles.col}>
           <p className="label">Explore</p>
@@ -34,8 +34,8 @@ export default function Footer() {
       </div>
 
       <div className={`container ${styles.bottom}`}>
-        <p>© {new Date().getFullYear()} {site.legalLine}</p>
-        <p>All project images are design visualisations.</p>
+        <p>© {new Date().getFullYear()} {site.legalName}</p>
+        <p>{site.parentLine}</p>
       </div>
     </footer>
   );

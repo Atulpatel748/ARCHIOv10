@@ -15,9 +15,9 @@ const slides = projects.map((p) => ({
 
 // Services grouped by stage (proposed grouping, owner to confirm), each with a render.
 const stages = [
-  { name: 'Define', items: [services[0], services[2]], image: '/images/projects/dubai-marina-residence/study-wall.png', alt: 'Study wall with timber joinery and lit shelving, design visualisation' },
-  { name: 'Design', items: [services[1], services[3]], image: '/images/projects/dubai-marina-residence/media-wall-marble.png', alt: 'Media wall in book-matched marble framed by timber panelling, design visualisation' },
-  { name: 'Support', items: [services[4], services[5]], image: '/images/projects/jlt-office/boardroom-screen.png', alt: 'Boardroom facing a media wall with timber joinery, design visualisation' },
+  { name: 'Define', items: [services[0], services[2]], image: '/images/projects/dubai-marina-residence/study-wall.png', alt: 'Study wall with timber joinery and lit shelving' },
+  { name: 'Design', items: [services[1], services[3]], image: '/images/projects/dubai-marina-residence/media-wall-marble.png', alt: 'Media wall in book-matched marble framed by timber panelling' },
+  { name: 'Support', items: [services[4], services[5]], image: '/images/projects/jlt-office/boardroom-screen.png', alt: 'Boardroom facing a media wall with timber joinery' },
 ];
 
 export default function HomePage() {
@@ -106,7 +106,6 @@ export default function HomePage() {
             <dl>
               <div><dt>Where</dt><dd>{flagship.location}</dd></div>
               <div><dt>Area</dt><dd>{flagship.area}</dd></div>
-              <div><dt>What it is</dt><dd>{flagship.status}</dd></div>
             </dl>
             <Link href={`/projects/${flagship.slug}`} className="btn btn--solid"><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
           </div>

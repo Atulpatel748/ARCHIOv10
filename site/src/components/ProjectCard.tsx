@@ -20,7 +20,6 @@ export default function ProjectCard({ project, size = 'regular', priority = fals
           />
         </div>
         <div className={styles.meta}>
-          <span className="viz">{project.status}</span>
           <h3 className="h3">{project.title}</h3>
           <p>{project.category}, {project.location} · {project.area}</p>
           <span className={styles.more}>See the project <span aria-hidden="true">→</span></span>

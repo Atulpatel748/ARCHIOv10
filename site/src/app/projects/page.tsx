@@ -4,7 +4,7 @@ import { projects } from '@/content/projects';
 
 export const metadata: Metadata = {
   title: 'Projects',
-  description: 'Residential, commercial and landscape design projects by Archió in Dubai Marina, JLT and Arabian Ranches 2, shown as design visualisations.',
+  description: 'Residential, commercial and landscape design projects by Archió in Dubai Marina, JLT and Arabian Ranches 2.',
   alternates: { canonical: '/projects' },
 };
 

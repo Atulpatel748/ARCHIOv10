@@ -20,7 +20,7 @@ export default function ServicesPage() {
         title="Expertise at every stage"
         accent="of a project."
         intro={servicesIntro}
-        image={{ src: '/images/projects/jlt-office/boardroom.png', alt: 'Boardroom with a white stone table and cream leather chairs, design visualisation' }}
+        image={{ src: '/images/projects/jlt-office/boardroom.png', alt: 'Boardroom with a white stone table and cream leather chairs' }}
       />
 
       <section className="section container">

@@ -3,7 +3,9 @@
 
 export const site = {
   name: 'Archió',
-  legalLine: 'Archió Interior Design Studio is a unit of Beracah Trading.',
+  legalName: 'Archió Interior Design Studio',
+  parentLine: 'a unit of Beracah Trading',
+  footerLine: 'An interior design consultancy in Dubai, for residential, commercial and landscape spaces.',
   descriptor: 'Interior Design Studio',
   city: 'Dubai, UAE',
   url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000', // CLIENT TO CONFIRM: production domain

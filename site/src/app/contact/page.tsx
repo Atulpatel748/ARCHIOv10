@@ -19,7 +19,7 @@ export default function ContactPage() {
         title="Tell us about the"
         accent="space."
         intro={contactCopy.body}
-        image={{ src: '/images/projects/arabian-ranches-garden/entrance-night.png', alt: 'Villa entrance garden lit at night, design visualisation' }}
+        image={{ src: '/images/projects/arabian-ranches-garden/entrance-night.png', alt: 'Villa entrance garden lit at night' }}
       >
         <a href={site.whatsappHref} className="btn btn--light"><Roll>Message us on WhatsApp</Roll></a>
       </PageHero>

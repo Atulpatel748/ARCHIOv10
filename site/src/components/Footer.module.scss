@@ -17,8 +17,8 @@
   @include tablet-down { grid-template-columns: 1fr 1fr; }
   @include phone { grid-template-columns: 1fr; }
 }
-.brand { display: grid; gap: 20px; align-content: start; color: var(--paper); p { color: var(--sand); } }
-.logo { height: 64px; }
+.brand { display: grid; gap: 20px; align-content: start; color: var(--sand); p { max-width: 30ch; font-size: 1.0625rem; line-height: 1.55; color: var(--sand); } }
+.logo { width: clamp(200px, 22vw, 300px); }
 .col {
   display: grid; gap: 4px; align-content: start;
   .label { color: var(--blush); margin-bottom: 8px; }

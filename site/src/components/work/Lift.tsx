@@ -90,7 +90,6 @@ export default function Lift({ projects }: { projects: Project[] }) {
               <h2 className={styles.lfTitle} data-lf-in>{p.title}</h2>
               <div className={styles.lfRow} data-lf-in>
                 <span className={styles.lfMeta}>{p.location}, {p.area}</span>
-                <span className={styles.lfStatus}>{p.status}</span>
                 <Link href={`/projects/${p.slug}`} className={`text-link ${styles.lfGo}`}><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
               </div>
             </div>

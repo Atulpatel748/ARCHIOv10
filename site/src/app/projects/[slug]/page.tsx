@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const project = getProject((await params).slug);
   if (!project) return {};
   return {
-    title: `${project.title}, ${project.category} design visualisation`,
+    title: `${project.title}, ${project.category} project`,
     description: `${project.summary} ${project.location}, ${project.area}.`,
     alternates: { canonical: `/projects/${project.slug}` },
     openGraph: { images: [project.cover.src] },
@@ -37,7 +37,7 @@ export default async function ProjectPage({ params }: Params) {
     <>
       {/* The page follows Wood & Weave's project pages: a full-screen hero, the idea beside a facts list, the rooms, then a
           conversation and the next project. */}
-      <PageHero label={project.status} title={project.title} intro={project.location} image={project.hero} size="full" compact />
+      <PageHero label={project.category} title={project.title} intro={project.location} image={project.hero} size="full" compact />
 
       <section className={`section container ${styles.idea}`}>
         <div className={styles.ideaText}>
@@ -50,11 +50,9 @@ export default async function ProjectPage({ params }: Params) {
             <div><dt>Where</dt><dd>{project.location}</dd></div>
             <div><dt>Category</dt><dd>{project.category}</dd></div>
             <div><dt>Area</dt><dd>{project.area}</dd></div>
-            <div><dt>What it is</dt><dd>{project.status}</dd></div>
           </dl>
           <Link href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
           <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
-          <p className={styles.note}>The images on this page are 3D design visualisations of the proposed design.</p>
         </aside>
       </section>
 

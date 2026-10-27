@@ -1,5 +1,4 @@
-// The three projects from the company profile. All images are 3D design visualisations (owner decision, 25 Oct 2026),
-// so every project carries that status. Image sizes are the extracted placeholders; replace with the original renders.
+// The three projects from the company profile. Image sizes are the extracted placeholders; replace with the original renders.
 
 export type ProjectImage = { src: string; alt: string; width: number; height: number; room?: string };
 export type Project = {
@@ -8,7 +7,6 @@ export type Project = {
   category: 'Residential' | 'Commercial' | 'Landscape';
   location: string;
   area: string;
-  status: string;
   summary: string;
   description: string[];
   cover: ProjectImage;
@@ -17,7 +15,7 @@ export type Project = {
 };
 
 const img = (slug: string, file: string, width: number, height: number, alt: string, room?: string): ProjectImage =>
-  ({ src: `/images/projects/${slug}/${file}.png`, width, height, alt: `${alt}, design visualisation`, room });
+  ({ src: `/images/projects/${slug}/${file}.png`, width, height, alt, room });
 
 const dm = 'dubai-marina-residence';
 const jlt = 'jlt-office';
@@ -30,7 +28,6 @@ export const projects: Project[] = [
     category: 'Residential',
     location: 'Dubai Marina',
     area: '2,500 sq ft',
-    status: 'Design visualisation',
     summary: 'A residence where architecture, material and light come together, from feature walls and joinery to lighting and finishing details.',
     description: [
       'We design interiors where architecture, material, and light come together seamlessly, from feature walls and joinery to lighting and finishing details.',
@@ -60,7 +57,6 @@ export const projects: Project[] = [
     category: 'Commercial',
     location: 'Jumeirah Lake Towers (JLT)',
     area: '2,000 sq ft',
-    status: 'Design visualisation',
     summary: 'Commercial spaces that make the right first impression, from reception areas and lounges to a full office.',
     description: [
       'Commercial spaces that make the right first impression, from reception areas and lounges to full office fit-outs.',
@@ -86,7 +82,6 @@ export const projects: Project[] = [
     category: 'Landscape',
     location: 'Arabian Ranches 2',
     area: '6,500 sqm',
-    status: 'Design visualisation',
     summary: 'A landscape that brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors.',
     description: [
       'This landscape design brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors. Palms and layered greenery line a stone path to the entrance, setting a calm, welcoming tone from the moment you arrive.',
