@@ -97,7 +97,3 @@ export const team = [
   { name: 'S. Harshitha', role: 'Co-Founder, Strategy & Growth', image: '/images/team/s-harshitha.png' },
 ];
 
-export const contactCopy = {
-  title: "Let's build something purposeful",
-  body: "If you're planning a project, residential, commercial, or mixed-use, we'd welcome the opportunity to understand your vision and explore how we can bring clarity, purpose, and lasting value to your space.",
-};

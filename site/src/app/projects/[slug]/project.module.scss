@@ -14,7 +14,6 @@
   dt { font-size: 0.875rem; color: var(--accent-color); }
   dd { margin: 0; font-family: var(--font-display); font-size: 1.35rem; line-height: 1.2; }
 }
-.note { font-size: 0.875rem; padding-left: 14px; border-left: 2px solid var(--oxblood); }
 
 /* End: a conversation beside the next project */
 .end { display: grid; gap: 4rem; @media (min-width: 64em) { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 6rem; align-items: end; } }

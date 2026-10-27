@@ -3,7 +3,7 @@ import type { ElementType, ReactNode } from 'react';
 type Props = { as?: ElementType; text: string; accent?: string; className?: string; id?: string };
 
 // Renders headings with an optional accent phrase; [data-split] lets Reveals fade the whole heading in.
-// An optional `accent` phrase follows in italic (after Wood & Weave's italic phrases).
+// An optional `accent` phrase follows, in the heading's own colour (`.accent`).
 // Splitting happens in React, never by rewriting the DOM; screen readers get the plain text once.
 export default function Split({ as: Tag = 'h2', text, accent, className, id }: Props): ReactNode {
   const words = [...text.trim().split(/\s+/).map((w) => ({ w, a: false })), ...(accent ? accent.trim().split(/\s+/).map((w) => ({ w, a: true })) : [])];

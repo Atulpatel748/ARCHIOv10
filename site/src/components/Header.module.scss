@@ -19,6 +19,7 @@
 }
 /* Before the page's script has run, home starts with the logo big and mid-screen */
 .onHome .brand { --p: 0; --y0: calc(50vh - 20px); --s0: 4.2; }
+.brand[data-over-hero] { opacity: 0; visibility: hidden; }
 .hidden .brand { opacity: 0; visibility: hidden; transform: translateY(-100%); transition: opacity 400ms var(--ease), transform 700ms var(--ease), visibility 0s linear 700ms; }
 .logo { width: var(--w1); }
 /* Links on the left, desktop only */

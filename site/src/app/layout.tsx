@@ -10,7 +10,7 @@ import './globals.scss';
 // Belleza stands in for Optima (not licensed for web); Public Sans and Lora are the brand kit's own fonts.
 const display = Belleza({ weight: '400', subsets: ['latin', 'latin-ext'], variable: '--font-display', display: 'swap' });
 const ui = Public_Sans({ weight: ['300', '400', '500'], subsets: ['latin', 'latin-ext'], variable: '--font-ui', display: 'swap' });
-const body = Lora({ weight: '400', style: ['normal', 'italic'], subsets: ['latin', 'latin-ext'], variable: '--font-body', display: 'swap' });
+const body = Lora({ weight: '400', subsets: ['latin', 'latin-ext'], variable: '--font-body', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

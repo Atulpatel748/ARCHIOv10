@@ -70,7 +70,15 @@ export default function Header() {
       el.style.setProperty('--s0', String(mark.offsetWidth / logo.offsetWidth));
     };
     const update = () => {
-      const t = reduced.matches ? 1 : Math.min(1, Math.max(0, scrollY / distance));
+      if (reduced.matches) {
+        // No motion: the hero keeps its big wordmark and line; the header logo simply appears once the hero is mostly scrolled past.
+        el.style.setProperty('--p', '1');
+        el.toggleAttribute('data-over-hero', scrollY < distance * 0.5);
+        tag?.style.removeProperty('transform');
+        tag?.style.removeProperty('opacity');
+        return;
+      }
+      const t = Math.min(1, Math.max(0, scrollY / distance));
       const r = Math.min(t / 0.8, 1);
       el.style.setProperty('--p', String(r));
       if (tag) {
@@ -93,6 +101,7 @@ export default function Header() {
       removeEventListener('resize', onResize);
       reduced.removeEventListener('change', onResize);
       ['--p', '--y0', '--s0'].forEach((v) => el.style.removeProperty(v));
+      el.removeAttribute('data-over-hero');
       tag?.style.removeProperty('transform');
       tag?.style.removeProperty('opacity');
     };
