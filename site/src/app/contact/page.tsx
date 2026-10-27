@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import ContactForm from '@/components/ContactForm';
-import PageHero from '@/components/PageHero';
+import PageHead from '@/components/PageHead';
 import { contactCopy, site } from '@/content/site';
 import styles from './contact.module.scss';
 import Roll from '@/components/Roll';
@@ -14,15 +14,9 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <PageHero
-        label="Contact"
-        title="Tell us about the"
-        accent="space."
-        intro={contactCopy.body}
-        image={{ src: '/images/projects/arabian-ranches-garden/entrance-night.png', alt: 'Villa entrance garden lit at night' }}
-      >
-        <a href={site.whatsappHref} className="btn btn--light"><Roll>Message us on WhatsApp</Roll></a>
-      </PageHero>
+      <PageHead label="Contact" title="Tell us about the" accent="space." intro={contactCopy.body}>
+        <a href={site.whatsappHref} className="btn btn--solid"><Roll>Message us on WhatsApp</Roll></a>
+      </PageHead>
       <section className={`section container ${styles.grid}`}>
         <div className={styles.info}>
           <p className="label" data-reveal>Or reach us directly</p>

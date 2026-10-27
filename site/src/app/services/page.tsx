@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import PageHero from '@/components/PageHero';
+import PageHead from '@/components/PageHead';
 import { approach, sectors, services, servicesIntro } from '@/content/site';
 import styles from './services.module.scss';
 import Roll from '@/components/Roll';
@@ -15,13 +15,7 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <PageHero
-        label="Services"
-        title="Expertise at every stage"
-        accent="of a project."
-        intro={servicesIntro}
-        image={{ src: '/images/projects/jlt-office/boardroom.png', alt: 'Boardroom with a white stone table and cream leather chairs' }}
-      />
+      <PageHead label="Services" title="Expertise at every stage" accent="of a project." intro={servicesIntro} />
 
       <section className="section container">
         <ol className={styles.list}>

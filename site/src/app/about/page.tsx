@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import PageHero from '@/components/PageHero';
+import PageHead from '@/components/PageHead';
 import { about, mission, philosophy, team, vision, whyUs } from '@/content/site';
 import styles from './about.module.scss';
 
@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <PageHero
+      <PageHead
         label="About us"
         title="Design that works, functionally,"
         accent="aesthetically and commercially."
-        image={{ src: '/images/projects/dubai-marina-residence/living-room.png', alt: 'Double-height living room with marble wall panels' }}
+        intro="Archió is a consultancy-led interior design studio in Dubai, founded by Pooja Vijayakumar and S. Harshitha."
       />
 
       <section className={`section container ${styles.about}`}>
