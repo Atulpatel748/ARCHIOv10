@@ -54,6 +54,14 @@ export default function HomePage() {
         </div>
       </Sequence>
 
+      {/* Philosophy: a quiet dark statement, text only */}
+      <section className={styles.philosophy}>
+        <blockquote className={`container ${styles.philosophyInner}`}>
+          <Split as="p" className={styles.quote} text="Good design is not about making something" accent="look expensive." />
+          <p className={`serif ${styles.philosophyBody}`} data-reveal>{philosophy.body}</p>
+        </blockquote>
+      </section>
+
       {/* The position */}
       <section className={`section container ${styles.position}`}>
         <p className="label" data-reveal>Our position</p>
@@ -154,16 +162,6 @@ export default function HomePage() {
           </ol>
           <Link href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
         </div>
-      </section>
-
-      {/* Philosophy over a full-bleed image */}
-      <section className={styles.philosophy}>
-        <Image src="/images/projects/dubai-marina-residence/living-room.png" alt="" fill sizes="100vw" className={styles.philosophyImage} />
-        <div className={styles.philosophyShade} aria-hidden="true" />
-        <blockquote className={`container ${styles.philosophyInner}`}>
-          <Split as="p" className={styles.quote} text="Good design is not about making something" accent="look expensive." />
-          <p className={`serif ${styles.philosophyBody}`} data-reveal>{philosophy.body}</p>
-        </blockquote>
       </section>
     </>
   );
