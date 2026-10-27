@@ -20,9 +20,9 @@ const slides = projects.map((p) => ({
 
 // Services grouped by stage (proposed grouping, owner to confirm), each with a render.
 const stages = [
-  { name: 'Define', items: [services[0], services[2]], image: '/images/projects/dubai-marina-residence/study-wall.png', alt: 'Study wall with timber joinery and lit shelving' },
-  { name: 'Design', items: [services[1], services[3]], image: '/images/projects/dubai-marina-residence/media-wall-marble.png', alt: 'Media wall in book-matched marble framed by timber panelling' },
-  { name: 'Support', items: [services[4], services[5]], image: '/images/projects/jlt-office/boardroom-screen.png', alt: 'Boardroom facing a media wall with timber joinery' },
+  { name: 'Define', items: [services[0], services[2]], image: '/images/projects/dubai-marina-residence/study-wall.webp', alt: 'Study wall with timber joinery and lit shelving' },
+  { name: 'Design', items: [services[1], services[3]], image: '/images/projects/dubai-marina-residence/media-wall-marble.webp', alt: 'Media wall in book-matched marble framed by timber panelling' },
+  { name: 'Support', items: [services[4], services[5]], image: '/images/projects/jlt-office/boardroom-screen.webp', alt: 'Boardroom facing a media wall with timber joinery' },
 ];
 
 export default function HomePage() {

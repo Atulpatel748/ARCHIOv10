@@ -15,7 +15,7 @@ export type Project = {
 };
 
 const img = (slug: string, file: string, width: number, height: number, alt: string, room?: string): ProjectImage =>
-  ({ src: `/images/projects/${slug}/${file}.png`, width, height, alt, room });
+  ({ src: `/images/projects/${slug}/${file}.webp`, width, height, alt, room });
 
 const dm = 'dubai-marina-residence';
 const jlt = 'jlt-office';

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: 'Archió | Interior Design Studio in Dubai', template: '%s | Archió Interior Design Studio' },
   description: 'Archió is a consultancy-led interior design studio in Dubai for residential, commercial, mixed-use and landscape projects.',
-  openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: ['/images/projects/dubai-marina-residence/main-bedroom.png'] },
+  openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: ['/images/projects/dubai-marina-residence/main-bedroom.webp'] },
   twitter: { card: 'summary_large_image' },
 };
 

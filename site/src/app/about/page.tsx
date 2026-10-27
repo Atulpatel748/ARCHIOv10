@@ -42,7 +42,7 @@ export default function AboutPage() {
 
       <section className={`section container ${styles.split}`}>
         <div className={styles.media} data-reveal>
-          <Image src="/images/projects/dubai-marina-residence/bar-under-stair.png" alt="Curved bar beneath a marble staircase" width={666} height={800} sizes="(max-width: 767px) 100vw, 40vw" />
+          <Image src="/images/projects/dubai-marina-residence/bar-under-stair.webp" alt="Curved bar beneath a marble staircase" width={666} height={800} sizes="(max-width: 767px) 100vw, 40vw" />
         </div>
         <div className={styles.why}>
           <p className="label" data-reveal>Why choose us</p>
