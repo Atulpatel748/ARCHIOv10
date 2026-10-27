@@ -67,10 +67,10 @@ export const services = [
 
 // Residential, commercial and landscape copy adapted from the profile's project pages; mixed-use is CLIENT TO REVIEW.
 export const sectors = [
-  { title: 'Residential', text: 'Interiors where architecture, material and light come together, from feature walls and joinery to lighting and finishing details, shaped around how our clients actually live.', image: '/images/projects/dubai-marina-residence/main-bedroom.png' },
-  { title: 'Commercial', text: 'Spaces that make the right first impression, from reception areas and lounges to full offices, considered to reflect the brand and support how people work and meet.', image: '/images/projects/jlt-office/managers-office.png' },
-  { title: 'Mixed-use', text: 'Environments that combine living, working and hospitality, planned so that each part works on its own and together.', image: '/images/projects/dubai-marina-residence/dining-room.png' },
-  { title: 'Landscape', text: 'Outdoor spaces where architecture and nature meet, from softscape and hardscape to pools, irrigation and lighting, shaped around the lifestyle of the home.', image: '/images/projects/arabian-ranches-garden/pool-courtyard.png' },
+  { title: 'Residential', text: 'Interiors where architecture, material and light come together, from feature walls and joinery to lighting and finishing details, shaped around how our clients actually live.', image: '/images/projects/dubai-marina-residence/main-bedroom.webp' },
+  { title: 'Commercial', text: 'Spaces that make the right first impression, from reception areas and lounges to full offices, considered to reflect the brand and support how people work and meet.', image: '/images/projects/jlt-office/managers-office.webp' },
+  { title: 'Mixed-use', text: 'Environments that combine living, working and hospitality, planned so that each part works on its own and together.', image: '/images/projects/dubai-marina-residence/dining-room.webp' },
+  { title: 'Landscape', text: 'Outdoor spaces where architecture and nature meet, from softscape and hardscape to pools, irrigation and lighting, shaped around the lifestyle of the home.', image: '/images/projects/arabian-ranches-garden/pool-courtyard.webp' },
 ];
 
 export const vision = 'To create purposeful spaces that balance design integrity with everyday usability, where form always serves function, not the other way around. We move beyond surface-level styling toward environments that genuinely improve how people live, work, and do business.';
