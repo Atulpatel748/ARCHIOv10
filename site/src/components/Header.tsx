@@ -7,9 +7,9 @@ import { nav, site } from '@/content/site';
 import styles from './Header.module.scss';
 import Roll from '@/components/Roll';
 
-// No bar: the links (Projects, Services, About) on the left, the logo centred, and the "Let's talk" pill on the right, plus a
-// round menu button on phones and tablets (where the links and a left-aligned logo move into the full-screen menu and header).
-// On the home page the big hero wordmark scrolls up and becomes the header logo. Elsewhere the logo slides away as you scroll
+// No bar. The logo is always centred. Desktop: the links (Projects, Services, About) on the left and the "Let's talk" pill on
+// the right. Phones, tablets and laptops under 1024px: the round menu button on the left (the links live in the full-screen
+// menu) and the pill on the right. On the home page the big hero wordmark scrolls up and becomes the header logo. Elsewhere the logo slides away as you scroll
 // down and returns as you scroll up. The logo and links change colour to suit whatever is behind them.
 export default function Header() {
   const pathname = usePathname();
@@ -27,7 +27,7 @@ export default function Header() {
       queued = false;
       const y = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) / 2;
       let theme = 'light';
-      for (const el of document.elementsFromPoint(innerWidth >= 1024 ? innerWidth / 2 : 40, y)) {
+      for (const el of document.elementsFromPoint(innerWidth / 2, y)) {
         if (el.closest('header, #site-menu')) continue;
         if (el instanceof HTMLImageElement || el instanceof HTMLCanvasElement || el instanceof HTMLVideoElement) { theme = 'dark'; break; }
         const c = (getComputedStyle(el).backgroundColor.match(/[0-9.]+/g) ?? []).map(Number);
@@ -45,29 +45,56 @@ export default function Header() {
     return () => { removeEventListener('scroll', ask); removeEventListener('resize', ask); clearTimeout(settle); };
   }, [pathname]);
 
-  // Home: the hero wordmark (a hidden placeholder in the page) scrolls up and shrinks into the header logo.
-  // --p runs from 0 (the logo sits where the placeholder is, at full size) to 1 (the header position).
+  // Home: the hero wordmark docks into the header, the way archio-v10's does. The logo stays fixed on screen and glides in a
+  // straight line from the placeholder's spot to its header spot, growing smaller, over the first 80% of the hero's height of
+  // scrolling (--p runs 0 to 1). The "Interior design studio" line moves up by the same distance and fades out as it goes.
+  // Measurements come from layout offsets, which transforms (the hero recedes as you scroll) cannot skew.
   useEffect(() => {
     const el = brandRef.current;
     const mark = pathname === '/' ? document.querySelector<HTMLElement>('[data-hero-mark]') : null;
-    if (!el || !mark) return;
+    const hero = mark?.closest<HTMLElement>('[data-recede]');
+    const tag = document.querySelector<HTMLElement>('[data-hero-tag]');
+    if (!el || !mark || !hero) return;
     const logo = el.firstElementChild as HTMLElement;
-    const range = () => innerHeight * 0.5;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let dy = 0;
+    let distance = 1;
     const measure = () => {
-      const r = mark.getBoundingClientRect();
-      el.style.setProperty('--y0', `${r.top + r.height / 2 + scrollY}px`);
-      el.style.setProperty('--s0', String(r.width / logo.offsetWidth));
+      let y0 = mark.offsetHeight / 2;
+      // Stop at the hero itself: it is sticky, so its own offsetTop grows as you scroll. It sits at the top of the page.
+      for (let n: HTMLElement | null = mark; n && n !== hero; n = n.offsetParent as HTMLElement | null) y0 += n.offsetTop;
+      const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80;
+      dy = headerH / 2 - y0;
+      distance = Math.max(1, hero.offsetHeight - headerH);
+      el.style.setProperty('--y0', `${y0}px`);
+      el.style.setProperty('--s0', String(mark.offsetWidth / logo.offsetWidth));
     };
-    const update = () => el.style.setProperty('--p', String(Math.min(1, scrollY / range())));
+    const update = () => {
+      const t = reduced.matches ? 1 : Math.min(1, Math.max(0, scrollY / distance));
+      const r = Math.min(t / 0.8, 1);
+      el.style.setProperty('--p', String(r));
+      if (tag) {
+        tag.style.transform = `translate3d(0, ${dy * r}px, 0)`;
+        tag.style.opacity = String(1 - r);
+      }
+    };
     const onResize = () => { measure(); update(); };
     measure();
     update();
+    const ro = new ResizeObserver(onResize);
+    ro.observe(hero);
+    document.fonts?.ready.then(onResize);
     addEventListener('scroll', update, { passive: true });
     addEventListener('resize', onResize);
+    reduced.addEventListener('change', onResize);
     return () => {
+      ro.disconnect();
       removeEventListener('scroll', update);
       removeEventListener('resize', onResize);
+      reduced.removeEventListener('change', onResize);
       ['--p', '--y0', '--s0'].forEach((v) => el.style.removeProperty(v));
+      tag?.style.removeProperty('transform');
+      tag?.style.removeProperty('opacity');
     };
   }, [pathname]);
 
@@ -110,6 +137,19 @@ export default function Header() {
         className={`${styles.header} ${dark ? styles.dark : ''} ${open ? styles.onMenu : ''} ${pathname === '/' ? styles.onHome : ''} ${hidden && !open ? styles.hidden : ''}`}
         onFocusCapture={() => setHidden(false)}
       >
+        <div className={styles.menuSlot}>
+            <button
+              ref={toggleRef}
+              type="button"
+              className={`${styles.toggle} ${open ? styles.toggleOpen : ''}`}
+              aria-expanded={open}
+              aria-controls="site-menu"
+              aria-label={open ? 'Close the menu' : 'Open the menu'}
+              onClick={() => setOpen((o) => !o)}
+            >
+              <span className={styles.bars}><span /><span /></span>
+            </button>
+        </div>
         <nav aria-label="Main" className={styles.nav}>
           {nav.slice(0, 3).map((item) => (
             <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}><Roll>{item.label}</Roll></Link>
@@ -120,17 +160,6 @@ export default function Header() {
         </Link>
         <div className={styles.right}>
           <Link href="/contact" className={styles.talk}><Roll>{"Let's talk"}</Roll> <span aria-hidden="true">+</span></Link>
-          <button
-            ref={toggleRef}
-            type="button"
-            className={`${styles.toggle} ${open ? styles.toggleOpen : ''}`}
-            aria-expanded={open}
-            aria-controls="site-menu"
-            aria-label={open ? 'Close the menu' : 'Open the menu'}
-            onClick={() => setOpen((o) => !o)}
-          >
-            <span className={styles.bars}><span /><span /></span>
-          </button>
         </div>
       </header>
 

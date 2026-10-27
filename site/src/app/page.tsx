@@ -29,7 +29,7 @@ export default function HomePage() {
         <h1 className={styles.heroMark}>
           <span className="visually-hidden">Archió, interior design studio in Dubai</span>
           <span className={`logo logo--wordmark ${styles.heroLogo}`} data-hero-mark aria-hidden="true" />
-          <span className={styles.heroTag} aria-hidden="true">Interior design studio</span>
+          <span className={styles.heroTag} data-hero-tag aria-hidden="true">Interior design studio</span>
         </h1>
       </HeroSlider>
 

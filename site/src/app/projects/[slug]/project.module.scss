@@ -1,15 +1,5 @@
 @use '../../../styles/tokens' as *;
 
-/* Facts strip: four facts in one line between two hairlines; two by two on phones */
-.facts { padding-top: clamp(36px, 4vw, 56px); }
-.factsList {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px var(--gutter); margin: 0; padding-block: clamp(20px, 2.4vw, 32px);
-  border-block: 1px solid var(--line);
-  dt { margin-bottom: 6px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-color); }
-  dd { margin: 0; font-family: var(--font-display); font-size: clamp(1.125rem, 0.9rem + 0.8vw, 1.5rem); line-height: 1.25; }
-  @include phone { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-
 .idea {
   display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: 48px clamp(32px, 6vw, 112px); align-items: start;
   @include tablet-down { grid-template-columns: 1fr; }
@@ -17,11 +7,27 @@
 .ideaText { display: grid; gap: 22px; .serif { font-size: 1.125rem; line-height: 1.75; max-width: 58ch; } }
 .ideaTitle { font-size: clamp(2rem, 1.3rem + 2.2vw, 3.5rem); line-height: 1.12; max-width: 22ch; }
 .ideaSide { position: sticky; top: calc(var(--header-h) + 24px); display: grid; gap: 20px; justify-items: start; @include tablet-down { position: static; } }
+/* Facts list (after Wood & Weave): a heavy rule on top, hairlines between rows */
+.table {
+  width: 100%; margin: 0; border-top: 1px solid var(--oxblood);
+  > div { display: grid; grid-template-columns: 8rem 1fr; gap: 16px; padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
+  dt { font-size: 0.875rem; color: var(--accent-color); }
+  dd { margin: 0; font-family: var(--font-display); font-size: 1.35rem; line-height: 1.2; }
+}
 .note { font-size: 0.875rem; padding-left: 14px; border-left: 2px solid var(--oxblood); }
 
-.next { border-top: 1px solid var(--line); margin-top: var(--section); display: grid; gap: 16px; }
-.nextLink {
-  display: grid; gap: 8px; text-decoration: none;
-  .display { transition: transform 500ms var(--ease); }
-  @include hover { &:hover .display { transform: translateX(12px); } }
+/* End: a conversation beside the next project */
+.end { display: grid; gap: 4rem; @media (min-width: 64em) { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 6rem; align-items: end; } }
+.endCta { display: grid; gap: 28px; justify-items: start; }
+.endTitle { font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; max-width: 14ch; }
+.endActions { display: grid; gap: 14px; justify-items: start; }
+.endNext { display: grid; gap: 12px; }
+.endAll { justify-self: start; }
+.next {
+  display: grid; gap: 0.75rem; text-decoration: none;
+  .label { color: var(--accent-color); }
 }
+.nextTitle { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 1rem + 3.4vw, 4.5rem); line-height: 1; transition: color 500ms var(--ease); }
+.nextPlace { font-size: 0.875rem; color: var(--accent-color); }
+.nextPhoto { position: relative; display: block; margin-top: 1rem; aspect-ratio: 16 / 10; overflow: hidden; background: var(--sand); img { object-fit: cover; transition: scale 1.2s var(--ease); } }
+@include hover { .next:hover .nextTitle { color: var(--accent-color); } .next:hover .nextPhoto img { scale: 1.03; } }

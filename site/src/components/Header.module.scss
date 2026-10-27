@@ -8,14 +8,14 @@
 /* The logo is positioned from --p (0 = big, over the hero; 1 = in the header), which the page sets while scrolling on the home page */
 .brand {
   --p: 1; --y0: 50vh; --s0: 1; --w1: 128px; --fx: 50vw;
-  position: absolute; z-index: 2; display: block; pointer-events: auto;
+  position: absolute; z-index: 2; display: block; pointer-events: auto; padding: 12px 8px; /* a comfortable tap area around the small wordmark */
   left: calc(var(--p) * var(--fx) + (1 - var(--p)) * 50vw);
   top: calc(var(--p) * var(--header-h) / 2 + (1 - var(--p)) * var(--y0));
   translate: -50% -50%;
   scale: calc(1 + (1 - var(--p)) * (var(--s0) - 1));
+  filter: drop-shadow(0 2px 28px rgb(20 6 7 / calc(0.55 * (1 - var(--p))))); /* the hero wordmark's shadow fades as it docks */
   transition: opacity 400ms var(--ease), transform 700ms var(--ease), visibility 0s;
-  @include tablet-down { --fx: calc(var(--margin) + var(--w1) / 2); }
-  @include phone { --w1: 104px; }
+  @include phone { --w1: 88px; }
 }
 /* Before the page's script has run, home starts with the logo big and mid-screen */
 .onHome .brand { --p: 0; --y0: calc(50vh - 20px); --s0: 4.2; }
@@ -31,6 +31,8 @@
   a[aria-current='page'] { background-size: 100% 1px; }
   @include tablet-down { display: none; }
 }
+/* The menu button: left side, phones and tablets */
+.menuSlot { position: absolute; top: 0; left: var(--margin); height: 100%; display: none; align-items: center; pointer-events: auto; @include tablet-down { display: flex; } }
 .right {
   position: absolute; inset: 0 var(--margin) 0 auto; z-index: 1; display: flex; align-items: center; gap: clamp(10px, 1.4vw, 16px); pointer-events: auto;
 }
@@ -42,7 +44,7 @@
   transition: background-color 300ms var(--ease), color 300ms var(--ease);
   > span[aria-hidden] { font-size: 1rem; line-height: 1; transition: transform 400ms var(--ease); }
   @include hover { &:hover { background: var(--deep); > span[aria-hidden] { transform: rotate(90deg); } } }
-  @include phone { padding: 0 18px; gap: 8px; font-size: 0.6875rem; letter-spacing: 0.12em; }
+  @include phone { padding: 0 14px; font-size: 0.625rem; letter-spacing: 0.1em; > span[aria-hidden] { display: none; } }
 }
 .onMenu .talk { background: var(--paper); color: var(--oxblood); }
 
@@ -70,11 +72,11 @@
 .menu {
   position: fixed; inset: 0; z-index: 40; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); align-items: center; gap: 48px var(--gutter);
   padding: calc(var(--header-h) + 32px) var(--margin) 48px; background: var(--deep); color: var(--paper); --accent-color: var(--blush);
-  visibility: hidden; clip-path: circle(0% at calc(100% - var(--margin) - 26px) calc(var(--header-h) / 2));
+  visibility: hidden; clip-path: circle(0% at calc(var(--margin) + 26px) calc(var(--header-h) / 2));
   transition: clip-path 600ms var(--ease), visibility 0s 600ms;
   @include tablet-down { grid-template-columns: 1fr; align-content: start; overflow-y: auto; }
 }
-.menuOpen { visibility: visible; clip-path: circle(150% at calc(100% - var(--margin) - 26px) calc(var(--header-h) / 2)); transition: clip-path 900ms var(--ease), visibility 0s; }
+.menuOpen { visibility: visible; clip-path: circle(150% at calc(var(--margin) + 26px) calc(var(--header-h) / 2)); transition: clip-path 900ms var(--ease), visibility 0s; }
 .menuNav {
   display: grid; gap: 2px;
   a { justify-self: start; font: 400 clamp(2.5rem, 1.4rem + 4vw, 5rem)/1.12 var(--font-display); text-decoration: none; padding: 2px 0; transition: color 300ms var(--ease), translate 500ms var(--ease); }

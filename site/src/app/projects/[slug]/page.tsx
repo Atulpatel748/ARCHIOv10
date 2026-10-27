@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Gallery from '@/components/Gallery';
@@ -34,19 +35,10 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <>
-      <PageHero label={project.status} title={project.title} intro={project.location} image={project.hero} />
+      {/* The page follows Wood & Weave's project pages: a full-screen hero, the idea beside a facts list, the rooms, then a
+          conversation and the next project. */}
+      <PageHero label={project.status} title={project.title} intro={project.location} image={project.hero} size="full" compact />
 
-      {/* Facts in one clean strip (after YODEZEEN's project facts), then the idea and the next step */}
-      <section className={`container ${styles.facts}`} aria-label="Project facts">
-        <dl className={styles.factsList} data-reveal>
-          <div><dt>Where</dt><dd>{project.location}</dd></div>
-          <div><dt>Category</dt><dd>{project.category}</dd></div>
-          <div><dt>Area</dt><dd>{project.area}</dd></div>
-          <div><dt>What it is</dt><dd>{project.status}</dd></div>
-        </dl>
-      </section>
-
-      {/* The idea and the next step (after Wood & Weave's project pages) */}
       <section className={`section container ${styles.idea}`}>
         <div className={styles.ideaText}>
           <p className="label" data-reveal>The idea</p>
@@ -54,24 +46,43 @@ export default async function ProjectPage({ params }: Params) {
           {project.description.map((p) => <p key={p} className="serif" data-reveal>{p}</p>)}
         </div>
         <aside className={styles.ideaSide} data-reveal>
+          <dl className={styles.table}>
+            <div><dt>Where</dt><dd>{project.location}</dd></div>
+            <div><dt>Category</dt><dd>{project.category}</dd></div>
+            <div><dt>Area</dt><dd>{project.area}</dd></div>
+            <div><dt>What it is</dt><dd>{project.status}</dd></div>
+          </dl>
           <Link href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
           <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
           <p className={styles.note}>The images on this page are 3D design visualisations of the proposed design.</p>
         </aside>
       </section>
 
-      {/* Room by room */}
-      <section className="container" aria-label={`${project.title}, room by room`}>
-        <p className="label" data-reveal>Room by room</p>
+      {/* The rooms; each image opens in the full-screen viewer */}
+      <section className="section container" aria-label={`${project.title}, room by room`}>
         <Gallery images={project.gallery} title={project.title} />
       </section>
 
-      <section className={`section container ${styles.next}`}>
-        <p className="label">Next project</p>
-        <Link href={`/projects/${next.slug}`} className={styles.nextLink}>
-          <span className="display">{next.title}</span>
-          <span>{next.category}, {next.location}</span>
-        </Link>
+      {/* A conversation, then the next project */}
+      <section className={`section container ${styles.end}`}>
+        <div className={styles.endCta}>
+          <Split className={styles.endTitle} text="Tell us about the space." />
+          <div className={styles.endActions} data-reveal>
+            <Link href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
+            <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
+          </div>
+        </div>
+        <div className={styles.endNext}>
+          <Link href="/projects" className={`text-link ${styles.endAll}`} data-reveal><Roll>All the work</Roll></Link>
+          <Link href={`/projects/${next.slug}`} className={styles.next} data-cursor="View" data-reveal>
+            <span className="label">Next project</span>
+            <span className={styles.nextTitle}>{next.title}</span>
+            <span className={styles.nextPlace}>{next.category}, {next.location}</span>
+            <span className={styles.nextPhoto}>
+              <Image src={next.cover.src} alt="" fill sizes="(max-width: 1023px) 100vw, 45vw" />
+            </span>
+          </Link>
+        </div>
       </section>
     </>
   );

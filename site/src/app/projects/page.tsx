@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import PageHero from '@/components/PageHero';
-import ProjectsList from '@/components/ProjectsList';
+import WorkPage from '@/components/work/WorkPage';
 import { projects } from '@/content/projects';
 
 export const metadata: Metadata = {
@@ -10,18 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
-  return (
-    <>
-      <PageHero
-        label="Projects"
-        title="Spaces designed"
-        accent="across Dubai."
-        intro="Residential, commercial and landscape design across Dubai. Every project is shown as a design visualisation."
-        image={{ src: '/images/projects/arabian-ranches-garden/pergola-kitchen-dusk.png', alt: 'Pergola with an outdoor kitchen beside a pool at dusk, design visualisation' }}
-      />
-      <section className="section container">
-        <ProjectsList projects={projects} />
-      </section>
-    </>
-  );
+  return <WorkPage projects={projects} />;
 }

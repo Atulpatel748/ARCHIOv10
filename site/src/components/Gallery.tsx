@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 import { gsap } from 'gsap';
 import type { ProjectImage } from '@/content/projects';
 import styles from './Gallery.module.scss';
@@ -19,8 +19,33 @@ function insetFrom(full: DOMRect, thumb: DOMRect) {
   return `inset(${c(thumb.top - full.top, full.height)}px ${c(full.right - thumb.right, full.width)}px ${c(full.bottom - thumb.bottom, full.height)}px ${c(thumb.left - full.left, full.width)}px)`;
 }
 
-// Room-by-room gallery with a full-screen viewer whose open, close and next/previous motion follows Wood & Weave.
-export default function Gallery({ images, title }: { images: ProjectImage[]; title: string }) {
+// Images grouped by room (consecutive images with the same room), then split into rows of at most three.
+type Shot = { img: ProjectImage; index: number };
+function groupByRoom(images: ProjectImage[]) {
+  const groups: { room: string; shots: Shot[] }[] = [];
+  images.forEach((img, index) => {
+    const room = img.room ?? '';
+    const last = groups[groups.length - 1];
+    if (last && last.room === room) last.shots.push({ img, index });
+    else groups.push({ room, shots: [{ img, index }] });
+  });
+  return groups;
+}
+function toRows(shots: Shot[]) {
+  const rows = Math.ceil(shots.length / 3);
+  const out: Shot[][] = [];
+  let at = 0;
+  for (let r = 0; r < rows; r++) {
+    const size = Math.ceil((shots.length - at) / (rows - r));
+    out.push(shots.slice(at, at + size));
+    at += size;
+  }
+  return out;
+}
+
+// Room-by-room gallery (after Wood & Weave's project pages) with a full-screen viewer whose open, close and next/previous
+// motion also follows Wood & Weave. Each room is a label beside rows of images; in a row the images share one height.
+export default function Gallery({ images, title, layout = 'rooms' }: { images: ProjectImage[]; title: string; layout?: 'rooms' | 'mosaic' }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const veil = useRef<HTMLDivElement>(null);
   const thumbs = useRef<HTMLButtonElement[]>([]);
@@ -35,7 +60,7 @@ export default function Gallery({ images, title }: { images: ProjectImage[]; tit
     const { width, height } = images[i];
     const ratio = width / height;
     const phone = innerWidth < 768;
-    const w = Math.min(innerWidth - (phone ? 24 : 144), (innerHeight - (phone ? 150 : 112)) * ratio, 1600);
+    const w = Math.min(innerWidth - (phone ? 24 : 144), (innerHeight - (phone ? 150 : 112)) * ratio, width);
     // The thumbnail's already-loaded image shows through until the full-size one arrives.
     const thumb = thumbs.current[i].querySelector('img')?.currentSrc;
     Object.assign(frame(i).style, { width: `${Math.round(w)}px`, height: `${Math.round(w / ratio)}px`, backgroundImage: thumb ? `url("${thumb}")` : '' });
@@ -120,21 +145,46 @@ export default function Gallery({ images, title }: { images: ProjectImage[]; tit
 
   return (
     <>
-      {/* Room by room: alternating full-width and paired images, each with a caption */}
-      <ul className={styles.grid}>
-        {images.map((img, i) => (
-          <li key={img.src} className={i % 3 === 0 ? styles.wide : undefined} data-reveal>
-            <button
-              ref={(b) => { if (b) thumbs.current[i] = b; }}
-              type="button" className={styles.thumb} data-cursor="Open" onClick={() => open(i)}
-              aria-label={`Open image ${i + 1} of ${images.length}: ${img.alt}`}
-            >
-              <Image src={img.src} alt="" fill sizes={i % 3 === 0 ? '(max-width: 767px) 100vw, 92vw' : '(max-width: 767px) 100vw, 46vw'} />
-            </button>
-            <p className={styles.caption} aria-hidden="true">{img.alt.replace(/, design visualisation$/, '')}</p>
-          </li>
+      {layout === 'mosaic' ? (
+        // A packed mosaic: the page's script places each tile by its aspect ratio (data-om-ar); without it, plain columns.
+        <ul className={styles.mosaic} data-om-grid>
+          {images.map((img, index) => (
+            <li key={img.src} className={styles.tile} data-om-ar={img.width / img.height} style={{ '--ar': img.width / img.height, '--i': Math.min(index, 14) } as CSSProperties}>
+              <button
+                ref={(el) => { if (el) thumbs.current[index] = el; }}
+                type="button" className={styles.tileBtn} data-cursor="Open" onClick={() => open(index)}
+                aria-label={`Open image ${index + 1} of ${images.length}: ${img.alt}`}
+              >
+                <Image src={img.src} alt="" fill sizes="(min-width: 64em) 30vw, 50vw" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+      <div className={styles.rooms}>
+        {groupByRoom(images).map((g, gi) => (
+          <div key={`${g.room}-${gi}`} role="group" aria-label={g.room} className={`${styles.room} ${gi % 2 ? styles.flip : ''}`}>
+            <h3 className={`label ${styles.roomName}`} data-reveal>{g.room}</h3>
+            <div className={styles.rowset}>
+              {toRows(g.shots).map((row, ri) => (
+                <div key={ri} className={styles.row} style={{ '--sum': row.reduce((t, x) => t + x.img.width / x.img.height, 0) } as CSSProperties} data-reveal>
+                  {row.map(({ img, index }) => (
+                    <button
+                      key={img.src}
+                      ref={(el) => { if (el) thumbs.current[index] = el; }}
+                      type="button" className={styles.shot} style={{ '--ar': img.width / img.height } as CSSProperties} data-cursor="Open" onClick={() => open(index)}
+                      aria-label={`Open image ${index + 1} of ${images.length}: ${img.alt}`}
+                    >
+                      <Image src={img.src} alt="" fill sizes="(max-width: 767px) 100vw, 40vw" />
+                    </button>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
+      )}
 
       <dialog ref={dialog} className={styles.viewer} aria-label={`${title}, full screen`} onClick={(e) => { if (e.target === dialog.current || e.target === veil.current) close(); }}>
         <div ref={veil} className={styles.veil} aria-hidden="true" />
@@ -143,12 +193,12 @@ export default function Gallery({ images, title }: { images: ProjectImage[]; tit
             <div className={styles.frame} data-frame>
               <Image src={img.src} alt={img.alt} fill sizes="100vw" />
             </div>
-            <figcaption>{img.alt}<span>{i + 1} / {images.length}</span></figcaption>
+            <figcaption>{img.room ?? img.alt}</figcaption>
           </figure>
         ))}
-        <button type="button" className={`${styles.btn} ${styles.close}`} onClick={close} aria-label="Close" autoFocus>×</button>
-        <button type="button" className={`${styles.btn} ${styles.prev}`} onClick={() => step(-1)} aria-label="Previous image">←</button>
-        <button type="button" className={`${styles.btn} ${styles.next}`} onClick={() => step(1)} aria-label="Next image">→</button>
+        <button type="button" className={`${styles.btn} ${styles.close}`} onClick={close} aria-label="Close" autoFocus><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
+        <button type="button" className={`${styles.btn} ${styles.prev}`} onClick={() => step(-1)} aria-label="Previous image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
+        <button type="button" className={`${styles.btn} ${styles.next}`} onClick={() => step(1)} aria-label="Next image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
       </dialog>
     </>
   );
