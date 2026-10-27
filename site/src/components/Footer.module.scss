@@ -7,7 +7,7 @@
 .cta {
   display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 32px var(--gutter); align-items: end;
   padding-top: var(--section); padding-bottom: clamp(64px, 8vw, 112px); border-bottom: 1px solid rgb(218 207 186 / 0.2);
-  h2 { max-width: 12ch; }
+  h2 { max-width: 14ch; text-transform: uppercase; letter-spacing: 0.01em; }
   @include tablet-down { grid-template-columns: 1fr; }
 }
 .ctaSide { display: grid; gap: 28px; justify-items: start; p { max-width: 44ch; } }

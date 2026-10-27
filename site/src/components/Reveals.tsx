@@ -45,7 +45,18 @@ export default function Reveals() {
       });
 
       gsap.utils.toArray<HTMLElement>('[data-mask]').filter(below).forEach((el) => {
-        gsap.fromTo(el, { clipPath: 'inset(12% 8% 12% 8%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+        // Curtain reveal: the image opens from a centre seam outwards, like drapes parting.
+        gsap.fromTo(el, { clipPath: 'inset(0% 50% 0% 50%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'power4.inOut', scrollTrigger: { trigger: el, start: 'top 82%', once: true } });
+      });
+
+      // Hero recedes (scales down, fades, drifts up) while the next section slides up over it.
+      gsap.utils.toArray<HTMLElement>('[data-recede]').forEach((el) => {
+        const next = el.nextElementSibling;
+        if (!next) return;
+        gsap.to(el.querySelector('[data-recede-inner]') ?? el, {
+          scale: 0.92, opacity: 0.35, yPercent: -6, ease: 'none',
+          scrollTrigger: { trigger: next, start: 'top bottom', end: 'top top', scrub: true },
+        });
       });
 
       gsap.utils.toArray<HTMLElement>('[data-parallax]').forEach((el) => {

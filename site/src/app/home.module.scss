@@ -1,11 +1,11 @@
 @use '../styles/tokens' as *;
 
-.heroTitle { font-size: clamp(3.5rem, 1.2rem + 7.4vw, 9.5rem); line-height: 0.95; letter-spacing: -0.01em; :global(.accent) { color: var(--sand); } }
+.heroTitle { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(3rem, 1rem + 6.6vw, 8.5rem); line-height: 0.92; :global(.accent) { color: var(--sand); } }
 .heroIntro { max-width: 44ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; }
 .heroActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
-@include phone { .heroIntro { font-size: 1rem; } .heroActions { flex-wrap: nowrap; gap: 8px; :global(.btn) { padding: 0 16px; font-size: 0.875rem; } } }
+@include phone { .heroIntro { font-size: 1rem; } .heroActions { flex-wrap: nowrap; gap: 8px; :global(.btn) { padding: 0 18px; font-size: 0.6875rem; } } }
 
-.big { font-size: clamp(2.5rem, 1.3rem + 3.4vw, 5rem); line-height: 1.02; max-width: 18ch; }
+.big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1.2rem + 3vw, 4.5rem); line-height: 0.98; max-width: 20ch; }
 
 /* The position */
 .position {
@@ -25,7 +25,7 @@
   @include tablet-down { grid-template-columns: 1fr; }
 }
 .stageMedia { position: relative; aspect-ratio: 4 / 3; overflow: hidden; img { object-fit: cover; } }
-.stageName { font-family: var(--font-body); font-style: italic; font-weight: 400; font-size: 1.75rem; color: var(--blush) !important; }
+.stageName { font-family: var(--font-ui); font-weight: 500; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blush) !important; }
 .stageItem { padding-top: 14px; border-top: 1px solid rgb(218 207 186 / 0.25); h4 { font: 400 1.375rem/1.2 var(--font-display); margin-bottom: 6px; } p { font-size: 0.9375rem; } }
 .onDark { color: var(--paper); }
 
@@ -38,7 +38,7 @@
 .flagshipMedia { position: relative; display: block; aspect-ratio: 16 / 11; overflow: hidden; img { object-fit: cover; transition: transform 1.2s var(--ease); } @include hover { &:hover img { transform: scale(1.04); } } }
 .factsCard {
   position: relative; z-index: 1; margin-left: -18%; margin-bottom: clamp(32px, 5vw, 72px); padding: clamp(28px, 3vw, 44px);
-  background: var(--paper); box-shadow: 0 30px 60px -30px rgb(59 12 15 / 0.35); display: grid; gap: 18px; justify-items: start;
+  background: var(--paper); border: 1px solid var(--line); display: grid; gap: 18px; justify-items: start;
   h3 { font-size: clamp(1.75rem, 1.3rem + 1.2vw, 2.5rem); }
   dl { width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
   dl > div { padding: 14px 12px 0 0; display: grid; gap: 4px; }
@@ -59,7 +59,7 @@
   @include tablet-down { grid-template-columns: 1fr 1fr; }
   @include phone { grid-template-columns: 1fr; }
 }
-.stepNum { font-family: var(--font-body); font-style: italic; color: var(--blush); }
+.stepNum { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; color: var(--blush); }
 
 /* Founders in arches */
 .founders {
@@ -80,5 +80,5 @@
 .philosophyImage { object-fit: cover; scale: 1.2; }
 .philosophyShade { position: absolute; inset: 0; background: rgb(20 6 7 / 0.66); }
 .philosophyInner { position: relative; z-index: 1; display: grid; gap: 32px; justify-items: center; text-align: center; padding-block: var(--section); }
-.quote { font-family: var(--font-display); font-size: clamp(2.5rem, 1.2rem + 4.4vw, 6rem); line-height: 1.04; max-width: 17ch; :global(.accent) { color: var(--sand); } }
+.quote { text-transform: uppercase; letter-spacing: 0.01em; font-family: var(--font-display); font-size: clamp(2.5rem, 1.2rem + 4.4vw, 6rem); line-height: 1.04; max-width: 17ch; :global(.accent) { color: var(--sand); } }
 .philosophyBody { max-width: 52ch; font-size: 1.125rem; line-height: 1.7; color: var(--sand); }

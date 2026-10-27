@@ -140,7 +140,9 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       aria-label="Featured projects"
       onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
+      data-recede
     >
+      <div className={styles.inner} data-recede-inner>
       <div ref={stage} className={`${styles.stage} ${glReady ? styles.glReady : ''}`}>
         {slides.map((s, i) => (
           <Image
@@ -170,6 +172,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
             </button>
           ))}
         </div>
+      </div>
       </div>
     </section>
   );

@@ -34,6 +34,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 h1, h2, h3 { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; line-height: 1.08; }
 :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
+/* Every section after the hero is a layer that slides up over it (the hero is sticky). */
+/* :where() keeps specificity at zero, so each section's own background (dark bands etc.) still wins. */
+:where(main > section:not(:first-child), body > footer) { position: relative; z-index: 1; background: var(--paper); }
+
 .container { width: 100%; max-width: 1440px; margin-inline: auto; padding-inline: var(--margin); } /* inline only: sections set their own block padding */
 .section { padding-block: var(--section); } /* block only, so .container keeps its side margins */
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -53,13 +57,12 @@ html.lenis, html.lenis body { height: auto; }
 .split-word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
 .split-word > span { display: inline-block; will-change: transform; }
 
-/* Section label with a short leading rule (after Wood & Weave) */
-.label {
-  display: inline-flex; align-items: center; gap: 14px; font-size: 0.8125rem; font-weight: 400; letter-spacing: 0.01em;
-  &::before { content: ''; width: 40px; height: 1px; background: currentColor; opacity: 0.6; }
-}
-/* Italic accent words inside headings (Lora italic, like Wood & Weave's italic phrases) */
-.accent { font-family: var(--font-body), Georgia, serif; font-style: italic; font-weight: 400; color: var(--accent-color, var(--blush)); }
+/* Minimal small uppercase label (after YODEZEEN) */
+.label { display: inline-block; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+/* Accent words: same face, set apart by colour only (minimal, after YODEZEEN) */
+.accent { color: var(--accent-color, var(--blush)); }
+/* Big uppercase display headings in the brand's Optima-style face, which matches the logo caps */
+.caps { text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.95; }
 
 .display { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(2.5rem, 1.2rem + 4.2vw, 5.5rem); line-height: 1.02; }
 .h2 { font-size: clamp(2rem, 1.3rem + 2.2vw, 3.5rem); }
@@ -67,11 +70,11 @@ html.lenis, html.lenis body { height: auto; }
 .lead { font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem); line-height: 1.55; }
 .serif { font-family: var(--font-body), Georgia, serif; font-weight: 400; }
 
-/* Square-cornered buttons in sentence case (after Wood & Weave); solid and outline variants */
+/* Pill buttons with small uppercase labels (after YODEZEEN); solid and outline variants */
 .btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; padding: 0 28px;
-  border-radius: 1px; border: 1px solid currentColor; font-size: 0.9375rem; font-weight: 500; letter-spacing: 0.01em;
-  text-decoration: none; white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 46px; padding: 0 24px;
+  border-radius: 999px; border: 1px solid currentColor; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+  text-transform: uppercase; text-decoration: none; white-space: nowrap;
   transition: background-color 250ms var(--ease), color 250ms var(--ease), transform 120ms var(--ease);
   &:active { transform: scale(0.98); }
 }
@@ -81,10 +84,8 @@ html.lenis, html.lenis body { height: auto; }
 .btn--outline-light { color: var(--paper); @include hover { &:hover { background: var(--paper); color: var(--oxblood); } } }
 
 .text-link {
-  display: inline-flex; align-items: center; gap: 8px; padding: 10px 0; font-size: 0.9375rem; font-weight: 500;
-  text-decoration: none;
-  &::after { content: '→'; transition: translate 300ms var(--ease); }
-  @include hover { &:hover::after { translate: 4px 0; } }
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 0; font-size: 0.75rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
   background: linear-gradient(currentColor 0 0) left calc(100% - 6px) / 100% 1px no-repeat;
   transition: background-size 300ms var(--ease);
   @include hover { &:hover { background-size: 30% 1px; } }
@@ -97,4 +98,4 @@ html.lenis, html.lenis body { height: auto; }
 .logo--monogram { --logo: url('/brand/logo-monogram.svg'); aspect-ratio: 376 / 359; }
 
 /* Visualisation label shown with project imagery */
-.viz { display: inline-block; font-family: var(--font-body), Georgia, serif; font-style: italic; font-size: 0.9375rem; }
+.viz { display: inline-block; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }

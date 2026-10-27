@@ -1,10 +1,26 @@
-.curtain {
-  position: fixed; inset: 0; z-index: 90; display: grid; place-content: center; justify-items: center; gap: 22px;
-  background: var(--oxblood); color: var(--sand); pointer-events: none;
-  /* Fallback: if JavaScript never runs, the curtain still lifts. */
-  animation: curtain-fallback 0.8s cubic-bezier(0.76, 0, 0.24, 1) 2.6s forwards;
-  :global(html.intro-seen) & { transform: translateY(-100%); animation: none; }
+.curtain { position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden; }
+
+/* Velvet drapes: vertical folds (light and shadow bands) over brand oxblood, darker toward the centre seam. */
+.drape {
+  position: absolute; top: 0; bottom: 0; width: 50.5%; /* slight overlap so no seam shows when closed */
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0) 0, rgb(255 255 255 / 0.07) 3.5%, rgb(0 0 0 / 0.22) 7%, rgb(255 255 255 / 0) 10%),
+    linear-gradient(180deg, rgb(0 0 0 / 0.15), rgb(0 0 0 / 0) 25%, rgb(0 0 0 / 0.25)),
+    var(--oxblood);
+  /* Fallback: if JavaScript never runs, the drapes still part. */
+  animation: 0.9s cubic-bezier(0.76, 0, 0.24, 1) 2.6s forwards;
 }
-@keyframes curtain-fallback { to { transform: translateY(-100%); } }
+.left { left: 0; box-shadow: inset -40px 0 60px -30px rgb(0 0 0 / 0.55); animation-name: part-left; }
+.right { right: 0; box-shadow: inset 40px 0 60px -30px rgb(0 0 0 / 0.55); animation-name: part-right; }
+@keyframes part-left { to { transform: translateX(-100%); } }
+@keyframes part-right { to { transform: translateX(100%); } }
+
+/* Repeat visits and reduced motion (class set before first paint): drapes start open. */
+:global(html.intro-seen) .left { transform: translateX(-100%); animation: none; }
+:global(html.intro-seen) .right { transform: translateX(100%); animation: none; }
+.js .drape { animation: none; }
+
+.brand { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 22px; color: var(--sand); }
 .mark { height: clamp(88px, 12vw, 132px); opacity: 0; }
 .word { height: clamp(22px, 2.6vw, 30px); opacity: 0; }
+:global(html.intro-seen) .brand { display: none; }
