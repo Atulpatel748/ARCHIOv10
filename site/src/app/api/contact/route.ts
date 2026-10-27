@@ -13,11 +13,13 @@ const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', 
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
   try { body = await request.json(); } catch { return NextResponse.json({ error: 'invalid_json' }, { status: 400 }); }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return NextResponse.json({ error: 'invalid_json' }, { status: 400 });
 
   if (clean(body.company, 200)) return NextResponse.json({ ok: true }); // honeypot filled: pretend success, send nothing
 
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
   const now = Date.now();
+  for (const [k, ts] of recent) if (ts.every((t) => now - t >= WINDOW_MS)) recent.delete(k); // keep the map from growing without bound
   const hits = (recent.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
   if (hits.length >= LIMIT) return NextResponse.json({ error: 'rate_limited' }, { status: 429 });
   recent.set(ip, [...hits, now]);
@@ -43,6 +45,7 @@ export async function POST(request: Request) {
     <strong>Project type:</strong> ${escapeHtml(type)}<br><strong>Location:</strong> ${escapeHtml(location || 'Not given')}</p>
     <p>${escapeHtml(message || 'No message').replace(/\n/g, '<br>')}</p>`;
   const res = await fetch('https://api.resend.com/emails', {
+    signal: AbortSignal.timeout(10_000),
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -52,7 +55,7 @@ export async function POST(request: Request) {
       html,
       ...(contact.includes('@') ? { reply_to: contact } : {}),
     }),
-  });
-  if (!res.ok) return NextResponse.json({ error: 'send_failed' }, { status: 502 });
+  }).catch(() => null);
+  if (!res?.ok) return NextResponse.json({ error: 'send_failed' }, { status: 502 });
   return NextResponse.json({ ok: true });
 }
