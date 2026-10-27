@@ -36,7 +36,17 @@ export default async function ProjectPage({ params }: Params) {
     <>
       <PageHero label={project.status} title={project.title} intro={project.location} image={project.hero} />
 
-      {/* The idea, with a facts table and the next step (after Wood & Weave's project pages) */}
+      {/* Facts in one clean strip (after YODEZEEN's project facts), then the idea and the next step */}
+      <section className={`container ${styles.facts}`} aria-label="Project facts">
+        <dl className={styles.factsList} data-reveal>
+          <div><dt>Where</dt><dd>{project.location}</dd></div>
+          <div><dt>Category</dt><dd>{project.category}</dd></div>
+          <div><dt>Area</dt><dd>{project.area}</dd></div>
+          <div><dt>What it is</dt><dd>{project.status}</dd></div>
+        </dl>
+      </section>
+
+      {/* The idea and the next step (after Wood & Weave's project pages) */}
       <section className={`section container ${styles.idea}`}>
         <div className={styles.ideaText}>
           <p className="label" data-reveal>The idea</p>
@@ -44,12 +54,6 @@ export default async function ProjectPage({ params }: Params) {
           {project.description.map((p) => <p key={p} className="serif" data-reveal>{p}</p>)}
         </div>
         <aside className={styles.ideaSide} data-reveal>
-          <dl className={styles.table}>
-            <div><dt>Where</dt><dd>{project.location}</dd></div>
-            <div><dt>Category</dt><dd>{project.category}</dd></div>
-            <div><dt>Area</dt><dd>{project.area}</dd></div>
-            <div><dt>What it is</dt><dd>{project.status}</dd></div>
-          </dl>
           <Link href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
           <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
           <p className={styles.note}>The images on this page are 3D design visualisations of the proposed design.</p>

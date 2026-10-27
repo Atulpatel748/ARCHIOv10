@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import PageHero from '@/components/PageHero';
-import ProjectsGrid from '@/components/ProjectsGrid';
+import ProjectsList from '@/components/ProjectsList';
 import { projects } from '@/content/projects';
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export default function ProjectsPage() {
         image={{ src: '/images/projects/arabian-ranches-garden/pergola-kitchen-dusk.png', alt: 'Pergola with an outdoor kitchen beside a pool at dusk, design visualisation' }}
       />
       <section className="section container">
-        <ProjectsGrid projects={projects} />
+        <ProjectsList projects={projects} />
       </section>
     </>
   );
