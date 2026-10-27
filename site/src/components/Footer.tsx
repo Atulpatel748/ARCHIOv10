@@ -1,20 +1,10 @@
 import Link from 'next/link';
-import { contactCopy, nav, site } from '@/content/site';
-import Split from './Split';
+import { nav, site } from '@/content/site';
 import styles from './Footer.module.scss';
-import Roll from '@/components/Roll';
 
 export default function Footer() {
   return (
     <footer className={styles.footer}>
-      <div className={`container ${styles.cta}`}>
-        <Split className="display" text={"Let's build something"} accent="purposeful." />
-        <div className={styles.ctaSide} data-reveal>
-          <p>{contactCopy.body}</p>
-          <Link href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
-        </div>
-      </div>
-
       <div className={`container ${styles.grid}`}>
         <div className={styles.brand}>
           <span className={`logo logo--wordmark ${styles.logo}`} role="img" aria-label="Archió" />

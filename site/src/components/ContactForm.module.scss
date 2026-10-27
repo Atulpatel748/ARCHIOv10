@@ -1,26 +1,26 @@
 @use '../styles/tokens' as *;
 
-.form { display: grid; gap: 28px; }
-.field { display: grid; gap: 8px; border: 0; margin: 0; padding: 0; min-width: 0; }
-.field > label, .field legend { padding: 0; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; }
-.optional { text-transform: none; letter-spacing: 0; font-weight: 300; }
+/* The form sits on the dark contact section: text inherits its colour, rules are drawn in that colour too. */
+.form { display: grid; gap: clamp(28px, 3vw, 40px); }
+.field { display: grid; gap: 4px; border: 0; margin: 0; padding: 0; min-width: 0; }
+.field > label, .field legend { padding: 0; font-size: 0.8125rem; color: var(--blush); }
+.optional { color: rgb(206 182 168 / 0.75); }
 .field input:not([type='radio']):not([type='checkbox']), .field textarea {
-  width: 100%; padding: 12px 0; border: 0; border-bottom: 1px solid rgb(76 17 20 / 0.55); border-radius: 0;
-  background: transparent; color: var(--oxblood); font: inherit; resize: vertical;
-  &:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 4px; }
-  &[aria-invalid='true'] { border-bottom-color: #9B1C22; }
+  width: 100%; padding: 14px 0 12px; border: 0; border-bottom: 1px solid rgb(248 247 244 / 0.7); border-radius: 0;
+  background: transparent; color: inherit; font: inherit; resize: vertical;
+  &:focus-visible { outline: 2px solid var(--paper); outline-offset: 4px; }
+  &[aria-invalid='true'] { border-bottom-color: #ffb4ad; }
 }
-.choices { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.field textarea { min-height: 9rem; }
+.choices { display: flex; flex-wrap: wrap; gap: 4px 28px; margin-top: 6px; }
 .choice {
-  position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px;
-  border: 1px solid rgb(76 17 20 / 0.35); border-radius: 999px; font-size: 0.9375rem; cursor: pointer;
-  input { accent-color: var(--oxblood); width: 16px; height: 16px; margin: 0; }
-  &:has(input:checked) { background: var(--oxblood); color: var(--paper); border-color: var(--oxblood); input { accent-color: var(--paper); } }
-  &:has(input:focus-visible) { outline: 2px solid var(--oxblood); outline-offset: 2px; }
+  display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer;
+  input { accent-color: var(--paper); width: 20px; height: 20px; margin: 0; }
+  &:has(input:focus-visible) { outline: 2px solid var(--paper); outline-offset: 2px; }
 }
-.consent { display: flex; gap: 12px; align-items: flex-start; font-size: 0.9375rem; input { accent-color: var(--oxblood); width: 18px; height: 18px; margin: 4px 0 0; flex: none; } }
+.consent { display: flex; gap: 14px; align-items: flex-start; font-size: 1rem; line-height: 1.5; input { accent-color: var(--paper); width: 22px; height: 22px; margin: 2px 0 0; flex: none; } }
 .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-.error { color: #9B1C22; font-size: 0.875rem; font-weight: 400; }
+.error { color: #ffb4ad; font-size: 0.875rem; font-weight: 400; }
 .status { min-height: 1.5em; font-size: 0.9375rem; a { font-weight: 500; } }
 .form :global(.btn) { justify-self: start; &:disabled { opacity: 0.6; cursor: progress; } }
-.done { display: grid; gap: 12px; padding: 32px; border: 1px solid var(--line); }
+.done { display: grid; gap: 12px; padding: 32px; border: 1px solid rgb(248 247 244 / 0.3); }

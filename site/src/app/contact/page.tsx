@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import ContactForm from '@/components/ContactForm';
-import PageHead from '@/components/PageHead';
-import { contactCopy, site } from '@/content/site';
+import Split from '@/components/Split';
+import { site } from '@/content/site';
 import styles from './contact.module.scss';
-import Roll from '@/components/Roll';
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -14,22 +13,17 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <PageHead label="Contact" title="Tell us about the" accent="space." intro={contactCopy.body}>
-        <a href={site.whatsappHref} className="btn btn--solid"><Roll>Message us on WhatsApp</Roll></a>
-      </PageHead>
-      <section className={`section container ${styles.grid}`}>
-        <div className={styles.info}>
-          <p className="label" data-reveal>Or reach us directly</p>
-          <dl className={styles.details} data-reveal>
-            <div><dt>WhatsApp</dt><dd><a href={site.whatsappHref}>{site.phone}</a></dd></div>
-            <div><dt>Phone</dt><dd><a href={site.phoneHref}>{site.phone}</a></dd></div>
-            <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
-            <div><dt>Instagram</dt><dd><a href={site.instagramHref}>{site.instagram}</a></dd></div>
-            <div><dt>Studio</dt><dd>{site.city}</dd></div>
-          </dl>
-        </div>
-        <div className={styles.formWrap}>
-          <h2 className="h3">Send an enquiry</h2>
+      <section className={`section ${styles.talk}`}>
+        <div className={`container ${styles.grid}`}>
+          <div className={styles.info}>
+            <Split as="h1" className={styles.title} text="Start a conversation" />
+            <p className={styles.invite} data-reveal>Tell us about the space and what it needs to do. We will reply to arrange a first conversation.</p>
+            <dl className={styles.details} data-reveal>
+              <div><dt>WhatsApp or call</dt><dd><a href={site.whatsappHref}>{site.phone}</a></dd></div>
+              <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+              <div><dt>Instagram</dt><dd><a href={site.instagramHref}>{site.instagram}</a></dd></div>
+            </dl>
+          </div>
           <ContactForm />
         </div>
       </section>

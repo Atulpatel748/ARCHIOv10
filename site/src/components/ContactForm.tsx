@@ -82,7 +82,7 @@ export default function ContactForm() {
         <input id="location" name="location" />
       </div>
       <div className={styles.field}>
-        <label htmlFor="message">Tell us about the space <span className={styles.optional}>(optional)</span></label>
+        <label htmlFor="message">About the space <span className={styles.optional}>(optional)</span></label>
         <textarea id="message" name="message" rows={4} maxLength={2000} />
       </div>
       {/* Honeypot: hidden from people, often filled by bots */}
@@ -93,11 +93,11 @@ export default function ContactForm() {
       <div className={styles.field} data-invalid={!!errors.consent}>
         <label className={styles.consent}>
           <input type="checkbox" name="consent" value="yes" aria-describedby={errors.consent ? 'consent-error' : undefined} />
-          <span>I agree to Archió using these details to reply to my enquiry. They are not shared or used for marketing.</span>
+          <span>I agree to Archió using these details to reply to my enquiry.</span>
         </label>
         {errors.consent && <p id="consent-error" className={styles.error}>{errors.consent}</p>}
       </div>
-      <button type="submit" className="btn btn--solid" disabled={state === 'sending'}>{state === 'sending' ? 'Sending' : 'Send enquiry'}</button>
+      <button type="submit" className="btn btn--light" disabled={state === 'sending'}>{state === 'sending' ? 'Sending' : 'Send enquiry'}</button>
       <p className={styles.status} role="status">
         {state === 'failed' && <>Sorry, your enquiry could not be sent. Please message us on <a href={site.whatsappHref}>WhatsApp</a> or email <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
       </p>
