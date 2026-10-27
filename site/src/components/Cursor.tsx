@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './Cursor.module.scss';
 
 // Measured from YODEZEEN's cursor: the SVG is drawn 150px wide but its viewBox is 280, so everything is scaled by 150/280 (0.54).
-// A radius of 50 is therefore about 27px (a ring about 54px across) and 120 is about 64px (about 129px across).
+// A radius of 50 is therefore about 27px (a ring about 54px across) and 120 is about 64px (about 129px across); 80 is about 43px (about 86px across).
 const SIZE = 150;
 const VIEW = 280;
 const R_IDLE = 50;
-const R_HOVER = 120;
+const R_HOVER = 120; // over something labelled with data-cursor, which needs room for its text
+const R_LINK = 80; // over a plain link or button: a gentler growth, about 86px across
 const INTERACTIVE = 'a, button, [data-cursor]';
 
 // A ring that trails the pointer (after YODEZEEN's cursor): it eases after the mouse and grows over links, buttons and
@@ -48,7 +49,7 @@ export default function Cursor() {
       const next = (e.target as Element).closest(INTERACTIVE);
       if (next === current) return;
       current = next;
-      target = next ? R_HOVER : R_IDLE;
+      target = next ? (next.hasAttribute('data-cursor') ? R_HOVER : R_LINK) : R_IDLE;
       setLabel(next?.getAttribute('data-cursor') ?? '');
     };
     const onLeave = () => { el.style.opacity = '0'; seen = false; cancelAnimationFrame(raf); };
