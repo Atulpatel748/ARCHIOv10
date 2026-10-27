@@ -2,9 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 
-// A tall section whose content stays pinned while you scroll through it. Publishes how far in you are as --seq
-// (in screen heights, 0 when the section's top meets the header) so CSS can drive the motion. Without JS, or with
-// reduced motion, data-seq is never set and the section is a plain static block.
+// A tall section whose content stays pinned (a sticky child) while you scroll through it. Publishes how far through it you
+// are as --progress (0 when its top meets the top of the screen, 1 when its bottom meets the bottom), so CSS can drive the
+// motion; the same scheme as YODEZEEN's "We do". Without JS, or with reduced motion, data-seq is never set and the section
+// is a plain static block.
 export default function Sequence({ className, children }: { className?: string; children: React.ReactNode }) {
   const ref = useRef<HTMLElement>(null);
 
@@ -12,13 +13,15 @@ export default function Sequence({ className, children }: { className?: string; 
     const el = ref.current!;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let frame = 0;
-    let header = 0;
-    const measure = () => { header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 0; };
-    const update = () => { frame = 0; el.style.setProperty('--seq', ((header - el.getBoundingClientRect().top) / (innerHeight / 100)).toFixed(2)); };
+    const update = () => {
+      frame = 0;
+      const r = el.getBoundingClientRect();
+      const span = r.height - innerHeight;
+      el.style.setProperty('--progress', (span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 1).toFixed(4));
+    };
     const queue = () => { frame ||= requestAnimationFrame(update); };
-    const resize = () => { measure(); queue(); };
+    const resize = () => queue();
     el.dataset.seq = '';
-    measure();
     update();
     addEventListener('scroll', queue, { passive: true });
     addEventListener('resize', resize);
@@ -27,7 +30,7 @@ export default function Sequence({ className, children }: { className?: string; 
       removeEventListener('resize', resize);
       cancelAnimationFrame(frame);
       delete el.dataset.seq;
-      el.style.removeProperty('--seq');
+      el.style.removeProperty('--progress');
     };
   }, []);
 

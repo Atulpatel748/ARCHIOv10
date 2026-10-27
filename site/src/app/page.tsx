@@ -33,20 +33,21 @@ export default function HomePage() {
         </h1>
       </HeroSlider>
 
-      {/* We do (after YODEZEEN): two huge words part to the edges while the sectors come up beneath */}
+      {/* We do, built like YODEZEEN's: a tall section with a pinned stage. As you scroll, "We" and "Do" slide apart and fade
+          while the sectors rise from below, one after another, to the middle. */}
       <Sequence className={styles.sequence}>
         <div className={styles.seqStage}>
           <h2 className="visually-hidden">We do residential, commercial and landscape design</h2>
-          <div className={styles.seqRow} aria-hidden="true">
+          <div className={styles.seqTitle} aria-hidden="true">
             <span className={styles.seqStart}>We</span>
             <span className={styles.seqEnd}>Do</span>
           </div>
-          <ul className={styles.seqList} aria-hidden="true">
-            <li>Residential</li>
-            <li>Commercial</li>
-            <li>Landscape</li>
-          </ul>
-          <Link href="/projects" className="text-link"><Roll>See the work</Roll></Link>
+          <div className={styles.seqItems}>
+            {['Residential', 'Commercial', 'Landscape'].map((name, i) => (
+              <span key={name} className={styles.seqItem} style={{ '--i': i } as React.CSSProperties} aria-hidden="true">{name}</span>
+            ))}
+            <Link href="/projects" className={`text-link ${styles.seqLink}`} style={{ '--i': 3 } as React.CSSProperties}><Roll>See the work</Roll></Link>
+          </div>
         </div>
       </Sequence>
 
