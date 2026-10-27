@@ -2,41 +2,34 @@
 
 .sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 40px; pointer-events: none; }
 
-.header {
-  position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h);
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;
-  @include tablet-down { display: flex; justify-content: space-between; }
-  padding: 0 var(--margin); color: var(--paper);
+/* The header is a transparent frame. The bar (logo and background) slides away on scroll; the right-hand pill and menu button never do. */
+.header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); pointer-events: none; color: var(--paper); }
+.bar {
+  position: absolute; inset: 0; display: flex; align-items: center; padding: 0 var(--margin); pointer-events: auto;
   background: linear-gradient(rgb(20 6 7 / 0.45), rgb(20 6 7 / 0)); /* keeps light text legible over any hero image */
-  transition: background-color 300ms var(--ease), color 300ms var(--ease), box-shadow 300ms var(--ease);
+  transition: transform 500ms var(--ease), background-color 300ms var(--ease), color 300ms var(--ease), box-shadow 300ms var(--ease);
 }
-.solid { background: var(--paper); color: var(--oxblood); box-shadow: 0 1px 0 var(--line); }
-.onMenu { background: transparent; color: var(--paper); }
+.solid .bar { background: var(--paper); color: var(--oxblood); box-shadow: 0 1px 0 var(--line); }
+.onMenu .bar { background: transparent; color: var(--paper); }
+.hidden .bar { transform: translateY(-100%); }
 
 .brand { display: block; padding: 8px 0; transition: opacity 400ms var(--ease), visibility 0s; }
 /* Home, before scrolling: the hero's big wordmark stands in for the logo */
 .heroTop .brand { opacity: 0; visibility: hidden; transition: opacity 400ms var(--ease), visibility 0s 400ms; }
 .logo { height: 46px; @include phone { height: 38px; } }
-.right { display: flex; align-items: center; justify-content: flex-end; gap: clamp(16px, 2.4vw, 36px); }
-.nav {
-  display: flex; gap: clamp(20px, 2.4vw, 36px);
-  a {
-    padding: 12px 0; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
-    background: linear-gradient(currentColor 0 0) left calc(100% - 6px) / 0 1px no-repeat; transition: background-size 400ms var(--ease);
-  }
-  a[aria-current='page'] { background-size: 100% 1px; }
-  @include tablet-down { display: none; }
+.right {
+  position: absolute; inset: 0 var(--margin) 0 auto; z-index: 1; display: flex; align-items: center; gap: clamp(10px, 1.4vw, 16px); pointer-events: auto;
 }
-/* Outlined pill, after the reference design */
+/* Solid oxblood pill, the same colour and height as the round menu button beside it */
 .talk {
-  display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 22px; border: 1px solid currentColor; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 12px; height: 52px; padding: 0 26px; border-radius: 999px; background: var(--oxblood); color: var(--paper);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; white-space: nowrap;
   transition: background-color 300ms var(--ease), color 300ms var(--ease);
   > span[aria-hidden] { font-size: 1rem; line-height: 1; transition: transform 400ms var(--ease); }
-  @include hover { &:hover { background: var(--paper); color: var(--oxblood); > span[aria-hidden] { transform: rotate(90deg); } } }
-  @include phone { display: none; }
+  @include hover { &:hover { background: var(--deep); > span[aria-hidden] { transform: rotate(90deg); } } }
+  @include phone { padding: 0 18px; gap: 8px; font-size: 0.6875rem; letter-spacing: 0.12em; }
 }
-.solid .talk { @include hover { &:hover { background: var(--oxblood); color: var(--paper); } } }
+.onMenu .talk { background: var(--paper); color: var(--oxblood); }
 
 /* Round menu button with two lines that cross when open */
 .toggle {
@@ -47,7 +40,6 @@
   span:first-child { top: 22px; }
   span:last-child { top: 29px; }
 }
-.toggle { display: none; @include tablet-down { display: block; } } /* desktop uses the split nav instead */
 .toggleOpen {
   background: var(--paper); color: var(--oxblood);
   span:first-child { top: 25.5px; transform: rotate(45deg); }

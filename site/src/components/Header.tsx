@@ -7,12 +7,14 @@ import { nav, site } from '@/content/site';
 import styles from './Header.module.scss';
 import Roll from '@/components/Roll';
 
-// Desktop: split nav (Projects, Services | About, Let's talk) around a centred logo, which the home hero's wordmark
-// replaces until you scroll. Tablet and phone: logo left, round menu button right, full-screen menu.
+// After Wood & Weave on every screen size: logo left, the "Let's talk" pill and a round menu button right, and a
+// full-screen menu for the links. The bar (logo and background) slides away as you scroll down and returns as you
+// scroll up; the pill and the menu button stay on screen. On the home page the hero's wordmark replaces the logo until you scroll.
 export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -22,6 +24,19 @@ export default function Header() {
     const io = new IntersectionObserver(([entry]) => setScrolled(!entry.isIntersecting));
     io.observe(sentinel);
     return () => io.disconnect();
+  }, []);
+
+  // Hide the bar while scrolling down (past the first screen's worth), show it again on any scroll up.
+  useEffect(() => {
+    let last = scrollY;
+    const onScroll = () => {
+      const d = scrollY - last;
+      if (Math.abs(d) < 6) return;
+      setHidden(scrollY > 160 && d > 0);
+      last = scrollY;
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    return () => removeEventListener('scroll', onScroll);
   }, []);
 
   // Close the menu on navigation (a render-time state adjustment rather than an effect).
@@ -47,19 +62,16 @@ export default function Header() {
   return (
     <>
       <div id="top-sentinel" className={styles.sentinel} aria-hidden="true" />
-      <header className={`${styles.header} ${scrolled && !open ? styles.solid : ''} ${open ? styles.onMenu : ''} ${pathname === '/' && !scrolled && !open ? styles.heroTop : ''}`}>
-        <nav aria-label="Main" className={styles.nav}>
-          {nav.slice(0, 2).map((item) => (
-            <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}><Roll>{item.label}</Roll></Link>
-          ))}
-        </nav>
-        <Link href="/" className={styles.brand} aria-label="Archió, home">
-          <span className={`logo logo--lockup ${styles.logo}`} aria-hidden="true" />
-        </Link>
+      <header
+        className={`${styles.header} ${scrolled && !open ? styles.solid : ''} ${open ? styles.onMenu : ''} ${pathname === '/' && !scrolled && !open ? styles.heroTop : ''} ${hidden && !open ? styles.hidden : ''}`}
+        onFocusCapture={() => setHidden(false)}
+      >
+        <div className={styles.bar}>
+          <Link href="/" className={styles.brand} aria-label="Archió, home">
+            <span className={`logo logo--lockup ${styles.logo}`} aria-hidden="true" />
+          </Link>
+        </div>
         <div className={styles.right}>
-          <nav aria-label="Studio" className={styles.nav}>
-            <Link href="/about" aria-current={isActive('/about') ? 'page' : undefined}><Roll>About</Roll></Link>
-          </nav>
           <Link href="/contact" className={styles.talk}><Roll>{"Let's talk"}</Roll> <span aria-hidden="true">+</span></Link>
           <button
             ref={toggleRef}
