@@ -18,7 +18,7 @@ const MAX_CROP = 0.15;
 function pack(grid: HTMLElement): number {
   const items = Array.from(grid.children) as HTMLElement[];
   const cs = getComputedStyle(grid);
-  const cols = Math.max(1, parseInt(cs.columnCount, 10) || 1);
+  const cols = matchMedia('(min-width: 64em)').matches ? 3 : 2; // not read from the style: once laid out, column-count is auto
   const gap = parseFloat(cs.columnGap) || 0;
   const width = grid.clientWidth;
   const ar = items.map((e) => Number(e.dataset.omAr) || 1);
