@@ -93,6 +93,26 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Who you get: founders in arched frames (after Wood & Weave) */}
+      <section className={`section container ${styles.founders}`}>
+        <div className={styles.foundersHead}>
+          <p className="label" data-reveal>Who you work with</p>
+          <Split className={styles.big} text="The people behind" accent="Archió." />
+          <Link href="/about" className="text-link" data-reveal><Roll>About the studio</Roll></Link>
+        </div>
+        <ul className={styles.foundersGrid}>
+          {team.map((m) => (
+            <li key={m.name} data-reveal>
+              <div className={styles.arch}>
+                <Image src={m.image} alt={`Portrait of ${m.name}`} width={479} height={720} sizes="(max-width: 767px) 80vw, 26vw" />
+              </div>
+              <h3>{m.name}</h3>
+              <p>{m.role}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       {/* The work: a flagship with a facts card, then the other projects */}
       <section className={`section ${styles.work}`}>
         <div className="container">
@@ -134,26 +154,6 @@ export default function HomePage() {
           </ol>
           <Link href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
         </div>
-      </section>
-
-      {/* Who you get: founders in arched frames (after Wood & Weave) */}
-      <section className={`section container ${styles.founders}`}>
-        <div className={styles.foundersHead}>
-          <p className="label" data-reveal>Who you work with</p>
-          <Split className={styles.big} text="The people behind" accent="Archió." />
-          <Link href="/about" className="text-link" data-reveal><Roll>About the studio</Roll></Link>
-        </div>
-        <ul className={styles.foundersGrid}>
-          {team.map((m) => (
-            <li key={m.name} data-reveal>
-              <div className={styles.arch}>
-                <Image src={m.image} alt={`Portrait of ${m.name}`} width={479} height={720} sizes="(max-width: 767px) 80vw, 26vw" />
-              </div>
-              <h3>{m.name}</h3>
-              <p>{m.role}</p>
-            </li>
-          ))}
-        </ul>
       </section>
 
       {/* Philosophy over a full-bleed image */}
