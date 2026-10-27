@@ -113,7 +113,8 @@ export default function Header() {
     const onScroll = () => {
       const d = scrollY - last;
       if (Math.abs(d) < 6) return;
-      setHidden(location.pathname !== '/' && scrollY > 160 && d > 0);
+      // On the home page the logo is still docking over the first screen, so the header only starts to hide after it
+      setHidden(scrollY > (location.pathname === '/' ? innerHeight : 160) && d > 0);
       last = scrollY;
     };
     addEventListener('scroll', onScroll, { passive: true });
