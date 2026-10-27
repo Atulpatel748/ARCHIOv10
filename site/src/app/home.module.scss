@@ -12,6 +12,32 @@
 
 .big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1.2rem + 3vw, 4.5rem); line-height: 0.98; max-width: 20ch; }
 
+/* We design: a pinned scroll sequence. --seq (screen heights scrolled) is set by <Sequence>; without it this is a static row. */
+.sequence { position: relative; }
+.seqStage {
+  display: grid; align-content: center; justify-items: center; gap: clamp(24px, 3vw, 44px); overflow: clip;
+  min-height: calc(100svh - var(--header-h)); padding-block: var(--section);
+}
+.seqRow {
+  container-type: inline-size; width: 100%; padding-inline: var(--margin); display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; white-space: nowrap; font-size: 4.1vw;
+  @include phone { flex-direction: column; align-items: center; gap: 0.1em; font-size: 12vw; }
+}
+.seqMid { color: var(--accent-color); }
+.sequence[data-seq] {
+  height: calc(165svh - var(--header-h) - 1px);
+  .seqStage { position: sticky; top: var(--header-h); }
+  .seqStart, .seqEnd { --move: clamp(0, calc(var(--seq, 0) / 34), 1); --eased: calc(var(--move) * var(--move) * (3 - 2 * var(--move))); }
+  /* The outer words start side by side at the centre, then travel to the edges, revealing the middle word */
+  .seqStart { transform: translateX(calc((1 - var(--eased)) * (50cqw - 100% - 0.05em))); }
+  .seqEnd { transform: translateX(calc((1 - var(--eased)) * (100% - 50cqw + 0.05em))); }
+  .seqMid { opacity: clamp(0, calc((var(--seq, 0) - 16) / 18), 1); }
+  @include phone {
+    .seqStart { transform: translateX(calc((1 - var(--eased)) * -20cqw)); opacity: var(--eased); }
+    .seqEnd { transform: translateX(calc((1 - var(--eased)) * 20cqw)); opacity: var(--eased); }
+  }
+}
+
 /* The position */
 .position {
   display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 32px var(--gutter);

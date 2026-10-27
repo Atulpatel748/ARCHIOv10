@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import styles from './not-found.module.scss';
+import Roll from '@/components/Roll';
 
 export default function NotFound() {
   return (
@@ -9,8 +10,8 @@ export default function NotFound() {
         <h1 className="display">This page is not here.</h1>
         <p className={styles.text}>The address may have changed. The projects, services and studio are one step away.</p>
         <div className={styles.links}>
-          <Link href="/projects" className="btn btn--light">View projects</Link>
-          <Link href="/" className="btn btn--outline-light">Home</Link>
+          <Link href="/projects" className="btn btn--light"><Roll>View projects</Roll></Link>
+          <Link href="/" className="btn btn--outline-light"><Roll>Home</Roll></Link>
         </div>
       </div>
     </section>

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './HeroSlider.module.scss';
+import Roll from '@/components/Roll';
 
 export type Slide = { src: string; alt: string; title: string; place: string; href: string };
 
@@ -166,7 +167,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
             {slide.place}
           </p>
           <Link href={slide.href} className={styles.slideLink} data-cursor="View">
-            View project<span className="visually-hidden">: {slide.title}</span> <span aria-hidden="true">→</span>
+            <Roll>View project</Roll><span className="visually-hidden">: {slide.title}</span> <span aria-hidden="true">→</span>
           </Link>
         </div>
         <div className={styles.controls} role="group" aria-label="Choose a project">

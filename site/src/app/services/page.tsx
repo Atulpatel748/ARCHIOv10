@@ -4,6 +4,7 @@ import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import { approach, sectors, services, servicesIntro } from '@/content/site';
 import styles from './services.module.scss';
+import Roll from '@/components/Roll';
 
 export const metadata: Metadata = {
   title: 'Services',
@@ -65,7 +66,7 @@ export default function ServicesPage() {
           </ol>
         </div>
         <div className={`container ${styles.processCta}`} data-reveal>
-          <Link href="/contact" className="btn btn--light">Start a project</Link>
+          <Link href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
         </div>
       </section>
     </>

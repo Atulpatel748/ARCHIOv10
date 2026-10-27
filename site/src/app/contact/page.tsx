@@ -3,6 +3,7 @@ import ContactForm from '@/components/ContactForm';
 import PageHero from '@/components/PageHero';
 import { contactCopy, site } from '@/content/site';
 import styles from './contact.module.scss';
+import Roll from '@/components/Roll';
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -20,7 +21,7 @@ export default function ContactPage() {
         intro={contactCopy.body}
         image={{ src: '/images/projects/arabian-ranches-garden/entrance-night.png', alt: 'Villa entrance garden lit at night, design visualisation' }}
       >
-        <a href={site.whatsappHref} className="btn btn--light">Message us on WhatsApp</a>
+        <a href={site.whatsappHref} className="btn btn--light"><Roll>Message us on WhatsApp</Roll></a>
       </PageHero>
       <section className={`section container ${styles.grid}`}>
         <div className={styles.info}>

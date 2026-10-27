@@ -2,10 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import HeroSlider from '@/components/HeroSlider';
 import ProjectCard from '@/components/ProjectCard';
+import Sequence from '@/components/Sequence';
 import Split from '@/components/Split';
 import { projects } from '@/content/projects';
 import { about, philosophy, processSteps, services, team } from '@/content/site';
 import styles from './home.module.scss';
+import Roll from '@/components/Roll';
 
 const slides = projects.map((p) => ({
   src: p.cover.src, alt: p.cover.alt, title: p.title, place: `${p.location}, Dubai`, href: `/projects/${p.slug}`,
@@ -30,6 +32,20 @@ export default function HomePage() {
           <span className={styles.heroTag} aria-hidden="true">Interior design studio</span>
         </h1>
       </HeroSlider>
+
+      {/* We design: pinned while you scroll, the words part to the edges and the middle one appears */}
+      <Sequence className={styles.sequence}>
+        <div className={styles.seqStage}>
+          <h2 className="visually-hidden">We design residential, landscape and commercial spaces</h2>
+          <p className="label" aria-hidden="true">We design</p>
+          <div className={styles.seqRow} aria-hidden="true">
+            <span className={styles.seqStart}>Residential</span>
+            <span className={styles.seqMid}>Landscape</span>
+            <span className={styles.seqEnd}>Commercial</span>
+          </div>
+          <Link href="/projects" className="text-link"><Roll>See the work</Roll></Link>
+        </div>
+      </Sequence>
 
       {/* The position */}
       <section className={`section container ${styles.position}`}>
@@ -66,7 +82,7 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
-          <Link href="/services" className={`text-link ${styles.onDark}`} data-reveal>All services</Link>
+          <Link href="/services" className={`text-link ${styles.onDark}`} data-reveal><Roll>All services</Roll></Link>
         </div>
       </section>
 
@@ -88,7 +104,7 @@ export default function HomePage() {
               <div><dt>Area</dt><dd>{flagship.area}</dd></div>
               <div><dt>What it is</dt><dd>{flagship.status}</dd></div>
             </dl>
-            <Link href={`/projects/${flagship.slug}`} className="btn btn--solid">See the project <span aria-hidden="true">→</span></Link>
+            <Link href={`/projects/${flagship.slug}`} className="btn btn--solid"><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
           </div>
         </div>
         <div className={`container ${styles.others}`}>
@@ -110,7 +126,7 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
-          <Link href="/contact" className="btn btn--light" data-reveal>Start a project</Link>
+          <Link href="/contact" className="btn btn--light" data-reveal><Roll>Start a project</Roll></Link>
         </div>
       </section>
 
@@ -119,7 +135,7 @@ export default function HomePage() {
         <div className={styles.foundersHead}>
           <p className="label" data-reveal>Who you work with</p>
           <Split className={styles.big} text="The people behind" accent="Archió." />
-          <Link href="/about" className="text-link" data-reveal>About the studio</Link>
+          <Link href="/about" className="text-link" data-reveal><Roll>About the studio</Roll></Link>
         </div>
         <ul className={styles.foundersGrid}>
           {team.map((m) => (

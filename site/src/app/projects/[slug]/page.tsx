@@ -7,6 +7,7 @@ import Split from '@/components/Split';
 import { site } from '@/content/site';
 import { getProject, projects } from '@/content/projects';
 import styles from './project.module.scss';
+import Roll from '@/components/Roll';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -49,8 +50,8 @@ export default async function ProjectPage({ params }: Params) {
             <div><dt>Area</dt><dd>{project.area}</dd></div>
             <div><dt>What it is</dt><dd>{project.status}</dd></div>
           </dl>
-          <Link href="/contact" className="btn btn--solid">Start a project</Link>
-          <a href={site.whatsappHref} className="text-link">Message us on WhatsApp</a>
+          <Link href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
+          <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
           <p className={styles.note}>The images on this page are 3D design visualisations of the proposed design.</p>
         </aside>
       </section>

@@ -8,12 +8,12 @@
 .active { opacity: 1; }
 .glReady .slide { visibility: hidden; }
 .canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-/* An even veil for the centred wordmark, plus top and bottom bands for the header and the bar. */
+/* A soft dark oval behind the wordmark plus top and bottom bands: the photo stays bright at the edges, the mark stays legible. */
 .shade {
   position: absolute; inset: 0; pointer-events: none;
   background:
-    linear-gradient(180deg, rgb(20 6 7 / 0.4) 0%, rgb(20 6 7 / 0) 20%, rgb(20 6 7 / 0) 70%, rgb(20 6 7 / 0.55) 100%),
-    rgb(20 6 7 / 0.22);
+    radial-gradient(ellipse 100% 24% at 50% 50%, rgb(20 6 7 / 0.32), transparent),
+    linear-gradient(180deg, rgb(20 6 7 / 0.48) 0%, rgb(20 6 7 / 0.12) 22%, rgb(20 6 7 / 0.12) 55%, rgb(20 6 7 / 0.58) 100%);
 }
 .content { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; padding: var(--header-h) var(--margin); }
 /* Bottom bar: place and link left, slide tracks centre, pause right */

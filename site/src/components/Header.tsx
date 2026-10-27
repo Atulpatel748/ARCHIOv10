@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { nav, site } from '@/content/site';
 import styles from './Header.module.scss';
+import Roll from '@/components/Roll';
 
 // Desktop: split nav (Projects, Services | About, Let's talk) around a centred logo, which the home hero's wordmark
 // replaces until you scroll. Tablet and phone: logo left, round menu button right, full-screen menu.
@@ -49,7 +50,7 @@ export default function Header() {
       <header className={`${styles.header} ${scrolled && !open ? styles.solid : ''} ${open ? styles.onMenu : ''} ${pathname === '/' && !scrolled && !open ? styles.heroTop : ''}`}>
         <nav aria-label="Main" className={styles.nav}>
           {nav.slice(0, 2).map((item) => (
-            <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</Link>
+            <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}><Roll>{item.label}</Roll></Link>
           ))}
         </nav>
         <Link href="/" className={styles.brand} aria-label="Archió, home">
@@ -57,9 +58,9 @@ export default function Header() {
         </Link>
         <div className={styles.right}>
           <nav aria-label="Studio" className={styles.nav}>
-            <Link href="/about" aria-current={isActive('/about') ? 'page' : undefined}>About</Link>
+            <Link href="/about" aria-current={isActive('/about') ? 'page' : undefined}><Roll>About</Roll></Link>
           </nav>
-          <Link href="/contact" className={styles.talk}>Let&apos;s talk <span aria-hidden="true">+</span></Link>
+          <Link href="/contact" className={styles.talk}><Roll>{"Let's talk"}</Roll> <span aria-hidden="true">+</span></Link>
           <button
             ref={toggleRef}
             type="button"
@@ -82,7 +83,7 @@ export default function Header() {
         </nav>
         <div className={styles.menuSide}>
           <p className={styles.menuLead}>Tell us about the <span className="accent">space.</span></p>
-          <Link href="/contact" className="btn btn--light">Start a project</Link>
+          <Link href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
           <div className={styles.menuContact}>
             <a href={site.whatsappHref}>WhatsApp {site.phone}</a>
             <a href={site.phoneHref}>{site.phone}</a>

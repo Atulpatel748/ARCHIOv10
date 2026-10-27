@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { contactCopy, nav, site } from '@/content/site';
 import Split from './Split';
 import styles from './Footer.module.scss';
+import Roll from '@/components/Roll';
 
 export default function Footer() {
   return (
@@ -10,7 +11,7 @@ export default function Footer() {
         <Split className="display" text={"Let's build something"} accent="purposeful." />
         <div className={styles.ctaSide} data-reveal>
           <p>{contactCopy.body}</p>
-          <Link href="/contact" className="btn btn--light">Start a project</Link>
+          <Link href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
         </div>
       </div>
 

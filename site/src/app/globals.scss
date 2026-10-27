@@ -79,6 +79,14 @@ html.lenis, html.lenis body { height: auto; }
 .btn--outline { @include hover { &:hover { background: var(--oxblood); border-color: var(--oxblood); color: var(--paper); } } }
 .btn--outline-light { color: var(--paper); @include hover { &:hover { background: var(--paper); color: var(--oxblood); } } }
 
+/* Label roll: the text slides up and an identical copy rolls in from below (see <Roll>) */
+.roll { display: inline-block; height: 1.25em; line-height: 1.25; overflow: hidden; vertical-align: bottom; }
+.roll > span { display: block; white-space: nowrap; transition: transform 400ms var(--ease); }
+.roll > span::after { content: attr(data-text) / ""; display: block; }
+:is(a, button):focus-visible > .roll > span { transform: translateY(-50%); }
+@include hover { :is(a, button):hover > .roll > span { transform: translateY(-50%); } }
+@media (prefers-reduced-motion: reduce) { .roll > span { transform: none !important; } }
+
 .text-link {
   display: inline-flex; align-items: center; gap: 8px; padding: 10px 0; font-size: 0.75rem; font-weight: 500;
   letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
