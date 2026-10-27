@@ -43,7 +43,7 @@ export default function Reveals() {
       // Hero recedes (scales down, fades, drifts up) while the next section slides up over it.
       gsap.utils.toArray<HTMLElement>('[data-recede]').forEach((el) => {
         const next = el.nextElementSibling;
-        if (!next) return;
+        if (!next || getComputedStyle(el).position !== 'sticky') return; // a hero that is not pinned (portrait project pages) just scrolls
         gsap.to(el.querySelector('[data-recede-inner]') ?? el, {
           scale: 0.92, opacity: 0.35, yPercent: -6, ease: 'none',
           // From the very top (shorter heroes have the next section already on screen) until the next section reaches the top.

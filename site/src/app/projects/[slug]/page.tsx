@@ -41,7 +41,7 @@ export default async function ProjectPage({ params }: Params) {
 
       <section className={`section container ${styles.idea}`}>
         <div className={styles.ideaText}>
-          <p className="label" data-reveal>The idea</p>
+          <p className="label label--rule" data-reveal>The idea</p>
           <Split className={styles.ideaTitle} text={project.summary} />
           {project.description.map((p) => <p key={p} className="serif" data-reveal>{p}</p>)}
         </div>
@@ -73,7 +73,7 @@ export default async function ProjectPage({ params }: Params) {
         <div className={styles.endNext}>
           <Link href="/projects" className={`text-link ${styles.endAll}`} data-reveal><Roll>All the work</Roll></Link>
           <Link href={`/projects/${next.slug}`} className={styles.next} data-cursor="View" data-reveal>
-            <span className="label">Next project</span>
+            <span className="label label--rule">Next project</span>
             <span className={styles.nextTitle}>{next.title}</span>
             <span className={styles.nextPlace}>{next.category}, {next.location}</span>
             <span className={styles.nextPhoto}>

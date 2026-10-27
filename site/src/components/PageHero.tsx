@@ -17,12 +17,12 @@ type Props = {
 // Full-bleed image hero with the title set over a dark base (after both references).
 export default function PageHero({ title, accent, label, intro, image, caption, size = 'tall', compact, children }: Props) {
   return (
-    <section className={`${styles.hero} ${size === 'full' ? styles.full : ''}`} data-recede>
+    <section className={`${styles.hero} ${size === 'full' ? styles.full : ''} ${compact ? styles.compact : ''}`} data-recede>
       <div className={styles.inner} data-recede-inner>
         <Image src={image.src} alt={image.alt} fill priority sizes="100vw" className={styles.image} />
         <div className={styles.shade} aria-hidden="true" />
         <div className={`container ${styles.content}`}>
-          {label && <p className="label">{label}</p>}
+          {label && <p className="label label--rule">{label}</p>}
           <Split as="h1" className={compact ? styles.titleSm : size === 'full' ? styles.titleXl : styles.title} text={title} accent={accent} />
           {intro && <p className={styles.intro}>{intro}</p>}
           {children}

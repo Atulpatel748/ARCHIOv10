@@ -9,8 +9,23 @@
 .content { position: relative; z-index: 1; display: grid; gap: 18px; justify-items: start; padding-top: calc(var(--header-h) + 40px); padding-bottom: clamp(48px, 7vw, 96px); }
 .title { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(3rem, 1rem + 6.4vw, 8.25rem); line-height: 0.94; max-width: 16ch; }
 .titleXl { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(3.25rem, 1rem + 8vw, 10rem); line-height: 0.94; max-width: 13ch; }
-.titleSm { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1rem + 3.6vw, 5.5rem); line-height: 0.98; max-width: 20ch; }
+.titleSm { text-transform: uppercase; letter-spacing: 0.01em; text-wrap: balance; font-size: clamp(2.6rem, min(1.6rem + 3.2vw, 9.5vh), 4.75rem); line-height: 1.02; max-width: 18ch; }
 .intro { max-width: 46ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; color: var(--paper); }
+
+/* Project pages (after Wood & Weave's): a lighter veil, more air above and below the text, the place set in the display face */
+.compact {
+  .shade { background: linear-gradient(rgb(20 6 7 / 0.62) 0, rgb(20 6 7 / 0.18) 24%, rgb(20 6 7 / 0.15) 45%, rgb(20 6 7 / 0.85) 100%); }
+  .content { gap: 1rem; padding-top: calc(var(--header-h) + 4rem); padding-bottom: clamp(3.5rem, 3rem + 4vh, 6rem); }
+  .intro { max-width: none; font-family: var(--font-display); font-size: clamp(1.4rem, 1.2rem + 0.6vw, 1.85rem); line-height: 1.2; color: var(--blush); }
+}
+/* On a portrait screen the photograph sits above and the text below it, on a dark ground, as on Wood & Weave */
+@media (max-aspect-ratio: 1 / 1) {
+  .compact { position: relative; min-height: 0; padding-top: var(--header-h); }
+  .compact .inner { display: block; min-height: 0; background: transparent; }
+  .compact .image { position: relative !important; inset: auto !important; width: 100% !important; height: auto !important; aspect-ratio: 4 / 3; }
+  .compact .shade { display: none; }
+  .compact .content { padding-block: 2rem clamp(3rem, 2.5rem + 3vh, 4.5rem); }
+}
 .caption {
   position: absolute; right: var(--margin); bottom: clamp(48px, 7vw, 96px); z-index: 1; max-width: 26ch; text-align: right;
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;

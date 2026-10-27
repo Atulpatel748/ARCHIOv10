@@ -164,7 +164,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
       <div className={styles.rooms}>
         {groupByRoom(images).map((g, gi) => (
           <div key={`${g.room}-${gi}`} role="group" aria-label={g.room} className={`${styles.room} ${gi % 2 ? styles.flip : ''}`}>
-            <h3 className={`label ${styles.roomName}`} data-reveal>{g.room}</h3>
+            <h3 className={`label label--rule ${styles.roomName}`} data-reveal>{g.room}</h3>
             <div className={styles.rowset}>
               {toRows(g.shots).map((row, ri) => (
                 <div key={ri} className={styles.row} style={{ '--sum': row.reduce((t, x) => t + x.img.width / x.img.height, 0) } as CSSProperties} data-reveal>

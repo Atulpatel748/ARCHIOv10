@@ -57,6 +57,8 @@ html.lenis, html.lenis body { height: auto; }
 
 /* Minimal small uppercase label (after YODEZEEN) */
 .label { display: inline-block; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
+/* A label led by a short rule (after Wood & Weave's labels), used on the project pages */
+.label--rule { display: inline-flex; align-items: center; gap: 0.85rem; &::before { content: ''; width: 2.25rem; height: 1px; background: currentColor; } }
 /* Accent words: same face, set apart by colour only (minimal, after YODEZEEN) */
 .accent { color: inherit; } /* plain colour: accent phrases keep the heading's colour */
 /* Big uppercase display headings in the brand's Optima-style face, which matches the logo caps */

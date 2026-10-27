@@ -1,7 +1,7 @@
 @use '../styles/tokens' as *;
 
 /* Rooms: a label beside rows of images (alternating sides on wide screens); in a row the images share one height, so each is as wide as its aspect ratio */
-.rooms { display: grid; gap: clamp(64px, 6vw, 128px); }
+.rooms { display: grid; gap: clamp(4.5rem, 3.5rem + 4vw, 8rem); }
 .room {
   display: grid; gap: 20px;
   @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: center; gap: 4rem; .row { margin-inline-start: auto; } }
