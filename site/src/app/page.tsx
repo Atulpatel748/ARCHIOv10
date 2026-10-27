@@ -4,6 +4,7 @@ import Link from 'next/link';
 import HeroSlider from '@/components/HeroSlider';
 import ProjectCard from '@/components/ProjectCard';
 import Sequence from '@/components/Sequence';
+import StageList from '@/components/StageList';
 import Split from '@/components/Split';
 import { projects } from '@/content/projects';
 import { about, philosophy, processSteps, services, team } from '@/content/site';
@@ -74,30 +75,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* What we do */}
+      {/* What we do: an index of the three stages, after YODEZEEN's service list */}
       <section className={`section ${styles.whatWeDo}`}>
         <div className="container">
           <div className={styles.headRow}>
             <p className="label" data-reveal>What we do</p>
             <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to handover." />
           </div>
-          <ol className={styles.stages}>
-            {stages.map((s) => (
-              <li key={s.name} data-reveal>
-                <div className={styles.stageMedia} data-mask>
-                  <Image src={s.image} alt={s.alt} fill sizes="(max-width: 767px) 100vw, 30vw" />
-                </div>
-                <h3 className={styles.stageName}>{s.name}</h3>
-                {s.items.map((it) => (
-                  <div key={it.title} className={styles.stageItem}>
-                    <h4>{it.title}</h4>
-                    <p>{it.text}</p>
-                  </div>
-                ))}
-              </li>
-            ))}
-          </ol>
-          <Link href="/services" className={`text-link ${styles.onDark}`} data-reveal><Roll>All services</Roll></Link>
+          <StageList stages={stages} />
+          <Link href="/services" className={`text-link ${styles.allServices}`} data-reveal><Roll>All services</Roll></Link>
         </div>
       </section>
 
