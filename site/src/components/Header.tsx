@@ -107,14 +107,17 @@ export default function Header() {
     };
   }, [pathname]);
 
-  // Hide the logo while scrolling down (past the first screen's worth), show it again on any scroll up.
+  // Hide the logo while scrolling down (past the first screen's worth), show it again on any scroll up (home: only once back at the hero).
   useEffect(() => {
     let last = scrollY;
     const onScroll = () => {
       const d = scrollY - last;
       if (Math.abs(d) < 6) return;
-      // On the home page the logo is still docking over the first screen, so the header only starts to hide after it
-      setHidden(scrollY > (location.pathname === '/' ? innerHeight : 160) && d > 0);
+      // On the home page the logo is still docking over the first screen, so the header only starts to hide after it,
+      // and once hidden it stays hidden on scroll-up until the hero is back in view.
+      const home = location.pathname === '/';
+      if (home) setHidden((h) => (d > 0 ? scrollY > innerHeight : h && scrollY > innerHeight * 0.9));
+      else setHidden(scrollY > 160 && d > 0);
       last = scrollY;
     };
     addEventListener('scroll', onScroll, { passive: true });
