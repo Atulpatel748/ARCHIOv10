@@ -7,14 +7,16 @@ import { nav, site } from '@/content/site';
 import styles from './Header.module.scss';
 import Roll from '@/components/Roll';
 
-// After Wood & Weave on every screen size: logo left, the "Let's talk" pill and a round menu button right, and a
-// full-screen menu for the links. The bar (logo and background) slides away as you scroll down and returns as you
-// scroll up; the pill and the menu button stay on screen. On the home page the hero's wordmark replaces the logo until you scroll.
+// After Wood & Weave, on every screen size: no bar, just the logo left and the "Let's talk" pill and a round menu button
+// right, with the links in a full-screen menu. Only the logo slides away as you scroll down and returns as you scroll up;
+// the pill and the menu button always stay. The logo's colour follows whatever is behind it. On the home page the
+// hero's wordmark replaces the logo until you scroll.
 export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [dark, setDark] = useState(true); // is the page behind the logo dark?
   const toggleRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -26,7 +28,32 @@ export default function Header() {
     return () => io.disconnect();
   }, []);
 
-  // Hide the bar while scrolling down (past the first screen's worth), show it again on any scroll up.
+  // Colour: look at what sits behind the logo (a photo or canvas counts as dark, otherwise the first solid background).
+  useEffect(() => {
+    let queued = false;
+    const check = () => {
+      queued = false;
+      const y = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) / 2;
+      let theme = 'light';
+      for (const el of document.elementsFromPoint(40, y)) {
+        if (el.closest('header, #site-menu')) continue;
+        if (el instanceof HTMLImageElement || el instanceof HTMLCanvasElement || el instanceof HTMLVideoElement) { theme = 'dark'; break; }
+        const c = (getComputedStyle(el).backgroundColor.match(/[0-9.]+/g) ?? []).map(Number);
+        if (c.length < 3 || (c.length > 3 && c[3] < 0.5)) continue;
+        theme = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] < 128 ? 'dark' : 'light';
+        break;
+      }
+      setDark(theme === 'dark');
+    };
+    const ask = () => { if (!queued) { queued = true; setTimeout(check, 60); } };
+    addEventListener('scroll', ask, { passive: true });
+    addEventListener('resize', ask);
+    ask();
+    const settle = setTimeout(ask, 700); // after the new page's images and layout have settled
+    return () => { removeEventListener('scroll', ask); removeEventListener('resize', ask); clearTimeout(settle); };
+  }, [pathname]);
+
+  // Hide the logo while scrolling down (past the first screen's worth), show it again on any scroll up.
   useEffect(() => {
     let last = scrollY;
     const onScroll = () => {
@@ -63,14 +90,12 @@ export default function Header() {
     <>
       <div id="top-sentinel" className={styles.sentinel} aria-hidden="true" />
       <header
-        className={`${styles.header} ${scrolled && !open ? styles.solid : ''} ${open ? styles.onMenu : ''} ${pathname === '/' && !scrolled && !open ? styles.heroTop : ''} ${hidden && !open ? styles.hidden : ''}`}
+        className={`${styles.header} ${dark ? styles.dark : ''} ${open ? styles.onMenu : ''} ${pathname === '/' && !scrolled && !open ? styles.heroTop : ''} ${hidden && !open ? styles.hidden : ''}`}
         onFocusCapture={() => setHidden(false)}
       >
-        <div className={styles.bar}>
-          <Link href="/" className={styles.brand} aria-label="Archió, home">
-            <span className={`logo logo--lockup ${styles.logo}`} aria-hidden="true" />
-          </Link>
-        </div>
+        <Link href="/" className={styles.brand} aria-label="Archió, home">
+          <span className={`logo logo--lockup ${styles.logo}`} aria-hidden="true" />
+        </Link>
         <div className={styles.right}>
           <Link href="/contact" className={styles.talk}><Roll>{"Let's talk"}</Roll> <span aria-hidden="true">+</span></Link>
           <button
@@ -82,7 +107,7 @@ export default function Header() {
             aria-label={open ? 'Close the menu' : 'Open the menu'}
             onClick={() => setOpen((o) => !o)}
           >
-            <span /><span />
+            <span className={styles.bars}><span /><span /></span>
           </button>
         </div>
       </header>

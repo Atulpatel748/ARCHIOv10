@@ -2,27 +2,27 @@
 
 .sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 40px; pointer-events: none; }
 
-/* The header is a transparent frame. The bar (logo and background) slides away on scroll; the right-hand pill and menu button never do. */
-.header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); pointer-events: none; color: var(--paper); }
-.bar {
-  position: absolute; inset: 0; display: flex; align-items: center; padding: 0 var(--margin); pointer-events: auto;
-  background: linear-gradient(rgb(20 6 7 / 0.45), rgb(20 6 7 / 0)); /* keeps light text legible over any hero image */
-  transition: transform 500ms var(--ease), background-color 300ms var(--ease), color 300ms var(--ease), box-shadow 300ms var(--ease);
-}
-.solid .bar { background: var(--paper); color: var(--oxblood); box-shadow: 0 1px 0 var(--line); }
-.onMenu .bar { background: transparent; color: var(--paper); }
-.hidden .bar { transform: translateY(-100%); }
+/* No bar: a transparent frame holding the logo, the pill and the menu button. Only the logo slides away on scroll. */
+.header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); pointer-events: none; color: var(--oxblood); transition: color 300ms var(--ease); }
+.dark { color: var(--paper); }
+.onMenu { color: var(--paper); }
 
-.brand { display: block; padding: 8px 0; transition: opacity 400ms var(--ease), visibility 0s; }
-/* Home, before scrolling: the hero's big wordmark stands in for the logo */
-.heroTop .brand { opacity: 0; visibility: hidden; transition: opacity 400ms var(--ease), visibility 0s 400ms; }
+.brand {
+  position: absolute; top: 0; left: var(--margin); height: 100%; display: flex; align-items: center; pointer-events: auto;
+  transition: translate 700ms var(--ease), opacity 500ms var(--ease), visibility 0s;
+}
+/* Hidden while scrolling down; on the home page also before scrolling, where the hero's big wordmark stands in for the logo */
+.hidden .brand, .heroTop .brand {
+  translate: 0 -100%; opacity: 0; visibility: hidden; transition: translate 700ms var(--ease), opacity 400ms var(--ease), visibility 0s linear 700ms;
+}
 .logo { height: 46px; @include phone { height: 38px; } }
 .right {
   position: absolute; inset: 0 var(--margin) 0 auto; z-index: 1; display: flex; align-items: center; gap: clamp(10px, 1.4vw, 16px); pointer-events: auto;
 }
-/* Solid oxblood pill, the same colour and height as the round menu button beside it */
+/* Solid oxblood pill, the same colour and height as the round menu button beside it; a pale ring keeps both visible on dark sections */
 .talk {
   display: inline-flex; align-items: center; gap: 12px; height: 52px; padding: 0 26px; border-radius: 999px; background: var(--oxblood); color: var(--paper);
+  box-shadow: inset 0 0 0 1px rgb(248 247 244 / 0.4);
   font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; white-space: nowrap;
   transition: background-color 300ms var(--ease), color 300ms var(--ease);
   > span[aria-hidden] { font-size: 1rem; line-height: 1; transition: transform 400ms var(--ease); }
@@ -31,19 +31,24 @@
 }
 .onMenu .talk { background: var(--paper); color: var(--oxblood); }
 
-/* Round menu button with two lines that cross when open */
+/* Round menu button (after Wood & Weave): two lines, the lower one shorter and right-aligned; it lengthens on hover and the lines cross when open */
 .toggle {
-  position: relative; width: 52px; height: 52px; border-radius: 50%; background: var(--oxblood); color: var(--paper);
-  transition: transform 300ms var(--ease), background-color 300ms var(--ease);
-  @include hover { &:hover { transform: scale(1.06); } }
-  span { position: absolute; left: 17px; right: 17px; height: 1.5px; background: currentColor; transition: transform 400ms var(--ease), top 400ms var(--ease); }
-  span:first-child { top: 22px; }
-  span:last-child { top: 29px; }
+  position: relative; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--oxblood); color: var(--paper);
+  box-shadow: inset 0 0 0 1px rgb(248 247 244 / 0.4);
+  transition: filter 300ms var(--ease), scale 600ms var(--ease), background-color 300ms var(--ease), color 300ms var(--ease);
+  @include hover { &:hover { filter: brightness(1.3); } }
+  &:active { scale: 0.92; }
 }
+.bars {
+  display: grid; gap: 5px; width: 18px;
+  span { height: 1.5px; background: currentColor; transition: translate 500ms var(--ease), rotate 500ms var(--ease), width 500ms var(--ease); }
+  span:last-child { justify-self: end; width: 12px; }
+}
+@include hover { .toggle:hover .bars span:last-child { width: 18px; } }
 .toggleOpen {
   background: var(--paper); color: var(--oxblood);
-  span:first-child { top: 25.5px; transform: rotate(45deg); }
-  span:last-child { top: 25.5px; transform: rotate(-45deg); }
+  .bars span:first-child { translate: 0 3.25px; rotate: 45deg; }
+  .bars span:last-child { width: 18px; translate: 0 -3.25px; rotate: -45deg; }
 }
 
 .menu {
