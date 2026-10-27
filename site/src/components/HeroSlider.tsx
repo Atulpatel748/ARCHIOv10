@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './HeroSlider.module.scss';
 
-export type Slide = { src: string; alt: string; title: string; meta: string; href: string };
+export type Slide = { src: string; alt: string; title: string; place: string; href: string };
 
 const FRAGMENT = `
   precision highp float;
@@ -89,13 +89,14 @@ async function createGL(stage: HTMLDivElement, srcs: string[]): Promise<GL | nul
 }
 
 // Full-screen hero: the three projects, changed by a WebGL displacement transition ("GL slider").
-// Autoplays every 6 s, pauses on hover/focus or when the tab is hidden; reduced motion means no autoplay and a crossfade.
+// Autoplays every 6 s, pauses on hover/focus, when the tab is hidden or with the pause button; reduced motion means no autoplay and a crossfade.
 export default function HeroSlider({ slides, children }: { slides: Slide[]; children: React.ReactNode }) {
   const stage = useRef<HTMLDivElement>(null);
   const gl = useRef<GL | null>(null);
   const busy = useRef(false);
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [stopped, setStopped] = useState(false);
   const [glReady, setGlReady] = useState(false);
   const currentRef = useRef(0);
 
@@ -127,10 +128,10 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   }, [slides]);
 
   useEffect(() => {
-    if (paused || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (paused || stopped || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const id = setInterval(() => { if (!document.hidden) go((currentRef.current + 1) % slides.length); }, 6000);
     return () => clearInterval(id);
-  }, [paused, go, slides.length]);
+  }, [paused, stopped, go, slides.length]);
 
   const slide = slides[current];
   return (
@@ -158,20 +159,26 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       </div>
       <div className={styles.shade} aria-hidden="true" />
       <div className={`container ${styles.content}`}>{children}</div>
-      <div className={`container ${styles.bar}`}>
+      <div className={styles.bar}>
         <div className={styles.caption} aria-live="polite">
+          <p className={styles.place}>
+            <svg viewBox="0 0 12 16" aria-hidden="true"><path d="M6 15s5-5.2 5-9A5 5 0 0 0 1 6c0 3.8 5 9 5 9Z" fill="none" stroke="currentColor" /><circle cx="6" cy="6" r="1.6" fill="currentColor" /></svg>
+            {slide.place}
+          </p>
           <Link href={slide.href} className={styles.slideLink} data-cursor="View">
-            <span className={styles.slideTitle}>{slide.title}</span>
-            <span className={styles.slideMeta}>{slide.meta}</span>
+            View project<span className="visually-hidden">: {slide.title}</span> <span aria-hidden="true">→</span>
           </Link>
         </div>
         <div className={styles.controls} role="group" aria-label="Choose a project">
           {slides.map((s, i) => (
             <button key={s.src} type="button" className={styles.dot} aria-current={i === current} aria-label={`Show ${s.title}`} onClick={() => go(i)}>
-              <span className={`${styles.track} ${i === current && !paused ? styles.running : ''}`} />
+              <span className={`${styles.track} ${i === current && !paused && !stopped ? styles.running : ''}`} />
             </button>
           ))}
         </div>
+        <button type="button" className={styles.pause} aria-pressed={stopped} aria-label="Pause the slideshow" onClick={() => setStopped((v) => !v)}>
+          <span aria-hidden="true">{stopped ? '▶' : 'II'}</span>
+        </button>
       </div>
       </div>
     </section>

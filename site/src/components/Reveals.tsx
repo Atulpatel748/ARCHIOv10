@@ -55,7 +55,8 @@ export default function Reveals() {
         if (!next) return;
         gsap.to(el.querySelector('[data-recede-inner]') ?? el, {
           scale: 0.92, opacity: 0.35, yPercent: -6, ease: 'none',
-          scrollTrigger: { trigger: next, start: 'top bottom', end: 'top top', scrub: true },
+          // From the very top (shorter heroes have the next section already on screen) until the next section reaches the top.
+          scrollTrigger: { start: 0, end: () => next.getBoundingClientRect().top + window.scrollY, scrub: true },
         });
       });
 

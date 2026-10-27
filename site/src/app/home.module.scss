@@ -1,9 +1,14 @@
 @use '../styles/tokens' as *;
 
-.heroTitle { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(3rem, 1rem + 6.6vw, 8.5rem); line-height: 0.92; :global(.accent) { color: var(--sand); } }
-.heroIntro { max-width: 44ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; }
-.heroActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
-@include phone { .heroIntro { font-size: 1rem; } .heroActions { flex-wrap: nowrap; gap: 8px; :global(.btn) { padding: 0 18px; font-size: 0.6875rem; } } }
+.heroMark { display: grid; justify-items: center; gap: clamp(14px, 1.6vw, 22px); animation: rise 1.6s var(--ease) 0.2s both; }
+.heroLogo { width: clamp(260px, 37vw, 660px); color: var(--paper); filter: drop-shadow(0 2px 24px rgb(20 6 7 / 0.35)); }
+/* Small caps line between two rules */
+.heroTag {
+  display: flex; align-items: center; gap: 16px; font: 500 clamp(0.6875rem, 0.6rem + 0.2vw, 0.875rem)/1 var(--font-ui); letter-spacing: 0.28em; text-transform: uppercase;
+  &::before, &::after { content: ''; width: clamp(24px, 3vw, 44px); height: 1px; background: currentColor; opacity: 0.6; }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+@media (prefers-reduced-motion: reduce) { .heroMark { animation: none; } }
 
 .big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1.2rem + 3vw, 4.5rem); line-height: 0.98; max-width: 20ch; }
 

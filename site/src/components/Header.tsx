@@ -6,7 +6,8 @@ import { useEffect, useRef, useState } from 'react';
 import { nav, site } from '@/content/site';
 import styles from './Header.module.scss';
 
-// After Wood & Weave: logo left; a contact link and a round menu button right; a full-screen menu on every screen size.
+// Desktop: split nav (Projects, Services | About, Let's talk) around a centred logo, which the home hero's wordmark
+// replaces until you scroll. Tablet and phone: logo left, round menu button right, full-screen menu.
 export default function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -45,12 +46,20 @@ export default function Header() {
   return (
     <>
       <div id="top-sentinel" className={styles.sentinel} aria-hidden="true" />
-      <header className={`${styles.header} ${scrolled && !open ? styles.solid : ''} ${open ? styles.onMenu : ''}`}>
+      <header className={`${styles.header} ${scrolled && !open ? styles.solid : ''} ${open ? styles.onMenu : ''} ${pathname === '/' && !scrolled && !open ? styles.heroTop : ''}`}>
+        <nav aria-label="Main" className={styles.nav}>
+          {nav.slice(0, 2).map((item) => (
+            <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</Link>
+          ))}
+        </nav>
         <Link href="/" className={styles.brand} aria-label="Archió, home">
           <span className={`logo logo--lockup ${styles.logo}`} aria-hidden="true" />
         </Link>
         <div className={styles.right}>
-          <Link href="/contact" className={styles.enquire}>Start a project</Link>
+          <nav aria-label="Studio" className={styles.nav}>
+            <Link href="/about" aria-current={isActive('/about') ? 'page' : undefined}>About</Link>
+          </nav>
+          <Link href="/contact" className={styles.talk}>Let&apos;s talk <span aria-hidden="true">+</span></Link>
           <button
             ref={toggleRef}
             type="button"

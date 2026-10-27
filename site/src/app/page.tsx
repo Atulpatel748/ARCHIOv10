@@ -8,7 +8,7 @@ import { about, philosophy, processSteps, services, team } from '@/content/site'
 import styles from './home.module.scss';
 
 const slides = projects.map((p) => ({
-  src: p.cover.src, alt: p.cover.alt, title: p.title, meta: `${p.category}, ${p.location}. ${p.status}`, href: `/projects/${p.slug}`,
+  src: p.cover.src, alt: p.cover.alt, title: p.title, place: `${p.location}, Dubai`, href: `/projects/${p.slug}`,
 }));
 
 // Services grouped by stage (proposed grouping, owner to confirm), each with a render.
@@ -22,15 +22,13 @@ export default function HomePage() {
   const [flagship, ...others] = projects;
   return (
     <>
-      {/* Hero: Wood & Weave's composition over YODEZEEN-style project slides */}
+      {/* Hero: the brand wordmark centred over the project slides */}
       <HeroSlider slides={slides}>
-        <p className="label">Interior design consultancy, Dubai</p>
-        <Split as="h1" className={styles.heroTitle} text="Spaces that" accent="work." />
-        <p className={styles.heroIntro}>{about.lead}</p>
-        <div className={styles.heroActions}>
-          <Link href="/projects" className="btn btn--light">See the work <span aria-hidden="true">→</span></Link>
-          <Link href="/contact" className="btn btn--outline-light">Start a project</Link>
-        </div>
+        <h1 className={styles.heroMark}>
+          <span className="visually-hidden">Archió, interior design studio in Dubai</span>
+          <span className={`logo logo--wordmark ${styles.heroLogo}`} aria-hidden="true" />
+          <span className={styles.heroTag} aria-hidden="true">Interior design studio</span>
+        </h1>
       </HeroSlider>
 
       {/* The position */}
