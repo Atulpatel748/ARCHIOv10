@@ -94,9 +94,9 @@ html.lenis, html.lenis body { height: auto; }
 @media (prefers-reduced-motion: reduce) { .roll > span { transform: none !important; } }
 
 .text-link {
-  display: inline-flex; align-items: center; gap: 8px; padding: 10px 0; font-size: 0.75rem; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 8px; padding: 14px 0; font-size: 0.75rem; /* 44px tap height */ font-weight: 500;
   letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
-  background: linear-gradient(currentColor 0 0) left calc(100% - 6px) / 100% 1px no-repeat;
+  background: linear-gradient(currentColor 0 0) left calc(100% - 10px) / 100% 1px no-repeat;
   transition: background-size 300ms var(--ease);
   @include hover { &:hover { background-size: 30% 1px; } }
 }
