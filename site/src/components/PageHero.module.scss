@@ -7,8 +7,8 @@
 .image { object-fit: cover; }
 .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(20 6 7 / 0.35) 0%, rgb(20 6 7 / 0.05) 35%, rgb(20 6 7 / 0.62) 100%); }
 .content { position: relative; z-index: 1; display: grid; gap: 18px; justify-items: start; padding-top: calc(var(--header-h) + 40px); padding-bottom: clamp(48px, 7vw, 96px); }
-.title { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.5rem, 1rem + 4.2vw, 5.75rem); line-height: 0.96; max-width: 18ch; }
-.titleXl { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(3rem, 1.2rem + 5.8vw, 7.25rem); line-height: 0.98; max-width: 14ch; }
+.title { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(3rem, 1rem + 6.4vw, 8.25rem); line-height: 0.94; max-width: 16ch; }
+.titleXl { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(3.25rem, 1rem + 8vw, 10rem); line-height: 0.94; max-width: 13ch; }
 .intro { max-width: 46ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; color: var(--paper); }
 .caption {
   position: absolute; right: var(--margin); bottom: clamp(48px, 7vw, 96px); z-index: 1; max-width: 26ch; text-align: right;

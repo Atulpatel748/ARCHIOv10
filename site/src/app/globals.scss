@@ -12,7 +12,7 @@
   --header-h: 84px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --section: clamp(88px, 11vw, 168px);
-  --accent-color: #8E4F52; /* italic accents on light grounds: 5.78:1 on paper, 4.02:1 on sand; dark sections switch to blush */
+  --accent-color: rgb(76 17 20 / 0.66); /* small labels and numbers: muted ink, about 6:1 on paper; dark sections switch to blush */
   @include phone { --header-h: 68px; }
 }
 
@@ -37,6 +37,8 @@ h1, h2, h3 { font-family: var(--font-display), 'Optima', sans-serif; font-weight
 /* Every section after the hero is a layer that slides up over it (the hero is sticky). */
 /* :where() keeps specificity at zero, so each section's own background (dark bands etc.) still wins. */
 :where(main > section:not(:first-child), body > footer) { position: relative; z-index: 1; background: var(--paper); }
+/* Thin rules between sections (after YODEZEEN's plain, ruled layout) */
+:where(main > section:not(:first-child)) { border-top: 1px solid var(--line); }
 
 .container { width: 100%; max-width: 1440px; margin-inline: auto; padding-inline: var(--margin); } /* inline only: sections set their own block padding */
 .section { padding-block: var(--section); } /* block only, so .container keeps its side margins */
@@ -56,12 +58,12 @@ html.lenis, html.lenis body { height: auto; }
 /* Minimal small uppercase label (after YODEZEEN) */
 .label { display: inline-block; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
 /* Accent words: same face, set apart by colour only (minimal, after YODEZEEN) */
-.accent { color: var(--accent-color, var(--blush)); }
+.accent { color: inherit; } /* plain colour: accent phrases keep the heading's colour */
 /* Big uppercase display headings in the brand's Optima-style face, which matches the logo caps */
 .caps { text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.95; }
 
-.display { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(2.5rem, 1.2rem + 4.2vw, 5.5rem); line-height: 1.02; }
-.h2 { font-size: clamp(2rem, 1.3rem + 2.2vw, 3.5rem); }
+.display { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(3rem, 1rem + 6vw, 7.5rem); line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; }
+.h2 { font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; }
 .h3 { font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.875rem); line-height: 1.2; }
 .lead { font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem); line-height: 1.55; }
 .serif { font-family: var(--font-body), Georgia, serif; font-weight: 400; }

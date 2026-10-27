@@ -97,6 +97,11 @@ export default function Header() {
           <span className={`logo logo--lockup ${styles.logo}`} aria-hidden="true" />
         </Link>
         <div className={styles.right}>
+          <nav aria-label="Main" className={styles.nav}>
+            {nav.slice(0, 3).map((item) => (
+              <Link key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}><Roll>{item.label}</Roll></Link>
+            ))}
+          </nav>
           <Link href="/contact" className={styles.talk}><Roll>{"Let's talk"}</Roll> <span aria-hidden="true">+</span></Link>
           <button
             ref={toggleRef}

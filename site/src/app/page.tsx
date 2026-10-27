@@ -10,7 +10,7 @@ import styles from './home.module.scss';
 import Roll from '@/components/Roll';
 
 const slides = projects.map((p) => ({
-  src: p.cover.src, alt: p.cover.alt, title: p.title, place: `${p.location}, Dubai`, href: `/projects/${p.slug}`,
+  src: p.cover.src, alt: p.cover.alt, title: p.title, place: p.location, href: `/projects/${p.slug}`,
 }));
 
 // Services grouped by stage (proposed grouping, owner to confirm), each with a render.
@@ -126,7 +126,7 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
-          <Link href="/contact" className="btn btn--light" data-reveal><Roll>Start a project</Roll></Link>
+          <Link href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
         </div>
       </section>
 

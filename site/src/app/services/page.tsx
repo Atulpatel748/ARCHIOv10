@@ -66,7 +66,7 @@ export default function ServicesPage() {
           </ol>
         </div>
         <div className={`container ${styles.processCta}`} data-reveal>
-          <Link href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
+          <Link href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
         </div>
       </section>
     </>

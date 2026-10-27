@@ -90,14 +90,13 @@ async function createGL(stage: HTMLDivElement, srcs: string[]): Promise<GL | nul
 }
 
 // Full-screen hero: the three projects, changed by a WebGL displacement transition ("GL slider").
-// Autoplays every 8 s, pauses on hover/focus, when the tab is hidden or with the pause button; reduced motion means no autoplay and a crossfade.
+// Autoplays every 8 s, pauses on hover/focus or when the tab is hidden; reduced motion means no autoplay and a crossfade.
 export default function HeroSlider({ slides, children }: { slides: Slide[]; children: React.ReactNode }) {
   const stage = useRef<HTMLDivElement>(null);
   const gl = useRef<GL | null>(null);
   const busy = useRef(false);
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [stopped, setStopped] = useState(false);
   const [glReady, setGlReady] = useState(false);
   const currentRef = useRef(0);
 
@@ -129,10 +128,10 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   }, [slides]);
 
   useEffect(() => {
-    if (paused || stopped || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (paused || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const id = setInterval(() => { if (!document.hidden) go((currentRef.current + 1) % slides.length); }, 8000);
     return () => clearInterval(id);
-  }, [paused, stopped, go, slides.length]);
+  }, [paused, go, slides.length]);
 
   const slide = slides[current];
   return (
@@ -173,13 +172,10 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
         <div className={styles.controls} role="group" aria-label="Choose a project">
           {slides.map((s, i) => (
             <button key={s.src} type="button" className={styles.dot} aria-current={i === current} aria-label={`Show ${s.title}`} onClick={() => go(i)}>
-              <span className={`${styles.track} ${i === current && !paused && !stopped ? styles.running : ''}`} />
+              <span className={`${styles.track} ${i === current && !paused ? styles.running : ''}`} />
             </button>
           ))}
         </div>
-        <button type="button" className={styles.pause} aria-pressed={stopped} aria-label="Pause the slideshow" onClick={() => setStopped((v) => !v)}>
-          <span aria-hidden="true">{stopped ? '▶' : 'II'}</span>
-        </button>
       </div>
       </div>
     </section>

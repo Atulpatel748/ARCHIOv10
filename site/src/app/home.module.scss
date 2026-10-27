@@ -10,7 +10,7 @@
 @keyframes rise { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .heroMark { animation: none; } }
 
-.big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1.2rem + 3vw, 4.5rem); line-height: 0.98; max-width: 20ch; }
+.big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.5rem, 1rem + 4.8vw, 6.75rem); line-height: 0.96; max-width: 18ch; }
 
 /* We design: a pinned scroll sequence. --seq (screen heights scrolled) is set by <Sequence>; without it this is a static row. */
 .sequence { position: relative; }
@@ -47,18 +47,17 @@
 .positionLead { font-family: var(--font-display); font-size: clamp(1.75rem, 1.1rem + 2.2vw, 3.25rem); line-height: 1.18; max-width: 26ch; }
 .positionCols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px var(--gutter); max-width: 900px; @include phone { grid-template-columns: 1fr; } }
 
-/* What we do (dark) */
-.whatWeDo { --accent-color: var(--blush); background: var(--deep); color: var(--sand); h3, h4 { color: var(--paper); } :global(.label) { color: var(--blush); } }
-.headRow { display: grid; gap: 22px; margin-bottom: clamp(48px, 6vw, 88px); .big { color: var(--paper); } }
+/* What we do (plain paper, ruled) */
+.headRow { display: grid; gap: 22px; margin-bottom: clamp(48px, 6vw, 88px); }
 .stages {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px var(--gutter); margin-bottom: 48px;
   li { display: grid; gap: 18px; align-content: start; }
   @include tablet-down { grid-template-columns: 1fr; }
 }
 .stageMedia { position: relative; aspect-ratio: 4 / 3; overflow: hidden; img { object-fit: cover; } }
-.stageName { font-family: var(--font-ui); font-weight: 500; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blush) !important; }
-.stageItem { padding-top: 14px; border-top: 1px solid rgb(218 207 186 / 0.25); h4 { font: 400 1.375rem/1.2 var(--font-display); margin-bottom: 6px; } p { font-size: 0.9375rem; } }
-.onDark { color: var(--paper); }
+.stageName { font-family: var(--font-ui); font-weight: 500; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-color) !important; }
+.stageItem { padding-top: 14px; border-top: 1px solid var(--line); h4 { font: 400 1.375rem/1.2 var(--font-display); margin-bottom: 6px; } p { font-size: 0.9375rem; } }
+.onDark { color: inherit; }
 
 /* The work */
 .work :global(.label) { margin-bottom: 22px; }
@@ -80,17 +79,17 @@
 }
 .others { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px var(--gutter); margin-top: clamp(64px, 8vw, 120px); @include phone { grid-template-columns: 1fr; } }
 
-/* How it goes (dark oxblood) */
-.process { --accent-color: var(--blush); background: var(--oxblood); color: var(--sand); :global(.label) { color: var(--blush); margin-bottom: 22px; } .big { color: var(--paper); } }
+/* How it goes (plain paper, ruled) */
+.process { :global(.label) { margin-bottom: 22px; } }
 .steps {
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px var(--gutter); margin: clamp(48px, 6vw, 88px) 0 56px;
-  li { position: relative; display: grid; gap: 12px; align-content: start; padding-top: 28px; border-top: 1px solid rgb(218 207 186 / 0.35); }
-  li::before { content: ''; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--blush); }
-  h3 { color: var(--paper); font-size: 1.5rem; line-height: 1.2; }
+  li { position: relative; display: grid; gap: 12px; align-content: start; padding-top: 28px; border-top: 1px solid var(--line); }
+  li::before { content: ''; position: absolute; top: -5px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--oxblood); }
+  h3 { font-size: 1.5rem; line-height: 1.2; }
   @include tablet-down { grid-template-columns: 1fr 1fr; }
   @include phone { grid-template-columns: 1fr; }
 }
-.stepNum { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; color: var(--blush); }
+.stepNum { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; color: var(--accent-color); }
 
 /* Founders in arches */
 .founders {
