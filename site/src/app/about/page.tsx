@@ -63,14 +63,21 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className={`section container`}>
-        <h2 className="h2" data-reveal>Our team</h2>
+      <section className={`section container ${styles.teamSection}`}>
+        <div className={styles.teamHead}>
+          <p className="label label--rule" data-reveal>The founders</p>
+          <h2 className={styles.teamTitle} data-reveal>Our team</h2>
+        </div>
         <ul className={styles.team}>
           {team.map((m) => (
             <li key={m.name} data-reveal>
-              <Image src={m.image} alt={`Portrait of ${m.name}`} width={479} height={720} sizes="(max-width: 767px) 100vw, 30vw" />
-              <h3 className="h3">{m.name}</h3>
-              <p>{m.role}</p>
+              <div className={styles.arch}>
+                <Image src={m.image} alt={`Portrait of ${m.name}`} width={479} height={720} sizes="(max-width: 767px) 50vw, 30vw" />
+              </div>
+              <div className={styles.who}>
+                <h3>{m.name}</h3>
+                <p>{m.role}</p>
+              </div>
             </li>
           ))}
         </ul>

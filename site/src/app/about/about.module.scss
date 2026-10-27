@@ -34,9 +34,24 @@
   .serif { max-width: 52ch; font-size: 1.125rem; line-height: 1.7; }
 }
 
+/* Team: the heading on the left, the two founders in arches filling the right (the same arches as on the home page) */
+.teamSection {
+  display: grid; gap: 48px clamp(32px, 6vw, 112px); align-items: end;
+  @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+}
+.teamHead { display: grid; gap: 1.25rem; justify-items: start; align-self: start; }
+.teamTitle { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); line-height: 1; }
 .team {
-  margin-top: clamp(32px, 4vw, 56px); display: grid; grid-template-columns: repeat(2, minmax(0, 360px)); gap: 48px var(--gutter);
-  li { display: grid; gap: 8px; }
-  img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; background: var(--sand); margin-bottom: 12px; border-radius: 999px 999px 0 0; }
-  @include phone { grid-template-columns: 1fr; }
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px var(--gutter);
+  li { display: grid; gap: 18px; align-content: start; }
+}
+/* The photographs have white backgrounds: multiplying them onto the sand arch lets the arch show through instead of a hard white cut-out */
+.arch {
+  aspect-ratio: 3 / 4; overflow: hidden; border-radius: 999px 999px 0 0; background: var(--sand);
+  img { width: 100%; height: 100%; object-fit: cover; object-position: top; mix-blend-mode: multiply; }
+}
+.who {
+  display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--line);
+  h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem); line-height: 1.2; }
+  p { font-size: 0.875rem; color: var(--accent-color); }
 }
