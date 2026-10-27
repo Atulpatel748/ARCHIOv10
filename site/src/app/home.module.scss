@@ -1,13 +1,13 @@
 @use '../styles/tokens' as *;
 
-.heroMark { display: grid; justify-items: center; gap: clamp(14px, 1.6vw, 22px); animation: rise 1.6s var(--ease) 0.2s both; }
+.heroMark { display: grid; justify-items: center; gap: clamp(14px, 1.6vw, 22px); animation: rise 1.4s ease-out 0.2s both; }
 .heroLogo { width: clamp(260px, 37vw, 660px); color: var(--paper); filter: drop-shadow(0 2px 24px rgb(20 6 7 / 0.35)); }
 /* Small caps line between two rules */
 .heroTag {
   display: flex; align-items: center; gap: 16px; font: 500 clamp(0.6875rem, 0.6rem + 0.2vw, 0.875rem)/1 var(--font-ui); letter-spacing: 0.28em; text-transform: uppercase;
   &::before, &::after { content: ''; width: clamp(24px, 3vw, 44px); height: 1px; background: currentColor; opacity: 0.6; }
 }
-@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+@keyframes rise { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .heroMark { animation: none; } }
 
 .big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1.2rem + 3vw, 4.5rem); line-height: 0.98; max-width: 20ch; }
@@ -82,7 +82,7 @@
 
 /* Philosophy */
 .philosophy { position: relative; display: flex; align-items: center; min-height: 100dvh; overflow: hidden; color: var(--paper); background: var(--deep); }
-.philosophyImage { object-fit: cover; scale: 1.2; }
+.philosophyImage { object-fit: cover; }
 .philosophyShade { position: absolute; inset: 0; background: rgb(20 6 7 / 0.66); }
 .philosophyInner { position: relative; z-index: 1; display: grid; gap: 32px; justify-items: center; text-align: center; padding-block: var(--section); }
 .quote { text-transform: uppercase; letter-spacing: 0.01em; font-family: var(--font-display); font-size: clamp(2.5rem, 1.2rem + 4.4vw, 6rem); line-height: 1.04; max-width: 17ch; :global(.accent) { color: var(--sand); } }

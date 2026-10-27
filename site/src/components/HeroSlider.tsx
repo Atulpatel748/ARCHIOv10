@@ -89,7 +89,7 @@ async function createGL(stage: HTMLDivElement, srcs: string[]): Promise<GL | nul
 }
 
 // Full-screen hero: the three projects, changed by a WebGL displacement transition ("GL slider").
-// Autoplays every 6 s, pauses on hover/focus, when the tab is hidden or with the pause button; reduced motion means no autoplay and a crossfade.
+// Autoplays every 8 s, pauses on hover/focus, when the tab is hidden or with the pause button; reduced motion means no autoplay and a crossfade.
 export default function HeroSlider({ slides, children }: { slides: Slide[]; children: React.ReactNode }) {
   const stage = useRef<HTMLDivElement>(null);
   const gl = useRef<GL | null>(null);
@@ -129,7 +129,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
 
   useEffect(() => {
     if (paused || stopped || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const id = setInterval(() => { if (!document.hidden) go((currentRef.current + 1) % slides.length); }, 6000);
+    const id = setInterval(() => { if (!document.hidden) go((currentRef.current + 1) % slides.length); }, 8000);
     return () => clearInterval(id);
   }, [paused, stopped, go, slides.length]);
 

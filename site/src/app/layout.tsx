@@ -3,8 +3,6 @@ import { Belleza, Lora, Public_Sans } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Reveals from '@/components/Reveals';
-import PageTransition from '@/components/PageTransition';
-import Cursor from '@/components/Cursor';
 import { site } from '@/content/site';
 import './globals.scss';
 
@@ -44,18 +42,12 @@ const organization = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${display.variable} ${ui.variable} ${body.variable}`}>
-      <head>
-        {/* Before first paint: skip the intro curtain for repeat visits in this session and for reduced motion. */}
-        <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('archio-intro')||matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('intro-seen')}catch(e){}" }} />
-      </head>
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
-        <PageTransition />
         <Header />
         <main id="main">{children}</main>
         <Footer />
         <Reveals />
-        <Cursor />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
       </body>
     </html>

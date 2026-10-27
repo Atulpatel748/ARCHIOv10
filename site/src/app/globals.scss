@@ -53,10 +53,6 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 
-/* Words of [data-split] headings rise out of a mask */
-.split-word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
-.split-word > span { display: inline-block; will-change: transform; }
-
 /* Minimal small uppercase label (after YODEZEEN) */
 .label { display: inline-block; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; }
 /* Accent words: same face, set apart by colour only (minimal, after YODEZEEN) */

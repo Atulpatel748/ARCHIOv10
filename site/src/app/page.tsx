@@ -136,7 +136,7 @@ export default function HomePage() {
 
       {/* Philosophy over a full-bleed image */}
       <section className={styles.philosophy}>
-        <Image data-parallax src="/images/projects/dubai-marina-residence/living-room.png" alt="" fill sizes="100vw" className={styles.philosophyImage} />
+        <Image src="/images/projects/dubai-marina-residence/living-room.png" alt="" fill sizes="100vw" className={styles.philosophyImage} />
         <div className={styles.philosophyShade} aria-hidden="true" />
         <blockquote className={`container ${styles.philosophyInner}`}>
           <Split as="p" className={styles.quote} text="Good design is not about making something" accent="look expensive." />
