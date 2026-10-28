@@ -1,0 +1,51 @@
+# Runs the same checks as `npm run check:full` in site/ on every push to main and every pull request.
+# Vercel deploys on its own; a red check here does not stop that deploy (see CONSTRAINTS.md).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 24 matches Vercel and runs the TypeScript tests directly
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Types
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Dependency audit
+        run: npm audit --audit-level=high
