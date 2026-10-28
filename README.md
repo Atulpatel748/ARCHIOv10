@@ -3,7 +3,7 @@
 Multi-page marketing site for Archió, a consultancy-led interior design studio in Dubai.
 
 - `site/`: Next.js 16, SCSS modules, GSAP + Lenis, Three.js hero.
-- `docs/`: reference analysis, industry research, brand inventory and design strategy.
+- `docs/`: reference analysis, industry research, brand inventory, design strategy and `06-DECISIONS.md` (why the site is built the way it is: hosting, contact form, fonts, images, hero, Services).
 - `design-previews/`: earlier design explorations and screenshot helper.
 
 ## Run locally
@@ -15,6 +15,15 @@ npm run dev
 ```
 
 Then open http://localhost:3000. To validate a production build, set `NEXT_PUBLIC_SITE_URL` to the real public HTTPS domain in the build environment before running `npm run build`. A Vercel production deploy intentionally fails if this variable is missing or not HTTPS, so localhost URLs cannot silently ship into canonical URLs, metadata, sitemap or robots. A local `npm run build` falls back to localhost.
+
+Other commands, all run inside `site/`:
+
+| Command | What it does |
+| --- | --- |
+| `npm test` | Runs the contact form's server tests (plain Node, no extra library). |
+| `npm run lint` | Checks the code style. |
+| `npm run typecheck` | Checks the TypeScript types. |
+| `npm run build` | Makes the production build. |
 
 ## Contact form
 
