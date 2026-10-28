@@ -1,33 +1,37 @@
-# Archió Interior Design Studio: website
+# Archió Interior Design Studio website
 
 Multi-page marketing site for Archió, a consultancy-led interior design studio in Dubai.
 
-- `site/`: the website (Next.js 16, SCSS modules, GSAP + Lenis, Three.js for the hero slider)
-- `docs/`: research, reference analysis, brand inventory, design strategy and screenshots
-- `design-previews/`: earlier design explorations and the screenshot/check script
+- `site/`: Next.js 16, SCSS modules, GSAP + Lenis, Three.js hero.
+- `docs/`: reference analysis, industry research, brand inventory and design strategy.
+- `design-previews/`: earlier design explorations and screenshot helper.
 
 ## Run locally
 
 ```bash
-npm --prefix site install
-npm --prefix site run build
-npm --prefix site run start
+cd site
+npm ci
+npm run dev
 ```
 
-Then open http://localhost:3000.
+Then open http://localhost:3000. To validate a production build, set `NEXT_PUBLIC_SITE_URL` to the real public HTTPS domain in the build environment before running `npm run build`. A Vercel production deploy intentionally fails if this variable is missing or not HTTPS, so localhost URLs cannot silently ship into canonical URLs, metadata, sitemap or robots. A local `npm run build` falls back to localhost.
 
 ## Contact form
 
-Enquiries are emailed through [Resend](https://resend.com). Set these environment variables (never commit them):
+Enquiries are emailed through Resend. Configure all of these in your hosting provider's server environment (never commit actual secrets):
 
-- `RESEND_API_KEY`
-- `CONTACT_TO_EMAIL`: inbox that receives enquiries
-- `CONTACT_FROM_EMAIL` (optional): a verified sender
-- `NEXT_PUBLIC_SITE_URL`: production URL, used for SEO metadata and the sitemap
+- `NEXT_PUBLIC_SITE_URL`: public HTTPS production origin.
+- `RESEND_API_KEY`: Resend server API key.
+- `CONTACT_TO_EMAIL`: inbox receiving enquiries.
+- `CONTACT_FROM_EMAIL`: sender identity verified with Resend for the sending domain.
 
-Without them the form validates input and shows a WhatsApp/email fallback instead of sending.
+Without all three contact-delivery variables, the endpoint returns a controlled error and the form offers WhatsApp/email as a fallback rather than pretending a message was sent. The current rate limiter is per-process only; use a shared store/provider-based limit before describing it as production-grade abuse prevention.
 
 ## Before launch
 
-- Replace the 800 px placeholder renders in `site/public/images/` with the client's original high-resolution files.
-- Review lines marked `CLIENT TO REVIEW` / `CLIENT TO CONFIRM` in `site/src/content/`.
+1. Confirm the production domain, registered business/legal name and address, and whether `info@beracahlogistics.com` is the correct public and privacy contact email.
+2. Have the business/legal adviser review `/privacy` against the real controller, hosting/email providers, retention practices, cross-border processing and applicable UAE/free-zone requirements. The notice is a draft, not a legal certification.
+3. Replace the 800 px placeholder renders under `site/public/images/` with the client's original high-resolution files and confirm image usage rights.
+4. Review all `CLIENT TO REVIEW` / `CLIENT TO CONFIRM` notes in `site/src/content/`, including project titles and service/sector copy.
+5. Configure a shared rate-limit store and trusted proxy/IP source, plus deployment-level monitoring and email-delivery alerts.
+6. Run clean install, lint, typecheck, production build, route smoke tests, accessibility tests and mobile/desktop visual checks on the target deployment.

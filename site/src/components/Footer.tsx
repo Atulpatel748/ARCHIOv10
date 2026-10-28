@@ -26,6 +26,7 @@ export default function Footer() {
       <div className={`container ${styles.bottom}`}>
         <p>© {new Date().getFullYear()} {site.legalName}</p>
         <p>{site.parentLine}</p>
+        <Link href="/privacy">Privacy notice</Link>
       </div>
     </footer>
   );

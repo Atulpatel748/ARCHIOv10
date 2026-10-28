@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { site } from '@/content/site';
 import styles from './ContactForm.module.scss';
 
@@ -60,26 +61,26 @@ export default function ContactForm() {
     <form className={styles.form} onSubmit={onSubmit} noValidate>
       <div className={styles.field}>
         <label htmlFor="name">Name</label>
-        <input id="name" name="name" autoComplete="name" aria-invalid={!!errors.name} aria-describedby={errors.name ? 'name-error' : undefined} />
+        <input id="name" name="name" autoComplete="name" maxLength={100} required aria-invalid={!!errors.name} aria-describedby={errors.name ? 'name-error' : undefined} />
         {errors.name && <p id="name-error" className={styles.error}>{errors.name}</p>}
       </div>
       <div className={styles.field}>
         <label htmlFor="contact">Email or phone</label>
-        <input id="contact" name="contact" autoComplete="email" aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
+        <input id="contact" name="contact" autoComplete="email" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
         {errors.contact && <p id="contact-error" className={styles.error}>{errors.contact}</p>}
       </div>
       <fieldset className={styles.field} data-invalid={!!errors.type} aria-describedby={errors.type ? 'type-error' : undefined}>
         <legend>Type of project</legend>
         <div className={styles.choices}>
           {TYPES.map((t) => (
-            <label key={t} className={styles.choice}><input type="radio" name="type" value={t} /> {t}</label>
+            <label key={t} className={styles.choice}><input type="radio" name="type" value={t} required={t === TYPES[0]} /> {t}</label>
           ))}
         </div>
         {errors.type && <p id="type-error" className={styles.error}>{errors.type}</p>}
       </fieldset>
       <div className={styles.field}>
         <label htmlFor="location">Community or location <span className={styles.optional}>(optional)</span></label>
-        <input id="location" name="location" />
+        <input id="location" name="location" maxLength={120} />
       </div>
       <div className={styles.field}>
         <label htmlFor="message">About the space <span className={styles.optional}>(optional)</span></label>
@@ -92,9 +93,10 @@ export default function ContactForm() {
       </div>
       <div className={styles.field} data-invalid={!!errors.consent}>
         <label className={styles.consent}>
-          <input type="checkbox" name="consent" value="yes" aria-describedby={errors.consent ? 'consent-error' : undefined} />
+          <input type="checkbox" name="consent" value="yes" required aria-describedby={errors.consent ? 'consent-error' : undefined} />
           <span>I agree to Archió using these details to reply to my enquiry.</span>
         </label>
+        <p className={styles.privacyLink}>Read our <Link href="/privacy">Privacy Notice</Link>.</p>
         {errors.consent && <p id="consent-error" className={styles.error}>{errors.consent}</p>}
       </div>
       <button type="submit" className="btn btn--light" disabled={state === 'sending'}>{state === 'sending' ? 'Sending' : 'Send enquiry'}</button>

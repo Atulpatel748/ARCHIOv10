@@ -1,6 +1,17 @@
 // Business information and copy. Everything here comes from the client's company profile and brand kit
 // unless marked "CLIENT TO REVIEW" (wording we drafted where the profile had none).
 
+// The public origin feeds canonical URLs, the sitemap, robots and social metadata, so it is checked at build time. On a Vercel
+// production deploy it must be set to the real HTTPS domain; a local production build (npm run build) may fall back to localhost.
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const live = process.env.VERCEL_ENV === 'production';
+if (live && !configuredSiteUrl) throw new Error('NEXT_PUBLIC_SITE_URL must be set to the public HTTPS website URL for production deploys.');
+const siteUrl = new URL(configuredSiteUrl || 'http://localhost:3000');
+if (live && siteUrl.protocol !== 'https:') throw new Error('NEXT_PUBLIC_SITE_URL must use HTTPS in production.');
+if (siteUrl.pathname !== '/' || siteUrl.username || siteUrl.password || siteUrl.search || siteUrl.hash) {
+  throw new Error('NEXT_PUBLIC_SITE_URL must be an origin URL without a path, credentials, query string or fragment.');
+}
+
 export const site = {
   name: 'Archió',
   legalName: 'Archió Interior Design Studio',
@@ -8,7 +19,7 @@ export const site = {
   footerLine: 'An interior design consultancy in Dubai, for residential, commercial and landscape spaces.',
   descriptor: 'Interior Design Studio',
   city: 'Dubai, UAE',
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000', // CLIENT TO CONFIRM: production domain
+  url: siteUrl.origin, // CLIENT TO CONFIRM: production domain
   phone: '+971 55 654 1410',
   phoneHref: 'tel:+971556541410',
   whatsappHref: 'https://wa.me/971556541410',
