@@ -17,10 +17,10 @@ const FRAGMENT = `
     vec2 s = uPlaneAspect > img ? vec2(1.0, img / uPlaneAspect) : vec2(uPlaneAspect / img, 1.0);
     return (uv - 0.5) * s + 0.5;
   }
-  // On a landscape screen wider than the photo the whole photo is shown, centred, and the side bars are filled with a blurred, dimmed copy of it.
+  // On a screen much wider than the photo (over 1.35 times its aspect, about 21:9 for these 16:9 photos) the whole photo is shown, centred, and the side bars are filled with a blurred, dimmed copy of it. Otherwise the photo covers the screen.
   vec4 pic(sampler2D t, vec2 uv, float img) {
     vec2 cv = cover(uv, img);
-    if (uPlaneAspect < 1.0 || uPlaneAspect <= img) return texture2D(t, cv);
+    if (uPlaneAspect < 1.0 || uPlaneAspect <= img * 1.35) return texture2D(t, cv);
     vec4 bg = texture2D(t, cv);
     for (int i = 0; i < 8; i++) {
       float a = float(i) * 0.785398;

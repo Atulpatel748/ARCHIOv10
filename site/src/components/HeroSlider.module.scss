@@ -6,9 +6,9 @@
 .stage { position: absolute; inset: 0; }
 .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 700ms ease; }
 .photo { object-fit: cover; }
-/* A landscape screen shows the whole photo; the sides are filled with a blurred, dimmed copy (the WebGL view does the same). */
+/* A very wide screen (21:9 and wider) shows the whole 16:9 photo; the sides are filled with a blurred, dimmed copy (the WebGL view does the same, over 1.35 times the photo's aspect). */
 .backdrop { display: none; object-fit: cover; filter: blur(36px) brightness(0.65); transform: scale(1.15); }
-@media (min-aspect-ratio: 1/1) {
+@media (min-aspect-ratio: 12/5) {
   .photo { object-fit: contain; }
   .backdrop { display: block; }
 }
