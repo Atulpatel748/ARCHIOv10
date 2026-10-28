@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import PageHead from '@/components/PageHead';
 import { site } from '@/content/site';
 import styles from './privacy.module.scss';
 
@@ -11,12 +12,11 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <section className={`section container ${styles.page}`}>
-      <p className={`label label--rule ${styles.eyebrow}`}>Website information</p>
-      <h1 className="display">Privacy notice</h1>
-      <p className={styles.updated}>Last updated: 27 October 2026</p>
-      <p className={styles.intro}>This notice explains how Archió Interior Design Studio (“Archió”, “we” or “us”) handles information you submit through this website.</p>
-
+    <>
+      <PageHead label="Website information" title="Privacy notice" intro="This notice explains how Archió Interior Design Studio (“Archió”, “we” or “us”) handles information you submit through this website.">
+        <p className={styles.updated}>Last updated: 27 October 2026</p>
+      </PageHead>
+      <section className={`section container ${styles.page}`}>
       <div className={styles.body}>
         <section>
           <h2>Who we are</h2>
@@ -53,6 +53,7 @@ export default function PrivacyPage() {
         </section>
       </div>
       <p className={styles.back}><Link href="/contact">Return to contact</Link></p>
-    </section>
+      </section>
+    </>
   );
 }
