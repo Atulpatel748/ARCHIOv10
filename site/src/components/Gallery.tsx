@@ -100,10 +100,10 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
     s.tl = gsap.timeline({ onComplete: finish }).to(caption(i), { opacity: 0, duration: 0.2 }, 0);
     if (onScreen) {
       s.tl.to(frame(i), { clipPath: insetFrom(frame(i).getBoundingClientRect(), thumb), scale: 1, duration: 0.75, ease: 'expo.inOut' }, 0)
-        .to(veil.current, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 0.25);
+        .to(veil.current, { opacity: 0, duration: 0.35, ease: 'power2.out' }, 0.2);
     } else {
-      s.tl.to(frame(i), { opacity: 0, scale: 0.96, duration: 0.45, ease: 'power2.in' }, 0)
-        .to(veil.current, { opacity: 0, duration: 0.5, ease: 'power2.in' }, 0.1);
+      s.tl.to(frame(i), { opacity: 0, scale: 0.96, duration: 0.3, ease: 'power2.out' }, 0)
+        .to(veil.current, { opacity: 0, duration: 0.3, ease: 'power2.out' }, 0.05);
     }
   }
 
