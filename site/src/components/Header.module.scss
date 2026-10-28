@@ -76,7 +76,7 @@
 .menu {
   position: fixed; inset: 0; z-index: 40; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); align-items: center; gap: 48px var(--gutter);
   padding: calc(var(--header-h) + 32px) var(--margin) 48px; background: var(--deep); color: var(--paper); --accent-color: var(--blush);
-  visibility: hidden; clip-path: circle(0% at calc(var(--margin) + 26px) calc(var(--header-h) / 2));
+  overscroll-behavior: contain; visibility: hidden; clip-path: circle(0% at calc(var(--margin) + 26px) calc(var(--header-h) / 2));
   transition: clip-path 600ms var(--ease), visibility 0s 600ms;
   @include tablet-down { grid-template-columns: 1fr; align-content: start; overflow-y: auto; }
 }
