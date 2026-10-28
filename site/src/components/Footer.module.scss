@@ -19,7 +19,7 @@
 .bottom {
   display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 32px; padding-top: 24px; padding-bottom: 32px;
   border-top: 1px solid rgb(218 207 186 / 0.2); font-size: 0.8125rem; color: var(--blush);
-  a { color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }
+  a { display: inline-block; padding-block: 8px; color: var(--paper); text-decoration: underline; text-underline-offset: 3px; } /* 21px of text plus padding: a touch target over 24px */
 }
 /* Narrower than 1280px the Back to top disc floats at the page edge, so keep a clear band for it under the links */
 @media (max-width: 1279px) { .bottom { padding-bottom: 88px; } }
