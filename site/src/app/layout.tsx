@@ -45,7 +45,7 @@ const organization = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   preload('/brand/logo-wordmark.svg', { as: 'image' }); // the wordmark is a CSS mask, which the browser would otherwise find late
   return (
-    <html lang="en" suppressHydrationWarning className={`${display.variable} ${ui.variable} ${body.variable}`}>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${display.variable} ${ui.variable} ${body.variable}`}>
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
         <Header />

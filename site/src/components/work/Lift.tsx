@@ -81,7 +81,7 @@ export default function Lift({ projects }: { projects: Project[] }) {
         {projects.map((p, i) => (
           <article key={p.slug} className={styles.lfCover} data-lf-cover style={{ '--z': projects.length - i } as CSSProperties} aria-label={p.title}>
             <div className={styles.lfMedia} data-lf-media aria-hidden="true">
-              <Image src={p.cover.src} alt="" fill priority={i === 0} sizes="100vw" />
+              <Image src={p.cover.src} alt="" fill priority={i === 0} sizes="calc(100vw)" />
             </div>
             <div className={styles.lfVeil} aria-hidden="true" />
             <Link prefetch={false} href={`/projects/${p.slug}`} className={styles.lfHit} aria-hidden="true" tabIndex={-1} data-cursor="View" />
