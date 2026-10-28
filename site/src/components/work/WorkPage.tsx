@@ -1,0 +1,26 @@
+import type { Project } from '@/content/projects';
+import Lift from './Lift';
+import Mosaic from './Mosaic';
+import styles from './Work.module.scss';
+
+// The projects page, laid out like Wood & Weave's work page: a head, the projects full screen, and a filterable
+// room-by-room mosaic.
+export default function WorkPage({ projects }: { projects: Project[] }) {
+  return (
+    <>
+      <section className={styles.head}>
+        <div className="container">
+          <div className={styles.headA}>
+            <p className="label" data-reveal>Projects</p>
+            <h1 className={styles.title}>Selected work.</h1>
+            <p className={styles.lead} data-reveal>Residential, commercial and landscape design across Dubai.</p>
+          </div>
+        </div>
+      </section>
+
+      <Lift projects={projects} />
+
+      <Mosaic projects={projects} />
+    </>
+  );
+}

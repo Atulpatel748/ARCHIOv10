@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARCHIÓ design options</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/base.css">
+<link rel="icon" href="shared/logo-monogram.svg">
+<style>
+  body { background: var(--paper); color: var(--oxblood); font: 400 1rem/1.6 var(--font-ui); padding: clamp(32px, 6vw, 80px) var(--margin); }
+  .logo { height: 40px; }
+  h1 { margin-top: 48px; font: 400 clamp(2rem, 1.4rem + 2vw, 3rem)/1.1 var(--font-display); }
+  ol { margin-top: 40px; display: grid; gap: 0; border-top: 1px solid var(--oxblood); max-width: 900px; }
+  li { border-bottom: 1px solid rgb(76 17 20 / 0.22); }
+  a.option { display: grid; grid-template-columns: 3rem 1fr; gap: 4px 16px; padding: 24px 0; text-decoration: none; }
+  .letter { font: 400 2rem/1 var(--font-display); grid-row: span 2; }
+  .name { font: 400 1.5rem/1.2 var(--font-display); }
+  p.note { margin-top: 32px; max-width: 62ch; font-size: 0.875rem; }
+</style>
+</head>
+<body>
+  <span class="logo logo--lockup" role="img" aria-label="ARCHIÓ"></span>
+  <h1>Design directions</h1>
+  <ol>
+    <li><a class="option" href="option-d/"><span class="letter">D</span><span class="name">Cinematic Light (round 2)</span><span>Darkness and raking light: a real-time 3D plaster Ó lit by a moving sun, rooms that light up as you scroll.</span></a></li>
+    <li><a class="option" href="option-a/"><span class="letter">A</span><span class="name">Plaster and Light</span><span>Editorial architectural minimalism on off-white, oxblood as ink.</span></a></li>
+    <li><a class="option" href="option-b/"><span class="letter">B</span><span class="name">The Oxblood Room</span><span>Warm and material-led on oxblood, with the WebGL project slider.</span></a></li>
+    <li><a class="option" href="option-c/"><span class="letter">C</span><span class="name">The Consultancy</span><span>Rational and process-first on sand, with an index list and accordion services.</span></a></li>
+  </ol>
+  <p class="note">A, B and C are round 1; the owner found them too safe and template-like, and chose the cinematic light mood for round 2 (D). Prototypes for comparison only, not the production site. Images are low-resolution extracts from the company profile and are labelled as design visualisations. Details and rationale: docs/05-DESIGN-OPTIONS.md.</p>
+</body>
+</html>

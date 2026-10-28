@@ -1,0 +1,25 @@
+@use '../styles/tokens' as *;
+
+.footer { --accent-color: var(--blush); background: var(--oxblood); color: var(--sand); }
+.footer h2 { color: var(--paper); }
+.footer a { text-decoration: none; }
+
+.grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px var(--gutter); padding-top: clamp(64px, 7vw, 104px); padding-bottom: 64px;
+  @include tablet-down { grid-template-columns: 1fr 1fr; }
+  @include phone { grid-template-columns: 1fr; }
+}
+.brand { display: grid; gap: 20px; align-content: start; color: var(--sand); p { max-width: 30ch; font-size: 1.0625rem; line-height: 1.55; color: var(--sand); } }
+.logo { width: clamp(200px, 22vw, 300px); }
+.col {
+  display: grid; gap: 4px; align-content: start;
+  .label { color: var(--blush); margin-bottom: 8px; }
+  a { padding: 6px 0; color: var(--paper); @include hover { &:hover { color: var(--sand); } } }
+}
+.bottom {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 32px; padding-top: 24px; padding-bottom: 32px;
+  border-top: 1px solid rgb(218 207 186 / 0.2); font-size: 0.8125rem; color: var(--blush);
+  a { color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }
+}
+/* Narrower than 1280px the Back to top disc floats at the page edge, so keep a clear band for it under the links */
+@media (max-width: 1279px) { .bottom { padding-bottom: 88px; } }

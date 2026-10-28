@@ -1,0 +1,25 @@
+@use '../styles/tokens' as *;
+
+/* A vertical road with a line down its left edge; --fill (0 to 1) is how far the line has been drawn */
+.road {
+  --fill: 1; position: relative; margin: 0; padding-left: clamp(28px, 4vw, 56px);
+  &::before, &::after { content: ''; position: absolute; left: 0; top: 0; width: 1px; }
+  &::before { height: 100%; background: var(--line); }
+  &::after { height: calc(var(--fill) * 100%); background: var(--oxblood); }
+  li { position: relative; display: grid; grid-template-columns: clamp(72px, 9vw, 150px) minmax(0, 1fr); gap: 8px var(--gutter); align-items: start; padding-block: clamp(32px, 4.4vw, 64px); transition: opacity 600ms var(--ease); }
+  li + li { border-top: 1px solid var(--line); }
+  li::before { content: ''; position: absolute; left: calc(-1 * clamp(28px, 4vw, 56px) - 4px); top: clamp(44px, 5.6vw, 78px); width: 9px; height: 9px; border-radius: 50%; background: var(--paper); box-shadow: inset 0 0 0 1px var(--oxblood); transition: background 400ms var(--ease); }
+  &[data-live] li { opacity: 0.35; }
+  &[data-live] li.on { opacity: 1; }
+  li.on::before { background: var(--oxblood); }
+  /* Each model rises into place, block by block, as its step lights up */
+  &[data-live] li:not(.on) .glyph g { opacity: 0; }
+  &[data-live] li.on .glyph g { animation: rise 800ms var(--ease) both; animation-delay: calc(var(--k) * 110ms); }
+  @include phone { li { grid-template-columns: 1fr; } }
+}
+.glyph { display: block; width: clamp(64px, 8vw, 120px); height: auto; overflow: visible; }
+.body { display: grid; gap: 12px; max-width: 46ch; padding-top: 0.5em;
+  h3 { font-size: clamp(1.625rem, 1.2rem + 1.2vw, 2.5rem); line-height: 1.12; }
+  p { font-size: 1.0625rem; }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }

@@ -1,0 +1,10 @@
+// Brand kit colours (docs/03) and shared breakpoints/mixins.
+$oxblood: #4C1114;
+$deep: #3B0C0F;
+$blush: #CEB6A8;
+$sand: #DACFBA;
+$paper: #F8F7F4;
+
+@mixin phone { @media (max-width: 767px) { @content; } }
+@mixin tablet-down { @media (max-width: 1023px) { @content; } }
+@mixin hover { @media (hover: hover) and (pointer: fine) { @content; } }

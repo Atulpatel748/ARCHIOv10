@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Option B: The Oxblood Room | ARCHIÓ design preview</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#4C1114">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Lora:ital@0;1&family=Public+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/base.css">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="../shared/logo-monogram.svg">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<p class="preview-flag">Design preview, option B: The Oxblood Room. Not the live site.</p>
+
+<header class="site-header">
+  <a class="brand" href="#top" aria-label="ARCHIÓ home"><span class="logo logo--wordmark" aria-hidden="true"></span></a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#work">Work</a>
+    <a href="#services">Services</a>
+    <a href="#studio">Studio</a>
+    <a class="nav-cta" href="#contact">Start a conversation</a>
+  </nav>
+  <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu"><span data-menu-label>Menu</span></button>
+</header>
+
+<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu">
+  <nav aria-label="Mobile">
+    <a href="#work">Work</a>
+    <a href="#services">Services</a>
+    <a href="#studio">Studio</a>
+    <a href="#contact">Start a conversation</a>
+  </nav>
+  <p class="menu-contact">+971 55 654 1410<br>info@beracahlogistics.com</p>
+</div>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero-head">
+      <h1 id="hero-title" data-reveal>Form serves function. <span>Not the other way around.</span></h1>
+      <div class="hero-side" data-reveal>
+        <p>An interior design consultancy in Dubai for homes, workplaces and mixed-use spaces.</p>
+        <a class="button" href="#contact">Start a conversation</a>
+      </div>
+    </div>
+
+    <div class="slider" id="work" data-slider aria-roledescription="carousel" aria-label="Projects">
+      <div class="stage" data-stage>
+        <img class="slide is-active" src="../assets/profile-extract/p15-800x707-53dae932.png" width="800" height="707" alt="Bedroom with an upholstered panel wall, sculpted light line and paired lamps, design visualisation" fetchpriority="high">
+        <img class="slide" src="../assets/profile-extract/p17-800x640-df053516.png" width="800" height="640" loading="lazy" alt="Boardroom with a white stone table, cream leather chairs and a perforated ceiling, design visualisation">
+        <img class="slide" src="../assets/profile-extract/p22-800x640-decaf640.png" width="800" height="640" loading="lazy" alt="Pergola with an outdoor kitchen beside a pool at dusk, design visualisation">
+      </div>
+      <div class="slider-bar">
+        <div class="slide-info" aria-live="polite">
+          <h2 class="slide-title" data-slide-title>Dubai Marina residence</h2>
+          <p class="slide-facts" data-slide-facts>Residential, 2,500 sq ft</p>
+          <p class="viz-note">Design visualisation</p>
+        </div>
+        <div class="slider-controls" role="group" aria-label="Choose a project">
+          <button type="button" data-goto="0" aria-current="true">Residential</button>
+          <button type="button" data-goto="1">Commercial</button>
+          <button type="button" data-goto="2">Landscape</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="materials" aria-labelledby="materials-title">
+    <div class="materials-text">
+      <h2 id="materials-title" data-reveal>Good design is not about making something look expensive.</h2>
+      <p data-reveal>It's about making it work efficiently, intuitively and consistently. We believe the best spaces are the ones that feel effortless to use, even if they require careful thinking to create.</p>
+    </div>
+    <ul class="swatches">
+      <li data-reveal="mask"><img src="../assets/profile-extract/p15-800x707-53dae932.png" width="800" height="707" loading="lazy" alt="" style="object-position: 30% 60%"><span>Upholstered wall panels</span></li>
+      <li data-reveal="mask"><img src="../assets/profile-extract/p10-707x800-645fd877.png" width="707" height="800" loading="lazy" alt="" style="object-position: 55% 35%"><span>Book-matched marble</span></li>
+      <li data-reveal="mask"><img src="../assets/profile-extract/p14-800x707-78b98985.png" width="800" height="707" loading="lazy" alt="" style="object-position: 95% 40%"><span>Timber joinery</span></li>
+    </ul>
+    <p class="swatch-note">Details cropped from ARCHIÓ's design visualisations. A named finish schedule per project comes from the studio.</p>
+  </section>
+
+  <section class="services" id="services" aria-labelledby="services-title">
+    <h2 id="services-title" data-reveal>Services</h2>
+    <div class="tabs" data-tabs>
+      <div class="tablist" role="tablist" aria-label="Kinds of space">
+        <button role="tab" id="tab-res" aria-controls="panel-res" aria-selected="true">Residential</button>
+        <button role="tab" id="tab-com" aria-controls="panel-com" aria-selected="false" tabindex="-1">Commercial</button>
+        <button role="tab" id="tab-mix" aria-controls="panel-mix" aria-selected="false" tabindex="-1">Mixed-use</button>
+        <button role="tab" id="tab-lan" aria-controls="panel-lan" aria-selected="false" tabindex="-1">Landscape</button>
+      </div>
+      <div class="tabpanel" role="tabpanel" id="panel-res" aria-labelledby="tab-res">
+        <p>Interiors shaped around how our clients actually live, from feature walls and joinery to lighting and finishing details.</p>
+        <img src="../assets/profile-extract/p12-800x666-f0d5fa84.png" width="800" height="666" loading="lazy" alt="Kitchen with a fluted island, timber upper cabinets and a stone splashback, design visualisation">
+      </div>
+      <div class="tabpanel" role="tabpanel" id="panel-com" aria-labelledby="tab-com" hidden>
+        <p>Reception areas, lounges and offices that make the right first impression and support how people work and meet.</p>
+        <img src="../assets/profile-extract/p19-626x800-5f1878b5.png" width="626" height="800" loading="lazy" alt="Private office with a white stone desk and lit shelving, design visualisation">
+      </div>
+      <div class="tabpanel" role="tabpanel" id="panel-mix" aria-labelledby="tab-mix" hidden>
+        <p class="placeholder">Description to be written with the studio. No mixed-use project is shown until one exists.</p>
+      </div>
+      <div class="tabpanel" role="tabpanel" id="panel-lan" aria-labelledby="tab-lan" hidden>
+        <p>Outdoor spaces where architecture and nature meet, from softscape and hardscape to pools and lighting.</p>
+        <img src="../assets/profile-extract/p21-800x640-6a7269b9.png" width="800" height="640" loading="lazy" alt="Villa entrance with a stepping-stone path, palms and layered planting, design visualisation">
+      </div>
+    </div>
+    <div class="stages">
+      <div data-reveal><h3>Define</h3><p>Interior Design Consultation<br>Space Planning</p></div>
+      <div data-reveal><h3>Design</h3><p>Concept Development<br>Material and Finish Selection</p></div>
+      <div data-reveal><h3>Support</h3><p>Design Review and Advisory<br>Project Coordination Support</p></div>
+    </div>
+  </section>
+
+  <section class="studio" id="studio" aria-labelledby="studio-title">
+    <h2 id="studio-title" data-reveal>We don't just design spaces. We guide decisions.</h2>
+    <dl class="founders" data-reveal>
+      <div><dt>Pooja Vijayakumar</dt><dd>Co-founder, Design</dd></div>
+      <div><dt>S. Harshitha</dt><dd>Co-founder, Strategy and Growth</dd></div>
+    </dl>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="contact-intro">
+      <h2 id="contact-title" data-reveal>Start a conversation</h2>
+      <p data-reveal>Tell us about the space and what it needs to do. We will reply to arrange a first conversation.</p>
+      <ul class="contact-list">
+        <li><span>WhatsApp or call</span><a href="https://wa.me/971556541410">+971 55 654 1410</a></li>
+        <li><span>Email</span><a href="mailto:info@beracahlogistics.com">info@beracahlogistics.com</a></li>
+        <li><span>Instagram</span><a href="https://www.instagram.com/archio_designstudio/">@archio_designstudio</a></li>
+      </ul>
+    </div>
+    <form class="form" data-preview-form novalidate>
+      <div class="field"><label for="b-name">Name</label><input id="b-name" name="name" autocomplete="name" required><p class="error" data-error-for="name" hidden>Please add your name.</p></div>
+      <div class="field"><label for="b-reply">Email or phone</label><input id="b-reply" name="reply" autocomplete="email" required><p class="error" data-error-for="reply" hidden>Please add an email address or phone number.</p></div>
+      <fieldset class="field">
+        <legend>Type of project</legend>
+        <div class="choices">
+          <label><input type="radio" name="type" value="residential" required> Residential</label>
+          <label><input type="radio" name="type" value="commercial"> Commercial</label>
+          <label><input type="radio" name="type" value="mixed-use"> Mixed-use</label>
+          <label><input type="radio" name="type" value="landscape"> Landscape</label>
+        </div>
+        <p class="error" data-error-for="type" hidden>Please choose a type of project.</p>
+      </fieldset>
+      <div class="field"><label for="b-message">About the space <span class="optional">(optional)</span></label><textarea id="b-message" name="message" rows="3"></textarea></div>
+      <div class="field consent">
+        <label><input type="checkbox" name="consent" required> <span>I agree to Archió using these details to reply to my enquiry, as described in the <a href="#contact">privacy notice</a>.</span></label>
+        <p class="error" data-error-for="consent" hidden>Please confirm so we can reply.</p>
+      </div>
+      <button class="button button--light" type="submit">Send enquiry</button>
+      <p class="form-status" data-form-status role="status"></p>
+    </form>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span class="logo logo--monogram footer-mark" role="img" aria-label="ARCHIÓ monogram"></span>
+  <nav aria-label="Footer"><a href="#work">Work</a><a href="#services">Services</a><a href="#studio">Studio</a><a href="#contact">Contact</a></nav>
+  <p class="legal">Archió Interior Design Studio is a unit of Beracah Trading. Dubai, UAE. All project images are design visualisations.</p>
+</footer>
+
+<script type="module" src="../shared/preview.js"></script>
+<script type="module" src="gl-slider.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+@use '../styles/tokens' as *;
+
+.card { display: grid; }
+.link { display: grid; gap: 18px; text-decoration: none; }
+.media { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--sand); }
+.large .media { aspect-ratio: 16 / 8; @include phone { aspect-ratio: 4 / 5; } }
+.image { object-fit: cover; transition: transform 900ms var(--ease); }
+.meta { display: grid; gap: 6px; justify-items: start; p { font-size: 0.9375rem; } }
+.more {
+  margin-top: 6px; font-size: 0.9375rem; font-weight: 500;
+  background: linear-gradient(currentColor 0 0) left bottom / 0 1px no-repeat; transition: background-size 400ms var(--ease);
+}
+@include hover {
+  .link:hover .image { transform: scale(1.04); }
+  .link:hover .more { background-size: 100% 1px; }
+}

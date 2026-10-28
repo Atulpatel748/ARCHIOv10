@@ -1,0 +1,64 @@
+@use '../styles/tokens' as *;
+
+/* Rooms: a label beside rows of images (alternating sides on wide screens); in a row the images share one height, so each is as wide as its aspect ratio */
+.rooms { display: grid; gap: clamp(4.5rem, 3.5rem + 4vw, 8rem); }
+.room {
+  display: grid; gap: 20px;
+  @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: center; gap: 4rem; .row { margin-inline-start: auto; } }
+}
+.flip { @media (min-width: 64em) { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); .roomName { order: 2; } .row { margin-inline-start: 0; } } }
+.rowset { display: grid; gap: var(--gap, clamp(0.5rem, 0.4rem + 0.6vw, 1rem)); }
+.row {
+  --gap: clamp(0.5rem, 0.4rem + 0.6vw, 1rem);
+  display: flex; align-items: flex-end; gap: var(--gap); width: 100%; max-width: calc(var(--sum) * 34rem);
+  @include phone { flex-direction: column; align-items: stretch; max-width: none; }
+}
+.shot {
+  position: relative; flex: var(--ar) 1 0; min-width: 0; aspect-ratio: var(--ar); padding: 0; border: 0; overflow: hidden; background: var(--sand); cursor: zoom-in;
+  img { object-fit: cover; transition: scale 1.2s var(--ease); }
+  @include hover { &:hover img { scale: 1.025; } }
+  @include phone { flex: none; width: 100%; }
+}
+
+/* Mosaic (room by room, all projects): plain columns until the script has packed the tiles, then absolutely placed */
+.mosaic {
+  position: relative; column-count: 2; column-gap: clamp(0.6rem, 0.4rem + 1vw, 1.5rem); margin: 0; padding: 0; list-style: none;
+  @media (min-width: 64em) { column-count: 3; }
+  &:global(.is-laid) { column-count: auto; > li { position: absolute; margin: 0; } .tileBtn { height: 100%; aspect-ratio: auto; } }
+}
+.tile { break-inside: avoid; margin-bottom: clamp(0.6rem, 0.4rem + 1vw, 1.5rem); animation: tile-in 700ms var(--ease) both; animation-delay: calc(var(--i, 0) * 35ms); }
+.tileBtn {
+  position: relative; display: block; width: 100%; aspect-ratio: var(--ar); padding: 0; border: 0; overflow: hidden; background: var(--sand); cursor: zoom-in;
+  img { object-fit: cover; transition: scale 1.2s var(--ease); }
+  @include hover { &:hover img { scale: 1.035; } }
+}
+@keyframes tile-in { from { opacity: 0; transform: translateY(28px); } }
+
+/* Full-screen viewer (motion after Wood & Weave; the dialog itself is transparent, the veil carries the dark) */
+.viewer {
+  width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden;
+  background: transparent; color: var(--paper); touch-action: pan-y pinch-zoom;
+  &[open] { display: grid; place-items: center; }
+  &::backdrop { background: transparent; }
+}
+.veil { position: fixed; inset: 0; background: rgb(16 6 7 / 0.96); }
+.fig { position: relative; grid-area: 1 / 1; display: grid; justify-items: center; gap: 14px; margin: 0; &[hidden] { display: none; } }
+.frame { position: relative; overflow: hidden; background: var(--deep) center / cover no-repeat; box-shadow: 0 30px 80px rgb(0 0 0 / 0.55); img { object-fit: cover; } }
+.fig figcaption { font-size: 0.875rem; letter-spacing: 0.02em; color: rgb(242 238 230 / 0.7); }
+/* Round buttons as on Wood & Weave: close top right; previous and next at the screen's sides, or below on phones */
+.btn {
+  position: fixed; z-index: 3; width: 3rem; height: 3rem; display: grid; place-items: center; border-radius: 50%;
+  border: 1px solid rgb(242 238 230 / 0.28); background: rgb(20 6 7 / 0.5); color: rgb(242 238 230);
+  transition: background-color 300ms var(--ease), border-color 300ms var(--ease);
+  svg { width: 1.2rem; fill: none; stroke: currentColor; stroke-width: 1.4px; stroke-linecap: round; stroke-linejoin: round; }
+  @include hover { &:hover { background: rgb(76 17 20 / 0.7); border-color: var(--blush); } }
+  &:focus-visible { outline-color: var(--paper); }
+}
+.close { top: 1rem; right: 1rem; }
+.prev { left: 1rem; top: 50%; translate: 0 -50%; }
+.next { right: 1rem; top: 50%; translate: 0 -50%; }
+@include phone {
+  .prev, .next { top: auto; bottom: 1.25rem; translate: none; }
+  .prev { left: calc(50% - 3.75rem); }
+  .next { right: calc(50% - 3.75rem); }
+}

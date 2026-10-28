@@ -1,0 +1,43 @@
+@use '../styles/tokens' as *;
+
+/* Phones and tablets: stacked, the open panel grows taller */
+.panels { margin: 0; display: grid; gap: 10px; color: var(--paper); }
+.panels li {
+  position: relative; overflow: hidden; height: 92px; background: var(--deep);
+  transition: height 700ms var(--ease);
+  img { object-fit: cover; transition: transform 1.2s var(--ease); }
+  &.open { height: 620px; @include phone { height: 640px; } }
+}
+.veil { position: absolute; inset: 0; background: rgb(20 6 7 / 0.5); transition: background 700ms var(--ease); }
+.open .veil { background: linear-gradient(to top, rgb(20 6 7 / 0.88), rgb(20 6 7 / 0.12) 62%); }
+
+.head { position: absolute; inset: 0 0 auto 0; margin: 0; font: inherit; }
+.head button { display: flex; align-items: baseline; gap: 18px; width: 100%; padding: 28px clamp(20px, 3vw, 36px); text-align: left; }
+.vName { font: 400 clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem)/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.02em; transition: opacity 300ms var(--ease); }
+.hName { display: none; }
+
+.items {
+  position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px clamp(16px, 2vw, 32px);
+  padding: 0 clamp(20px, 3vw, 36px) clamp(24px, 3vw, 40px); opacity: 0; visibility: hidden;
+  transition: opacity 300ms var(--ease), visibility 0s 300ms; @include phone { grid-template-columns: 1fr; }
+  h4 { font: 400 1.375rem/1.2 var(--font-display); margin-bottom: 8px; }
+  p { font-size: 0.9375rem; color: var(--sand); }
+}
+.open .items { opacity: 1; visibility: visible; transition: opacity 500ms var(--ease) 350ms, visibility 0s; }
+
+/* Desktop: side by side; the open panel takes most of the width */
+@media (min-width: 1024px) {
+  .panels { display: flex; gap: 10px; height: min(78svh, 680px); }
+  .panels li {
+    flex: 1 1 0; height: auto; min-width: 0; transition: flex-grow 800ms var(--ease);
+    &.open { flex-grow: 4.2; height: auto; }
+  }
+  .open img { transform: scale(1.03); }
+  .head button { flex-direction: column; align-items: flex-start; height: 100%; padding: 28px 24px; }
+  .vName { position: absolute; left: 24px; bottom: 28px; writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; font-size: 2.25rem; }
+  .open .vName { opacity: 0; }
+  .open .hName { display: block; font: 400 clamp(2.75rem, 1rem + 4vw, 5.5rem)/0.95 var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; }
+  .head { inset: 0; pointer-events: none; button { pointer-events: auto; } }
+  .items { bottom: 0; padding-bottom: 36px; }
+  .open .items { bottom: 0; }
+}

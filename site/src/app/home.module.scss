@@ -1,0 +1,104 @@
+@use '../styles/tokens' as *;
+
+.heroMark { display: grid; justify-items: center; gap: clamp(14px, 1.6vw, 22px); animation: rise 1.4s ease-out 0.2s both; }
+/* An invisible placeholder: the header logo is drawn over it, then scrolls up into the header */
+.heroLogo { width: clamp(260px, 37vw, 660px); visibility: hidden; @media (prefers-reduced-motion: reduce) { visibility: visible; } }
+/* Small caps line between two rules */
+.heroTag {
+  display: flex; align-items: center; gap: 16px; font: 500 clamp(0.6875rem, 0.6rem + 0.2vw, 0.875rem)/1 var(--font-ui); letter-spacing: 0.28em; text-transform: uppercase;
+  &::before, &::after { content: ''; width: clamp(24px, 3vw, 44px); height: 1px; background: currentColor; opacity: 0.6; }
+}
+@keyframes rise { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .heroMark { animation: none; } }
+
+.big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.5rem, 1rem + 4.8vw, 6.75rem); line-height: 0.96; max-width: 18ch; }
+
+/* We do (after YODEZEEN's): a tall section with a sticky stage. <Sequence> sets --progress (0 to 1) as you scroll through it.
+   Without it (no JS, reduced motion) the same content is a plain static block. */
+.sequence { position: relative; }
+.seqStage { display: grid; gap: clamp(32px, 4vw, 56px); justify-items: center; align-content: center; min-height: 100svh; padding-block: var(--section); overflow: clip; }
+.seqTitle {
+  display: flex; justify-content: space-between; width: 100%; padding-inline: var(--margin); text-transform: uppercase; white-space: nowrap;
+  font-family: var(--font-display); font-size: min(16.7vw, 15rem); letter-spacing: -0.045em; line-height: 0.85; color: var(--oxblood);
+}
+.seqItems { display: grid; justify-items: center; gap: 0.1em; text-align: center; }
+.seqItem { font: 600 clamp(1.75rem, 1rem + 2.8vw, 4rem)/1.1 var(--font-ui); letter-spacing: -0.02em; text-transform: uppercase; }
+.seqLink { margin-top: clamp(16px, 2vw, 32px); justify-self: center; }
+
+.sequence[data-seq] {
+  height: 200svh;
+  .seqStage { position: sticky; top: 0; display: block; height: 100svh; min-height: 0; padding: 0; }
+  /* The two words start together in the middle, slide apart and fade to a tenth */
+  .seqTitle {
+    position: absolute; left: 0; top: 50%; justify-content: center; gap: 0.09em; padding: 0.06em 0 0; transform: translateY(-50%);
+    opacity: calc(1 - var(--progress, 0) * 0.9);
+  }
+  .seqStart { transform: translateX(calc(-26vw * var(--progress, 0))); }
+  .seqEnd { transform: translateX(calc(25.5vw * var(--progress, 0))); }
+  /* The sectors rise from below the stage to the middle, each lagging the one before (offset grows with the square of its position) */
+  .seqItems { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; transform: translateY(calc(100% - 100% * var(--progress, 0))); }
+  .seqItems > * { transform: translateY(calc((1 - var(--progress, 0)) * var(--i) * var(--i) * 100%)); }
+  @include phone {
+    .seqTitle { font-size: 16vw; letter-spacing: -0.04em; }
+    .seqStart { transform: translateX(calc((-100% - 2rem) * var(--progress, 0))); }
+    .seqEnd { transform: translateX(calc((100% + 2rem) * var(--progress, 0))); }
+  }
+}
+
+/* The position */
+.position {
+  display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 32px var(--gutter);
+  @include tablet-down { grid-template-columns: 1fr; }
+}
+.positionBody { display: grid; gap: clamp(32px, 4vw, 56px); }
+.positionLead { font-family: var(--font-display); font-size: clamp(1.75rem, 1.1rem + 2.2vw, 3.25rem); line-height: 1.18; max-width: 26ch; }
+.positionCols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px var(--gutter); max-width: 900px; @include phone { grid-template-columns: 1fr; } }
+
+/* What we do: a heading over the stage index (see StageList) */
+.headRow { display: grid; gap: 22px; margin-bottom: clamp(40px, 5vw, 72px); .big { font-size: clamp(2.25rem, 1rem + 3.8vw, 5.25rem); line-height: 1; max-width: 24ch; } }
+
+/* The work */
+.work :global(.label) { margin-bottom: 22px; }
+.flagship {
+  position: relative; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: stretch; margin-top: clamp(40px, 5vw, 72px);
+  @include tablet-down { grid-template-columns: 1fr; }
+}
+.flagshipMedia { position: relative; display: block; aspect-ratio: 16 / 11; overflow: hidden; img { object-fit: cover; transition: transform 1.2s var(--ease); } @include hover { &:hover img { transform: scale(1.04); } } }
+.factsCard {
+  position: relative; z-index: 1; padding: clamp(28px, 3vw, 44px); /* flush beside the image, same top and bottom edges */
+  background: var(--paper); border: 1px solid var(--line); border-left: 0; display: grid; gap: 18px; justify-items: start; align-content: center;
+  h3 { font-size: clamp(1.75rem, 1.3rem + 1.2vw, 2.5rem); }
+  dl { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+  dl > div { padding: 14px 12px 0 0; display: grid; gap: 4px; }
+  dt { font-size: 0.8125rem; opacity: 0.75; }
+  dd { margin: 0; font-family: var(--font-display); font-size: 1.125rem; line-height: 1.25; }
+  @include tablet-down { margin: -48px 16px 0; border-left: 1px solid var(--line); }
+  @include phone { dl { grid-template-columns: 1fr 1fr; } }
+}
+.others { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px var(--gutter); margin-top: clamp(64px, 8vw, 120px); @include phone { grid-template-columns: 1fr; } }
+
+/* How it goes: a sticky heading beside the road (see Journey) */
+.process { :global(.label) { margin-bottom: 22px; } }
+.processGrid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px clamp(32px, 6vw, 112px); align-items: start; @include tablet-down { grid-template-columns: 1fr; } }
+.processHead { display: grid; justify-items: start; gap: 0; position: sticky; top: calc(var(--header-h) + 32px); .big { font-size: clamp(2.25rem, 1rem + 3vw, 4.5rem); line-height: 1; margin-bottom: 40px; } @include tablet-down { position: static; } }
+
+/* Founders in arches */
+.founders {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px clamp(32px, 6vw, 112px); align-items: end;
+  @include tablet-down { grid-template-columns: 1fr; }
+}
+.foundersHead { display: grid; gap: 22px; justify-items: start; }
+.foundersGrid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px var(--gutter);
+  li { display: grid; gap: 6px; justify-items: start; }
+  h3 { font-size: 1.5rem; margin-top: 14px; }
+  @include phone { grid-template-columns: 1fr; }
+}
+.arch { width: 100%; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 999px 999px 0 0; background: var(--sand); img { width: 100%; height: 100%; object-fit: cover; object-position: top; mix-blend-mode: multiply; } }
+
+
+/* Philosophy: dark, text only */
+.philosophy { display: flex; align-items: center; color: var(--paper); background: var(--deep); }
+.philosophyInner { display: grid; gap: 32px; justify-items: center; text-align: center; padding-block: var(--section); }
+.quote { text-transform: uppercase; letter-spacing: 0.01em; font-family: var(--font-display); font-size: clamp(2.5rem, 1.2rem + 4.4vw, 6rem); line-height: 1.04; max-width: 17ch; :global(.accent) { color: var(--sand); } }
+.philosophyBody { max-width: 52ch; font-size: 1.125rem; line-height: 1.7; color: var(--sand); }

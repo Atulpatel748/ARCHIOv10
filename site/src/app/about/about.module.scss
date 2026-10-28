@@ -1,0 +1,57 @@
+@use '../../styles/tokens' as *;
+
+.about {
+  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 40px clamp(32px, 6vw, 112px); align-items: start;
+  @include tablet-down { grid-template-columns: 1fr; }
+}
+.lead { line-height: 1.15; }
+.body { display: grid; gap: 20px; padding-top: 10px; }
+
+.vm { /* plain paper, ruled by the section border */ }
+.vmGrid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px clamp(32px, 6vw, 112px);
+  > div { display: grid; gap: 20px; align-content: start; }
+  .serif { font-size: 1.125rem; line-height: 1.75; }
+  @include phone { grid-template-columns: 1fr; }
+}
+
+.split {
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 48px clamp(32px, 6vw, 112px); align-items: center;
+  @include phone { grid-template-columns: 1fr; }
+}
+.media img { width: 100%; height: auto; }
+.why {
+  display: grid; gap: 22px;
+  ul { border-top: 1px solid var(--line); margin-top: 8px; }
+  li { padding: 16px 0; border-bottom: 1px solid var(--line); }
+}
+
+.philosophy {
+  text-align: center;
+  .label { margin-bottom: 28px; }
+  blockquote { display: grid; gap: 28px; justify-items: center; }
+  .display { max-width: 18ch; }
+  .serif { max-width: 52ch; font-size: 1.125rem; line-height: 1.7; }
+}
+
+/* Team: the heading on the left, the two founders in arches filling the right (the same arches as on the home page) */
+.teamSection {
+  display: grid; gap: 48px clamp(32px, 6vw, 112px); align-items: end;
+  @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+}
+.teamHead { display: grid; gap: 1.25rem; justify-items: start; align-self: start; }
+.teamTitle { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); line-height: 1; }
+.team {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px var(--gutter);
+  li { display: grid; gap: 18px; align-content: start; }
+}
+/* The photographs have white backgrounds: multiplying them onto the sand arch lets the arch show through instead of a hard white cut-out */
+.arch {
+  aspect-ratio: 3 / 4; overflow: hidden; border-radius: 999px 999px 0 0; background: var(--sand);
+  img { width: 100%; height: 100%; object-fit: cover; object-position: top; mix-blend-mode: multiply; }
+}
+.who {
+  display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--line);
+  h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem); line-height: 1.2; }
+  p { font-size: 0.875rem; color: var(--accent-color); }
+}
