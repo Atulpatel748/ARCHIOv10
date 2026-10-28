@@ -133,7 +133,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   useEffect(() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let cancelled = false;
-    const start = () => createGL(stage.current!, slides.map((s) => s.src)).then((g) => {
+    const start = () => createGL(stage.current!, slides.map((s) => (s.poster ? heroLoader({ src: s.poster, width: 1920 }) : s.src))).then((g) => {
       if (cancelled) { g?.dispose(); return; }
       gl.current = g;
       if (g) setGlReady(true);
