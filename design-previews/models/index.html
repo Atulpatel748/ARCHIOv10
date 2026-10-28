@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We Do models: mock-up</title>
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Mock-up for the home "We Do" section: three small isometric scenes (a living room, an office, a garden terrace). As you scroll,
+   each scene's pieces fly in from outside and settle into place, hold for a moment, then lift away so the next scene can assemble
+   (the "pieces assemble" idea from Wood & Weave's kitchen). Pure CSS 3D, about 560px across. ?p=0.5 freezes the scroll progress. */
+:root { --ink: #4C1114; --paper: #F8F7F4; --sand: #DACFBA; --blush: #CEB6A8; --line: rgb(76 17 20 / .16); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Public Sans', sans-serif; }
+.label { font-size: 11px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; opacity: .6; }
+.track { height: 640vh; position: relative; }
+.stage { position: sticky; top: 0; height: 100vh; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: 24px; padding: 0 clamp(24px, 5vw, 80px); overflow: hidden; }
+.words { display: grid; gap: 4px; justify-items: start; }
+.words .label { margin-bottom: 22px; }
+.word { font: 400 clamp(40px, 6vw, 96px)/1.04 'Belleza', serif; text-transform: uppercase; opacity: .22; transition: opacity .4s; }
+.word.on { opacity: 1; }
+.sub { margin: 26px 0 0; font-size: 15px; line-height: 1.55; max-width: 36ch; min-height: 4.6em; }
+.tag { position: absolute; right: clamp(24px, 5vw, 80px); bottom: 24px; }
+.view { position: relative; height: 100%; perspective: 2400px; perspective-origin: 50% 36%; }
+.iso { position: absolute; left: 50%; top: 50%; margin: -350px 0 0 -350px; width: 700px; height: 700px; transform-style: preserve-3d; scale: .56;
+  transform: translate(0, 30px) rotateX(58deg) rotateZ(calc(45deg + var(--sway, 0) * 1deg)); }
+.iso > * { position: absolute; transform-style: preserve-3d; }
+.floor { left: 0; top: 0; width: 700px; height: 700px; box-shadow: 0 0 0 1px rgb(76 17 20 / .12), 0 70px 100px -20px rgb(59 12 15 / .35); opacity: var(--t, 0); }
+.wall { width: 700px; height: 300px; top: -300px; left: 0; transform-origin: 0 100%; }
+.wall.back { transform: rotateX(-90deg); } .wall.side { transform: rotateZ(90deg) rotateX(-90deg); }
+.sheet { position: absolute; inset: 0; transform-origin: 50% 100%; transform: scaleY(var(--t, 0)); background: linear-gradient(#F5F2EC, #EDE8DF); box-shadow: inset 0 0 0 1px rgb(76 17 20 / .22); overflow: hidden; backface-visibility: hidden; }
+.flip .sheet { transform: rotateY(180deg) scaleY(var(--t, 0)); }
+.sheet i { position: absolute; background: linear-gradient(#D8E3E8, #F3EEE4); box-shadow: inset 0 0 0 7px #FBF9F5, 0 0 0 1px rgb(76 17 20 / .25); }
+.sheet b { position: absolute; left: 0; right: 0; bottom: 0; height: 20px; background: #FBF9F5; box-shadow: 0 -1px 0 rgb(76 17 20 / .14); }
+.item { transform: translate3d(calc(var(--x) + var(--dx) * (1 - var(--t, 0))), calc(var(--y) + var(--dy) * (1 - var(--t, 0))), calc(var(--z0, 0px) + var(--dz) * (1 - var(--t, 0)))) rotateZ(calc(var(--r) * (1 - var(--t, 0)))); }
+.f { position: absolute; transform-origin: 0 0; background: var(--c); box-shadow: inset 0 0 0 1px rgb(76 17 20 / .3); }
+.item .top { width: var(--w); height: var(--d); transform: translateZ(var(--h)); background: color-mix(in srgb, var(--c), white 12%); }
+.item .front { width: var(--w); height: var(--h); transform: translateY(var(--d)) rotateX(90deg); background: color-mix(in srgb, var(--c), black 8%); }
+.item .back { width: var(--w); height: var(--h); transform: rotateX(90deg); background: color-mix(in srgb, var(--c), black 12%); }
+.item .right { width: var(--d); height: var(--h); transform: translateX(var(--w)) rotateZ(90deg) rotateX(90deg); background: color-mix(in srgb, var(--c), black 26%); }
+.item .left { width: var(--d); height: var(--h); transform: rotateZ(90deg) rotateX(90deg); background: color-mix(in srgb, var(--c), black 18%); }
+.item .sh { position: absolute; left: -4px; top: -2px; width: calc(var(--w) + 10px); height: calc(var(--d) + 10px); background: rgb(59 12 15 / .28); box-shadow: 0 0 12px 6px rgb(59 12 15 / .2); transform: translateZ(.6px); opacity: var(--t, 0); }
+nav { position: fixed; bottom: 16px; left: 50%; translate: -50% 0; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgb(20 6 7 / .75); z-index: 5; }
+nav a { color: var(--paper); text-decoration: none; padding: 6px 12px; border-radius: 999px; font-size: 12px; letter-spacing: .08em; }
+body.still nav { display: none; }
+@media (max-width: 800px) { .stage { grid-template-columns: 1fr; align-content: start; padding-top: 30px; } .view { height: 60vh; } .word { font-size: 36px; } }
+</style>
+</head>
+<body>
+<div class="track" id="track"><div class="stage" id="stage">
+  <div class="words">
+    <span class="label">What we do</span>
+    <div class="word" data-i="0">Residential</div><div class="word" data-i="1">Commercial</div><div class="word" data-i="2">Landscape</div>
+    <p class="sub" id="sub"></p>
+    <p class="label" id="cap" style="margin-top:18px"></p>
+  </div>
+  <div class="view"><div class="iso" id="iso"></div></div>
+  <span class="label tag">Illustration</span>
+</div></div>
+<nav><a href="?p=0.2">Bedroom</a><a href="?p=0.45">Kitchen</a><a href="?p=0.7">Office</a><a href="?p=0.95">Garden</a></nav>
+
+<script src="scenes.js"></script>
+<script>
+  const iso = document.getElementById('iso');
+  const hash = (i, k) => { const s = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return s - Math.floor(s); };
+  const groups = SCENES.map((sc, si) => {
+    const g = { floor: null, walls: [], items: [] };
+    iso.insertAdjacentHTML('beforeend', `<div class="floor" style="background:${sc.floor}"></div>`); g.floor = iso.lastElementChild;
+    sc.walls.forEach(([cls, inner], k) => { iso.insertAdjacentHTML('beforeend', wallHTML(cls, inner)); g.walls.push([iso.lastElementChild, .03 + k * .06, .26 + k * .06]); });
+    const n = sc.boxes.length;
+    sc.boxes.forEach(([x, y, w, d, h, c, z0 = 0], i) => {
+      const from = i === 0 ? 0 : .06 + (i / (n - 1)) * .56, to = i === 0 ? .14 : from + .24;
+      const a = hash(i, si) * Math.PI * 2, far = 320 + hash(i, 9) * 160;
+      iso.insertAdjacentHTML('beforeend', `<div class="item" style="--x:${x}px;--y:${y}px;--w:${w}px;--d:${d}px;--h:${h}px;--c:${c};--z0:${z0}px;--dx:${Math.cos(a) * far}px;--dy:${Math.sin(a) * far}px;--dz:${220 + hash(i, 3) * 200}px;--r:${(hash(i, 5) - .5) * 120}deg"><i class="sh"></i>${['top', 'front', 'back', 'right', 'left'].map((f) => `<i class="f ${f}"></i>`).join('')}</div>`);
+      g.items.push([iso.lastElementChild, from, to]);
+    });
+    return g;
+  });
+
+  const clamp = (v) => Math.min(1, Math.max(0, v));
+  const ease = (t) => 1 - Math.pow(1 - t, 4); // slow settle
+  const q0 = new URLSearchParams(location.search);
+  if (q0.has('p')) document.body.classList.add('still');
+  const words = [...document.querySelectorAll('.word')];
+  const sub = document.getElementById('sub');
+  const cap = document.getElementById('cap');
+  const track = document.getElementById('track');
+  const apply = (p) => {
+    const s = Math.min(3.999, p * 4), idx = Math.floor(s), q = s - idx;
+    const out = idx < 3 ? clamp((q - .88) / .12) : 0; // lift away at the end of a scene (not the last)
+    groups.forEach((g, si) => {
+      const live = si === idx;
+      const show = (el, t) => { el.style.display = live && t > 0.001 ? '' : 'none'; el.style.setProperty('--t', t.toFixed(3)); };
+      show(g.floor, ease(clamp(q / .14)) * (1 - out));
+      g.walls.forEach(([el, a, b]) => show(el, ease(clamp((q - a) / (b - a))) * (1 - out)));
+      g.items.forEach(([el, a, b]) => show(el, ease(clamp((q - a) / (b - a))) * (1 - out)));
+    });
+    iso.style.setProperty('--sway', (Math.sin(q * Math.PI) * -14).toFixed(2));
+    words.forEach((w, i) => w.classList.toggle('on', i === WORD[idx]));
+    sub.textContent = SUBS[idx];
+    cap.textContent = NAMES[idx];
+  };
+  let target = q0.has('p') ? Number(q0.get('p')) : 0, shown = target;
+  const progress = () => { const r = track.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight)); };
+  if (!q0.has('p')) { addEventListener('scroll', () => { target = progress(); }, { passive: true }); target = progress(); shown = target; }
+  const tick = () => { shown += (target - shown) * .12; apply(shown); requestAnimationFrame(tick); };
+  tick();
+</script>
+</body>
+</html>

@@ -140,10 +140,15 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       gl.current = g;
       if (g) setGlReady(true);
     }).catch(() => undefined);
-    const idle = setTimeout(start, 900); // after first paint, so the LCP image is never delayed
+    // After first paint, so the LCP image is never delayed, and after the preloader, whose motion it would otherwise stall.
+    let idle: ReturnType<typeof setTimeout> | undefined;
+    const preloading = !!document.querySelector('[data-preloader]');
+    if (preloading) addEventListener('preloader:done', start, { once: true });
+    else idle = setTimeout(start, 900);
     return () => {
       cancelled = true;
       clearTimeout(idle);
+      removeEventListener('preloader:done', start);
       gl.current?.dispose(); gl.current = null;
     };
   }, [slides]);
