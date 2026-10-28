@@ -42,7 +42,7 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 | --- | --- | --- |
 | Mobile LCP, slow-network test | 0.8 to 0.9 s on most pages; 2.5 s on `/services`; 2.6 to 3.1 s on `/projects` and project pages | must not rise; the goal is 2.5 s or less |
 | JavaScript loaded on first visit | about 145 KB, compressed | must not grow |
-| Fonts | about 47 KB | must not grow |
+| Fonts | about 58 KB (3 files, Latin only); it was 96 KB (6 files) until 28 Oct 2026, and an earlier note of 47 KB had counted only the two biggest files | must not grow |
 | Whole page weight on mobile | 311 to 527 KB | must not grow |
 | Contact form emails delivered | none yet (the SMTP settings are not set in Vercel) | must reach "works" before launch |
 

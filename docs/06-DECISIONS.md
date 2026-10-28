@@ -23,7 +23,7 @@ Why the site is built the way it is, so nobody has to guess later. Each entry sa
 - **Status:** Accepted
 - **Context:** The brand kit names Optima, which is not licensed for the web. It names Public Sans and Lora for interface and body text.
 - **Decision:** Belleza stands in for Optima (headings). Public Sans and Lora are used as the kit says. All three are self-hosted through `next/font`.
-- **Consequences:** If the studio buys an Optima web licence, only the display font in `site/src/app/layout.tsx` changes.
+- **Consequences:** If the studio buys an Optima web licence, only the display font in `site/src/app/layout.tsx` changes. The fonts load the Latin character set only (no "latin-ext"): on 28 Oct 2026 an audit found three preloaded Latin Extended files (about 38 KB) that no page used, because every page is English. If copy with letters such as ł, č or ő is ever added, put `latin-ext` back in the three font lines.
 
 ## ADR-004: How project images are shown
 
