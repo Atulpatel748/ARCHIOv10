@@ -8,7 +8,7 @@ import Sequence from '@/components/Sequence';
 import StageList from '@/components/StageList';
 import Split from '@/components/Split';
 import { projects } from '@/content/projects';
-import { about, philosophy, processSteps, services, team } from '@/content/site';
+import { about, philosophy, processSteps, serviceStages as stages, team } from '@/content/site';
 import styles from './home.module.scss';
 import Roll from '@/components/Roll';
 
@@ -17,13 +17,6 @@ export const metadata: Metadata = { alternates: { canonical: '/' } };
 const slides = projects.map((p) => ({
   src: p.cover.src, poster: `/images/hero/${p.slug}.webp`, alt: p.cover.alt, title: p.title, place: p.location, href: `/projects/${p.slug}`,
 }));
-
-// Services grouped by stage (proposed grouping, owner to confirm), each with a render.
-const stages = [
-  { name: 'Define', items: [services[0], services[2]], image: '/images/projects/dubai-marina-residence/study-wall.webp', alt: 'Study wall with timber joinery and lit shelving' },
-  { name: 'Design', items: [services[1], services[3]], image: '/images/projects/dubai-marina-residence/media-wall-marble.webp', alt: 'Media wall in book-matched marble framed by timber panelling' },
-  { name: 'Support', items: [services[4], services[5]], image: '/images/projects/jlt-office/boardroom-screen.webp', alt: 'Boardroom facing a media wall with timber joinery' },
-];
 
 export default function HomePage() {
   const [flagship, ...others] = projects;

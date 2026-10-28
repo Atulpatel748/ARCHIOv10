@@ -1,30 +1,43 @@
 @use '../../styles/tokens' as *;
 
-.list {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(32px, 6vw, 112px);
-  li { display: grid; gap: 10px; align-content: start; padding: 32px 0; border-top: 1px solid var(--line); }
+/* Stages: three full-width bands, a render bleeding to the edge on one half and the words on the other; the sides alternate */
+.bands { margin-top: clamp(40px, 5vw, 80px); }
+.band {
+  display: grid; grid-template-columns: 1fr 1fr; min-height: min(86svh, 760px);
+  &:nth-child(even) { background: color-mix(in srgb, var(--sand) 45%, var(--paper)); .bandMedia { order: 2; } }
+  @include tablet-down { grid-template-columns: 1fr; min-height: 0; &:nth-child(even) .bandMedia { order: 0; } }
+}
+.bandMedia { position: relative; min-height: 360px; img { object-fit: cover; } @include tablet-down { min-height: 0; aspect-ratio: 4 / 3; } }
+.bandBody { display: grid; align-content: center; gap: clamp(24px, 3vw, 40px); padding: clamp(40px, 6vw, 96px) clamp(24px, 6vw, 112px); }
+.bandName { font: 400 clamp(3rem, 1rem + 5.5vw, 7rem)/0.95 var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; }
+.offers {
+  display: grid; margin: 0;
+  li { display: grid; gap: 10px; padding: 24px 0; border-top: 1px solid var(--line); }
+  li:last-child { border-bottom: 1px solid var(--line); }
+  h3 { font: 400 clamp(1.5rem, 1.1rem + 1.1vw, 2.125rem)/1.1 var(--font-display); }
   p { max-width: 46ch; }
-  @include phone { grid-template-columns: 1fr; }
 }
 
-.sectors { /* plain paper, ruled by the section border */ }
-.sectorGrid {
-  margin-top: clamp(32px, 4vw, 56px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px var(--gutter);
-  li { display: grid; gap: 12px; align-content: start; }
-  p { max-width: 50ch; }
-  @include phone { grid-template-columns: 1fr; }
+/* Spaces we design: a quiet index, a small picture and a name and a line for each */
+.sectors { padding-block: var(--section); }
+.sectorsTitle { margin-bottom: clamp(32px, 4vw, 56px); }
+.spaces { margin: 0; border-bottom: 1px solid var(--line); }
+.space {
+  display: grid; grid-template-columns: clamp(120px, 14vw, 200px) minmax(0, 5fr) minmax(0, 6fr); gap: 16px clamp(24px, 4vw, 72px); align-items: center; padding: 28px 0; border-top: 1px solid var(--line);
+  p { max-width: 46ch; }
+  @include tablet-down { grid-template-columns: 120px 1fr; p { grid-column: 1 / -1; } }
+  @include phone { grid-template-columns: 96px 1fr; }
 }
-.sectorMedia { position: relative; aspect-ratio: 3 / 2; overflow: hidden; margin-bottom: 8px; img { object-fit: cover; } }
+.spaceMedia { position: relative; aspect-ratio: 4 / 3; overflow: hidden; img { object-fit: cover; transition: transform 1s var(--ease); } @include hover { .space:hover & img { transform: scale(1.06); } } }
+.spaceName { font: 400 clamp(1.75rem, 1.2rem + 2vw, 3rem)/1.05 var(--font-display); text-transform: uppercase; }
 
-.process { /* plain paper, ruled by the section border */ }
-.processInner {
-  display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 48px clamp(32px, 6vw, 112px); align-items: start;
-  > div { display: grid; gap: 22px; }
-  .serif { font-size: 1.125rem; line-height: 1.7; max-width: 50ch; }
-  @include tablet-down { grid-template-columns: 1fr; }
+/* How we work: the approach on the left, its four commitments on the right */
+.process { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 56px clamp(32px, 6vw, 112px); align-items: start; @include tablet-down { grid-template-columns: 1fr; } }
+.processHead { display: grid; gap: 22px; justify-items: start; .serif { font-size: 1.125rem; line-height: 1.7; max-width: 50ch; } .btn { margin-top: 12px; } }
+.points {
+  margin: 0; display: grid;
+  li { position: relative; padding: 24px 0 24px 32px; border-top: 1px solid var(--line); font: 400 clamp(1.25rem, 1.05rem + 0.6vw, 1.625rem)/1.3 var(--font-display); }
+  li:last-child { border-bottom: 1px solid var(--line); }
+  li::before { content: ''; position: absolute; left: 0; top: 1.95rem; width: 10px; height: 10px; border: 1px solid var(--oxblood); transform: rotate(45deg); }
 }
-.steps {
-  border-top: 1px solid var(--line);
-  li { padding: 20px 0; border-bottom: 1px solid var(--line); }
-}
-.processCta { margin-top: 56px; }
+

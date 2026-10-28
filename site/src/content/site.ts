@@ -76,6 +76,13 @@ export const services = [
   { title: 'Project Coordination Support', text: 'Support in keeping the design intent clear as the project moves from drawings to site, with consistent communication throughout.' },
 ];
 
+// Services grouped by stage (proposed grouping, owner to confirm), each with a render.
+export const serviceStages = [
+  { name: 'Define', items: [services[0], services[2]], image: '/images/projects/dubai-marina-residence/study-wall.webp', alt: 'Study wall with timber joinery and lit shelving' },
+  { name: 'Design', items: [services[1], services[3]], image: '/images/projects/dubai-marina-residence/media-wall-marble.webp', alt: 'Media wall in book-matched marble framed by timber panelling' },
+  { name: 'Support', items: [services[4], services[5]], image: '/images/projects/jlt-office/boardroom-screen.webp', alt: 'Boardroom facing a media wall with timber joinery' },
+];
+
 // Residential, commercial and landscape copy adapted from the profile's project pages; mixed-use is CLIENT TO REVIEW.
 export const sectors = [
   { title: 'Residential', text: 'Interiors where architecture, material and light come together, from feature walls and joinery to lighting and finishing details, shaped around how our clients actually live.', image: '/images/projects/dubai-marina-residence/main-bedroom.webp' },

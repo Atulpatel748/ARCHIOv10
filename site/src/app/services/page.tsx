@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
+import Image from 'next/image';
 import PageHead from '@/components/PageHead';
-import { approach, sectors, services, servicesIntro } from '@/content/site';
+import { approach, sectors, serviceStages, servicesIntro } from '@/content/site';
 import styles from './services.module.scss';
 import Roll from '@/components/Roll';
 
@@ -17,50 +17,55 @@ export default function ServicesPage() {
     <>
       <PageHead label="Services" title="Expertise at every stage" accent="of a project." intro={servicesIntro} />
 
-      <section className="section container">
-        <ol className={styles.list}>
-          {services.map((s) => (
-            <li key={s.title} data-reveal>
-              <h2 className="h3">{s.title}</h2>
+      {/* Three bands, one per stage: a render to the edge of the screen, the stage name and its two services */}
+      <div className={styles.bands}>
+        {serviceStages.map((stage, i) => (
+          <section key={stage.name} className={styles.band}>
+            <div className={styles.bandMedia}>
+              <Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 1023px) 100vw, 50vw" priority={i === 0} />
+            </div>
+            <div className={styles.bandBody}>
+              <h2 className={styles.bandName} data-reveal>{stage.name}</h2>
+              <ul className={styles.offers}>
+                {stage.items.map((s) => (
+                  <li key={s.title} data-reveal>
+                    <h3>{s.title}</h3>
+                    <p>{s.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <section className={`container ${styles.sectors}`}>
+        <h2 className={`h2 ${styles.sectorsTitle}`} data-reveal>Spaces we design</h2>
+        <ul className={styles.spaces}>
+          {sectors.map((s) => (
+            <li key={s.title} className={styles.space} data-reveal>
+              <div className={styles.spaceMedia}>
+                <Image src={s.image} alt="" fill sizes="200px" />
+              </div>
+              <h3 className={styles.spaceName}>{s.title}</h3>
               <p>{s.text}</p>
             </li>
           ))}
-        </ol>
+        </ul>
       </section>
 
-      <section className={`section ${styles.sectors}`}>
-        <div className="container">
-          <h2 className="h2" data-reveal>Spaces we design</h2>
-          <ul className={styles.sectorGrid}>
-            {sectors.map((s) => (
-              <li key={s.title} data-reveal>
-                <div className={styles.sectorMedia}>
-                  <Image src={s.image} alt="" fill sizes="(max-width: 767px) 100vw, 46vw" />
-                </div>
-                <h3 className="h3">{s.title}</h3>
-                <p>{s.text}</p>
-              </li>
-            ))}
-          </ul>
+      <section className={`section container ${styles.process}`}>
+        <div className={styles.processHead}>
+          <p className="label" data-reveal>How we work</p>
+          <h2 className="h2" data-reveal>{approach.title}</h2>
+          <p className="serif" data-reveal>{approach.body}</p>
+          <Link prefetch={false} href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
         </div>
-      </section>
-
-      <section className={`section ${styles.process}`}>
-        <div className={`container ${styles.processInner}`}>
-          <div>
-            <p className="label" data-reveal>How we work</p>
-            <h2 className="h2" data-reveal>{approach.title}</h2>
-            <p className="serif" data-reveal>{approach.body}</p>
-          </div>
-          <ol className={styles.steps}>
-            {approach.points.map((p) => (
-              <li key={p} data-reveal>{p}</li>
-            ))}
-          </ol>
-        </div>
-        <div className={`container ${styles.processCta}`} data-reveal>
-          <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
-        </div>
+        <ul className={styles.points}>
+          {approach.points.map((p) => (
+            <li key={p} data-reveal>{p}</li>
+          ))}
+        </ul>
       </section>
     </>
   );
