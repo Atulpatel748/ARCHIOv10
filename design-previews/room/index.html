@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Room that builds: mock-up</title>
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Mock-up: "How it goes". A 3D room builds itself as you scroll through the four steps, and spins one full turn around its own
+   centre while it does (pure CSS 3D, no library). Step 1: the floor plan is marked out. Step 2: four walls rise (only the walls on
+   the far side are drawn, so you always see inside). Step 3: furniture grows up from the floor. Step 4: the lights come on.
+   ?p=0.6 freezes the scroll progress (for screenshots). */
+:root { --deep: #3B0C0F; --ink: #4C1114; --paper: #F8F7F4; --sand: #DACFBA; --blush: #CEB6A8; --wood: #B08D6B; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Public Sans', sans-serif; }
+.label { font-size: 11px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase; opacity: .6; }
+.track { height: 520vh; position: relative; }
+.stage { position: sticky; top: 0; height: 100vh; display: grid; grid-template-columns: minmax(280px, 34%) 1fr; align-items: center; overflow: hidden; }
+.stage::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 70% at 68% 55%, rgb(238 223 200 / calc(var(--glow, 0) * .55)), transparent 70%); pointer-events: none; }
+
+/* The steps, left */
+.steps { position: relative; z-index: 2; padding: 0 0 0 clamp(24px, 5vw, 80px); }
+.steps h2 { margin: 14px 0 34px; font: 400 clamp(34px, 3.6vw, 56px)/1 'Belleza', serif; text-transform: uppercase; max-width: 9ch; }
+.steps ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; position: relative; }
+.steps ol::before { content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 1px; background: rgb(76 17 20 / .2); }
+.steps ol::after { content: ''; position: absolute; left: 11px; top: 8px; width: 1px; height: calc((100% - 16px) * var(--p, 0)); background: var(--ink); }
+.steps li { position: relative; padding-left: 44px; opacity: .38; transition: opacity .5s; }
+.steps li::before { content: ''; position: absolute; left: 4px; top: 3px; width: 15px; height: 15px; border-radius: 50%; background: var(--paper); border: 1px solid rgb(76 17 20 / .4); transition: background .4s, border-color .4s; }
+.steps li.on { opacity: 1; }
+.steps li.on::before { background: var(--ink); border-color: var(--ink); }
+.steps .eb { display: block; margin-bottom: 6px; color: #8A2E34; opacity: 1; }
+.steps h3 { margin: 0 0 4px; font: 400 22px 'Belleza', serif; }
+.steps p { margin: 0; font-size: 14px; line-height: 1.5; max-width: 34ch; }
+.rail { position: absolute; left: 36%; right: clamp(24px, 4vw, 56px); bottom: 64px; z-index: 2; height: 40px; }
+.rail::before { content: ""; position: absolute; left: 0; right: 0; top: 14px; height: 1px; background: rgb(76 17 20 / .25); }
+.rail::after { content: ""; position: absolute; left: 0; top: 14px; height: 1px; width: calc(var(--p, 0) * 100%); background: var(--ink); }
+.rail i { position: absolute; top: 8px; width: 1px; height: 13px; background: rgb(76 17 20 / .4); }
+.rail i b { position: absolute; top: 20px; left: -40px; width: 80px; text-align: center; font: 500 10px/1 'Public Sans', sans-serif; letter-spacing: .2em; text-transform: uppercase; opacity: .55; }
+.rail .mark { position: absolute; top: 0; left: calc(var(--p, 0) * 100%); width: 30px; height: 30px; margin-left: -15px; border-radius: 50%; background: var(--paper); box-shadow: inset 0 0 0 1px var(--ink); display: grid; place-items: center; }
+.rail .mark::before { content: ""; width: 16px; aspect-ratio: 376 / 359; background: var(--ink); -webkit-mask: url(../shared/logo-monogram.svg) no-repeat center / contain; mask: url(../shared/logo-monogram.svg) no-repeat center / contain; }
+.hint { position: absolute; left: clamp(24px, 5vw, 80px); bottom: 24px; z-index: 2; }
+.tag { position: absolute; right: clamp(24px, 4vw, 56px); bottom: 24px; z-index: 2; opacity: var(--glow, 0); }
+
+/* The room: it turns about its own centre (the box turns about its own middle, which is the middle of the floor) */
+.view { position: relative; height: 100%; perspective: 2400px; perspective-origin: 50% 36%; display: grid; place-items: center; }
+.iso { position: relative; width: 700px; height: 700px; transform-style: preserve-3d; transform: translate(0, 40px) rotateX(58deg) rotateZ(calc(45deg + var(--p, 0) * 360deg)); scale: var(--s, .85); will-change: transform; }
+.iso > * { position: absolute; transform-style: preserve-3d; }
+
+.floor { left: 0; top: 0; width: 700px; height: 700px; opacity: calc(.15 + var(--t, 0) * .85); box-shadow: 0 0 0 1px rgb(76 17 20 / .12), 0 70px 100px -20px rgb(59 12 15 / .4);
+  background: repeating-linear-gradient(90deg, transparent 0 69px, rgb(76 17 20 / .1) 69px 70px), repeating-linear-gradient(0deg, #E6D9C6 0 35px, #E0D2BD 35px 70px); }
+.shafts { left: 0; top: 0; width: 700px; height: 700px; transform: translateZ(1.2px); opacity: calc(var(--glow, 0) * .9); background: repeating-linear-gradient(118deg, transparent 0 54px, rgb(255 226 170 / .34) 54px 104px); -webkit-mask: linear-gradient(90deg, transparent, #000 25%, #000 75%, transparent); mask: linear-gradient(90deg, transparent, #000 25%, #000 75%, transparent); }
+.pool { width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(closest-side, rgb(255 214 150 / .65), transparent); opacity: var(--glow, 0); transform: translateZ(1.5px); }
+
+/* Walls: an outer plane stood upright and an inner sheet that grows from the floor up. The sheet is single-sided (backface hidden),
+   so a wall between you and the room disappears while the walls behind it stay: you always see inside. */
+.wall { width: 700px; height: 300px; top: -300px; left: 0; transform-origin: 0 100%; }
+.wall.back { transform: rotateX(-90deg); }
+.wall.front { top: 400px; transform: rotateX(-90deg); }
+.wall.side { transform: rotateZ(90deg) rotateX(-90deg); }
+.wall.side2 { left: 700px; transform: rotateZ(90deg) rotateX(-90deg); }
+.sheet { box-shadow: inset 0 0 0 1px rgb(76 17 20 / .22); position: absolute; inset: 0; transform-origin: 50% 100%; transform: scaleY(var(--t, 0)); backface-visibility: hidden; overflow: hidden; background: linear-gradient(#F5F2EC, #EDE8DF); }
+.flip .sheet { transform: rotateY(180deg) scaleY(var(--t, 0)); }
+.sheet::before { content: ''; position: absolute; inset: 0; z-index: 5; pointer-events: none; background: radial-gradient(70% 70% at 50% 100%, rgb(255 214 150 / .45), transparent); opacity: var(--glow, 0); }
+.sheet .crown { position: absolute; left: 0; right: 0; top: 0; height: 12px; background: #FBF9F5; box-shadow: 0 2px 0 rgb(76 17 20 / .1); }
+.sheet .skirt { position: absolute; left: 0; right: 0; bottom: 0; height: 20px; background: #FBF9F5; box-shadow: 0 -1px 0 rgb(76 17 20 / .14); }
+.sheet .panels { position: absolute; left: 0; right: 0; bottom: 20px; height: 110px; background: repeating-linear-gradient(90deg, transparent 0 86px, rgb(76 17 20 / .13) 86px 88px); box-shadow: 0 -2px 0 rgb(76 17 20 / .13); }
+.arch { position: absolute; left: 260px; bottom: 20px; width: 180px; height: 230px; border-radius: 90px 90px 0 0; box-shadow: inset 0 0 0 6px rgb(76 17 20 / .55); background: linear-gradient(#F8EBD6, #EEDFC8); }
+.arch::after { content: ''; position: absolute; inset: 12px 12px 0; border-radius: 78px 78px 0 0; box-shadow: inset 0 0 0 1px rgb(76 17 20 / .3); }
+.window { position: absolute; background: linear-gradient(#D8E3E8, #F3EEE4); box-shadow: inset 0 0 0 7px #FBF9F5, 0 0 0 1px rgb(76 17 20 / .25); }
+.window::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 6px; translate: -50% 0; background: #FBF9F5; }
+.window::after { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 6px; translate: 0 -50%; background: #FBF9F5; }
+.curtain { position: absolute; width: 38px; background: repeating-linear-gradient(90deg, #CEB6A8 0 6px, #C2A794 6px 11px); box-shadow: 4px 0 10px rgb(76 17 20 / .15); }
+.frame { position: absolute; background: linear-gradient(120deg, var(--blush), var(--sand)); box-shadow: 0 0 0 5px #FBF9F5, 0 0 0 6px rgb(76 17 20 / .3); }
+.frame.b { background: linear-gradient(160deg, #8A2E34, #4C1114); }
+.frame.c { background: linear-gradient(#DDE3D2, #B9C4A6); }
+.mirror { position: absolute; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #D6DEE2 70%); box-shadow: 0 0 0 7px #B08D6B, 0 0 0 8px rgb(76 17 20 / .3); }
+.tv { position: absolute; background: linear-gradient(135deg, #1B1214, #3A2A2D 55%, #1B1214); box-shadow: 0 0 0 4px #120a0b; }
+.sconce { position: absolute; width: 22px; height: 40px; border-radius: 0 0 11px 11px; background: #EEDFC8; box-shadow: 0 0 0 1px rgb(76 17 20 / .3); }
+.sconce::after { content: ''; position: absolute; left: 50%; top: 12px; width: 150px; height: 150px; translate: -50% 0; border-radius: 50%; background: radial-gradient(closest-side, rgb(255 214 150 / .85), transparent); opacity: var(--glow, 0); }
+
+/* Furniture: boxes that grow up from the floor (scaled in z, so there is no fading that would flatten them) */
+.item { transform: translate3d(var(--x), var(--y), var(--z0, 0px)); scale: 1 1 var(--t, 0); transform-origin: 0 0 0; }
+.item .f { position: absolute; transform-origin: 0 0; background: var(--c); box-shadow: inset 0 0 0 1px rgb(76 17 20 / .3); }
+.item .top { width: var(--w); height: var(--d); transform: translateZ(var(--h)); background: color-mix(in srgb, var(--c), white 12%); }
+.item .front { width: var(--w); height: var(--h); transform: translateY(var(--d)) rotateX(90deg); background: color-mix(in srgb, var(--c), black 8%); }
+.item .back { width: var(--w); height: var(--h); transform: rotateX(90deg); background: color-mix(in srgb, var(--c), black 12%); }
+.item .right { width: var(--d); height: var(--h); transform: translateX(var(--w)) rotateZ(90deg) rotateX(90deg); background: color-mix(in srgb, var(--c), black 26%); }
+.item .left { width: var(--d); height: var(--h); transform: rotateZ(90deg) rotateX(90deg); background: color-mix(in srgb, var(--c), black 18%); }
+.item .sh { position: absolute; left: -4px; top: -2px; width: calc(var(--w) + 10px); height: calc(var(--d) + 10px); background: rgb(59 12 15 / .3); box-shadow: 0 0 12px 6px rgb(59 12 15 / .22); transform: translateZ(.6px); }
+.item .glow { position: absolute; left: calc(var(--w) / 2); top: calc(var(--d) / 2); width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; background: radial-gradient(closest-side, rgb(255 224 160 / .95), transparent); opacity: var(--glow, 0); transform: translateZ(calc(var(--h) + 2px)); }
+.ghost { width: var(--w); height: var(--d); left: var(--x); top: var(--y); border: 1px dashed rgb(76 17 20 / .5); opacity: var(--g, 0); }
+.flat { opacity: var(--t, 0); transform: translateZ(2px); }
+.rug { left: 130px; top: 220px; width: 440px; height: 380px; border-radius: 6px; background: repeating-linear-gradient(90deg, #CDB8A6 0 14px, #D8C7B7 14px 28px); box-shadow: inset 0 0 0 12px #DACFBA, inset 0 0 0 14px rgb(76 17 20 / .25), 0 0 0 1px rgb(76 17 20 / .2); }
+
+@media (max-width: 800px) { .stage { grid-template-columns: 1fr; align-content: start; padding-top: 24px; } .steps h2 { display: none; } .view { height: 60vh; } }
+@media (prefers-reduced-motion: reduce) { .steps li { transition: none; } }
+</style>
+</head>
+<body>
+<div class="track" id="track">
+  <div class="stage" id="stage">
+    <div class="steps">
+      <span class="label">How it goes</span>
+      <h2>From the first conversation</h2>
+      <ol id="steps">
+        <li><span class="label eb">01 · Brief</span><h3>The first conversation</h3><p>Every project begins with a clear understanding of your needs, constraints and expectations.</p></li>
+        <li><span class="label eb">02 · Strategy</span><h3>A structured strategy</h3><p>Ideas become a structured design strategy, balancing creativity with feasibility.</p></li>
+        <li><span class="label eb">03 · Decisions</span><h3>Decisions, guided</h3><p>Layout, materials and budget, decided with advice that's unbiased and consultancy-driven.</p></li>
+        <li><span class="label eb">04 · Execution</span><h3>Through to execution</h3><p>Clear direction from concept through to execution, with consistent communication throughout.</p></li>
+      </ol>
+    </div>
+    <div class="view"><div class="iso" id="iso"></div></div>
+    <div class="rail"><i style="left:0"><b>Brief</b></i><i style="left:33.3%"><b>Strategy</b></i><i style="left:66.6%"><b>Decisions</b></i><i style="left:100%"><b>Execution</b></i><span class="mark"></span></div>
+    <span class="label hint" id="hint">Scroll</span>
+    <span class="label tag">Illustration</span>
+  </div>
+</div>
+
+<script>
+  const iso = document.getElementById('iso');
+  const items = []; // [element, from, to, cssVar, hideAtZero]
+  const add = (html, from, to, v = '--t', hide = false) => { iso.insertAdjacentHTML('beforeend', html); const el = iso.lastElementChild; items.push([el, from, to, v, hide]); return el; };
+
+  // A box on the floor: x, y, width, depth, height, colour, build window, height above the floor, a glow on top (a lit lamp)
+  const box = (x, y, w, d, h, c, from, to, z0 = 0, lit = false, shadow = true) => add(
+    `<div class="item" style="--x:${x}px;--y:${y}px;--w:${w}px;--d:${d}px;--h:${h}px;--c:${c};--z0:${z0}px">${shadow ? '<i class="sh"></i>' : ''}${['top', 'front', 'back', 'right', 'left'].map((f) => `<i class="f ${f}"></i>`).join('')}${lit ? '<i class="glow"></i>' : ''}</div>`,
+    from, to, '--t', true);
+  const ghost = (x, y, w, d) => add(`<div class="ghost" style="--x:${x}px;--y:${y}px;--w:${w}px;--d:${d}px"></div>`, 0, 1, '--g');
+  const pool = (x, y) => add(`<div class="pool" style="left:${x - 130}px;top:${y - 130}px"></div>`, .76, .96, '--noop');
+
+  // ---------- Step 1 (0 to .25): the floor and dashed footprints of what is coming ----------
+  add('<div class="floor"></div>', 0, .1);
+  add('<div class="shafts"></div>', .76, .96, '--noop');
+  [[200, 300, 300, 100], [260, 450, 180, 90], [230, 640, 240, 50], [540, 410, 90, 90], [110, 310, 50, 50], [40, 500, 70, 70], [630, 120, 60, 160], [510, 250, 44, 44]].forEach(([x, y, w, d]) => ghost(x, y, w, d));
+
+  // ---------- Step 2 (.22 to .5): four walls, each with its own details ----------
+  const crown = '<i class="crown"></i><i class="skirt"></i><i class="panels"></i>';
+  add(`<div class="wall back"><div class="sheet">${crown}<div class="window" style="left:90px;top:70px;width:170px;height:140px"></div><i class="curtain" style="left:52px;top:56px;height:170px"></i><i class="curtain" style="left:262px;top:56px;height:170px"></i><div class="frame" style="left:360px;top:86px;width:110px;height:84px"></div><div class="frame b" style="left:500px;top:100px;width:56px;height:76px"></div><i class="sconce" style="left:330px;top:190px"></i><i class="sconce" style="left:560px;top:190px"></i></div></div>`, .22, .38);
+  add(`<div class="wall side flip"><div class="sheet">${crown}<div class="arch"></div><div class="mirror" style="left:60px;top:70px;width:110px;height:110px"></div><div class="frame c" style="left:500px;top:84px;width:90px;height:110px"></div><i class="sconce" style="left:210px;top:190px"></i><i class="sconce" style="left:470px;top:190px"></i></div></div>`, .28, .44);
+  add(`<div class="wall front flip"><div class="sheet">${crown}<div class="tv" style="left:230px;top:70px;width:240px;height:130px"></div><div class="frame" style="left:80px;top:78px;width:90px;height:110px"></div><div class="frame b" style="left:520px;top:78px;width:90px;height:110px"></div><i class="sconce" style="left:180px;top:200px"></i><i class="sconce" style="left:500px;top:200px"></i></div></div>`, .32, .48);
+  add(`<div class="wall side2"><div class="sheet">${crown}<div class="window" style="left:200px;top:60px;width:300px;height:150px"></div><i class="curtain" style="left:158px;top:46px;height:190px"></i><i class="curtain" style="left:504px;top:46px;height:190px"></i><div class="frame c" style="left:60px;top:92px;width:70px;height:90px"></div><div class="frame" style="left:560px;top:92px;width:80px;height:90px"></div></div></div>`, .36, .52);
+
+  // ---------- Step 3 (.5 to .78): the rug, then furniture ----------
+  add('<div class="flat rug"></div>', .48, .56, '--t');
+  // sofa: base, back, two arms, two seat cushions, two back cushions
+  box(200, 300, 300, 100, 38, '#C9AE9C', .52, .6);
+  box(200, 300, 300, 26, 112, '#C9AE9C', .53, .61);
+  box(200, 300, 28, 100, 80, '#BFA390', .54, .62);
+  box(472, 300, 28, 100, 80, '#BFA390', .54, .62);
+  box(228, 328, 122, 72, 18, '#D6BFAE', .56, .64, 38, false, false);
+  box(350, 328, 122, 72, 18, '#D6BFAE', .56, .64, 38, false, false);
+  box(232, 326, 114, 20, 54, '#D9C4B3', .57, .65, 38, false, false);
+  box(354, 326, 114, 20, 54, '#D9C4B3', .57, .65, 38, false, false);
+  box(240, 340, 40, 14, 40, '#8A2E34', .6, .67, 56, false, false);       // red cushion
+  // coffee table: top and four legs, books and a vase on it
+  box(260, 450, 180, 90, 8, '#B08D6B', .58, .66, 32);
+  [[266, 456], [426, 456], [266, 524], [426, 524]].forEach(([x, y]) => box(x, y, 8, 8, 32, '#8F6F52', .58, .66, 0, false, false));
+  box(280, 470, 46, 34, 7, '#4C1114', .62, .7, 40, false, false);
+  box(284, 474, 38, 28, 6, '#DACFBA', .62, .7, 47, false, false);
+  box(390, 480, 14, 14, 26, '#F8F7F4', .63, .71, 40, false, false);
+  box(395, 485, 4, 4, 34, '#7E9070', .64, .72, 66, false, false);
+  // media console under the TV, with a lamp-lit bowl
+  box(230, 640, 240, 50, 54, '#8F6F52', .6, .68);
+  box(236, 646, 70, 38, 4, '#6B5039', .62, .7, 54, false, false);
+  box(420, 650, 30, 30, 14, '#DACFBA', .64, .72, 54, false, false);
+  // armchair and pouf
+  box(540, 410, 90, 90, 36, '#B9A38F', .6, .68);
+  box(540, 410, 90, 22, 100, '#B9A38F', .61, .69);
+  box(540, 410, 20, 90, 70, '#AD9783', .62, .7);
+  box(610, 410, 20, 90, 70, '#AD9783', .62, .7);
+  box(560, 432, 50, 68, 14, '#D1BDAA', .63, .71, 36, false, false);
+  box(420, 560, 70, 70, 36, '#CEB6A8', .66, .74);
+  // side table with a table lamp
+  box(110, 310, 50, 50, 56, '#B08D6B', .64, .72);
+  box(130, 330, 10, 10, 40, '#EEDFC8', .68, .76, 56, false, false);
+  box(120, 320, 30, 30, 26, '#F4E7D2', .69, .77, 96, true, false);
+  // floor lamp
+  box(510, 250, 44, 44, 4, '#4C1114', .66, .74, 0, false, false);
+  box(528, 268, 8, 8, 170, '#4C1114', .67, .75, 4, false, false);
+  box(516, 256, 32, 32, 34, '#F4E7D2', .7, .78, 170, true, false);
+  // bookcase against the far side wall: frame, shelves, books
+  box(644, 120, 54, 160, 6, '#8F6F52', .62, .7);
+  box(694, 120, 6, 160, 176, '#8F6F52', .62, .7);
+  box(644, 120, 54, 6, 176, '#8F6F52', .62, .7);
+  box(644, 274, 54, 6, 176, '#8F6F52', .62, .7);
+  [42, 84, 126, 170].forEach((z) => box(644, 120, 54, 160, 5, '#A07F5E', .64, .72, z, false, false));
+  [['#4C1114', 54], ['#DACFBA', 52], ['#CEB6A8', 56], ['#8A2E34', 50], ['#7E9070', 54]].forEach(([c, h], i) => box(656, 132 + i * 14, 36, 11, h - 14, c, .7, .78, 47 - 42 + 42, false, false));
+  [['#DACFBA', 40], ['#4C1114', 42], ['#B08D6B', 38]].forEach(([c, h], i) => box(656, 140 + i * 30, 36, 18, h - 6, c, .7, .78, 89, false, false));
+  box(660, 196, 20, 20, 24, '#F8F7F4', .72, .8, 5 + 126, false, false);
+  // plant: pot and leaves
+  box(40, 500, 70, 70, 50, '#9C6F52', .66, .74);
+  [[62, 522, 12, 120, '#6F8662'], [48, 512, 10, 92, '#7E9070'], [82, 536, 10, 100, '#6F8662'], [70, 548, 8, 70, '#8FA180'], [54, 540, 8, 140, '#7E9070']].forEach(([x, y, s, h, c]) => box(x, y, s, s, h, c, .72, .8, 50, false, false));
+  // wall-hung pendant: a thin cord and a glowing globe on the far corner
+  box(60, 60, 6, 6, 120, '#4C1114', .74, .8, 0, false, false);
+  box(40, 40, 46, 46, 46, '#F4E7D2', .76, .84, 120, true, false);
+
+  // ---------- Step 4 (.76 to .96): the floor pools of light ----------
+  [[130, 335], [532, 272], [75, 65]].forEach(([x, y]) => pool(x, y));
+
+  // ---------- Scroll ----------
+  const steps = [...document.querySelectorAll('#steps li')];
+  const track = document.getElementById('track');
+  const stage = document.getElementById('stage');
+  const hint = document.getElementById('hint');
+  const view = document.querySelector('.view');
+  const fit = () => iso.style.setProperty('--s', Math.min(.95, view.clientWidth / 1050, view.clientHeight / 820).toFixed(3));
+  fit(); addEventListener('resize', fit);
+  const q = new URLSearchParams(location.search);
+  const clamp = (v) => Math.min(1, Math.max(0, v));
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const apply = (p) => {
+    stage.style.setProperty('--p', p.toFixed(4));
+    stage.style.setProperty('--glow', ease(clamp((p - .76) / .2)).toFixed(3));
+    items.forEach(([el, from, to, v, hide]) => {
+      if (v === '--g') { el.style.setProperty(v, (clamp((p - .04) / .08) * (1 - clamp((p - .5) / .12))).toFixed(3)); return; }
+      if (v === '--noop') return;
+      const t = ease(clamp((p - from) / (to - from)));
+      el.style.setProperty(v, t.toFixed(3));
+      if (hide) el.style.display = t <= 0.001 ? 'none' : '';
+    });
+    steps.forEach((li, i) => li.classList.toggle('on', p >= (i ? i * .25 + .01 : 0)));
+    hint.style.opacity = p > .03 ? 0 : .6;
+  };
+  const progress = () => { const r = track.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight)); };
+  let target = q.has('p') ? Number(q.get('p')) : progress(), shown = target;
+  if (!q.has('p')) addEventListener('scroll', () => { target = progress(); }, { passive: true });
+  const tick = () => { shown += (target - shown) * (reduced ? 1 : .1); apply(shown); requestAnimationFrame(tick); };
+  tick();
+</script>
+</body>
+</html>
