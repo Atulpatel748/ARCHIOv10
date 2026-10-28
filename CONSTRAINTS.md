@@ -24,8 +24,8 @@ Run from inside `site/` unless a different place is given.
 | Types | Zero errors | `npm run typecheck` | 0 errors | every change |
 | Lint | Zero errors | `npm run lint` | 0 errors | every change |
 | Tests | All pass | `npm test` (contact form route) | 9 of 9 pass | every change |
-| Build | Succeeds | `npm run build` | passes | before every push |
-| Dependencies | No known problems | `npm audit` | 0 | before every push |
+| Build | Succeeds | `npm run build` | passes | before every push, and on GitHub |
+| Dependencies | No known problems | `npm audit --audit-level=high` | 0 | before every push, and on GitHub |
 | Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 8 pages checked | after every deploy |
 | Speed | Lighthouse performance 90 or more on every page | `npx lighthouse <URL> --only-categories=performance` | 94 to 100 | after every deploy |
 | Layout shift | CLS 0.1 or less | the same Lighthouse run | 0 to 0.035 | after every deploy |
@@ -49,7 +49,7 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 ## Not set up yet (no tool behind it, so not a constraint)
 
 - Test coverage: there is no coverage tool, so no number is claimed.
-- Automatic checks on every push: not set up yet (planned: GitHub Actions).
+- Blocking a merge on a red check: GitHub runs the checks on every push and pull request (`.github/workflows/ci.yml`, first green run on 28 Oct 2026, 46 seconds), but Vercel deploys on its own, and branch protection (a repository setting for the owner) is not turned on.
 - A scan for leaked secrets as a tool: a search of the git history was done by hand on 28 Oct 2026 and found nothing.
 - Error and speed monitoring on the live site: none.
 
