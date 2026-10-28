@@ -17,8 +17,6 @@ export const site = {
   legalName: 'Archió Interior Design Studio',
   parentLine: 'a unit of Beracah Trading',
   footerLine: 'An interior design consultancy in Dubai, for residential, commercial and landscape spaces.',
-  descriptor: 'Interior Design Studio',
-  city: 'Dubai, UAE',
   url: siteUrl.origin, // CLIENT TO CONFIRM: production domain
   phone: '+971 55 654 1410',
   phoneHref: 'tel:+971556541410',
@@ -47,7 +45,6 @@ export const about = {
 export const approach = {
   title: "We don't just design spaces. We guide decisions.",
   body: "Every project begins with a clear understanding of the client's needs, constraints, and expectations. From there, we translate ideas into structured design strategies balancing creativity with feasibility.",
-  intro: 'Our consultancy-led process ensures:',
   points: [
     'Clear direction, from concept through to execution',
     'Efficient use of budget and resources',

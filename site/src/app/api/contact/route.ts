@@ -1,10 +1,9 @@
 // Contact enquiries are validated server-side and delivered through Resend only when all production credentials are set.
 // The in-memory rate limit is a per-instance best-effort guard; use a shared store for multi-instance deployments.
-import { NextResponse } from 'next/server';
+import { isValidContact, TYPES } from '../../../content/contact.ts';
 
 export const runtime = 'nodejs';
 
-const TYPES = new Set(['Residential', 'Commercial', 'Mixed-use', 'Landscape']);
 const recent = new Map<string, number[]>();
 const LIMIT = 5;
 const WINDOW_MS = 10 * 60 * 1000;
@@ -55,19 +54,19 @@ export async function POST(request: Request) {
   try {
     parsed = await readJson(request);
   } catch (error) {
-    if (error instanceof BodyTooLargeError) return NextResponse.json({ error: 'body_too_large' }, { status: 413 });
+    if (error instanceof BodyTooLargeError) return Response.json({ error: 'body_too_large' }, { status: 413 });
     if (error instanceof TypeError && error.message === 'unsupported_content_type') {
-      return NextResponse.json({ error: 'unsupported_media_type' }, { status: 415 });
+      return Response.json({ error: 'unsupported_media_type' }, { status: 415 });
     }
-    return NextResponse.json({ error: 'invalid_json' }, { status: 400 });
+    return Response.json({ error: 'invalid_json' }, { status: 400 });
   }
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-    return NextResponse.json({ error: 'invalid_json' }, { status: 400 });
+    return Response.json({ error: 'invalid_json' }, { status: 400 });
   }
   const body = parsed as Record<string, unknown>;
 
   // Honeypot: silently discard likely bot submissions.
-  if (clean(body.company, 200)) return NextResponse.json({ ok: true });
+  if (clean(body.company, 200)) return Response.json({ ok: true });
 
   // Hosting proxies should overwrite these headers; configure a shared rate-limit store for production.
   const ip = request.headers.get('x-real-ip')?.trim() || request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
@@ -81,7 +80,7 @@ export async function POST(request: Request) {
     if (oldest) recent.delete(oldest);
   }
   const hits = (recent.get(safeIp) ?? []).filter((timestamp) => now - timestamp < WINDOW_MS);
-  if (hits.length >= LIMIT) return NextResponse.json({ error: 'rate_limited' }, { status: 429 });
+  if (hits.length >= LIMIT) return Response.json({ error: 'rate_limited' }, { status: 429 });
   recent.set(safeIp, [...hits, now]);
 
   const name = clean(body.name, 100);
@@ -95,16 +94,16 @@ export async function POST(request: Request) {
     .slice(0, 2000);
   const errors: string[] = [];
   if (name.length < 2) errors.push('name');
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact) && !/^\+?[\d\s()-]{7,20}$/.test(contact)) errors.push('contact');
-  if (!TYPES.has(type)) errors.push('type');
+  if (!isValidContact(contact)) errors.push('contact');
+  if (!TYPES.includes(type)) errors.push('type');
   if (body.consent !== 'yes') errors.push('consent');
-  if (errors.length) return NextResponse.json({ error: 'invalid', fields: errors }, { status: 422 });
+  if (errors.length) return Response.json({ error: 'invalid', fields: errors }, { status: 422 });
 
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL;
   const from = process.env.CONTACT_FROM_EMAIL;
   if (!apiKey || !to || !from) {
-    return NextResponse.json({ error: 'not_configured' }, { status: 503 });
+    return Response.json({ error: 'not_configured' }, { status: 503 });
   }
 
   const html = `<h2>New website enquiry</h2>
@@ -128,6 +127,6 @@ export async function POST(request: Request) {
   } catch {
     res = null;
   }
-  if (!res?.ok) return NextResponse.json({ error: 'send_failed' }, { status: 502 });
-  return NextResponse.json({ ok: true });
+  if (!res?.ok) return Response.json({ error: 'send_failed' }, { status: 502 });
+  return Response.json({ ok: true });
 }

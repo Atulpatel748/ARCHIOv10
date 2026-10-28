@@ -2,20 +2,18 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { isValidContact, TYPES } from '@/content/contact';
 import { site } from '@/content/site';
 import styles from './ContactForm.module.scss';
 
 type Errors = Partial<Record<'name' | 'contact' | 'type' | 'consent', string>>;
-const TYPES = ['Residential', 'Commercial', 'Mixed-use', 'Landscape'];
 
 function validate(data: FormData): Errors {
   const errors: Errors = {};
   const name = String(data.get('name') ?? '').trim();
   const contact = String(data.get('contact') ?? '').trim();
   if (name.length < 2) errors.name = 'Please enter your name.';
-  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
-  const isPhone = /^\+?[\d\s()-]{7,20}$/.test(contact);
-  if (!isEmail && !isPhone) errors.contact = 'Please enter a valid email address or phone number.';
+  if (!isValidContact(contact)) errors.contact = 'Please enter a valid email address or phone number.';
   if (!data.get('type')) errors.type = 'Please choose a type of project.';
   if (!data.get('consent')) errors.consent = 'Please confirm so we can reply to you.';
   return errors;

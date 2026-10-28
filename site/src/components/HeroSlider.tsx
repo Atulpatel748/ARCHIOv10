@@ -131,7 +131,9 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   }, []);
 
   useEffect(() => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // The WebGL transition is for larger screens; phones and data-saver users keep the plain crossfade and skip three.js.
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || matchMedia('(max-width: 767px)').matches || saveData) return;
     let cancelled = false;
     const start = () => createGL(stage.current!, slides.map((s) => (s.poster ? heroLoader({ src: s.poster, width: 1920 }) : s.src))).then((g) => {
       if (cancelled) { g?.dispose(); return; }
