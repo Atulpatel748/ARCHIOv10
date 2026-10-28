@@ -56,7 +56,6 @@
 
 /* What we do: a heading over the stage index (see StageList) */
 .headRow { display: grid; gap: 22px; margin-bottom: clamp(40px, 5vw, 72px); .big { font-size: clamp(2.25rem, 1rem + 3.8vw, 5.25rem); line-height: 1; max-width: 24ch; } }
-.allServices { margin-top: 28px; }
 
 /* The work */
 .work :global(.label) { margin-bottom: 22px; }

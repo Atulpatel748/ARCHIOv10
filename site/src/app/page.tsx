@@ -84,7 +84,6 @@ export default function HomePage() {
             <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to handover." />
           </div>
           <StageList stages={stages} />
-          <Link prefetch={false} href="/services" className={`text-link ${styles.allServices}`} data-reveal><Roll>All services</Roll></Link>
         </div>
       </section>
 
