@@ -10,20 +10,31 @@ const WINDOW_MS = 10 * 60 * 1000;
 const MAX_BODY_BYTES = 16 * 1024;
 
 const clean = (v: unknown, max: number) => (typeof v === 'string' ? v : '').replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max);
+const fail = (code: string, status: number, extra: object = {}) => Response.json({ error: code, ...extra }, { status });
 const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
-class BodyTooLargeError extends Error {}
+// A request problem that knows its own answer: the JSON error code and the HTTP status.
+class HttpError extends Error {
+  status: number;
+  code: string;
+  constructor(status: number, code: string) {
+    super(code);
+    this.status = status;
+    this.code = code;
+  }
+}
 
 async function readJson(request: Request): Promise<unknown> {
   const contentType = request.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase();
-  if (contentType !== 'application/json') throw new TypeError('unsupported_content_type');
+  if (contentType !== 'application/json') throw new HttpError(415, 'unsupported_media_type');
 
+  // The declared length rejects honest oversized bodies early; counting the bytes as they arrive catches the rest.
   const declaredLength = Number(request.headers.get('content-length') || 0);
-  if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) throw new BodyTooLargeError();
-  if (!request.body) throw new SyntaxError('empty_body');
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) throw new HttpError(413, 'body_too_large');
+  if (!request.body) throw new HttpError(400, 'invalid_json');
 
   const reader = request.body.getReader();
-  const chunks: Uint8Array[] = [];
+  const chunks: Uint8Array<ArrayBuffer>[] = [];
   let total = 0;
   try {
     while (true) {
@@ -32,21 +43,14 @@ async function readJson(request: Request): Promise<unknown> {
       total += value.byteLength;
       if (total > MAX_BODY_BYTES) {
         await reader.cancel();
-        throw new BodyTooLargeError();
+        throw new HttpError(413, 'body_too_large');
       }
       chunks.push(value);
     }
   } finally {
     reader.releaseLock();
   }
-
-  const bytes = new Uint8Array(total);
-  let offset = 0;
-  for (const chunk of chunks) {
-    bytes.set(chunk, offset);
-    offset += chunk.byteLength;
-  }
-  return JSON.parse(new TextDecoder().decode(bytes)) as unknown;
+  return JSON.parse(await new Blob(chunks).text()) as unknown;
 }
 
 export async function POST(request: Request) {
@@ -54,14 +58,11 @@ export async function POST(request: Request) {
   try {
     parsed = await readJson(request);
   } catch (error) {
-    if (error instanceof BodyTooLargeError) return Response.json({ error: 'body_too_large' }, { status: 413 });
-    if (error instanceof TypeError && error.message === 'unsupported_content_type') {
-      return Response.json({ error: 'unsupported_media_type' }, { status: 415 });
-    }
-    return Response.json({ error: 'invalid_json' }, { status: 400 });
+    if (error instanceof HttpError) return fail(error.code, error.status);
+    return fail('invalid_json', 400); // JSON.parse failed
   }
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-    return Response.json({ error: 'invalid_json' }, { status: 400 });
+    return fail('invalid_json', 400);
   }
   const body = parsed as Record<string, unknown>;
 
@@ -80,7 +81,7 @@ export async function POST(request: Request) {
     if (oldest) recent.delete(oldest);
   }
   const hits = (recent.get(safeIp) ?? []).filter((timestamp) => now - timestamp < WINDOW_MS);
-  if (hits.length >= LIMIT) return Response.json({ error: 'rate_limited' }, { status: 429 });
+  if (hits.length >= LIMIT) return fail('rate_limited', 429);
   recent.set(safeIp, [...hits, now]);
 
   const name = clean(body.name, 100);
@@ -97,13 +98,13 @@ export async function POST(request: Request) {
   if (!isValidContact(contact)) errors.push('contact');
   if (!TYPES.includes(type)) errors.push('type');
   if (body.consent !== 'yes') errors.push('consent');
-  if (errors.length) return Response.json({ error: 'invalid', fields: errors }, { status: 422 });
+  if (errors.length) return fail('invalid', 422, { fields: errors });
 
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.CONTACT_TO_EMAIL;
   const from = process.env.CONTACT_FROM_EMAIL;
   if (!apiKey || !to || !from) {
-    return Response.json({ error: 'not_configured' }, { status: 503 });
+    return fail('not_configured', 503);
   }
 
   const html = `<h2>New website enquiry</h2>
@@ -127,6 +128,6 @@ export async function POST(request: Request) {
   } catch {
     res = null;
   }
-  if (!res?.ok) return Response.json({ error: 'send_failed' }, { status: 502 });
+  if (!res?.ok) return fail('send_failed', 502);
   return Response.json({ ok: true });
 }

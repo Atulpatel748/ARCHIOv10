@@ -1,5 +1,8 @@
 @use '../styles/tokens' as *;
 
+/* The header, its logo and its links all slide and fade with the same timing */
+$slide: opacity 250ms var(--ease), transform 350ms var(--ease);
+
 /* No bar: a transparent frame holding the logo, the pill and the menu button. Only the logo slides away on scroll. */
 .header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); pointer-events: none; color: var(--oxblood); transition: color 300ms var(--ease); }
 .dark { color: var(--paper); }
@@ -14,20 +17,20 @@
   translate: -50% -50%;
   scale: calc(1 + (1 - var(--p)) * (var(--s0) - 1));
   filter: drop-shadow(0 2px 28px rgb(20 6 7 / calc(0.55 * (1 - var(--p))))); /* the hero wordmark's shadow fades as it docks */
-  transition: opacity 250ms var(--ease), transform 350ms var(--ease), visibility 0s;
+  transition: $slide, visibility 0s;
   @include phone { --w1: 88px; }
 }
 /* Before the page's script has run, home starts with the logo big and mid-screen */
 .onHome .brand { --p: 0; --y0: calc(50vh - 20px); --s0: 4.2; }
 .brand[data-over-hero] { opacity: 0; visibility: hidden; }
 /* The links slide away with the logo, so neither sits on top of the text beneath as you scroll down */
-.hidden .nav { opacity: 0; visibility: hidden; transform: translateY(-100%); transition: opacity 250ms var(--ease), transform 350ms var(--ease), visibility 0s linear 350ms; }
-.hidden .brand { opacity: 0; visibility: hidden; transform: translateY(-100%); transition: opacity 250ms var(--ease), transform 350ms var(--ease), visibility 0s linear 350ms; }
+.hidden .nav { opacity: 0; visibility: hidden; transform: translateY(-100%); transition: $slide, visibility 0s linear 350ms; }
+.hidden .brand { opacity: 0; visibility: hidden; transform: translateY(-100%); transition: $slide, visibility 0s linear 350ms; }
 .logo { width: var(--w1); }
 /* Links on the left, desktop only */
 .nav {
   position: absolute; top: 0; left: var(--margin); height: 100%; display: flex; align-items: center; gap: clamp(20px, 2.4vw, 36px); pointer-events: auto;
-  transition: opacity 250ms var(--ease), transform 350ms var(--ease), visibility 0s;
+  transition: $slide, visibility 0s;
   a {
     padding: 12px 0; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
     background: linear-gradient(currentColor 0 0) left calc(100% - 6px) / 0 1px no-repeat; transition: background-size 400ms var(--ease);
