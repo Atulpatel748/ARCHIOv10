@@ -17,6 +17,21 @@ const FRAGMENT = `
     vec2 s = uPlaneAspect > img ? vec2(1.0, img / uPlaneAspect) : vec2(uPlaneAspect / img, 1.0);
     return (uv - 0.5) * s + 0.5;
   }
+  // On a landscape screen wider than the photo the whole photo is shown, centred, and the side bars are filled with a blurred, dimmed copy of it.
+  vec4 pic(sampler2D t, vec2 uv, float img) {
+    vec2 cv = cover(uv, img);
+    if (uPlaneAspect < 1.0 || uPlaneAspect <= img) return texture2D(t, cv);
+    vec4 bg = texture2D(t, cv);
+    for (int i = 0; i < 8; i++) {
+      float a = float(i) * 0.785398;
+      vec2 d = vec2(cos(a), sin(a));
+      bg += texture2D(t, cv + d * 0.03) + texture2D(t, cv + d * 0.07);
+    }
+    bg = mix(bg / 17.0, vec4(0.08, 0.02, 0.03, 1.0), 0.35);
+    vec2 c = (uv - 0.5) * vec2(uPlaneAspect / img, 1.0) + 0.5;
+    float inside = step(0.0, c.x) * step(c.x, 1.0);
+    return mix(bg, texture2D(t, clamp(c, 0.0, 1.0)), inside);
+  }
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   float noise(vec2 p) {
     vec2 i = floor(p), f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);
@@ -30,8 +45,8 @@ const FRAGMENT = `
     float band = 4.0 * m * (1.0 - m);
     vec2 off = vec2((n - 0.5) * 0.12, (n - 0.5) * 0.04) * band;
     float zoom = 1.0 + 0.06 * (1.0 - uProgress);              // incoming image settles as it arrives
-    vec4 a = texture2D(uFrom, cover(vUv + off, uFromAspect));
-    vec4 b = texture2D(uTo, cover((vUv - off - 0.5) / zoom + 0.5, uToAspect));
+    vec4 a = pic(uFrom, vUv + off, uFromAspect);
+    vec4 b = pic(uTo, (vUv - off - 0.5) / zoom + 0.5, uToAspect);
     gl_FragColor = mix(b, a, m);
   }`;
 
@@ -150,16 +165,18 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       <div className={styles.inner} data-recede-inner>
       <div ref={stage} className={`${styles.stage} ${glReady ? styles.glReady : ''}`}>
         {slides.map((s, i) => (
-          <Image
-            key={s.src}
-            src={s.poster ?? s.src}
-            loader={s.poster ? heroLoader : undefined}
-            alt={i === current ? s.alt : ''}
-            fill
-            priority={i === 0}
-            sizes="100vw"
-            className={`${styles.slide} ${i === current ? styles.active : ''}`}
-          />
+          <div key={s.src} className={`${styles.slide} ${i === current ? styles.active : ''}`}>
+            <Image src={s.poster ?? s.src} loader={s.poster ? heroLoader : undefined} alt="" fill sizes="100vw" className={styles.backdrop} aria-hidden="true" />
+            <Image
+              src={s.poster ?? s.src}
+              loader={s.poster ? heroLoader : undefined}
+              alt={i === current ? s.alt : ''}
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className={styles.photo}
+            />
+          </div>
         ))}
       </div>
       <div className={styles.shade} aria-hidden="true" />

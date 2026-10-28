@@ -4,7 +4,14 @@
 .hero { --accent-color: var(--sand); position: sticky; top: 0; z-index: 0; height: 100dvh; min-height: 640px; color: var(--paper); background: #140607; overflow: hidden; }
 .inner { position: absolute; inset: 0; background: var(--deep); transform-origin: 50% 100%; }
 .stage { position: absolute; inset: 0; }
-.slide { object-fit: cover; opacity: 0; transition: opacity 700ms ease; }
+.slide { position: absolute; inset: 0; opacity: 0; transition: opacity 700ms ease; }
+.photo { object-fit: cover; }
+/* A landscape screen shows the whole photo; the sides are filled with a blurred, dimmed copy (the WebGL view does the same). */
+.backdrop { display: none; object-fit: cover; filter: blur(36px) brightness(0.65); transform: scale(1.15); }
+@media (min-aspect-ratio: 1/1) {
+  .photo { object-fit: contain; }
+  .backdrop { display: block; }
+}
 .active { opacity: 1; }
 .glReady .slide { visibility: hidden; }
 .canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }

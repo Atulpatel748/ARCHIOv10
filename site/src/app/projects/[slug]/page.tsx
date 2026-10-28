@@ -71,7 +71,6 @@ export default async function ProjectPage({ params }: Params) {
           </div>
         </div>
         <div className={styles.endNext}>
-          <Link prefetch={false} href="/projects" className={`text-link ${styles.endAll}`} data-reveal><Roll>All the work</Roll></Link>
           <Link prefetch={false} href={`/projects/${next.slug}`} className={styles.next} data-cursor="View" data-reveal>
             <span className="label label--rule">Next project</span>
             <span className={styles.nextTitle}>{next.title}</span>
