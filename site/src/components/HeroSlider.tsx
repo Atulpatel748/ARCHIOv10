@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './HeroSlider.module.scss';
 import Roll from '@/components/Roll';
 
-export type Slide = { src: string; alt: string; title: string; place: string; href: string };
+export type Slide = { src: string; poster?: string; alt: string; title: string; place: string; href: string };
 
 const FRAGMENT = `
   precision highp float;
@@ -34,6 +34,10 @@ const FRAGMENT = `
     vec4 b = texture2D(uTo, cover((vUv - off - 0.5) / zoom + 0.5, uToAspect));
     gl_FragColor = mix(b, a, m);
   }`;
+
+// The hero photos come as ready-sized files (-640, -1080, -1920, -2560 .webp in /images/hero), served as they are: nothing is
+// processed on the first request, so the picture is there as soon as it has downloaded.
+const heroLoader = ({ src, width }: { src: string; width: number }) => src.replace(/\.webp$/, `-${width <= 640 ? 640 : width <= 1080 ? 1080 : width <= 1920 ? 1920 : 2560}.webp`);
 
 type GL = { go(from: number, to: number): Promise<void>; dispose(): void };
 
@@ -148,7 +152,8 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
         {slides.map((s, i) => (
           <Image
             key={s.src}
-            src={s.src}
+            src={s.poster ?? s.src}
+            loader={s.poster ? heroLoader : undefined}
             alt={i === current ? s.alt : ''}
             fill
             priority={i === 0}

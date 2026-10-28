@@ -15,7 +15,7 @@ import Roll from '@/components/Roll';
 export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 const slides = projects.map((p) => ({
-  src: p.cover.src, alt: p.cover.alt, title: p.title, place: p.location, href: `/projects/${p.slug}`,
+  src: p.cover.src, poster: `/images/hero/${p.slug}.webp`, alt: p.cover.alt, title: p.title, place: p.location, href: `/projects/${p.slug}`,
 }));
 
 // Services grouped by stage (proposed grouping, owner to confirm), each with a render.

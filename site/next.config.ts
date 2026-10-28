@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  images: { formats: ['image/avif', 'image/webp'] },
+  images: { formats: ['image/webp'] }, // WebP only: AVIF takes far longer to encode on a first request
   poweredByHeader: false,
   async headers() {
     const headers: { key: string; value: string }[] = [

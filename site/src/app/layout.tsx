@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { preload } from 'react-dom';
 import { Belleza, Lora, Public_Sans } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -42,6 +43,7 @@ const organization = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  preload('/brand/logo-wordmark.svg', { as: 'image' }); // the wordmark is a CSS mask, which the browser would otherwise find late
   return (
     <html lang="en" suppressHydrationWarning className={`${display.variable} ${ui.variable} ${body.variable}`}>
       <body>
