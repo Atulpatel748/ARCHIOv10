@@ -19,9 +19,8 @@ export default function ServicesPage() {
 
       <section className="section container">
         <ol className={styles.list}>
-          {services.map((s, i) => (
+          {services.map((s) => (
             <li key={s.title} data-reveal>
-              <span className={styles.num}>{String(i + 1).padStart(2, '0')}</span>
               <h2 className="h3">{s.title}</h2>
               <p>{s.text}</p>
             </li>
@@ -54,8 +53,8 @@ export default function ServicesPage() {
             <p className="serif" data-reveal>{approach.body}</p>
           </div>
           <ol className={styles.steps}>
-            {approach.points.map((p, i) => (
-              <li key={p} data-reveal><span className={styles.num}>{String(i + 1).padStart(2, '0')}</span>{p}</li>
+            {approach.points.map((p) => (
+              <li key={p} data-reveal>{p}</li>
             ))}
           </ol>
         </div>

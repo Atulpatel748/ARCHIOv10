@@ -19,7 +19,6 @@ export default function StageList({ stages }: { stages: Stage[] }) {
           <div className={styles.veil} aria-hidden="true" />
           <h3 className={styles.head}>
             <button type="button" aria-expanded={i === active} onClick={() => setActive(i)} onFocus={() => setActive(i)}>
-              <span className={styles.num} aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
               <span className={styles.vName}>{s.name}</span>
               <span className={styles.hName} aria-hidden="true">{s.name}</span>
             </button>

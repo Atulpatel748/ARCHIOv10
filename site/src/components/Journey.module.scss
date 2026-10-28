@@ -12,10 +12,14 @@
   &[data-live] li { opacity: 0.35; }
   &[data-live] li.on { opacity: 1; }
   li.on::before { background: var(--oxblood); }
+  /* Each model rises into place, block by block, as its step lights up */
+  &[data-live] li:not(.on) .glyph g { opacity: 0; }
+  &[data-live] li.on .glyph g { animation: rise 800ms var(--ease) both; animation-delay: calc(var(--k) * 110ms); }
   @include phone { li { grid-template-columns: 1fr; } }
 }
-.num { font: 400 clamp(2.5rem, 1rem + 4.4vw, 5.5rem)/0.9 var(--font-display); color: var(--accent-color); }
+.glyph { display: block; width: clamp(64px, 8vw, 120px); height: auto; overflow: visible; }
 .body { display: grid; gap: 12px; max-width: 46ch; padding-top: 0.5em;
   h3 { font-size: clamp(1.625rem, 1.2rem + 1.2vw, 2.5rem); line-height: 1.12; }
   p { font-size: 1.0625rem; }
 }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }

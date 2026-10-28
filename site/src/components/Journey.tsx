@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import StepGlyph from './StepGlyph';
 import styles from './Journey.module.scss';
 
 type Step = { title: string; text: string };
@@ -39,7 +40,7 @@ export default function Journey({ steps }: { steps: Step[] }) {
     <ol ref={list} className={styles.road}>
       {steps.map((s, i) => (
         <li key={s.title}>
-          <span className={styles.num} aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <StepGlyph step={i} className={styles.glyph} />
           <div className={styles.body}>
             <h3>{s.title}</h3>
             <p>{s.text}</p>
