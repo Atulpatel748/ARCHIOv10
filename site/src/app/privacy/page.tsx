@@ -33,7 +33,7 @@ export default function PrivacyPage() {
         </section>
         <section>
           <h2>Service providers and email delivery</h2>
-          <p>When the enquiry email service is enabled, form submissions are sent through Resend to the business inbox configured for this website. The website is also hosted by a deployment provider chosen by the operator. Those providers may process information to deliver, secure and maintain their services; please consult their current privacy terms for details.</p>
+          <p>When the enquiry email service is enabled, form submissions are sent by email, through the mail provider the operator has set up for this website, to the business inbox configured for it. The website is also hosted by a deployment provider chosen by the operator. Those providers may process information to deliver, secure and maintain their services; please consult their current privacy terms for details.</p>
         </section>
         <section>
           <h2>Retention and security</h2>

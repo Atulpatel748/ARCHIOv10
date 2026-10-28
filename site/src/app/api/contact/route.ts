@@ -1,6 +1,7 @@
-// Contact enquiries are validated server-side and delivered through Resend only when all production credentials are set.
+// Contact enquiries are validated server-side and emailed over SMTP, only when all the mail settings are set (see lib/mailer.ts).
 // The in-memory rate limit is a per-instance best-effort guard; use a shared store for multi-instance deployments.
 import { isValidContact, TYPES } from '../../../content/contact.ts';
+import { mailSettings, mailer } from '../../../lib/mailer.ts';
 
 export const runtime = 'nodejs';
 
@@ -100,34 +101,24 @@ export async function POST(request: Request) {
   if (body.consent !== 'yes') errors.push('consent');
   if (errors.length) return fail('invalid', 422, { fields: errors });
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
-  const from = process.env.CONTACT_FROM_EMAIL;
-  if (!apiKey || !to || !from) {
-    return fail('not_configured', 503);
-  }
+  const settings = mailSettings();
+  if (!settings) return fail('not_configured', 503);
 
   const html = `<h2>New website enquiry</h2>
     <p><strong>Name:</strong> ${escapeHtml(name)}<br><strong>Reply to:</strong> ${escapeHtml(contact)}<br>
     <strong>Project type:</strong> ${escapeHtml(type)}<br><strong>Location:</strong> ${escapeHtml(location || 'Not given')}</p>
     <p>${escapeHtml(message || 'No message').replace(/\n/g, '<br>')}</p>`;
-  let res: Response | null = null;
+  const text = ['New website enquiry', '', `Name: ${name}`, `Reply to: ${contact}`, `Project type: ${type}`, `Location: ${location || 'Not given'}`, '', message || 'No message', ''].join('\n');
   try {
-    res = await fetch('https://api.resend.com/emails', {
-      signal: AbortSignal.timeout(10_000),
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        subject: `Website enquiry: ${type} project from ${name}`,
-        html,
-        ...(contact.includes('@') ? { reply_to: contact } : {}),
-      }),
+    await mailer.send(settings, {
+      subject: `Website enquiry: ${type} project from ${name}`,
+      text,
+      html,
+      ...(contact.includes('@') ? { replyTo: contact } : {}),
     });
-  } catch {
-    res = null;
+  } catch (error) {
+    console.error('contact form: sending failed:', (error as { code?: string }).code ?? (error as Error).name); // the cause, never the settings
+    return fail('send_failed', 502);
   }
-  if (!res?.ok) return fail('send_failed', 502);
   return Response.json({ ok: true });
 }
