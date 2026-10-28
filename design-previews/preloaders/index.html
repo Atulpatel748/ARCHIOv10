@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preloader options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Belleza&family=Public+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Five preloader options over a copy of the home hero. ?v=1..5 picks one; ?t=ms freezes it at that moment (for screenshots).
+   Each option loops on a 4.5 s cycle: about 1.6 s loading, 1 s exit, then the hero on its own. */
+:root { --deep: #3B0C0F; --night: #140607; --paper: #F8F7F4; --sand: #DACFBA; --cycle: 4.5s; --bg: #F8F7F4; --ink: #4C1114; --tiny: url('data:image/webp;base64,UklGRrYAAABXRUJQVlA4IKoAAABQBQCdASogABIAPrVOoEsnJCMhsBgIAOAWiWcArAA0gM3F/zojCgaEx/LwONtpM9K+1XAA/oQTwwjloYY8iMnOlH+GikWYJt6KXyW/X9iUR464l1YEh43pTHjMg+LlOx7gUEuv8lHbw39xJNb7x+E2ikJYcDaoBLzia+rr+XZqYP9AeDz21WvPeg16ED0TOAeg421I3FpVdt3y5d2NBaziJTUv5HUO/gAAAA=='); --curtain: cubic-bezier(0.76, 0, 0.24, 1); }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--night); color: var(--paper); font-family: 'Public Sans', sans-serif; overflow: hidden; }
+.logo { display: block; background: currentColor; -webkit-mask: var(--logo) no-repeat center / contain; mask: var(--logo) no-repeat center / contain; }
+.wordmark { --logo: url('../shared/logo-wordmark.svg'); aspect-ratio: 248 / 61; }
+.monogram { --logo: url('../shared/logo-monogram.svg'); aspect-ratio: 376 / 359; }
+.caps { font-size: 11px; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; }
+
+/* The hero underneath */
+.hero { position: fixed; inset: 0; display: grid; place-items: center; }
+.hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(20 6 7 / .45), rgb(20 6 7 / .1) 25%, rgb(20 6 7 / .1) 55%, rgb(20 6 7 / .55)); }
+.hero .mark { position: relative; z-index: 1; display: grid; justify-items: center; gap: 18px; }
+.hero .wordmark { width: clamp(220px, 37vw, 660px); filter: drop-shadow(0 2px 28px rgb(20 6 7 / .55)); }
+
+.pre { position: fixed; inset: 0; z-index: 10; display: none; color: var(--ink); }
+body[data-v="1"] .v1, body[data-v="2"] .v2, body[data-v="3"] .v3, body[data-v="4"] .v4, body[data-v="5"] .v5, body[data-v="6"] .v6, body[data-v="7"] .v7, body[data-v="8"] .v8 { display: block; }
+.pre, .pre * { animation-duration: var(--cycle); animation-iteration-count: infinite; animation-fill-mode: both; }
+.center { position: absolute; inset: 0; display: grid; place-items: center; }
+
+/* 1. Wordmark fill: the logo fills in from left to right, then the curtain rolls up */
+.v1 { background: var(--bg); animation-name: roll-up; }
+.v1 .box { position: relative; width: clamp(160px, 16vw, 260px); animation-name: lift-away; }
+.v1 .ghost { opacity: .18; }
+.v1 .fill { position: absolute; inset: 0; animation-name: wipe; }
+@keyframes roll-up { 0%, 35% { clip-path: inset(0 0 0 0); animation-timing-function: var(--curtain); } 56%, 100% { clip-path: inset(0 0 100% 0); } }
+@keyframes lift-away { 0%, 31% { opacity: 1; translate: 0 0; } 38%, 100% { opacity: 0; translate: 0 -16px; } }
+@keyframes wipe { 0%, 2% { clip-path: inset(0 100% 0 0); animation-timing-function: cubic-bezier(.65, 0, .35, 1); } 27%, 100% { clip-path: inset(0 0 0 0); } }
+
+/* 2. Counter: a big number counts to 100 in the corner, a line runs along the bottom, then the panel slides up */
+@property --n { syntax: '<integer>'; inherits: false; initial-value: 0; }
+.v2 { background: var(--bg); animation-name: slide-up; }
+.v2 .top { position: absolute; top: 32px; left: 40px; right: 40px; display: flex; justify-content: space-between; align-items: center; animation-name: fade-out; }
+.v2 .top .wordmark { width: 120px; }
+.v2 .num { position: absolute; right: 32px; bottom: 12px; font: 400 clamp(96px, 20vw, 300px)/1 'Belleza', serif; animation-name: count, fade-out; counter-reset: n var(--n); }
+.v2 .num::after { content: counter(n); }
+.v2 .num::before { content: '%'; font-size: .25em; vertical-align: top; margin-right: .1em; opacity: .5; }
+.v2 .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--ink); transform-origin: left; animation-name: grow; }
+.v2 .say { position: absolute; left: 40px; bottom: 36px; opacity: .6; animation-name: fade-out; }
+@keyframes count { 0%, 2% { --n: 0; animation-timing-function: cubic-bezier(.3, 0, .2, 1); } 32%, 100% { --n: 100; } }
+@keyframes grow { 0%, 2% { scale: 0 1; animation-timing-function: cubic-bezier(.3, 0, .2, 1); } 32%, 100% { scale: 1 1; } }
+@keyframes fade-out { 0%, 33% { opacity: 1; } 37%, 100% { opacity: 0; } }
+@keyframes slide-up { 0%, 35% { translate: 0 0; animation-timing-function: var(--curtain); } 56%, 100% { translate: 0 -100%; } }
+
+/* 3. Monogram iris: the Ó sits in a ring that draws itself, then a circle opens from the centre onto the hero */
+@property --r { syntax: '<length>'; inherits: false; initial-value: 0px; }
+.v3 { background: var(--bg); animation-name: iris; -webkit-mask: radial-gradient(circle at 50% 50%, transparent var(--r), #000 calc(var(--r) + 1px)); mask: radial-gradient(circle at 50% 50%, transparent var(--r), #000 calc(var(--r) + 1px)); }
+.v3 .seal { position: relative; width: 150px; height: 150px; display: grid; place-items: center; animation-name: shrink-out; }
+.v3 .monogram { width: 64px; }
+.v3 svg { position: absolute; inset: 0; rotate: -90deg; }
+.v3 circle { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 440; animation: draw var(--cycle) infinite both; }
+.v3 .track { stroke: rgb(76 17 20 / .15); animation: none; stroke-dashoffset: 0; }
+@keyframes draw { 0%, 2% { stroke-dashoffset: 440; animation-timing-function: cubic-bezier(.45, 0, .2, 1); } 30%, 100% { stroke-dashoffset: 0; } }
+@keyframes shrink-out { 0%, 31% { opacity: 1; scale: 1; } 37%, 100% { opacity: 0; scale: .85; } }
+@keyframes iris { 0%, 36% { --r: 0px; animation-timing-function: cubic-bezier(.7, 0, .3, 1); } 58%, 100% { --r: 150vmax; } }
+
+/* 4. Split doors: a line grows out from the middle under the logo, then the screen parts at that line, top up and bottom down */
+.v4 .door { position: absolute; left: 0; right: 0; height: 50.5%; background: var(--bg); animation-name: door-up; }
+.v4 .door + .door { bottom: 0; animation-name: door-down; }
+.v4 .door:first-child { top: 0; }
+.v4 .center { gap: 0; align-content: center; animation-name: fade-out; }
+.v4 .wordmark { width: clamp(160px, 16vw, 260px); margin-bottom: 26px; }
+.v4 .line { width: min(70vw, 720px); height: 1px; background: var(--ink); animation-name: spread; }
+.v4 .caps { margin-top: 22px; opacity: .6; }
+@keyframes spread { 0%, 2% { scale: 0 1; animation-timing-function: cubic-bezier(.45, 0, .2, 1); } 30%, 100% { scale: 1 1; } }
+@keyframes door-up { 0%, 35% { translate: 0 0; animation-timing-function: var(--curtain); } 56%, 100% { translate: 0 -100%; } }
+@keyframes door-down { 0%, 35% { translate: 0 0; animation-timing-function: var(--curtain); } 56%, 100% { translate: 0 100%; } }
+
+/* 5. Photo window: the three projects flick by in a small frame, then the frame opens up to fill the screen and becomes the hero */
+.v5 { animation-name: none; }
+.v5 .bg { position: absolute; inset: 0; background: var(--bg); animation-name: bg-out; }
+.v5 .frame { position: absolute; overflow: hidden; animation-name: open, frame-out; } /* the last photo is the hero's, so fading the frame reveals the logo on the same picture */
+.v5 .frame img { position: absolute; inset: 0; width: 100vw; height: 100vh; object-fit: cover; left: 50%; top: 50%; translate: -50% -50%; max-width: none; }
+.v5 .frame img:nth-child(1) { animation-name: flick-1; }
+.v5 .frame img:nth-child(2) { animation-name: flick-2; }
+.v5 .frame img:nth-child(3) { animation-name: flick-3; }
+.v5 .label { position: absolute; left: 0; right: 0; top: calc(50% + 17vh + 22px); display: flex; justify-content: center; gap: 18px; animation-name: fade-out; }
+.v5 .label .wordmark { width: 92px; }
+@keyframes open { 0%, 35% { inset: 33vh 40vw; animation-timing-function: var(--curtain); } 56%, 100% { inset: 0; } }
+@keyframes flick-1 { 0%, 11% { opacity: 1; } 12%, 100% { opacity: 0; } }
+@keyframes flick-2 { 0%, 11% { opacity: 0; } 12%, 23% { opacity: 1; } 24%, 100% { opacity: 0; } }
+@keyframes flick-3 { 0%, 23% { opacity: 0; } 24%, 100% { opacity: 1; } }
+@keyframes frame-out { 0%, 57% { opacity: 1; } 63%, 100% { opacity: 0; } }
+@keyframes bg-out { 0%, 54% { opacity: 1; } 57%, 100% { opacity: 0; } }
+
+/* 6-8 are option 1 (the logo fills in, then the curtain rolls up) on a richer background */
+.v6 .box, .v7 .box, .v8 .box { position: relative; width: clamp(160px, 16vw, 260px); animation-name: lift-away; }
+.v6 .ghost, .v7 .ghost, .v8 .ghost { opacity: .18; }
+.v6 .fill, .v7 .fill, .v8 .fill { position: absolute; inset: 0; animation-name: wipe; }
+
+/* 6. Scenery: a soft, blurred copy of the hero photo (an inline image of under 200 bytes, so it shows at once) that drifts closer */
+.v6 { background: var(--bg); animation-name: roll-up; overflow: hidden; }
+.v6 .scene { position: absolute; inset: -60px; background: var(--tiny) center / cover; filter: blur(28px) saturate(1.1); animation-name: drift; }
+.v6 .wash { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 45% at 50% 50%, rgb(248 247 244 / .7), rgb(248 247 244 / .25)); }
+@keyframes drift { 0% { scale: 1.12; } 40%, 100% { scale: 1; } }
+
+/* 7. Sketch, open from the arch: a furnished interior draws itself in thin lines in four passes (room and arch; ceiling, floor and
+   panels; furniture, art, window and lamps; small details) while the logo fills in. Warm light fills the arched doorway. When loading
+   ends the doorway grows, keeping its arch shape, until the hero fills the screen, and the light fades into the photo.
+   Smoothness: the opening only moves GPU layers. The doorway is an arch-shaped box (border-radius) holding a copy of the hero photo;
+   the box scales up while the photo inside scales down by exactly the same amount, so the photo stays still and only the arch grows.
+   The scale runs in log space, so the growth feels even rather than rushing at the end. A longer 6.5 s cycle. */
+body[data-v="7"] { --cycle: 6.5s; }
+.v7 { animation-name: v7-out; }
+.v7 svg { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; will-change: transform; animation-name: push-in; }
+.v7 .win { position: absolute; z-index: 0; overflow: hidden; will-change: transform; animation-name: win-front; }
+.v7 .win img { position: absolute; max-width: none; object-fit: cover; will-change: transform; }
+.v7 .win .light { position: absolute; inset: 0; background: radial-gradient(ellipse 75% 75% at 50% 75%, #EEDFC8, #F8F7F4); animation-name: light-out; }
+.v7 .center { z-index: 3; }
+.v7 .wall { fill: var(--bg); }
+.v7 .tone { animation-name: tone-in; }
+.v7 .ln path { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 1; stroke-linecap: round; stroke-linejoin: round; }
+.v7 .s1 { stroke-opacity: .44; animation-name: draw-a; }
+.v7 .s2 { stroke-opacity: .2; animation-name: draw-b; }
+.v7 .s3 { stroke-opacity: .34; animation-name: draw-c; }
+.v7 .s4 { stroke-opacity: .24; animation-name: draw-d; }
+.v7 .box { animation-name: v7-mark; }
+.v7 .fill { animation-name: v7-wipe; }
+body[data-v="7"] .hero .mark { animation: mark-in var(--cycle) infinite both; }
+@keyframes draw-a { 0%, 1% { stroke-dashoffset: 1; animation-timing-function: cubic-bezier(.45, 0, .2, 1); } 16%, 100% { stroke-dashoffset: 0; } }
+@keyframes draw-b { 0%, 6% { stroke-dashoffset: 1; animation-timing-function: cubic-bezier(.45, 0, .2, 1); } 24%, 100% { stroke-dashoffset: 0; } }
+@keyframes draw-c { 0%, 12% { stroke-dashoffset: 1; animation-timing-function: cubic-bezier(.45, 0, .2, 1); } 32%, 100% { stroke-dashoffset: 0; } }
+@keyframes draw-d { 0%, 18% { stroke-dashoffset: 1; animation-timing-function: cubic-bezier(.45, 0, .2, 1); } 38%, 100% { stroke-dashoffset: 0; } }
+@keyframes tone-in { 0% { opacity: 0; } 20%, 100% { opacity: 1; } }
+@keyframes v7-wipe { 0%, 6% { clip-path: inset(0 100% 0 0); animation-timing-function: cubic-bezier(.65, 0, .35, 1); } 30%, 100% { clip-path: inset(0 0 0 0); } }
+@keyframes v7-mark { 0%, 35% { opacity: 1; scale: 1; } 40%, 100% { opacity: 0; scale: .96; } }
+@keyframes win-front { 0%, 43.9% { z-index: 0; } 44%, 100% { z-index: 2; } } /* behind the drawing until it opens, then in front */
+@keyframes light-out { 0%, 44% { opacity: 1; animation-timing-function: cubic-bezier(.4, 0, .6, 1); } 58%, 100% { opacity: 0; } }
+@keyframes push-in { 0%, 44% { scale: 1; animation-timing-function: cubic-bezier(.65, 0, .35, 1); } 68%, 100% { scale: 1.12; } }
+@keyframes v7-out { 0%, 67.5% { opacity: 1; } 68%, 100% { opacity: 0; } }
+@keyframes mark-in { 0%, 64% { opacity: 0; translate: 0 14px; animation-timing-function: cubic-bezier(.2, 0, .2, 1); } 78%, 100% { opacity: 1; translate: 0 0; } }
+
+/* 8. 3D: the Ó monogram as a solid piece (24 copies stacked in depth) turning slowly in space, the logo filling in below */
+.v8 { background: var(--bg); animation-name: roll-up; }
+.v8 .center { gap: 48px; align-content: center; }
+.v8 .stage { perspective: 900px; display: grid; justify-items: center; animation-name: lift-away; }
+.v8 .obj { position: relative; width: 150px; aspect-ratio: 376 / 359; transform-style: preserve-3d; animation: turn 1.35s cubic-bezier(.45, 0, .55, 1) infinite alternate both; }
+.v8 .obj .monogram { position: absolute; inset: 0; color: #2e090b; transform: translateZ(calc(var(--z) * 1.25px)); animation: none; }
+.v8 .obj .face { color: var(--ink); }
+.v8 .obj .back { color: #6d2a2e; }
+.v8 .shadow { width: 160px; height: 16px; margin-top: 30px; border-radius: 50%; background: rgb(46 9 11 / .22); filter: blur(8px); animation: none; }
+@keyframes turn { from { transform: rotateX(8deg) rotateY(-38deg); } to { transform: rotateX(8deg) rotateY(38deg); } }
+
+/* Option switcher */
+nav { position: fixed; z-index: 20; left: 50%; bottom: 16px; translate: -50% 0; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgb(20 6 7 / .7); backdrop-filter: blur(8px); }
+nav a { color: var(--paper); text-decoration: none; white-space: nowrap; padding: 6px clamp(6px, 1vw, 12px); border-radius: 999px; font-size: 12px; letter-spacing: .08em; }
+nav a[aria-current] { background: var(--paper); color: var(--deep); }
+body.still nav { display: none; }
+</style>
+</head>
+<body>
+<div class="hero">
+  <img src="dubai-marina-residence-1080.webp" alt="">
+  <div class="mark"><span class="logo wordmark"></span><span class="caps">— Interior design studio —</span></div>
+</div>
+
+<div class="pre v1"><div class="center"><div class="box"><span class="logo wordmark ghost"></span><span class="logo wordmark fill"></span></div></div></div>
+
+<div class="pre v2">
+  <div class="top"><span class="logo wordmark"></span><span class="caps">Interior design studio · Dubai</span></div>
+  <span class="caps say">Loading the work</span>
+  <div class="num"></div>
+  <div class="bar"></div>
+</div>
+
+<div class="pre v3"><div class="center"><div class="seal">
+  <svg viewBox="0 0 150 150"><circle class="track" cx="75" cy="75" r="70"/><circle cx="75" cy="75" r="70"/></svg>
+  <span class="logo monogram"></span>
+</div></div></div>
+
+<div class="pre v4">
+  <div class="door"></div><div class="door"></div>
+  <div class="center"><span class="logo wordmark"></span><div class="line"></div><span class="caps">Interior design studio</span></div>
+</div>
+
+<div class="pre v5">
+  <div class="bg"></div>
+  <div class="frame">
+    <img src="jlt-office-1080.webp" alt="">
+    <img src="arabian-ranches-garden-1080.webp" alt="">
+    <img src="dubai-marina-residence-1080.webp" alt="">
+  </div>
+  <div class="label"><span class="logo wordmark"></span></div>
+</div>
+
+<div class="pre v6"><div class="scene"></div><div class="wash"></div><div class="center"><div class="box"><span class="logo wordmark ghost"></span><span class="logo wordmark fill"></span></div></div></div>
+
+<div class="pre v7">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path class="door" fill="none" d="M600 640V420A120 120 0 0 1 840 420V640Z"/><!-- invisible: the script measures it to place the doorway box -->
+    <g>
+      <!-- the room, with the arched doorway cut out so the doorway box behind shows through -->
+      <path class="wall" fill-rule="evenodd" d="M-200-200H1640V1100H-200Z M600 640V420A120 120 0 0 1 840 420V640Z"/>
+      <g class="tone">
+        <path fill="#F3F0EA" d="M0 0H1440L970 250H470Z"/>
+        <path fill="#EEEAE2" d="M0 0L470 250V640L0 900Z M1440 0L970 250V640L1440 900Z"/>
+        <path fill="#EAE3D8" d="M0 900L470 640H970L1440 900Z"/>
+      </g>
+      <g class="ln">
+        <!-- 1: the room and the arch -->
+        <path class="s1" pathLength="1" d="M470 250H970V640H470Z"/>
+        <path class="s1" pathLength="1" d="M470 250L0 0M970 250L1440 0M470 640L0 900M970 640L1440 900"/>
+        <path class="s1" pathLength="1" d="M600 640V420A120 120 0 0 1 840 420V640"/>
+        <path class="s1" pathLength="1" d="M614 640V420A106 106 0 0 1 826 420V640"/>
+        <path class="s1" pathLength="1" d="M588 640V420A132 132 0 0 1 852 420V640"/>
+        <!-- 2: ceiling beams and cornice, floor boards, threshold, wall panels, niches -->
+        <path class="s2" pathLength="1" d="M570 250L378 0M670 250L606 0M770 250L834 0M870 250L1062 0M226 120H1214M357 190H1083M470 262H970"/>
+        <path class="s2" pathLength="1" d="M570 640L370 900M670 640L603 900M770 640L837 900M870 640L1070 900M620 640L487 900M720 652V900M820 640L953 900M361 700H1079M217 780H1223M90 850H1350"/>
+        <path class="s2" pathLength="1" d="M590 652H850M600 640L590 652M840 640L850 652"/>
+        <path class="s2" pathLength="1" d="M495 280H580V560H495ZM507 292H568V548H507ZM860 280H945V560H860ZM872 292H933V548H872ZM470 626H588M852 626H970"/>
+        <path class="s2" pathLength="1" d="M300 690V300A60 60 0 0 1 400 270V650M1140 690V300A60 60 0 0 0 1040 270V650"/>
+        <!-- 3: pendant lamp, sofa, plant, shelves, rug, table, art, window, armchair, floor lamp, light spilling from the doorway -->
+        <path class="s3" pathLength="1" d="M720 0V190M688 190Q720 150 752 190ZM712 196A8 8 0 0 0 728 196"/>
+        <path class="s3" pathLength="1" d="M490 640V600H588V640M494 600V578Q494 572 500 572H578Q584 572 584 578V600M490 614H588M539 572V600"/>
+        <path class="s3" pathLength="1" d="M872 640L866 604H912L906 640M889 604C884 570 868 552 852 540M889 604C892 566 904 548 922 532M889 604C888 576 890 556 888 528M889 604C880 586 864 584 850 586M889 604C898 588 914 586 928 590"/>
+        <path class="s3" pathLength="1" d="M300 470L400 462M300 560L400 556M336 469C330 455 334 445 342 440H350C358 445 362 455 356 468M330 559A20 8 0 0 0 370 558"/>
+        <path class="s3" pathLength="1" d="M1040 462L1140 470M1040 556L1140 560M1092 440A14 14 0 1 0 1092 412A14 14 0 1 0 1092 440M1086 465H1098V440"/>
+        <path class="s3" pathLength="1" d="M470 770A250 46 0 1 0 970 770A250 46 0 1 0 470 770M520 770A200 34 0 1 0 920 770A200 34 0 1 0 520 770"/>
+        <path class="s3" pathLength="1" d="M640 720A80 16 0 1 0 800 720A80 16 0 1 0 640 720M662 728V772M778 728V772M720 736V782"/>
+        <path class="s3" pathLength="1" d="M120 310L230 331V480L120 487ZM134 324L216 339V468L134 474Z"/>
+        <path class="s3" pathLength="1" d="M1210 285L1320 256V541L1210 526ZM1265 271V533M1210 409L1320 403"/>
+        <path class="s3" pathLength="1" d="M228 900V826Q228 796 258 796H352Q382 796 382 826V900M218 846H392M240 846V900M370 846V900"/>
+        <path class="s3" pathLength="1" d="M1236 900V612M1204 612L1220 566H1252L1268 612ZM1218 900H1254"/>
+        <path class="s3" pathLength="1" d="M600 640L556 706M840 640L884 706"/>
+        <!-- 4: small details: ceiling spotlights, cushions, art, curtains, books, a vase of branches on the table -->
+        <path class="s4" pathLength="1" d="M516 95A4 4 0 1 0 524 95A4 4 0 1 0 516 95M916 95A4 4 0 1 0 924 95A4 4 0 1 0 916 95M606 175A4 4 0 1 0 614 175A4 4 0 1 0 606 175M826 175A4 4 0 1 0 834 175A4 4 0 1 0 826 175"/>
+        <path class="s4" pathLength="1" d="M500 588Q511 580 522 588M556 588Q566 580 576 588"/>
+        <path class="s4" pathLength="1" d="M142 440C162 400 186 424 208 384M150 456C170 436 190 448 206 430"/>
+        <path class="s4" pathLength="1" d="M1198 270C1192 370 1202 470 1194 572M1334 236C1328 370 1340 480 1332 600"/>
+        <path class="s4" pathLength="1" d="M1050 556V530M1058 556V534M1066 556V528M1074 556L1080 532"/>
+        <path class="s4" pathLength="1" d="M712 712C708 700 712 692 716 688H724C728 692 732 700 728 712M718 688C714 670 704 660 696 650M722 688C726 668 736 660 746 648M720 688V660"/>
+      </g>
+    </g>
+  </svg>
+  <!-- the doorway: an arch-shaped box with warm light over a copy of the hero photo; the script places it over the drawn doorway -->
+  <div class="win"><img src="dubai-marina-residence-1080.webp" alt=""><div class="light"></div></div>
+  <div class="center"><div class="box"><span class="logo wordmark ghost"></span><span class="logo wordmark fill"></span></div></div>
+</div>
+
+<div class="pre v8"><div class="center">
+  <div class="stage"><div class="obj"></div><div class="shadow"></div></div>
+  <div class="box"><span class="logo wordmark ghost"></span><span class="logo wordmark fill"></span></div>
+</div></div>
+
+<nav>
+  <a href="?v=1">1 Fill</a><a href="?v=2">2 Counter</a><a href="?v=3">3 Iris</a><a href="?v=4">4 Doors</a><a href="?v=5">5 Window</a><a href="?v=6">6 Scenery</a><a href="?v=7">7 Sketch</a><a href="?v=8">8 3D</a>
+</nav>
+
+<script>
+  const obj = document.querySelector('.v8 .obj');
+  for (let z = 0; z < 24; z++) obj.insertAdjacentHTML('beforeend', `<span class="logo monogram${z === 23 ? ' face' : z === 0 ? ' back' : ''}" style="--z:${z - 12}"></span>`);
+  const q = new URLSearchParams(location.search);
+  const v = q.get('v') || '1';
+  document.body.dataset.v = v;
+
+  // Option 7: place the doorway box over the drawn doorway, then grow it. The box scales by s and the photo inside by 1/s, both
+  // around the doorway's centre, so the photo stays put; s rises in log space from 1 to the scale that covers the whole screen.
+  let opening = [];
+  function openDoorway() {
+    if (v !== '7') return;
+    opening.forEach((a) => a.cancel());
+    const r = document.querySelector('.v7 .door').getBoundingClientRect();
+    const win = document.querySelector('.v7 .win');
+    const img = win.querySelector('img');
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2, half = r.width / 2;
+    Object.assign(win.style, { left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px`, borderRadius: `${half}px ${half}px 0 0` });
+    Object.assign(img.style, { left: `${-r.left}px`, top: `${-r.top}px`, width: `${innerWidth}px`, height: `${innerHeight}px`, transformOrigin: `${cx}px ${cy}px` });
+    // The smallest scale at which the arch covers all four corners of the screen.
+    const inside = (x, y, s) => { x /= s; y /= s; const top = -r.height / 2 + half; return Math.abs(x) <= half && y <= r.height / 2 && (y >= top || Math.hypot(x, y - top) <= half); };
+    let end = 1;
+    while (![[-cx, -cy], [innerWidth - cx, -cy], [-cx, innerHeight - cy], [innerWidth - cx, innerHeight - cy]].every(([x, y]) => inside(x, y, end))) end *= 1.02;
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const from = 0.44, to = 0.68, steps = 60;
+    const outer = [{ offset: 0, transform: 'scale(1)' }], inner = [{ offset: 0, transform: 'scale(1)' }];
+    for (let i = 0; i <= steps; i++) {
+      const s = Math.pow(end, ease(i / steps));
+      outer.push({ offset: from + (to - from) * (i / steps), transform: `scale(${s})` });
+      inner.push({ offset: from + (to - from) * (i / steps), transform: `scale(${1 / s})` });
+    }
+    outer.push({ offset: 1, transform: `scale(${end})` }); inner.push({ offset: 1, transform: `scale(${1 / end})` });
+    const timing = { duration: 6500, iterations: Infinity };
+    opening = [win.animate(outer, timing), img.animate(inner, timing)];
+    document.querySelector('.v7 svg').style.transformOrigin = `${cx}px ${cy}px`;
+    // Keep the box in step with the CSS animations around it.
+    const css = document.querySelector('.v7').getAnimations()[0];
+    if (css) opening.forEach((a) => { a.currentTime = css.currentTime; });
+  }
+  openDoorway();
+  addEventListener('resize', openDoorway);
+  document.querySelector(`nav a[href="?v=${v}"]`)?.setAttribute('aria-current', 'page');
+  if (q.has('t')) {
+    document.body.classList.add('still');
+    document.fonts.ready.then(() => document.getAnimations().forEach((a) => { a.currentTime = Number(q.get('t')); a.pause(); }));
+  }
+</script>
+</body>
+</html>
