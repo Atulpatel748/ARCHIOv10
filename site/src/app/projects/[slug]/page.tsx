@@ -24,7 +24,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: `${project.title}, ${project.category} project`,
     description: `${project.summary} ${project.location}, ${project.area}.`,
     alternates: { canonical: `/projects/${project.slug}` },
-    openGraph: { images: [project.cover.src] },
+    // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
+    openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: [project.cover.src] },
   };
 }
 
