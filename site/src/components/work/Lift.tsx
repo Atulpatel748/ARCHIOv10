@@ -84,13 +84,13 @@ export default function Lift({ projects }: { projects: Project[] }) {
               <Image src={p.cover.src} alt="" fill priority={i === 0} sizes="100vw" />
             </div>
             <div className={styles.lfVeil} aria-hidden="true" />
-            <Link href={`/projects/${p.slug}`} className={styles.lfHit} aria-hidden="true" tabIndex={-1} data-cursor="View" />
+            <Link prefetch={false} href={`/projects/${p.slug}`} className={styles.lfHit} aria-hidden="true" tabIndex={-1} data-cursor="View" />
             <div className={`container ${styles.lfText}`}>
               <span className={styles.lfTag} data-lf-in>{p.category}</span>
               <h2 className={styles.lfTitle} data-lf-in>{p.title}</h2>
               <div className={styles.lfRow} data-lf-in>
                 <span className={styles.lfMeta}>{p.location}, {p.area}</span>
-                <Link href={`/projects/${p.slug}`} className={`text-link ${styles.lfGo}`}><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
+                <Link prefetch={false} href={`/projects/${p.slug}`} className={`text-link ${styles.lfGo}`}><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
               </div>
             </div>
             <div className={styles.lfDim} data-lf-dim aria-hidden="true" />
@@ -99,7 +99,7 @@ export default function Lift({ projects }: { projects: Project[] }) {
         <div className={styles.lfStrip}>
           <ul className={styles.lfNames}>
             {projects.map((p, i) => (
-              <li key={p.slug} className={i === current ? styles.isOn : undefined}><Link href={`/projects/${p.slug}`}>{p.title}</Link></li>
+              <li key={p.slug} className={i === current ? styles.isOn : undefined}><Link prefetch={false} href={`/projects/${p.slug}`}>{p.title}</Link></li>
             ))}
           </ul>
         </div>

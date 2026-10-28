@@ -8,7 +8,7 @@ type Props = { project: Project; size?: 'large' | 'regular'; priority?: boolean 
 export default function ProjectCard({ project, size = 'regular', priority = false }: Props) {
   return (
     <article className={`${styles.card} ${size === 'large' ? styles.large : ''}`} data-reveal>
-      <Link href={`/projects/${project.slug}`} className={styles.link} data-cursor="View">
+      <Link prefetch={false} href={`/projects/${project.slug}`} className={styles.link} data-cursor="View">
         <div className={styles.media} data-mask>
           <Image
             src={project.cover.src}

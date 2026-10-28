@@ -51,7 +51,7 @@ export default function HomePage() {
             {['Residential', 'Commercial', 'Landscape'].map((name, i) => (
               <span key={name} className={styles.seqItem} style={{ '--i': i } as React.CSSProperties} aria-hidden="true">{name}</span>
             ))}
-            <Link href="/projects" className={`text-link ${styles.seqLink}`} style={{ '--i': 3 } as React.CSSProperties}><Roll>See the work</Roll></Link>
+            <Link prefetch={false} href="/projects" className={`text-link ${styles.seqLink}`} style={{ '--i': 3 } as React.CSSProperties}><Roll>See the work</Roll></Link>
           </div>
         </div>
       </Sequence>
@@ -84,7 +84,7 @@ export default function HomePage() {
             <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to handover." />
           </div>
           <StageList stages={stages} />
-          <Link href="/services" className={`text-link ${styles.allServices}`} data-reveal><Roll>All services</Roll></Link>
+          <Link prefetch={false} href="/services" className={`text-link ${styles.allServices}`} data-reveal><Roll>All services</Roll></Link>
         </div>
       </section>
 
@@ -93,7 +93,7 @@ export default function HomePage() {
         <div className={styles.foundersHead}>
           <p className="label" data-reveal>Who you work with</p>
           <Split className={styles.big} text="The people behind" accent="Archió." />
-          <Link href="/about" className="text-link" data-reveal><Roll>About the studio</Roll></Link>
+          <Link prefetch={false} href="/about" className="text-link" data-reveal><Roll>About the studio</Roll></Link>
         </div>
         <ul className={styles.foundersGrid}>
           {team.map((m) => (
@@ -115,7 +115,7 @@ export default function HomePage() {
           <Split className={styles.big} text="Three spaces," accent="designed in full." />
         </div>
         <div className={`container ${styles.flagship}`}>
-          <Link href={`/projects/${flagship.slug}`} className={styles.flagshipMedia} data-cursor="View" data-mask>
+          <Link prefetch={false} href={`/projects/${flagship.slug}`} className={styles.flagshipMedia} data-cursor="View" data-mask>
             <Image src={flagship.hero.src} alt={flagship.hero.alt} fill sizes="(max-width: 1023px) 100vw, 60vw" />
           </Link>
           <div className={styles.factsCard} data-reveal>
@@ -125,7 +125,7 @@ export default function HomePage() {
               <div><dt>Where</dt><dd>{flagship.location}</dd></div>
               <div><dt>Area</dt><dd>{flagship.area}</dd></div>
             </dl>
-            <Link href={`/projects/${flagship.slug}`} className="btn btn--solid"><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
+            <Link prefetch={false} href={`/projects/${flagship.slug}`} className="btn btn--solid"><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
           </div>
         </div>
         <div className={`container ${styles.others}`}>
@@ -139,7 +139,7 @@ export default function HomePage() {
           <div className={styles.processHead}>
             <p className="label" data-reveal>How it goes</p>
             <Split className={styles.big} text="From the first conversation" accent="to the final handover." />
-            <Link href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
+            <Link prefetch={false} href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
           </div>
           <Journey steps={processSteps} />
         </div>

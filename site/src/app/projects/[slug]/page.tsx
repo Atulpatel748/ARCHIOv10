@@ -51,7 +51,7 @@ export default async function ProjectPage({ params }: Params) {
             <div><dt>Category</dt><dd>{project.category}</dd></div>
             <div><dt>Area</dt><dd>{project.area}</dd></div>
           </dl>
-          <Link href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
           <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
         </aside>
       </section>
@@ -66,13 +66,13 @@ export default async function ProjectPage({ params }: Params) {
         <div className={styles.endCta}>
           <Split className={styles.endTitle} text="Tell us about the space." />
           <div className={styles.endActions} data-reveal>
-            <Link href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
+            <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
             <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
           </div>
         </div>
         <div className={styles.endNext}>
-          <Link href="/projects" className={`text-link ${styles.endAll}`} data-reveal><Roll>All the work</Roll></Link>
-          <Link href={`/projects/${next.slug}`} className={styles.next} data-cursor="View" data-reveal>
+          <Link prefetch={false} href="/projects" className={`text-link ${styles.endAll}`} data-reveal><Roll>All the work</Roll></Link>
+          <Link prefetch={false} href={`/projects/${next.slug}`} className={styles.next} data-cursor="View" data-reveal>
             <span className="label label--rule">Next project</span>
             <span className={styles.nextTitle}>{next.title}</span>
             <span className={styles.nextPlace}>{next.category}, {next.location}</span>

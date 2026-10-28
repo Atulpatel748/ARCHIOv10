@@ -60,7 +60,7 @@ export default function ServicesPage() {
           </ol>
         </div>
         <div className={`container ${styles.processCta}`} data-reveal>
-          <Link href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
         </div>
       </section>
     </>

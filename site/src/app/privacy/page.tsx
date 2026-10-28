@@ -52,7 +52,7 @@ export default function PrivacyPage() {
           <p>We may update this notice when the website or our practices change.</p>
         </section>
       </div>
-      <p className={styles.back}><Link href="/contact">Return to contact</Link></p>
+      <p className={styles.back}><Link prefetch={false} href="/contact">Return to contact</Link></p>
       </section>
     </>
   );

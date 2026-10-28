@@ -96,7 +96,7 @@ export default function ContactForm() {
           <input type="checkbox" name="consent" value="yes" required aria-describedby={errors.consent ? 'consent-error' : undefined} />
           <span>I agree to Archió using these details to reply to my enquiry.</span>
         </label>
-        <p className={styles.privacyLink}>Read our <Link href="/privacy">Privacy Notice</Link>.</p>
+        <p className={styles.privacyLink}>Read our <Link prefetch={false} href="/privacy">Privacy Notice</Link>.</p>
         {errors.consent && <p id="consent-error" className={styles.error}>{errors.consent}</p>}
       </div>
       <button type="submit" className="btn btn--light" disabled={state === 'sending'}>{state === 'sending' ? 'Sending' : 'Send enquiry'}</button>

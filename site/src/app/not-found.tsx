@@ -10,8 +10,8 @@ export default function NotFound() {
         <h1 className="display">This page is not here.</h1>
         <p className={styles.text}>The address may have changed. The projects, services and studio are one step away.</p>
         <div className={styles.links}>
-          <Link href="/projects" className="btn btn--light"><Roll>View projects</Roll></Link>
-          <Link href="/" className="btn btn--outline-light"><Roll>Home</Roll></Link>
+          <Link prefetch={false} href="/projects" className="btn btn--light"><Roll>View projects</Roll></Link>
+          <Link prefetch={false} href="/" className="btn btn--outline-light"><Roll>Home</Roll></Link>
         </div>
       </div>
     </section>

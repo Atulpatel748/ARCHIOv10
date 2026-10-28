@@ -12,7 +12,7 @@ export default function Footer() {
         </div>
         <nav aria-label="Footer" className={styles.col}>
           <p className="label">Explore</p>
-          {nav.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
+          {nav.map((item) => <Link prefetch={false} key={item.href} href={item.href}>{item.label}</Link>)}
         </nav>
         <div className={styles.col}>
           <p className="label">Contact</p>
@@ -26,7 +26,7 @@ export default function Footer() {
       <div className={`container ${styles.bottom}`}>
         <p>© {new Date().getFullYear()} {site.legalName}</p>
         <p>{site.parentLine}</p>
-        <Link href="/privacy">Privacy notice</Link>
+        <Link prefetch={false} href="/privacy">Privacy notice</Link>
       </div>
     </footer>
   );
