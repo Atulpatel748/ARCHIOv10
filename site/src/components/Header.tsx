@@ -74,6 +74,7 @@ export default function Header() {
         // No motion: the hero keeps its big wordmark and line; the header logo simply appears once the hero is mostly scrolled past.
         el.style.setProperty('--p', '1');
         el.toggleAttribute('data-over-hero', scrollY < distance * 0.5);
+        el.inert = scrollY < distance * 0.5;
         tag?.style.removeProperty('transform');
         tag?.style.removeProperty('opacity');
         return;
@@ -81,6 +82,7 @@ export default function Header() {
       const t = Math.min(1, Math.max(0, scrollY / distance));
       const r = Math.min(t / 0.8, 1);
       el.style.setProperty('--p', String(r));
+      el.inert = r < 1; // the big hero wordmark is not a link; it becomes one once it has docked into the header
       if (tag) {
         tag.style.transform = `translate3d(0, ${dy * r}px, 0)`;
         tag.style.opacity = String(1 - r);
@@ -102,6 +104,7 @@ export default function Header() {
       reduced.removeEventListener('change', onResize);
       ['--p', '--y0', '--s0'].forEach((v) => el.style.removeProperty(v));
       el.removeAttribute('data-over-hero');
+      el.inert = false;
       tag?.style.removeProperty('transform');
       tag?.style.removeProperty('opacity');
     };
