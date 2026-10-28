@@ -1,0 +1,151 @@
+@use '../styles/tokens' as *;
+
+/* The room: pure CSS 3D. <Sequence> sets --progress (0 to 1) on .track; every piece works out its own build state from --p, so the
+   browser animates it without any script per frame. */
+
+/* Every timed piece: u (0 to 1 between its --from and --to), eased into t */
+%timed {
+  --u: clamp(0, calc((var(--p) - var(--from)) / (var(--to) - var(--from))), 1);
+  --t: calc(var(--u) * var(--u) * (3 - 2 * var(--u)));
+}
+
+.track {
+  --p: var(--progress, 1); /* the finished room when the script has not run */
+  --glow: clamp(0, calc((var(--p) - 0.76) / 0.2), 1);
+  position: relative; border-top: 1px solid var(--line);
+}
+.stage {
+  position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px clamp(24px, 4vw, 72px); align-items: center;
+  padding: clamp(64px, 8vw, 120px) var(--margin); max-width: 1440px; margin-inline: auto;
+  @include tablet-down { grid-template-columns: 1fr; }
+}
+/* Pinned: the stage stays on screen while the tall track scrolls past (large screens that are tall enough) */
+@media (min-width: 1024px) and (min-height: 640px) {
+  .track[data-seq] { height: 520vh; }
+  .track[data-seq] .stage { position: sticky; top: 0; height: 100dvh; padding-block: calc(var(--header-h) + 8px) 24px; }
+  .track[data-seq] .stage::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 70% at 68% 55%, rgb(238 223 200 / calc(var(--glow) * 0.55)), transparent 70%); pointer-events: none; }
+}
+@media (max-width: 1023px), (max-height: 639px) { .track { --p: 1; } } /* not pinned: the finished room */
+
+/* Steps, left */
+.steps {
+  position: relative; z-index: 2; display: grid; justify-items: start; gap: 0;
+  :global(.label) { margin-bottom: 22px; }
+  ol {
+    list-style: none; margin: 0 0 32px; padding: 0 0 0 clamp(28px, 3vw, 44px); display: grid; gap: 18px; position: relative;
+    &::before, &::after { content: ''; position: absolute; left: 0; top: 6px; width: 1px; }
+    &::before { bottom: 6px; background: var(--line); }
+    &::after { height: calc((100% - 12px) * var(--p)); background: var(--oxblood); }
+  }
+  li {
+    --on: clamp(0, calc((var(--p) - var(--at)) * 1000), 1);
+    --off: clamp(0, calc((var(--p) - var(--next)) * 1000), 1);
+    --cur: clamp(0, calc(var(--on) - var(--off)), 1);
+    position: relative; opacity: calc(0.6 + var(--on) * 0.4); /* steps not yet reached stay readable: 4.9:1 on the paper */
+    &::before {
+      content: ''; position: absolute; left: calc(-1 * clamp(28px, 3vw, 44px) - 4px); top: 4px; width: 9px; height: 9px; border-radius: 50%;
+      background: color-mix(in srgb, var(--oxblood) calc(var(--on) * 100%), var(--paper)); box-shadow: inset 0 0 0 1px var(--oxblood);
+    }
+    h3 { font-size: clamp(1.25rem, 1rem + 0.7vw, 1.75rem); line-height: 1.15; }
+    p { margin: 0; max-width: 42ch; font-size: 1rem; }
+  }
+}
+.big { font-size: clamp(1.875rem, 1rem + 1.7vw, 3rem); line-height: 1.02; margin-bottom: 28px; max-width: 18ch; text-transform: uppercase; letter-spacing: 0.01em; }
+.eyebrow { display: block; margin-bottom: 4px; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: #8A2E34; }
+/* When pinned, only the current step shows its text, so the column stays short */
+@media (min-width: 1024px) and (min-height: 640px) {
+  .track[data-seq] .steps li p { overflow: hidden; max-height: calc(var(--cur) * 7em); opacity: var(--cur); }
+}
+
+/* The room, right. The box is centred and turns about its own middle, which is the middle of the floor. */
+.view {
+  position: relative; height: 300px; overflow: clip; perspective: 2400px; perspective-origin: 50% 36%;
+  @media (min-width: 640px) { height: 400px; }
+  @media (min-width: 1024px) { overflow: visible; height: 480px; }
+  @media (min-width: 1024px) and (min-height: 640px) { height: 100%; }
+}
+.iso {
+  position: absolute; left: 50%; top: 50%; margin: -350px 0 0 -350px; width: 700px; height: 700px; transform-style: preserve-3d; will-change: transform;
+  transform: translate(0, 40px) rotateX(58deg) rotateZ(calc(45deg + var(--p) * 360deg));
+  /* About 600px across when it has turned to its widest, like Wood & Weave's illustrations (about 42% of the page) */
+  scale: 0.36;
+  @media (min-width: 640px) { scale: 0.5; }
+  @media (min-width: 1024px) { scale: 0.46; }
+  @media (min-width: 1280px) { scale: 0.54; }
+  @media (min-width: 1536px) and (min-height: 860px) { scale: 0.6; }
+  > * { position: absolute; transform-style: preserve-3d; }
+}
+@media (prefers-reduced-motion: reduce) { .iso { transform: translate(0, 40px) rotateX(58deg) rotateZ(45deg); } }
+
+.floor {
+  @extend %timed; left: 0; top: 0; width: 700px; height: 700px; opacity: calc(0.15 + var(--t) * 0.85);
+  box-shadow: 0 0 0 1px rgb(76 17 20 / 0.12), 0 70px 100px -20px rgb(59 12 15 / 0.4);
+  background: repeating-linear-gradient(90deg, transparent 0 69px, rgb(76 17 20 / 0.1) 69px 70px), repeating-linear-gradient(0deg, #E6D9C6 0 35px, #E0D2BD 35px 70px);
+}
+.shafts {
+  left: 0; top: 0; width: 700px; height: 700px; transform: translateZ(1.2px); opacity: calc(var(--glow) * 0.9);
+  background: repeating-linear-gradient(118deg, transparent 0 54px, rgb(255 226 170 / 0.34) 54px 104px);
+  mask: linear-gradient(90deg, transparent, #000 25%, #000 75%, transparent);
+}
+.pool { width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(closest-side, rgb(255 214 150 / 0.65), transparent); opacity: var(--glow); transform: translateZ(1.5px); }
+.ghost {
+  width: var(--w); height: var(--d); left: var(--x); top: var(--y); border: 1px dashed rgb(76 17 20 / 0.5);
+  opacity: calc(clamp(0, calc((var(--p) - 0.04) / 0.08), 1) * (1 - clamp(0, calc((var(--p) - 0.5) / 0.12), 1)));
+}
+
+/* Walls: an upright outer plane and an inner sheet that grows from the floor up. The sheet is single-sided, so a wall between you and
+   the room disappears while the walls behind it stay. */
+.wall { @extend %timed; width: 700px; height: 300px; top: -300px; left: 0; transform-origin: 0 100%; }
+.wBack { transform: rotateX(-90deg); }
+.wFront { top: 400px; transform: rotateX(-90deg); }
+.wSide { transform: rotateZ(90deg) rotateX(-90deg); }
+.wSide2 { left: 700px; transform: rotateZ(90deg) rotateX(-90deg); }
+.sheet {
+  position: absolute; inset: 0; transform-origin: 50% 100%; transform: scaleY(var(--t)); backface-visibility: hidden; overflow: hidden;
+  background: linear-gradient(#F5F2EC, #EDE8DF); box-shadow: inset 0 0 0 1px rgb(76 17 20 / 0.22);
+  &::before { content: ''; position: absolute; inset: 0; z-index: 5; pointer-events: none; background: radial-gradient(70% 70% at 50% 100%, rgb(255 214 150 / 0.45), transparent); opacity: var(--glow); }
+}
+.flip .sheet { transform: rotateY(180deg) scaleY(var(--t)); }
+.crown { position: absolute; left: 0; right: 0; top: 0; height: 12px; background: #FBF9F5; box-shadow: 0 2px 0 rgb(76 17 20 / 0.1); }
+.skirt { position: absolute; left: 0; right: 0; bottom: 0; height: 20px; background: #FBF9F5; box-shadow: 0 -1px 0 rgb(76 17 20 / 0.14); }
+.panels { position: absolute; left: 0; right: 0; bottom: 20px; height: 110px; background: repeating-linear-gradient(90deg, transparent 0 86px, rgb(76 17 20 / 0.13) 86px 88px); box-shadow: 0 -2px 0 rgb(76 17 20 / 0.13); }
+.arch {
+  position: absolute; left: 260px; bottom: 20px; width: 180px; height: 230px; border-radius: 90px 90px 0 0; box-shadow: inset 0 0 0 6px rgb(76 17 20 / 0.55); background: linear-gradient(#F8EBD6, #EEDFC8);
+  &::after { content: ''; position: absolute; inset: 12px 12px 0; border-radius: 78px 78px 0 0; box-shadow: inset 0 0 0 1px rgb(76 17 20 / 0.3); }
+}
+.window {
+  position: absolute; background: linear-gradient(#D8E3E8, #F3EEE4); box-shadow: inset 0 0 0 7px #FBF9F5, 0 0 0 1px rgb(76 17 20 / 0.25);
+  &::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 6px; translate: -50% 0; background: #FBF9F5; }
+  &::after { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 6px; translate: 0 -50%; background: #FBF9F5; }
+}
+.curtain { position: absolute; width: 38px; background: repeating-linear-gradient(90deg, #CEB6A8 0 6px, #C2A794 6px 11px); box-shadow: 4px 0 10px rgb(76 17 20 / 0.15); }
+.frame { position: absolute; background: linear-gradient(120deg, var(--blush), var(--sand)); box-shadow: 0 0 0 5px #FBF9F5, 0 0 0 6px rgb(76 17 20 / 0.3); }
+.red { background: linear-gradient(160deg, #8A2E34, #4C1114); }
+.green { background: linear-gradient(#DDE3D2, #B9C4A6); }
+.mirror { position: absolute; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, #D6DEE2 70%); box-shadow: 0 0 0 7px #B08D6B, 0 0 0 8px rgb(76 17 20 / 0.3); }
+.tv { position: absolute; background: linear-gradient(135deg, #1B1214, #3A2A2D 55%, #1B1214); box-shadow: 0 0 0 4px #120a0b; }
+.sconce {
+  position: absolute; width: 22px; height: 40px; border-radius: 0 0 11px 11px; background: #EEDFC8; box-shadow: 0 0 0 1px rgb(76 17 20 / 0.3);
+  &::after { content: ''; position: absolute; left: 50%; top: 12px; width: 150px; height: 150px; translate: -50% 0; border-radius: 50%; background: radial-gradient(closest-side, rgb(255 214 150 / 0.85), transparent); opacity: var(--glow); }
+}
+
+/* Furniture: boxes that grow up from the floor (scaled in z, so nothing fades, which would flatten the 3D) */
+.item { @extend %timed; transform: translate3d(var(--x), var(--y), var(--z0, 0px)); scale: 1 1 var(--t); transform-origin: 0 0 0; opacity: clamp(0, calc(var(--t) * 1000), 1); }
+.f { position: absolute; transform-origin: 0 0; background: var(--c); box-shadow: inset 0 0 0 1px rgb(76 17 20 / 0.3); }
+.item .top { width: var(--w); height: var(--d); transform: translateZ(var(--h)); background: color-mix(in srgb, var(--c), white 12%); }
+.item .front { width: var(--w); height: var(--h); transform: translateY(var(--d)) rotateX(90deg); background: color-mix(in srgb, var(--c), black 8%); }
+.item .back { width: var(--w); height: var(--h); transform: rotateX(90deg); background: color-mix(in srgb, var(--c), black 12%); }
+.item .right { width: var(--d); height: var(--h); transform: translateX(var(--w)) rotateZ(90deg) rotateX(90deg); background: color-mix(in srgb, var(--c), black 26%); }
+.item .left { width: var(--d); height: var(--h); transform: rotateZ(90deg) rotateX(90deg); background: color-mix(in srgb, var(--c), black 18%); }
+.sh { position: absolute; left: -4px; top: -2px; width: calc(var(--w) + 10px); height: calc(var(--d) + 10px); background: rgb(59 12 15 / 0.3); box-shadow: 0 0 12px 6px rgb(59 12 15 / 0.22); transform: translateZ(0.6px); }
+.glow { position: absolute; left: calc(var(--w) / 2); top: calc(var(--d) / 2); width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; background: radial-gradient(closest-side, rgb(255 224 160 / 0.95), transparent); opacity: var(--glow); transform: translateZ(calc(var(--h) + 2px)); }
+.rug {
+  @extend %timed; left: 130px; top: 220px; width: 440px; height: 380px; border-radius: 6px; opacity: var(--t); transform: translateZ(2px);
+  background: repeating-linear-gradient(90deg, #CDB8A6 0 14px, #D8C7B7 14px 28px); box-shadow: inset 0 0 0 12px #DACFBA, inset 0 0 0 14px rgb(76 17 20 / 0.25), 0 0 0 1px rgb(76 17 20 / 0.2);
+}
+
+/* The "Illustration" label, bottom right, once the lights are on; only when pinned */
+.tag { display: none; }
+@media (min-width: 1024px) and (min-height: 640px) {
+  .track[data-seq] .tag { display: block; position: absolute; right: calc(var(--margin) + 72px); bottom: 24px; margin: 0; opacity: var(--glow); }
+}
