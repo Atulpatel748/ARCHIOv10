@@ -43,7 +43,7 @@ const organization = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  preload('/brand/logo-wordmark.svg', { as: 'image' }); // the wordmark is a CSS mask, which the browser would otherwise find late
+  preload('/brand/logo-wordmark.svg', { as: 'image', crossOrigin: 'anonymous' }); // the wordmark is a CSS mask, which the browser would otherwise find late; mask images load in CORS mode, so the preload must too
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${display.variable} ${ui.variable} ${body.variable}`}>
       <body>
