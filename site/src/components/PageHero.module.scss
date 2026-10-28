@@ -1,7 +1,7 @@
 @use '../styles/tokens' as *;
 
 /* Sticky: the next section slides up over the hero while it recedes (after Wood & Weave). */
-.hero { --accent-color: var(--sand); position: sticky; top: 0; z-index: 0; min-height: 86vh; color: var(--paper); background: #140607; overflow: hidden; }
+.hero { --accent-color: var(--sand); position: sticky; top: 0; z-index: 0; min-height: 86vh; color: var(--paper); background: var(--night); overflow: hidden; }
 .full { min-height: 100dvh; }
 .inner { position: relative; display: flex; align-items: flex-end; min-height: inherit; background: var(--deep); transform-origin: 50% 100%; }
 .image { object-fit: cover; }

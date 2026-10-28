@@ -11,13 +11,13 @@
 
 
 /* ---------- Full-screen view ---------- */
-.lfStage { position: relative; background: #140607; }
+.lfStage { position: relative; background: var(--night); }
 .lfPin { position: relative; }
-.lfCover { position: relative; display: block; height: 100svh; min-height: 34rem; overflow: hidden; color: var(--paper); background: #140607; }
+.lfCover { position: relative; display: block; height: 100svh; min-height: 34rem; overflow: hidden; color: var(--paper); background: var(--night); }
 .lfMedia { position: absolute; inset: 0; display: block; img { object-fit: cover; } }
 .lfHit { position: absolute; inset: 0; z-index: 2; }
 .lfVeil { position: absolute; inset: 0; background: linear-gradient(rgb(20 6 7 / 0.08) 40%, rgb(20 6 7 / 0.9)); }
-.lfDim { position: absolute; inset: 0; z-index: 4; opacity: 0; pointer-events: none; background: #140607; }
+.lfDim { position: absolute; inset: 0; z-index: 4; opacity: 0; pointer-events: none; background: var(--night); }
 .lfText { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; display: grid; justify-items: start; gap: 1rem; padding-bottom: clamp(2.5rem, 2rem + 5vh, 5.5rem); pointer-events: none; }
 .lfTag { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blush); }
 .lfTitle { font-family: var(--font-display); font-size: clamp(2.25rem, 1rem + 3.4vw, 5rem); line-height: 0.95; letter-spacing: -0.01em; text-transform: uppercase; text-wrap: balance; transition: color 500ms var(--ease); }

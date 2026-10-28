@@ -11,6 +11,8 @@
   --gutter: clamp(16px, 2vw, 32px);
   --header-h: 84px;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --night: #140607; /* the near-black behind photographs */
+  --error: #ffb4ad; /* error text and rules on the dark contact section */
   --section: clamp(88px, 11vw, 168px);
   --accent-color: rgb(76 17 20 / 0.66); /* small labels and numbers: muted ink, about 6:1 on paper; dark sections switch to blush */
   @include phone { --header-h: 68px; }
@@ -88,7 +90,7 @@ html.lenis, html.lenis body { height: auto; }
 
 /* Label roll: the text slides up and an identical copy rolls in from below (see <Roll>) */
 .roll { display: inline-block; height: 1.25em; line-height: 1.25; overflow: hidden; vertical-align: bottom; }
-.roll > span { display: block; white-space: nowrap; transition: transform 400ms var(--ease); }
+.roll > span { display: block; white-space: nowrap; transition: transform 250ms var(--ease); }
 .roll > span::after { content: attr(data-text) / ""; display: block; }
 :is(a, button):focus-visible > .roll > span { transform: translateY(-50%); }
 @include hover { :is(a, button):hover > .roll > span { transform: translateY(-50%); } }

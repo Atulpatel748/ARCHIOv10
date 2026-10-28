@@ -1,7 +1,7 @@
 @use '../styles/tokens' as *;
 
 /* Sticky: the next section slides up over the hero while it recedes (scale/fade driven by Reveals, after Wood & Weave). */
-.hero { --accent-color: var(--sand); position: sticky; top: 0; z-index: 0; height: 100dvh; min-height: 640px; color: var(--paper); background: #140607; overflow: hidden; }
+.hero { --accent-color: var(--sand); position: sticky; top: 0; z-index: 0; height: 100dvh; min-height: 640px; color: var(--paper); background: var(--night); overflow: hidden; }
 .inner { position: absolute; inset: 0; background: var(--deep); transform-origin: 50% 100%; }
 .stage { position: absolute; inset: 0; }
 .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 700ms ease; }
