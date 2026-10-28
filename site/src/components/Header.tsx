@@ -28,7 +28,7 @@ export default function Header() {
       const y = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) / 2;
       let theme = 'light';
       for (const el of document.elementsFromPoint(innerWidth / 2, y)) {
-        if (el.closest('header, #site-menu')) continue;
+        if (el.closest('header, #site-menu, [data-preloader]')) continue;
         if (el instanceof HTMLImageElement || el instanceof HTMLCanvasElement || el instanceof HTMLVideoElement) { theme = 'dark'; break; }
         const c = (getComputedStyle(el).backgroundColor.match(/[0-9.]+/g) ?? []).map(Number);
         if (c.length < 3 || (c.length > 3 && c[3] < 0.5)) continue;
