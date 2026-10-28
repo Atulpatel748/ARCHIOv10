@@ -23,7 +23,7 @@ Run from inside `site/` unless a different place is given.
 | --- | --- | --- | --- | --- |
 | Types | Zero errors | `npm run typecheck` | 0 errors | every change |
 | Lint | Zero errors | `npm run lint` | 0 errors | every change |
-| Tests | All pass | `npm test` (contact form route) | 9 of 9 pass | every change |
+| Tests | All pass | `npm test` (contact form route and mail sender) | 13 of 13 pass | every change |
 | Build | Succeeds | `npm run build` | passes | before every push, and on GitHub |
 | Dependencies | No known problems | `npm audit --audit-level=high` | 0 | before every push, and on GitHub |
 | Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 8 pages checked | after every deploy |
@@ -44,7 +44,7 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 | JavaScript loaded on first visit | about 145 KB, compressed | must not grow |
 | Fonts | about 47 KB | must not grow |
 | Whole page weight on mobile | 311 to 527 KB | must not grow |
-| Contact form emails delivered | none yet (the email settings are not set) | must reach "works" before launch |
+| Contact form emails delivered | none yet (the SMTP settings are not set in Vercel) | must reach "works" before launch |
 
 ## Not set up yet (no tool behind it, so not a constraint)
 

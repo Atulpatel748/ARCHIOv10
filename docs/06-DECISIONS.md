@@ -12,11 +12,11 @@ Why the site is built the way it is, so nobody has to guess later. Each entry sa
 
 ## ADR-002: How the contact form sends enquiries
 
-- **Status:** Accepted; delivery not yet switched on
+- **Status:** Accepted, changed on 28 Oct 2026 (Resend replaced by SMTP); delivery not yet switched on
 - **Context:** The form needs to reach the studio's inbox without a database, accounts or tracking.
-- **Decision:** A single server route (`site/src/app/api/contact/route.ts`) checks the input (JSON only, 16 KB limit, field rules, consent, a hidden "company" field that bots fill), then emails the studio through Resend. The field rules live in one file (`site/src/content/contact.ts`) that the form and the route both read. Nine tests (`npm test`, plain Node, no extra library) cover the route.
-- **Alternatives:** Web3Forms (what the previous site used; the key is still in Vercel); a mail link only; a database.
-- **Consequences:** Until `RESEND_API_KEY`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` are set, the route answers 503 and visitors see a message with the WhatsApp and email links. The built-in spam limit (5 per 10 minutes per address) lives in each server instance's memory, so it is weak on Vercel; the intended guard is a Vercel Firewall rate-limit rule on `/api/contact`, to be added by the owner in the dashboard. Open decision: Resend, or back to Web3Forms.
+- **Decision:** A single server route (`site/src/app/api/contact/route.ts`) checks the input (JSON only, 16 KB limit, field rules, consent, a hidden "company" field that bots fill), then emails the studio over SMTP with the `nodemailer` library (`site/src/lib/mailer.ts`; no dependencies of its own, no install scripts, MIT-0 licence). The field rules live in one file (`site/src/content/contact.ts`) that the form and the route both read. Thirteen tests (`npm test`, plain Node) cover the route, the settings check and one real send to a small fake mail server that runs inside the test.
+- **Alternatives:** Resend (the first choice: it needs an account and DNS records on the studio's domain, which we do not know the studio controls); Web3Forms (what the previous site used; the key is still in Vercel); a mail link only; a database. SMTP was chosen on 28 Oct 2026 at the owner's request, because it can use a mailbox the studio already has.
+- **Consequences:** Until `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` are set (`SMTP_PORT` defaults to 587), the route answers 503 and visitors see a message with the WhatsApp and email links. The built-in spam limit (5 per 10 minutes per address) lives in each server instance's memory, so it is weak on Vercel; the intended guard is a Vercel Firewall rate-limit rule on `/api/contact`, to be added by the owner in the dashboard. Passwords for the mailbox live only in the hosting settings. Ports other than 465 must upgrade to TLS before the password is sent. Open: the owner must supply the mailbox settings and set them in Vercel.
 
 ## ADR-003: Display type
 

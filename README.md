@@ -27,14 +27,16 @@ Other commands, all run inside `site/`:
 
 ## Contact form
 
-Enquiries are emailed through Resend. Configure all of these in your hosting provider's server environment (never commit actual secrets):
+Enquiries are emailed over SMTP, the normal way a mailbox (Gmail, Microsoft 365, a hosting company's email) sends mail. Configure all of these in your hosting provider's server environment (never commit actual secrets):
 
 - `NEXT_PUBLIC_SITE_URL`: public HTTPS production origin.
-- `RESEND_API_KEY`: Resend server API key.
+- `SMTP_HOST`: the mail server's name, from your email provider's help pages.
+- `SMTP_PORT`: optional, defaults to 587. Port 465 is encrypted from the start; every other port must upgrade to TLS before the password is sent (except `localhost`, for a local mail catcher).
+- `SMTP_USER` and `SMTP_PASS`: the mailbox login and password. Gmail and Microsoft 365 want an "app password", not the real one.
 - `CONTACT_TO_EMAIL`: inbox receiving enquiries.
-- `CONTACT_FROM_EMAIL`: sender identity verified with Resend for the sending domain.
+- `CONTACT_FROM_EMAIL`: the "From" address; best if it belongs to the same mailbox or domain as `SMTP_USER`, so the mail is less likely to land in spam.
 
-Without all three contact-delivery variables, the endpoint returns a controlled error and the form offers WhatsApp/email as a fallback rather than pretending a message was sent. The current rate limiter is per-process only; use a shared store/provider-based limit before describing it as production-grade abuse prevention.
+Without all five (host, user, password, to, from), the endpoint returns a controlled error and the form offers WhatsApp/email as a fallback rather than pretending a message was sent. If sending fails, the visitor sees the same fallback, and the cause code (never the settings) is written to the server log. The current rate limiter is per-process only; the intended guard is a Vercel Firewall rate-limit rule on `/api/contact`.
 
 ## Before launch
 
