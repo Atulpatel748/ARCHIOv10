@@ -64,7 +64,7 @@ export default function ContactForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="contact">Email or phone</label>
-        <input id="contact" name="contact" autoComplete="email" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
+        <input id="contact" name="contact" autoComplete="email" spellCheck={false} autoCapitalize="none" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
         {errors.contact && <p id="contact-error" className={styles.error}>{errors.contact}</p>}
       </div>
       <fieldset className={styles.field} data-invalid={!!errors.type} aria-describedby={errors.type ? 'type-error' : undefined}>
@@ -97,7 +97,7 @@ export default function ContactForm() {
         <p className={styles.privacyLink}>Read our <Link prefetch={false} href="/privacy">Privacy Notice</Link>.</p>
         {errors.consent && <p id="consent-error" className={styles.error}>{errors.consent}</p>}
       </div>
-      <button type="submit" className="btn btn--light" disabled={state === 'sending'}>{state === 'sending' ? 'Sending' : 'Send enquiry'}</button>
+      <button type="submit" className="btn btn--light" disabled={state === 'sending'}>{state === 'sending' ? 'Sending…' : 'Send enquiry'}</button>
       <p className={styles.status} role="status">
         {state === 'failed' && <>Sorry, your enquiry could not be sent. Please message us on <a href={site.whatsappHref}>WhatsApp</a> or email <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
       </p>

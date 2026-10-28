@@ -37,7 +37,7 @@
 /* Full-screen viewer (motion after Wood & Weave; the dialog itself is transparent, the veil carries the dark) */
 .viewer {
   width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden;
-  background: transparent; color: var(--paper); touch-action: pan-y pinch-zoom;
+  background: transparent; color: var(--paper); touch-action: pan-y pinch-zoom; overscroll-behavior: contain;
   &[open] { display: grid; place-items: center; }
   &::backdrop { background: transparent; }
 }

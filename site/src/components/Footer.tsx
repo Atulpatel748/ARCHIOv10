@@ -24,7 +24,7 @@ export default function Footer() {
       </div>
 
       <div className={`container ${styles.bottom}`}>
-        <p>© {new Date().getFullYear()} {site.legalName}</p>
+        <p>© {new Date().getFullYear()} <span translate="no">{site.legalName}</span></p>
         <p>{site.parentLine}</p>
         <Link prefetch={false} href="/privacy">Privacy notice</Link>
       </div>

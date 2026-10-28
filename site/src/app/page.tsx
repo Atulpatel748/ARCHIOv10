@@ -25,7 +25,7 @@ export default function HomePage() {
       {/* Hero: the brand wordmark centred over the project slides */}
       <HeroSlider slides={slides}>
         <h1 className={styles.heroMark}>
-          <span className="visually-hidden">Archió, interior design studio in Dubai</span>
+          <span className="visually-hidden"><span translate="no">Archió</span>, interior design studio in Dubai</span>
           <span className={`logo logo--wordmark ${styles.heroLogo}`} data-hero-mark aria-hidden="true" />
           <span className={styles.heroTag} data-hero-tag aria-hidden="true">Interior design studio</span>
         </h1>
