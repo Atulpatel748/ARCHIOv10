@@ -174,11 +174,11 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
             <Roll>View project</Roll><span className="visually-hidden">: {slide.title}</span> <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className={styles.controls} role="group" aria-label="Choose a project">
+        <div className={styles.controls} aria-hidden="true">
           {slides.map((s, i) => (
-            <button key={s.src} type="button" className={styles.dot} aria-current={i === current} aria-label={`Show ${s.title}`} onClick={() => go(i)}>
+            <span key={s.src} className={styles.dot} data-current={i === current}>
               <span className={`${styles.track} ${i === current && !paused ? styles.running : ''}`} />
-            </button>
+            </span>
           ))}
         </div>
       </div>
