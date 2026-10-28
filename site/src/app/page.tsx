@@ -7,7 +7,7 @@ import Journey from '@/components/Journey';
 import Sequence from '@/components/Sequence';
 import StageList from '@/components/StageList';
 import Split from '@/components/Split';
-import { coverBlur, projects } from '@/content/projects';
+import { projects } from '@/content/projects';
 import { about, philosophy, processSteps, services, team } from '@/content/site';
 import styles from './home.module.scss';
 import Roll from '@/components/Roll';
@@ -15,7 +15,7 @@ import Roll from '@/components/Roll';
 export const metadata: Metadata = { alternates: { canonical: '/' } };
 
 const slides = projects.map((p) => ({
-  src: p.cover.src, blur: coverBlur[p.slug], alt: p.cover.alt, title: p.title, place: p.location, href: `/projects/${p.slug}`,
+  src: p.cover.src, alt: p.cover.alt, title: p.title, place: p.location, href: `/projects/${p.slug}`,
 }));
 
 // Services grouped by stage (proposed grouping, owner to confirm), each with a render.

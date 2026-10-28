@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './HeroSlider.module.scss';
 import Roll from '@/components/Roll';
 
-export type Slide = { src: string; blur?: string; alt: string; title: string; place: string; href: string };
+export type Slide = { src: string; alt: string; title: string; place: string; href: string };
 
 const FRAGMENT = `
   precision highp float;
@@ -152,8 +152,6 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
             alt={i === current ? s.alt : ''}
             fill
             priority={i === 0}
-            placeholder={s.blur ? 'blur' : 'empty'}
-            blurDataURL={s.blur}
             sizes="100vw"
             className={`${styles.slide} ${i === current ? styles.active : ''}`}
           />

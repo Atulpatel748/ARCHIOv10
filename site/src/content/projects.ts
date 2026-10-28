@@ -102,11 +102,3 @@ export const projects: Project[] = [
 ];
 
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
-
-// 24px blurred previews of each project's cover, shown by the hero while the full image downloads (so there is never an empty dark screen).
-// Regenerate if a cover changes: resize the cover to 24px wide, save as WebP quality 50 and base64-encode it.
-export const coverBlur: Record<string, string> = {
-  'dubai-marina-residence': 'data:image/webp;base64,UklGRrAAAABXRUJQVlA4IKQAAACQBQCdASoYABUAPtFcpU6oJSMiKAqpABoJZQCdABEZbAP3FXLQSbJYtOSIJ3u1zhEUk2G4AADh5wStycKsAMr7qdebMqFsOMm5wPJO0h+rUnZg1Hi7gjTRJIssiR4mDbKA78glB2nA4eYNLOpQIPZgs6H5dvSBsW5Ho3pvv8bLigBHQBZ/5ddhbRTbJhf+UP/wvFcVettCCjLlkPq3kuZoS2AAAA==',
-  'jlt-office': 'data:image/webp;base64,UklGRrIAAABXRUJQVlA4IKYAAAAQBQCdASoYABMAPtFcpk6oJKMiKAqpABoJZwAD5dDSxnxeDHY/5BldWitcPs8OmmgAAP6Qs4eb4tuDgynmEmj23ReZ5bNTD/gvxzpNK7Zj4m4QrYHH4MEzd6uw4+pftSCA//MLUYXKutj9AFstT+NeVAqwBxdjW25l834AnC0Muv48pcXDXJqFXYS1ydT49r5sKxgvEhkw7VSz/COBp3jrUZp0AAAA',
-  'arabian-ranches-garden': 'data:image/webp;base64,UklGRq4AAABXRUJQVlA4IKIAAADQBACdASoYABMAPtFap04oJSOiKAqpABoJZwCzgBDXvcmDdu/KvMidkbcbBdEIAAD331OBPOrsnlDoZVvKN9ICocBVskVoiXBz9xYPQ3HAGJX3TGIq17olNK/UJ1uxy+xYuecMsDVkAAxSy5+Qc7NIOc9HfH49vi9jwDkhi711X/LKCZ+JVfDz5aSe3lFg8zaEsshXHswvbek4DgjN6RX7wAA=',
-};
