@@ -1,0 +1,18 @@
+@use '../styles/tokens' as *;
+
+/* A paper disc with an oxblood ring that fills with scroll progress. Paper stands out on the dark footer and the ring on the pale pages;
+   on hover it turns sand, which differs from both, so it never merges into the background. */
+.top {
+  --p: 0; position: fixed; right: max(8px, calc((var(--margin) - 48px) / 2)); bottom: 24px; z-index: 30; width: 48px; height: 48px; border-radius: 50%;
+  background: var(--paper); color: var(--oxblood); box-shadow: 0 6px 24px rgb(20 6 7 / 0.18);
+  opacity: 0; visibility: hidden; translate: 0 12px; transition: opacity 400ms var(--ease), translate 500ms var(--ease), visibility 0s 400ms, background-color 250ms var(--ease), scale 300ms var(--ease);
+  &.on { opacity: 1; visibility: visible; translate: 0 0; transition-delay: 0s; }
+  svg { display: block; width: 100%; height: 100%; }
+  .track, .fill { fill: none; stroke-width: 2; }
+  .track { stroke: rgb(76 17 20 / 0.18); }
+  .fill { stroke: var(--oxblood); stroke-linecap: round; stroke-dasharray: 138.23; stroke-dashoffset: calc(138.23 * (1 - var(--p))); rotate: -90deg; transform-origin: 24px 24px; }
+  .arrow { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: translate 400ms var(--ease); }
+  @include hover { &:hover { background: var(--sand); scale: 1.08; .arrow { translate: 0 -2px; } } }
+  &:focus-visible { background: var(--sand); outline: 2px solid var(--paper); outline-offset: 3px; }
+  @include phone { bottom: 16px; right: 12px; width: 44px; height: 44px; }
+}

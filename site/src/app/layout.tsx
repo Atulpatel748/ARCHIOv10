@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Belleza, Lora, Public_Sans } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import BackToTop from '@/components/BackToTop';
 import Cursor from '@/components/Cursor';
 import Reveals from '@/components/Reveals';
 import { site } from '@/content/site';
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        <BackToTop />
         <Reveals />
         <Cursor />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
