@@ -112,6 +112,7 @@ export default function Preloader() {
   const lightRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (document.documentElement.hasAttribute('data-no-preloader')) return; // not the landing page, or not the first time in this tab: the CSS keeps the overlay hidden
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout>;
     const until = (ms: number) => new Promise((r) => setTimeout(r, ms - performance.now())); // ms counted from the page's start

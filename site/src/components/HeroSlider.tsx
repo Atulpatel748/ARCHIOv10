@@ -142,7 +142,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
     }).catch(() => undefined);
     // After first paint, so the LCP image is never delayed, and after the preloader, whose motion it would otherwise stall.
     let idle: ReturnType<typeof setTimeout> | undefined;
-    const preloading = !!document.querySelector('[data-preloader]');
+    const preloading = !document.documentElement.hasAttribute('data-no-preloader') && !!document.querySelector('[data-preloader]');
     if (preloading) addEventListener('preloader:done', start, { once: true });
     else idle = setTimeout(start, 900);
     return () => {
