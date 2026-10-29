@@ -9,19 +9,6 @@
 .lead { max-width: 38ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; }
 
 
-/* ---------- The tunnel (pinned view) ---------- */
-/* With motion: a tall section with a pinned stage; the photos start invisible and are placed by the script. Without: the plain list. Warm paper, like the rest of the page. */
-.tunnel { display: none; background: var(--paper); color: var(--oxblood); @media (prefers-reduced-motion: no-preference) { display: block; height: 520dvh; } }
-.stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 50%, #fff 0, transparent 70%); perspective: 1200px; @include phone { perspective: 900px; } }
-.centre { position: relative; z-index: 0; display: grid; gap: 1rem; justify-items: center; text-align: center; padding: 0 1.5rem; }
-.space { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
-.card {
-  position: absolute; left: 50%; top: 50%; width: clamp(180px, 18vw, 270px); opacity: 0; overflow: hidden; background: var(--sand); box-shadow: 0 30px 80px rgb(59 12 15 / 0.3); will-change: transform, opacity;
-  @include phone { width: clamp(130px, 38vw, 180px); }
-}
-.tag { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-color); }
-.name { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 1rem + 4.4vw, 6rem); line-height: 0.95; letter-spacing: -0.01em; text-transform: uppercase; text-wrap: balance; max-width: 14ch; a { text-decoration: none; } }
-.meta { margin: 0; font-family: var(--font-display); font-size: 1.35rem; color: var(--accent-color); }
 .plain { display: grid; gap: clamp(3rem, 2rem + 4vw, 6rem); padding-block: 0 clamp(4rem, 3rem + 4vw, 7rem); @media (prefers-reduced-motion: no-preference) { display: none; } }
 .plainItem { display: grid; gap: 0.9rem; justify-items: start; }
 .plainPhoto { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: var(--sand); img { object-fit: cover; } }

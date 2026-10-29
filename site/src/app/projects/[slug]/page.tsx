@@ -36,11 +36,12 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <>
-      {/* Hero: layered parallax. The page scrolls over three layers (a soft warm wash of the photo, the sharp photo, the name) that sink at different speeds (after Osmo). */}
+      {/* Hero: the main photo cut in two with the big name between the halves; the layers sink at different speeds as you
+          scroll, so the foreground rises over the name (after Osmo's "Parallax Scrolling" on 21st.dev). */}
       <ParallaxHero photo={project.hero}>
         <p className="label">{project.category}</p>
-        <Split as="h1" text={project.title} />
-        <p className={styles.heroPlace}>{project.location}</p>
+        <h1>{project.title}</h1>
+        <p>{project.location}</p>
       </ParallaxHero>
 
       {/* Facts beside the story */}
