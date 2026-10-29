@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Gallery from '@/components/Gallery';
-import ParallaxHero from '@/components/ParallaxHero';
+import ProjectHero from '@/components/ProjectHero';
 import Split from '@/components/Split';
 import { site } from '@/content/site';
 import { getProject, projects } from '@/content/projects';
@@ -36,13 +36,12 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <>
-      {/* Hero: the main photo cut in two with the big name between the halves; the layers sink at different speeds as you
-          scroll, so the foreground rises over the name (after Osmo's "Parallax Scrolling" on 21st.dev). */}
-      <ParallaxHero photo={project.hero}>
+      {/* Hero: the main photo full screen with the name on it; a calm entrance, nothing moves on scroll. */}
+      <ProjectHero photo={project.hero}>
         <p className="label">{project.category}</p>
-        <h1>{project.title}</h1>
+        <Split as="h1" text={project.title} />
         <p>{project.location}</p>
-      </ParallaxHero>
+      </ProjectHero>
 
       {/* Facts beside the story */}
       <section className={`section container ${styles.info}`}>
