@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, type CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { gsap } from 'gsap';
 import type { ProjectImage } from '@/content/projects';
 import styles from './Gallery.module.scss';
@@ -19,7 +19,7 @@ function insetFrom(full: DOMRect, thumb: DOMRect) {
   return `inset(${c(thumb.top - full.top, full.height)}px ${c(full.right - thumb.right, full.width)}px ${c(full.bottom - thumb.bottom, full.height)}px ${c(thumb.left - full.left, full.width)}px)`;
 }
 
-// Images grouped by room (consecutive images with the same room), then split into rows of at most three.
+// Images grouped by room (consecutive images with the same room).
 type Shot = { img: ProjectImage; index: number };
 function groupByRoom(images: ProjectImage[]) {
   const groups: { room: string; shots: Shot[] }[] = [];
@@ -31,26 +31,17 @@ function groupByRoom(images: ProjectImage[]) {
   });
   return groups;
 }
-function toRows(shots: Shot[]) {
-  const rows = Math.ceil(shots.length / 3);
-  const out: Shot[][] = [];
-  let at = 0;
-  for (let r = 0; r < rows; r++) {
-    const size = Math.ceil((shots.length - at) / (rows - r));
-    out.push(shots.slice(at, at + size));
-    at += size;
-  }
-  return out;
-}
 
-// Room-by-room gallery (after Wood & Weave's project pages) with a full-screen viewer whose open, close and next/previous
-// motion also follows Wood & Weave. Each room is a label beside rows of images; in a row the images share one height.
+// Room-by-room gallery with a full-screen viewer (open, close and next/previous motion after Wood & Weave). Each room is a
+// collage: a sticky index lists the rooms and marks the one in view, and the photos drift as you scroll.
 export default function Gallery({ images, title, layout = 'rooms' }: { images: ProjectImage[]; title: string; layout?: 'rooms' | 'mosaic' }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const veil = useRef<HTMLDivElement>(null);
   const thumbs = useRef<HTMLButtonElement[]>([]);
   const figs = useRef<HTMLElement[]>([]);
   const state = useRef({ index: 0, busy: false, tl: null as gsap.core.Timeline | null });
+  const [room, setRoom] = useState(0);
+  const roomsEl = useRef<HTMLDivElement>(null);
 
   const frame = (i: number) => figs.current[i].querySelector<HTMLElement>('[data-frame]')!;
   const caption = (i: number) => figs.current[i].querySelector<HTMLElement>('figcaption')!;
@@ -122,6 +113,35 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
       .fromTo(figs.current[to], { opacity: 0, x: 50 * dir }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out', clearProps: 'opacity,x' }, 0.12);
   }
 
+  // The room index marks the chapter that is crossing the middle of the screen.
+  useEffect(() => {
+    const chapters = document.querySelectorAll<HTMLElement>('[data-chapter]');
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) setRoom(Number((e.target as HTMLElement).dataset.chapter)); }), { rootMargin: '-45% 0px -50% 0px' });
+    chapters.forEach((c) => io.observe(c));
+    return () => io.disconnect();
+  }, [images, layout]);
+
+  // Collage drift: each chapter publishes how far it has travelled through the screen (--p, 0 to 1); its photos drift by different amounts. Set straight on the DOM; off with reduced motion.
+  useEffect(() => {
+    if (layout === 'mosaic' || reduced()) return;
+    const rooms = roomsEl.current!;
+    rooms.dataset.drift = '';
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      rooms.querySelectorAll<HTMLElement>('[data-chapter]').forEach((c) => {
+        const r = c.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) return;
+        c.style.setProperty('--p', String(Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height)))));
+      });
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+    return () => { removeEventListener('scroll', onScroll); removeEventListener('resize', onScroll); cancelAnimationFrame(raf); delete rooms.dataset.drift; };
+  }, [images, layout]);
+
   // Keyboard, Escape (cancel), swipe and resize.
   useEffect(() => {
     const el = dialog.current!;
@@ -161,28 +181,32 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
           ))}
         </ul>
       ) : (
-      <div className={styles.rooms}>
-        {groupByRoom(images).map((g, gi) => (
-          <div key={`${g.room}-${gi}`} role="group" aria-label={g.room} className={`${styles.room} ${gi % 2 ? styles.flip : ''}`}>
-            <h3 className={`label label--rule ${styles.roomName}`} data-reveal>{g.room}</h3>
-            <div className={styles.rowset}>
-              {toRows(g.shots).map((row, ri) => (
-                <div key={ri} className={styles.row} style={{ '--sum': row.reduce((t, x) => t + x.img.width / x.img.height, 0) } as CSSProperties} data-reveal>
-                  {row.map(({ img, index }) => (
-                    <button
-                      key={img.src}
-                      ref={(el) => { if (el) thumbs.current[index] = el; }}
-                      type="button" className={styles.shot} style={{ '--ar': img.width / img.height } as CSSProperties} data-cursor="Open" onClick={() => open(index)}
-                      aria-label={`Open image ${index + 1} of ${images.length}: ${img.alt}`}
-                    >
-                      <Image src={img.src} alt="" fill sizes="(max-width: 767px) 100vw, 40vw" />
-                    </button>
-                  ))}
-                </div>
+      <div ref={roomsEl} className={styles.rooms}>
+        <nav className={styles.index} aria-label="Rooms">
+          <ol>
+            {groupByRoom(images).map((g, gi) => (
+              <li key={`${g.room}-${gi}`}><a href={`#room-${gi}`} aria-current={room === gi ? 'true' : undefined}><span>{String(gi + 1).padStart(2, '0')}</span>{g.room}</a></li>
+            ))}
+          </ol>
+        </nav>
+        <div className={styles.chapters}>
+          {groupByRoom(images).map((g, gi) => (
+            <section key={`${g.room}-${gi}`} id={`room-${gi}`} data-chapter={gi} aria-label={g.room} className={styles.chapter}>
+              <h3 className={styles.chapterName}>{g.room}</h3>
+              {g.shots.map(({ img, index }, si) => (
+                <button
+                  key={img.src}
+                  ref={(el) => { if (el) thumbs.current[index] = el; }}
+                  type="button" className={`${styles.shot} ${styles[`s${si % 4}`]}`}
+                  style={{ '--ar': img.width / img.height } as CSSProperties} data-cursor="Open" onClick={() => open(index)}
+                  aria-label={`Open image ${index + 1} of ${images.length}: ${img.alt}`}
+                >
+                  <Image src={img.src} alt="" fill sizes="(max-width: 767px) 90vw, 50vw" />
+                </button>
               ))}
-            </div>
-          </div>
-        ))}
+            </section>
+          ))}
+        </div>
       </div>
       )}
 

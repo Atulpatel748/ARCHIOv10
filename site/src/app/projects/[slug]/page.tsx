@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Gallery from '@/components/Gallery';
-import PageHero from '@/components/PageHero';
 import Split from '@/components/Split';
 import { site } from '@/content/site';
 import { getProject, projects } from '@/content/projects';
@@ -36,26 +35,40 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <>
-      {/* The page follows Wood & Weave's project pages: a full-screen hero, the idea beside a facts list, the rooms, then a
-          conversation and the next project. */}
-      <PageHero label={project.category} title={project.title} intro={project.location} image={project.hero} size="full" compact />
+      {/* Hero: the main image fills the screen under a slow sweep of light; the title bottom left, the facts and a small
+          arch (the Ó of the logo) holding a second view bottom right. */}
+      <section className={styles.hero}>
+        <Image src={project.hero.src} alt={project.hero.alt} fill priority sizes="100vw" className={styles.heroImage} />
+        <div className={styles.heroShade} aria-hidden="true" />
+        <div className={styles.heroLight} aria-hidden="true" />
+        <div className={`container ${styles.heroGrid}`}>
+          <div className={styles.heroText}>
+            <p className="label label--rule">{project.category}</p>
+            <Split as="h1" className={styles.heroTitle} text={project.title} />
+            <p className={styles.heroPlace}>{project.location}</p>
+          </div>
+          <div className={styles.heroSide}>
+            <dl className={styles.facts}>
+              <div><dt>Category</dt><dd>{project.category}</dd></div>
+              <div><dt>Area</dt><dd>{project.area}</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
 
+      {/* The idea: the summary as a heading, the story in two columns */}
       <section className={`section container ${styles.idea}`}>
-        <div className={styles.ideaText}>
-          <p className="label label--rule" data-reveal>The idea</p>
-          <Split className={styles.ideaTitle} text={project.summary} />
+        <p className="label label--rule" data-reveal>The idea</p>
+        <Split className={styles.ideaTitle} text={project.summary} />
+        <div className={styles.ideaCols}>
           {project.description.map((p) => <p key={p} className="serif" data-reveal>{p}</p>)}
         </div>
-        <aside className={styles.ideaSide} data-reveal>
-          <dl className={styles.table}>
-            <div><dt>Where</dt><dd>{project.location}</dd></div>
-            <div><dt>Category</dt><dd>{project.category}</dd></div>
-            <div><dt>Area</dt><dd>{project.area}</dd></div>
-          </dl>
+        <div className={styles.ideaActions} data-reveal>
           <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
           <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
-        </aside>
+        </div>
       </section>
+
 
       {/* The rooms; each image opens in the full-screen viewer */}
       <section className="section container" aria-label={`${project.title}, room by room`}>

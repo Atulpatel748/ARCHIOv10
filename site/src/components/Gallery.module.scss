@@ -1,24 +1,38 @@
 @use '../styles/tokens' as *;
 
-/* Rooms: a label beside rows of images (alternating sides on wide screens); in a row the images share one height, so each is as wide as its aspect ratio */
-.rooms { display: grid; gap: clamp(4.5rem, 3.5rem + 4vw, 8rem); }
-.room {
-  display: grid; gap: 20px;
-  @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: center; gap: 4rem; .row { margin-inline-start: auto; } }
+/* Rooms: a sticky index on the left marks the room in view; each room is a collage */
+.rooms {
+  display: grid; gap: 3rem;
+  @media (min-width: 64em) { grid-template-columns: 11rem minmax(0, 1fr); gap: 4rem; align-items: start; }
 }
-.flip { @media (min-width: 64em) { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); .roomName { order: 2; } .row { margin-inline-start: 0; } } }
-.rowset { display: grid; gap: var(--gap, clamp(0.5rem, 0.4rem + 0.6vw, 1rem)); }
-.row {
-  --gap: clamp(0.5rem, 0.4rem + 0.6vw, 1rem);
-  display: flex; align-items: flex-end; gap: var(--gap); width: 100%; max-width: calc(var(--sum) * 34rem);
-  @include phone { flex-direction: column; align-items: stretch; max-width: none; }
+.index {
+  ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.35rem; }
+  a {
+    display: flex; gap: 1rem; align-items: baseline; padding: 0.4rem 0; text-decoration: none; font-family: var(--font-display); font-size: 1.35rem; line-height: 1.2;
+    color: var(--accent-color); transition: color 400ms var(--ease), translate 400ms var(--ease);
+    span { font-family: inherit; font-size: 0.8rem; letter-spacing: 0.08em; }
+    &[aria-current='true'] { color: var(--oxblood); translate: 0.6rem 0; }
+  }
+  @media (min-width: 64em) { position: sticky; top: calc(var(--header-h) + 32px); }
+  @include tablet-down { display: none; }
 }
+.chapters { display: grid; gap: clamp(2rem, 1rem + 3vw, 4rem); }
+/* A collage per room: photos of different sizes placed loosely over each other, and each photo drifts by its own amount as the chapter moves through the screen (--p) */
+.chapter { position: relative; min-height: clamp(34rem, 70vw, 56rem); scroll-margin-top: calc(var(--header-h) + 24px); @include tablet-down { padding-top: 3.5rem; } @include phone { display: grid; gap: 1rem; min-height: 0; padding-top: 0; } }
+/* The sticky index already names the room on wide screens; the name shows here only where the index is hidden */
+.chapterName { display: none; margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; line-height: 1.1; @include tablet-down { display: block; position: absolute; left: 0; top: 0; z-index: 3; } @include phone { position: relative; } }
 .shot {
-  position: relative; flex: var(--ar) 1 0; min-width: 0; aspect-ratio: var(--ar); padding: 0; border: 0; overflow: hidden; background: var(--sand); cursor: zoom-in;
+  --d: 0px;
+  position: absolute; width: var(--w); aspect-ratio: var(--ar); padding: 0; border: 0; overflow: hidden; background: var(--sand); cursor: zoom-in;
+  box-shadow: 0 24px 60px rgb(59 12 15 / 0.22); translate: 0 calc((var(--p, 0.5) - 0.5) * var(--d));
   img { object-fit: cover; transition: scale 1.2s var(--ease); }
-  @include hover { &:hover img { scale: 1.025; } }
-  @include phone { flex: none; width: 100%; }
+  @include hover { &:hover img { scale: 1.03; } }
+  @include phone { position: relative; left: auto; top: auto; width: 88%; translate: none; &:nth-of-type(even) { margin-inline-start: auto; } }
 }
+.s0 { --w: 56%; --d: 40px; left: 0; top: 0; z-index: 1; }
+.s1 { --w: 38%; --d: -60px; left: 62%; top: 6%; z-index: 2; }
+.s2 { --w: 44%; --d: 70px; left: 50%; top: 52%; z-index: 3; }
+.s3 { --w: 28%; --d: -30px; left: 8%; top: 68%; z-index: 4; }
 
 /* Mosaic (room by room, all projects): plain columns until the script has packed the tiles, then absolutely placed */
 .mosaic {
