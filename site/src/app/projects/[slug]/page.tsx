@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Gallery from '@/components/Gallery';
+import ParallaxHero from '@/components/ParallaxHero';
 import Split from '@/components/Split';
 import { site } from '@/content/site';
 import { getProject, projects } from '@/content/projects';
@@ -35,39 +36,30 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <>
-      {/* Hero: the main image fills the screen under a slow sweep of light; the title bottom left, the facts and a small
-          arch (the Ó of the logo) holding a second view bottom right. */}
-      <section className={styles.hero}>
-        <Image src={project.hero.src} alt={project.hero.alt} fill priority sizes="100vw" className={styles.heroImage} />
-        <div className={styles.heroShade} aria-hidden="true" />
-        <div className={styles.heroLight} aria-hidden="true" />
-        <div className={`container ${styles.heroGrid}`}>
-          <div className={styles.heroText}>
-            <p className="label label--rule">{project.category}</p>
-            <Split as="h1" className={styles.heroTitle} text={project.title} />
-            <p className={styles.heroPlace}>{project.location}</p>
-          </div>
-          <div className={styles.heroSide}>
-            <dl className={styles.facts}>
-              <div><dt>Category</dt><dd>{project.category}</dd></div>
-              <div><dt>Area</dt><dd>{project.area}</dd></div>
-            </dl>
+      {/* Hero: layered parallax. The page scrolls over three layers (a soft warm wash of the photo, the sharp photo, the name) that sink at different speeds (after Osmo). */}
+      <ParallaxHero photo={project.hero}>
+        <p className="label">{project.category}</p>
+        <Split as="h1" text={project.title} />
+        <p className={styles.heroPlace}>{project.location}</p>
+      </ParallaxHero>
+
+      {/* Facts beside the story */}
+      <section className={`section container ${styles.info}`}>
+        <dl className={styles.facts} data-reveal>
+          <div><dt>Where</dt><dd>{project.location}</dd></div>
+          <div><dt>Category</dt><dd>{project.category}</dd></div>
+          <div><dt>Area</dt><dd>{project.area}</dd></div>
+        </dl>
+        <div className={styles.story}>
+          <Split className={styles.storyLead} text={project.summary} />
+          {project.description.map((p) => <p key={p} data-reveal>{p}</p>)}
+          <div className={styles.storyActions} data-reveal>
+            <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
+            <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
           </div>
         </div>
       </section>
 
-      {/* The idea: the summary as a heading, the story in two columns */}
-      <section className={`section container ${styles.idea}`}>
-        <p className="label label--rule" data-reveal>The idea</p>
-        <Split className={styles.ideaTitle} text={project.summary} />
-        <div className={styles.ideaCols}>
-          {project.description.map((p) => <p key={p} className="serif" data-reveal>{p}</p>)}
-        </div>
-        <div className={styles.ideaActions} data-reveal>
-          <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
-          <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
-        </div>
-      </section>
 
 
       {/* The rooms; each image opens in the full-screen viewer */}
