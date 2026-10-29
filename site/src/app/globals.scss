@@ -110,3 +110,6 @@ html.lenis, html.lenis body { height: auto; }
 .logo--wordmark { --logo: url('/brand/logo-wordmark.svg'); aspect-ratio: 248 / 61; }
 .logo--monogram { --logo: url('/brand/logo-monogram.svg'); aspect-ratio: 376 / 359; }
 
+
+/* No preloader on any page but the landing page, nor after the first time in a tab (set by the script in the layout's head) */
+html[data-no-preloader] [data-preloader] { display: none; }
