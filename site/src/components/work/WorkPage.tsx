@@ -1,9 +1,9 @@
 import type { Project } from '@/content/projects';
-import Lift from './Lift';
+import Tunnel from './Tunnel';
 import Mosaic from './Mosaic';
 import styles from './Work.module.scss';
 
-// The projects page, laid out like Wood & Weave's work page: a head, the projects full screen, and a filterable
+// The projects page, a head, a pinned tunnel of the projects' photos, and a filterable
 // room-by-room mosaic.
 export default function WorkPage({ projects }: { projects: Project[] }) {
   return (
@@ -18,7 +18,7 @@ export default function WorkPage({ projects }: { projects: Project[] }) {
         </div>
       </section>
 
-      <Lift projects={projects} />
+      <Tunnel projects={projects} />
 
       <Mosaic projects={projects} />
     </>

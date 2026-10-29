@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Gallery from '@/components/Gallery';
-import PageHero from '@/components/PageHero';
+import ParallaxHero from '@/components/ParallaxHero';
 import Split from '@/components/Split';
 import { site } from '@/content/site';
 import { getProject, projects } from '@/content/projects';
@@ -36,26 +36,32 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <>
-      {/* The page follows Wood & Weave's project pages: a full-screen hero, the idea beside a facts list, the rooms, then a
-          conversation and the next project. */}
-      <PageHero label={project.category} title={project.title} intro={project.location} image={project.hero} size="full" compact />
+      {/* Hero: the main photo cut in two with the big name between the halves; the layers sink at different speeds as you
+          scroll, so the foreground rises over the name (after Osmo's "Parallax Scrolling" on 21st.dev). */}
+      <ParallaxHero photo={project.hero}>
+        <p className="label">{project.category}</p>
+        <h1>{project.title}</h1>
+        <p>{project.location}</p>
+      </ParallaxHero>
 
-      <section className={`section container ${styles.idea}`}>
-        <div className={styles.ideaText}>
-          <p className="label label--rule" data-reveal>The idea</p>
-          <Split className={styles.ideaTitle} text={project.summary} />
-          {project.description.map((p) => <p key={p} className="serif" data-reveal>{p}</p>)}
+      {/* Facts beside the story */}
+      <section className={`section container ${styles.info}`}>
+        <dl className={styles.facts} data-reveal>
+          <div><dt>Where</dt><dd>{project.location}</dd></div>
+          <div><dt>Category</dt><dd>{project.category}</dd></div>
+          <div><dt>Area</dt><dd>{project.area}</dd></div>
+        </dl>
+        <div className={styles.story}>
+          <Split className={styles.storyLead} text={project.summary} />
+          {project.description.map((p) => <p key={p} data-reveal>{p}</p>)}
+          <div className={styles.storyActions} data-reveal>
+            <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
+            <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
+          </div>
         </div>
-        <aside className={styles.ideaSide} data-reveal>
-          <dl className={styles.table}>
-            <div><dt>Where</dt><dd>{project.location}</dd></div>
-            <div><dt>Category</dt><dd>{project.category}</dd></div>
-            <div><dt>Area</dt><dd>{project.area}</dd></div>
-          </dl>
-          <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
-          <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
-        </aside>
       </section>
+
+
 
       {/* The rooms; each image opens in the full-screen viewer */}
       <section className="section container" aria-label={`${project.title}, room by room`}>

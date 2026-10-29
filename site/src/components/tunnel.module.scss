@@ -1,0 +1,15 @@
+@use '../styles/tokens' as *;
+
+/* The pinned tunnel shared by the projects page and the project pages: the photos fly towards you through a corridor while the section is pinned.
+   With motion: a tall section (--len) with a sticky stage; the photos start invisible and are placed by the script. Without motion it is not shown. */
+.tunnel { display: none; background: var(--paper); color: var(--oxblood); @media (prefers-reduced-motion: no-preference) { display: block; height: var(--len, 520dvh); } }
+.stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 50%, #fff 0, transparent 70%); perspective: 1200px; @include phone { perspective: 900px; } }
+.centre { position: relative; z-index: 2; text-shadow: 0 0 28px rgb(248 247 244 / 0.95), 0 0 8px rgb(248 247 244 / 0.8); display: grid; gap: 1rem; justify-items: center; text-align: center; padding: 0 1.5rem; }
+.space { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+.card {
+  position: absolute; left: 50%; top: 50%; width: clamp(180px, 18vw, 270px); opacity: 0; overflow: hidden; background: var(--sand); box-shadow: 0 30px 80px rgb(59 12 15 / 0.3); will-change: transform, opacity;
+  @include phone { width: clamp(130px, 38vw, 180px); }
+}
+.tag { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-color); }
+.name { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 1rem + 4.4vw, 6rem); line-height: 0.95; letter-spacing: -0.01em; text-transform: uppercase; text-wrap: balance; max-width: 14ch; a { text-decoration: none; } }
+.meta { margin: 0; font-family: var(--font-display); font-size: 1.35rem; color: var(--accent-color); }

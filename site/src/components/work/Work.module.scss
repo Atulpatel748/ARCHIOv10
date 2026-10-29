@@ -1,7 +1,6 @@
 @use '../../styles/tokens' as *;
 
-/* The projects page follows Wood and Weave's work page: a head with a Book / Full screen switch, one of two pinned views of the
-   projects, a list of what each item is, and a filterable room-by-room mosaic. */
+/* The projects page: a head, a pinned tunnel of the projects' photos (or a plain list), and a filterable room-by-room mosaic. */
 
 /* ---------- Head ---------- */
 .head { padding-block: calc(var(--header-h) + clamp(4rem, 3rem + 5vw, 8rem)) clamp(3rem, 2rem + 4vw, 6rem); }
@@ -10,35 +9,9 @@
 .lead { max-width: 38ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; }
 
 
-/* ---------- Full-screen view ---------- */
-.lfStage { position: relative; background: var(--night); }
-.lfPin { position: relative; }
-.lfCover { position: relative; display: block; height: 100svh; min-height: 34rem; overflow: hidden; color: var(--paper); background: var(--night); }
-.lfMedia { position: absolute; inset: 0; display: block; img { object-fit: cover; } }
-.lfHit { position: absolute; inset: 0; z-index: 2; }
-.lfVeil { position: absolute; inset: 0; background: linear-gradient(rgb(20 6 7 / 0.08) 40%, rgb(20 6 7 / 0.9)); }
-.lfDim { position: absolute; inset: 0; z-index: 4; opacity: 0; pointer-events: none; background: var(--night); }
-.lfText { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; display: grid; justify-items: start; gap: 1rem; padding-bottom: clamp(2.5rem, 2rem + 5vh, 5.5rem); pointer-events: none; }
-.lfTag { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blush); }
-.lfTitle { font-family: var(--font-display); font-size: clamp(2.25rem, 1rem + 3.4vw, 5rem); line-height: 0.95; letter-spacing: -0.01em; text-transform: uppercase; text-wrap: balance; transition: color 500ms var(--ease); }
-.lfRow { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 2rem; justify-self: stretch; padding-top: 1.25rem; border-top: 1px solid rgb(242 238 230 / 0.22); }
-.lfMeta { font-family: var(--font-display); font-size: 1.35rem; color: var(--blush); }
-.lfGo { display: inline-flex; align-items: center; gap: 0.75rem; min-height: 44px; margin-left: auto; font-weight: 500; pointer-events: auto; }
-@include hover { .lfCover:hover .lfTitle { color: var(--blush); } }
-.lfStrip { display: none; }
-.lfNames {
-  display: flex; flex-direction: column; align-items: flex-end; margin: 0; padding: 0; list-style: none;
-  a { display: inline-flex; align-items: center; min-height: 44px; gap: 0.75rem; font-size: 0.6875rem; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; text-shadow: 0 1px 12px rgb(20 6 7 / 0.5); opacity: 0.5; transition: opacity 400ms var(--ease); }
-  a::before { content: ''; order: 2; width: 0.75rem; height: 1px; background: currentColor; transition: width 500ms var(--ease); }
-  .isOn a { opacity: 1; }
-  .isOn a::before { width: 2rem; }
-}
-.isPinned {
-  .lfPin { height: 100svh; min-height: 34rem; overflow: hidden; }
-  .lfCover { position: absolute; inset: 0; height: auto; min-height: 0; z-index: var(--z); }
-  /* The list of projects: right side, middle, quiet; a short rule marks the current one */
-  .lfStrip { display: block; position: absolute; z-index: 80; top: 50%; right: var(--margin); translate: 0 -50%; color: var(--paper); }
-}
+.plain { display: grid; gap: clamp(3rem, 2rem + 4vw, 6rem); padding-block: 0 clamp(4rem, 3rem + 4vw, 7rem); @media (prefers-reduced-motion: no-preference) { display: none; } }
+.plainItem { display: grid; gap: 0.9rem; justify-items: start; }
+.plainPhoto { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: var(--sand); img { object-fit: cover; } }
 
 /* ---------- Room by room ---------- */
 .om { padding-block: clamp(6rem, 5rem + 5vw, 10rem); }
