@@ -32,3 +32,13 @@
 @keyframes fade-in { from { opacity: 0; } }
 @keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 @keyframes clear { to { opacity: 0; visibility: hidden; } }
+
+/* The short version that plays when you click into a project: it fades in over the old page and draws about twice as fast */
+.enter { animation: appear 300ms ease both, clear 600ms ease 8s forwards; }
+.enter .tone { animation-duration: 500ms; }
+.enter .ln .s1 { animation-duration: 400ms; animation-delay: 300ms; }
+.enter .ln .s2 { animation-duration: 450ms; animation-delay: 450ms; }
+.enter .ln .s3 { animation-duration: 500ms; animation-delay: 600ms; }
+.enter .ln .s4 { animation-duration: 500ms; animation-delay: 750ms; }
+.enter .fill { animation-duration: 700ms; animation-delay: 450ms; }
+@keyframes appear { from { opacity: 0; } }

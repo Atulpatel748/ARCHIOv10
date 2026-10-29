@@ -7,6 +7,7 @@ import BackToTop from '@/components/BackToTop';
 import Cursor from '@/components/Cursor';
 import Reveals from '@/components/Reveals';
 import Preloader from '@/components/Preloader';
+import ProjectEnter from '@/components/ProjectEnter';
 import { site } from '@/content/site';
 import './globals.scss';
 
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
         <Preloader />
+        <ProjectEnter />
         <Header />
         <main id="main">{children}</main>
         <Footer />

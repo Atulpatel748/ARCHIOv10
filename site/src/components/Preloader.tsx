@@ -102,7 +102,9 @@ function openDoorway(root: HTMLDivElement, room: SVGSVGElement, door: SVGPathEle
   return fadeOut(OPEN_MS - 150);
 }
 
-export default function Preloader() {
+// `enter` is a project page's path: the shorter version that plays when you click into a project (see ProjectEnter). It waits for that
+// page to be on screen with its hero photo decoded, then opens the doorway onto it, and calls onDone when it has gone.
+export default function Preloader({ enter, onDone }: { enter?: string; onDone?: () => void }) {
   const [leaving, setLeaving] = useState(false);
   const [gone, setGone] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -114,25 +116,35 @@ export default function Preloader() {
   useEffect(() => {
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout>;
-    const until = (ms: number) => new Promise((r) => setTimeout(r, ms - performance.now())); // ms counted from the page's start
+    const from = enter ? performance.now() : 0; // ms below are counted from the page's start (or, for `enter`, from now)
+    const until = (ms: number) => new Promise((r) => setTimeout(r, from + ms - performance.now()));
     const imgs = [...document.querySelectorAll<HTMLImageElement>('#main img:not([loading="lazy"])')];
-    const ready = Promise.all([document.fonts.ready, ...imgs.map((img) => img.decode().catch(() => undefined)), until(2000)]);
-    Promise.race([ready, until(4000)]).then(() => {
+    // `enter`: the new page must be showing, with its hero photo loaded; the old page's photos do not count
+    const arrived = () => new Promise<void>((resolve) => {
+      const check = () => {
+        const img = location.pathname.replace(/\/$/, '') === enter?.replace(/\/$/, '') && document.querySelector<HTMLImageElement>('#main img:not([loading="lazy"])');
+        if (img && img.complete && img.naturalWidth > 0) resolve(); else setTimeout(check, 60);
+      };
+      check();
+    });
+    const ready = enter ? Promise.all([arrived(), until(800)]) : Promise.all([document.fonts.ready, ...imgs.map((img) => img.decode().catch(() => undefined)), until(2000)]);
+    Promise.race([ready, until(enter ? 3500 : 4000)]).then(() => {
       if (cancelled) return;
       setLeaving(true); // the wordmark fades first
       timer = setTimeout(() => {
         const [root, room, door, win, light] = [rootRef.current, roomRef.current, doorRef.current, winRef.current, lightRef.current];
-        const finish = () => { setGone(true); dispatchEvent(new Event('preloader:done')); }; // the hero's WebGL waits for this
+        const finish = () => { setGone(true); dispatchEvent(new Event('preloader:done')); onDone?.(); }; // the hero's WebGL waits for this
         if (root && room && door && win && light) openDoorway(root, room, door, win, light).then(finish, finish);
         else finish();
       }, 200);
     });
     return () => { cancelled = true; clearTimeout(timer); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- runs once per mount; enter and onDone do not change while it plays
   }, []);
 
   if (gone) return null;
   return (
-    <div ref={rootRef} className={`${styles.preloader} ${leaving ? styles.leaving : ''}`} data-preloader aria-hidden="true">
+    <div ref={rootRef} className={`${styles.preloader} ${enter ? styles.enter : ''} ${leaving ? styles.leaving : ''}`} data-preloader aria-hidden="true">
       <svg ref={roomRef} className={styles.room} viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
         <defs>
           <radialGradient id="preloader-light" cx="0.5" cy="0.75" r="0.75"><stop offset="0" stopColor="#EEDFC8" /><stop offset="1" stopColor="#F8F7F4" /></radialGradient>
