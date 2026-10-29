@@ -48,25 +48,25 @@
 }
 @keyframes tile-in { from { opacity: 0; transform: translateY(28px); } }
 
-/* Full-screen viewer (motion after Wood & Weave; the dialog itself is transparent, the veil carries the dark) */
+/* Full-screen viewer (motion after Wood & Weave; the dialog itself is transparent). The veil is the page's warm paper, frosted: what is behind the photo shows only as a soft blur. */
 .viewer {
   width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden;
-  background: transparent; color: var(--paper); touch-action: pan-y pinch-zoom; overscroll-behavior: contain;
+  background: transparent; color: var(--oxblood); touch-action: pan-y pinch-zoom; overscroll-behavior: contain;
   &[open] { display: grid; place-items: center; }
   &::backdrop { background: transparent; }
 }
-.veil { position: fixed; inset: 0; background: rgb(16 6 7 / 0.96); }
+.veil { position: fixed; inset: 0; background: rgb(248 247 244 / 0.78); backdrop-filter: blur(28px) saturate(1.1); }
 .fig { position: relative; grid-area: 1 / 1; display: grid; justify-items: center; gap: 14px; margin: 0; &[hidden] { display: none; } }
-.frame { position: relative; overflow: hidden; background: var(--deep) center / cover no-repeat; box-shadow: 0 30px 80px rgb(0 0 0 / 0.55); img { object-fit: cover; } }
-.fig figcaption { font-size: 0.875rem; letter-spacing: 0.02em; color: rgb(242 238 230 / 0.7); }
+.frame { position: relative; overflow: hidden; background: var(--sand) center / cover no-repeat; box-shadow: 0 30px 80px rgb(59 12 15 / 0.3); img { object-fit: cover; } }
+.fig figcaption { font-size: 0.875rem; letter-spacing: 0.02em; color: rgb(76 17 20 / 0.75); }
 /* Round buttons as on Wood & Weave: close top right; previous and next at the screen's sides, or below on phones */
 .btn {
   position: fixed; z-index: 3; width: 3rem; height: 3rem; display: grid; place-items: center; border-radius: 50%;
-  border: 1px solid rgb(242 238 230 / 0.28); background: rgb(20 6 7 / 0.5); color: rgb(242 238 230);
+  border: 1px solid rgb(76 17 20 / 0.3); background: rgb(248 247 244 / 0.6); color: var(--oxblood);
   transition: background-color 300ms var(--ease), border-color 300ms var(--ease);
   svg { width: 1.2rem; fill: none; stroke: currentColor; stroke-width: 1.4px; stroke-linecap: round; stroke-linejoin: round; }
-  @include hover { &:hover { background: rgb(76 17 20 / 0.7); border-color: var(--blush); } }
-  &:focus-visible { outline-color: var(--paper); }
+  @include hover { &:hover { background: var(--oxblood); border-color: var(--oxblood); color: var(--paper); } }
+  &:focus-visible { outline-color: var(--oxblood); }
 }
 .close { top: 1rem; right: 1rem; }
 .prev { left: 1rem; top: 50%; translate: 0 -50%; }
