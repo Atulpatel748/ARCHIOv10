@@ -6,6 +6,8 @@ Multi-page marketing site for Archió, a consultancy-led interior design studio 
 - `docs/`: reference analysis, industry research, brand inventory, design strategy and `06-DECISIONS.md` (why the site is built the way it is: hosting, contact form, fonts, images, hero, Services).
 - `design-previews/`: earlier design explorations and screenshot helper.
 
+The images in `design-previews/` and `docs/` are stored with [Git LFS](https://git-lfs.com) (see `.gitattributes`). Run `git lfs install` once before cloning to get them; the site in `site/` does not need them.
+
 ## Run locally
 
 ```bash

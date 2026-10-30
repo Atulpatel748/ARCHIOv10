@@ -1,0 +1,10 @@
+# Design references and screenshots are kept in Git LFS so they stop growing the repository.
+# site/public stays in plain git: the Vercel build needs the real files.
+design-previews/**/*.png filter=lfs diff=lfs merge=lfs -text
+design-previews/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+design-previews/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+design-previews/**/*.webp filter=lfs diff=lfs merge=lfs -text
+docs/**/*.png filter=lfs diff=lfs merge=lfs -text
+docs/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+docs/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+docs/**/*.webp filter=lfs diff=lfs merge=lfs -text
