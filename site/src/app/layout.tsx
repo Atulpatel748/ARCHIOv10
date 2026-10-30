@@ -50,8 +50,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${display.variable} ${ui.variable} ${body.variable}`}>
       <head>
-        {/* The preloader is for the landing page, the first time the site is opened in a tab: every other page and every later visit skips it, before first paint. */}
-        <script dangerouslySetInnerHTML={{ __html: "(function(){var d=document.documentElement,f=1;try{var k='archio-seen';f=!sessionStorage.getItem(k);sessionStorage.setItem(k,'1')}catch(e){}if(!f||location.pathname!=='/')d.setAttribute('data-no-preloader','')})()" }} />
+        {/* The preloader is for the landing page, the first time the site is opened in a tab: every other page and every later visit skips it, before first paint. If sessionStorage is blocked, the visit cannot be remembered, so the preloader is skipped rather than shown on every load. */}
+        <script dangerouslySetInnerHTML={{ __html: "(function(){var d=document.documentElement,f=1;try{var k='archio-seen';f=!sessionStorage.getItem(k);sessionStorage.setItem(k,'1')}catch(e){f=0}if(!f||location.pathname!=='/')d.setAttribute('data-no-preloader','')})()" }} />
       </head>
       <body>
         <a className="skip-link" href="#main">Skip to content</a>

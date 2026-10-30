@@ -44,6 +44,14 @@ test('lists every invalid field', async () => {
   assert.deepEqual(body.fields, ['name', 'contact', 'type', 'consent']);
 });
 
+test('refuses an email that would add a second reply-to address', async () => {
+  for (const contact of ['asha@example.com,eve@example.net', 'asha@example.com;eve', 'Eve <eve@example.net>']) {
+    const [code, body] = await status(await post({ ...valid, contact }));
+    assert.equal(code, 422, contact);
+    assert.deepEqual(body.fields, ['contact']);
+  }
+});
+
 test('accepts a phone number as the contact', async () => {
   assert.equal((await post({ ...valid, contact: '+971 55 654 1410' })).status, 503); // valid, but no mail settings set
 });
