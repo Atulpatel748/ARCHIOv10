@@ -54,7 +54,8 @@
 .eyebrow { display: block; margin-bottom: 4px; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: #8A2E34; }
 /* When pinned, only the current step shows its text, so the column stays short */
 @media (min-width: 1024px) and (min-height: 640px) {
-  .track[data-seq] .steps li p { overflow: hidden; max-height: calc(var(--cur) * 7em); opacity: var(--cur); }
+  /* 20em, not 7em: a visitor's own text spacing or larger font must not cut the end off a step (WCAG 1.4.12) */
+  .track[data-seq] .steps li p { overflow: hidden; max-height: calc(var(--cur) * 20em); opacity: var(--cur); }
 }
 
 /* The room, right. The box is centred and turns about its own middle, which is the middle of the floor. */

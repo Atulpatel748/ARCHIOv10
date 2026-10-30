@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageOpenGraph } from '@/lib/pageMeta';
 import Image from 'next/image';
 import PageHead from '@/components/PageHead';
 import { about, mission, philosophy, team, vision, whyUs } from '@/content/site';
@@ -11,8 +12,7 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: '/about' },
-  // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
-  openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: ['/images/projects/dubai-marina-residence/main-bedroom.webp'], title, description },
+  openGraph: pageOpenGraph(title, description),
 };
 
 export default function AboutPage() {

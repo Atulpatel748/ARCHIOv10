@@ -18,12 +18,12 @@ export default function StageList({ stages }: { stages: Stage[] }) {
           <Image src={s.image} alt={s.alt} fill sizes="(max-width: 1023px) 100vw, 60vw" />
           <div className={styles.veil} aria-hidden="true" />
           <h3 className={styles.head}>
-            <button type="button" aria-expanded={i === active} onClick={() => setActive(i)} onFocus={() => setActive(i)}>
+            <button type="button" aria-expanded={i === active} aria-controls={`stage-${i}`} onClick={() => setActive(i)} onFocus={() => setActive(i)}>
               <span className={styles.vName}>{s.name}</span>
               <span className={styles.hName} aria-hidden="true">{s.name}</span>
             </button>
           </h3>
-          <div className={styles.items}>
+          <div id={`stage-${i}`} className={styles.items}>
             {s.items.map((it) => (
               <div key={it.title}>
                 <h4>{it.title}</h4>

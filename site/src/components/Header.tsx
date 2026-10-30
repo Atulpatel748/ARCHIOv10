@@ -132,10 +132,13 @@ export default function Header() {
   const [lastPath, setLastPath] = useState(pathname);
   if (pathname !== lastPath) { setLastPath(pathname); setOpen(false); }
 
+  const menuWasOpen = useRef(false);
   useEffect(() => {
     const main = document.getElementById('main');
     const footer = document.querySelector('footer');
-    [main, footer].forEach((el) => { if (el) el.inert = open; });
+    // Only touch inert when the menu opens or has just closed: on mount, resetting it would undo the preloader's inert.
+    if (open || menuWasOpen.current) [main, footer].forEach((el) => { if (el) el.inert = open; });
+    menuWasOpen.current = open;
     document.documentElement.style.overflow = open ? 'hidden' : '';
     const lenis = (window as unknown as { lenis?: { stop(): void; start(): void } }).lenis;
     if (open) lenis?.stop(); else lenis?.start();
@@ -167,21 +170,21 @@ export default function Header() {
               <span className={styles.bars}><span /><span /></span>
             </button>
         </div>
-        <nav aria-label="Main" className={styles.nav}>
+        <nav aria-label="Main" className={styles.nav} inert={open}>
           {nav.slice(0, 3).map((item) => (
             <Link prefetch={false} key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}><Roll>{item.label}</Roll></Link>
           ))}
         </nav>
-        <Link prefetch={false} ref={brandRef} href="/" className={styles.brand} aria-label="Archió, home">
+        <Link prefetch={false} ref={brandRef} href="/" className={styles.brand} aria-label="Archió, home" inert={open}>
           <span className={`logo logo--wordmark ${styles.logo}`} aria-hidden="true" />
         </Link>
-        <div className={styles.right}>
+        <div className={styles.right} inert={open}>
           <Link prefetch={false} href="/contact" className={styles.talk}><Roll>{"Let's talk"}</Roll> <span aria-hidden="true">+</span></Link>
         </div>
       </header>
 
       <div ref={menuRef} id="site-menu" className={`${styles.menu} ${open ? styles.menuOpen : ''}`} role="dialog" aria-modal="true" aria-label="Menu" aria-hidden={!open} inert={!open}>
-        <nav aria-label="Main" className={styles.menuNav}>
+        <nav aria-label="Menu links" className={styles.menuNav}>
           {links.map((item) => (
             <Link prefetch={false} key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</Link>
           ))}

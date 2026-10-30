@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageOpenGraph } from '@/lib/pageMeta';
 import Link from 'next/link';
 import Image from 'next/image';
 import PageHead from '@/components/PageHead';
@@ -13,8 +14,7 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: '/services' },
-  // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
-  openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: ['/images/projects/dubai-marina-residence/main-bedroom.webp'], title, description },
+  openGraph: pageOpenGraph(title, description),
 };
 
 export default function ServicesPage() {
@@ -27,7 +27,7 @@ export default function ServicesPage() {
         {serviceStages.map((stage, i) => (
           <section key={stage.name} className={styles.band}>
             <div className={styles.bandMedia}>
-              <Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 1023px) 100vw, 50vw" priority={i === 0} />
+              <Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 1023px) 100vw, 50vw" priority={i === 0} fetchPriority={i === 0 ? 'high' : undefined} />
             </div>
             <div className={styles.bandBody}>
               <h2 className={styles.bandName} data-reveal>{stage.name}</h2>

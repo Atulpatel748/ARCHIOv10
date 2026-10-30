@@ -26,3 +26,6 @@ coverage/
 # Operating system files
 .DS_Store
 Thumbs.db
+
+# Agent worktrees (each is its own checkout; never commit them)
+.claude/worktrees/

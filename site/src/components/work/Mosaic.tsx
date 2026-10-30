@@ -1,7 +1,10 @@
 'use client';
 
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger); // Reveals now loads the plugin later, so this component registers it itself
 import Gallery from '@/components/Gallery';
 import { visualisation, type Project } from '@/content/projects';
 import styles from './Work.module.scss';

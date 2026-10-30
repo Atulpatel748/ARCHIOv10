@@ -62,9 +62,11 @@ const subscribeReduced = (cb: () => void) => { const mq = matchMedia(REDUCED); m
 const getReduced = () => matchMedia(REDUCED).matches;
 const getReducedServer = () => false;
 
-async function createGL(stage: HTMLDivElement, srcs: string[]): Promise<GL | null> {
+async function createGL(stage: HTMLDivElement, srcs: string[], onLost: () => void): Promise<GL | null> {
   const probe = document.createElement('canvas');
-  if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) return null;
+  const probeContext = probe.getContext('webgl2') || probe.getContext('webgl');
+  if (!probeContext) return null;
+  probeContext.getExtension('WEBGL_lose_context')?.loseContext(); // the probe must not keep one of the browser's few contexts
   const THREE = await import('three');
   // Fresh Image objects from the original files: <Image> elements report layout sizes, which breaks texture upload.
   const imgs = await Promise.all(srcs.map(async (src) => { const i = new window.Image(); i.src = src; await i.decode(); return i; }));
@@ -97,6 +99,9 @@ async function createGL(stage: HTMLDivElement, srcs: string[]): Promise<GL | nul
   ro.observe(stage);
   renderer.domElement.setAttribute('aria-hidden', 'true');
   renderer.domElement.className = styles.canvas;
+  // A GPU reset or an evicted tab drops the context and leaves the canvas blank: hand control back so the <img> slides return.
+  const lost = (e: Event) => { e.preventDefault(); onLost(); };
+  renderer.domElement.addEventListener('webglcontextlost', lost);
   stage.appendChild(renderer.domElement);
   const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   return {
@@ -127,6 +132,7 @@ async function createGL(stage: HTMLDivElement, srcs: string[]): Promise<GL | nul
     },
     dispose() {
       disposed = true;
+      renderer.domElement.removeEventListener('webglcontextlost', lost); // forceContextLoss below would otherwise call onLost again
       cancelAnimationFrame(frameId);
       settle?.(); settle = null;
       ro.disconnect();
@@ -144,7 +150,10 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   const gl = useRef<GL | null>(null);
   const busy = useRef(false);
   const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
+  // Hover and keyboard focus are tracked apart, so leaving with the mouse does not restart autoplay under a focused keyboard user.
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const paused = hovered || focused;
   const [stopped, setStopped] = useState(false);
   const [glReady, setGlReady] = useState(false);
   const reduced = useSyncExternalStore(subscribeReduced, getReduced, getReducedServer);
@@ -168,7 +177,8 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
     const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
     if (matchMedia(REDUCED).matches || matchMedia('(max-width: 767px)').matches || saveData) return;
     let cancelled = false;
-    const start = () => createGL(stage.current!, slides.map((s) => (s.poster ? heroLoader({ src: s.poster, width: 1920 }) : s.src))).then((g) => {
+    const onLost = () => { gl.current?.dispose(); gl.current = null; setGlReady(false); };
+    const start = () => createGL(stage.current!, slides.map((s) => (s.poster ? heroLoader({ src: s.poster, width: 1920 }) : s.src)), onLost).then((g) => {
       if (cancelled) { g?.dispose(); return; }
       gl.current = g;
       // The slide may have moved on while three.js and the photos loaded: start the canvas on the slide being shown.
@@ -202,8 +212,8 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       className={styles.hero}
       aria-roledescription="carousel"
       aria-label="Featured projects"
-      onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}
+      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      onFocus={() => setFocused(true)} onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}
       data-recede
     >
       <div className={styles.inner} data-recede-inner>
@@ -217,6 +227,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
               alt={i === current ? s.alt : ''}
               fill
               priority={i === 0}
+              fetchPriority={i === 0 ? 'high' : undefined}
               sizes="100vw"
               className={styles.photo}
             />

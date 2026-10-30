@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { pageOpenGraph } from '@/lib/pageMeta';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -20,14 +21,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const project = getProject((await params).slug);
   if (!project) return {};
-  const title = `${project.title}, ${project.category} project`;
-  const description = `${project.summary} ${project.location}, ${project.area}.`;
+  // The images are design renders, so search and share previews say so (CONSTRAINTS.md, Floor).
+  const title = `${project.title}, ${visualisation.toLowerCase()}`;
+  const description = `${visualisation}: ${project.summary} ${project.location}, ${project.area}.`;
   return {
     title,
     description,
     alternates: { canonical: `/projects/${project.slug}` },
-    // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
-    openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: [project.cover.src], title, description },
+    openGraph: pageOpenGraph(title, description, [project.cover.src]),
   };
 }
 
@@ -68,6 +69,7 @@ export default async function ProjectPage({ params }: Params) {
 
       {/* The rooms; each image opens in the full-screen viewer */}
       <section className="section container" aria-label={`${project.title}, room by room`}>
+        <h2 className="visually-hidden">Room by room</h2>
         <Gallery images={project.gallery} title={project.title} />
       </section>
 

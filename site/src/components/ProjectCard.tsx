@@ -15,6 +15,7 @@ export default function ProjectCard({ project, size = 'regular', priority = fals
             alt={project.cover.alt}
             fill
             priority={priority}
+            fetchPriority={priority ? 'high' : undefined}
             sizes={size === 'large' ? '(max-width: 767px) 100vw, 92vw' : '(max-width: 767px) 100vw, 46vw'}
             className={styles.image}
           />

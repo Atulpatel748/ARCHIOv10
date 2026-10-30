@@ -9,10 +9,10 @@ import styles from './RoomJourney.module.scss';
 type Step = { title: string; text: string };
 
 // "How it goes" as a 3D room that builds itself and turns one full circle while you scroll through the four steps (an illustration
-// in thin lines, after Wood & Weave's process section). Plain CSS 3D, no library: <Sequence> publishes the scroll progress as
-// --progress, and every piece computes its own build state from it in CSS, so no script runs per frame. Only the walls on the far
-// side are drawn (single-sided), so you always look inside. With reduced motion, or when not pinned (phones, small windows), it is the
-// finished room, standing still. The room itself loads only when you near it (RoomScene), so it costs nothing at page load.
+// in thin lines, after Wood & Weave's process section). <Sequence> publishes the scroll progress as --progress. On large screens with
+// WebGL, RoomScene draws the room in three.js (room3d.ts), which reads that progress each frame. Everywhere else (phones, small
+// windows, reduced motion, no WebGL) it is the CSS 3D room (RoomModel), the finished room standing still. The room loads only when you
+// near it (RoomScene), so it costs nothing at page load.
 
 const LABELS = ['Brief', 'Strategy', 'Decisions', 'Execution'];
 const vars = (o: Record<string, string | number>) => o as CSSProperties;

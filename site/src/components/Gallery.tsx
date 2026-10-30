@@ -185,7 +185,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
                 type="button" className={styles.tileBtn} data-cursor="Open" onClick={() => open(index)}
                 aria-label={`Open image ${index + 1} of ${images.length}: ${img.alt}`}
               >
-                <Image src={img.src} alt="" fill sizes="(min-width: 64em) 30vw, 50vw" />
+                <Image src={img.src} alt="" fill quality={65} sizes="(min-width: 64em) 30vw, 50vw" />
               </button>
             </li>
           ))}
@@ -211,7 +211,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
                   style={{ '--ar': img.width / img.height } as CSSProperties} data-cursor="Open" onClick={() => open(index)}
                   aria-label={`Open image ${index + 1} of ${images.length}: ${img.alt}`}
                 >
-                  <Image src={img.src} alt="" fill sizes="(max-width: 767px) 90vw, 50vw" />
+                  <Image src={img.src} alt="" fill quality={65} sizes="(max-width: 767px) 90vw, 50vw" />
                 </button>
               ))}
             </section>

@@ -25,7 +25,8 @@ const csp = [
 ].join('; ');
 
 const nextConfig: NextConfig = {
-  images: { formats: ['image/webp'] }, // WebP only: AVIF takes far longer to encode on a first request
+  // WebP only: AVIF takes far longer to encode on a first request. 65 is the lighter quality used for gallery thumbnails.
+  images: { formats: ['image/webp'], qualities: [65, 75] },
   poweredByHeader: false,
   async headers() {
     const headers: { key: string; value: string }[] = [
@@ -39,7 +40,13 @@ const nextConfig: NextConfig = {
     if (!dev) {
       headers.push({ key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' });
     }
-    return [{ source: '/:path*', headers }];
+    // The photos and logos keep their file names when replaced, so a long "immutable" lifetime is not safe: a day, then a quiet refresh.
+    const assetCache = { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' };
+    return [
+      { source: '/:path*', headers },
+      { source: '/images/:path*', headers: [assetCache] },
+      { source: '/brand/:path*', headers: [assetCache] },
+    ];
   },
 };
 

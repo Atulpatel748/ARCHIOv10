@@ -21,7 +21,7 @@ export const site = {
   phone: '+971 55 654 1410',
   phoneHref: 'tel:+971556541410',
   whatsappHref: 'https://wa.me/971556541410',
-  email: 'info@beracahlogistics.com', // CLIENT TO CONFIRM: a dedicated Archió address
+  email: 'info@beracahlogistics.com', // confirmed by the owner, 30 Oct 2026
   instagram: '@archio_designstudio',
   instagramHref: 'https://www.instagram.com/archio_designstudio/',
 };

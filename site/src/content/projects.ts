@@ -1,4 +1,4 @@
-// The three projects from the company profile. Image sizes are the extracted placeholders; replace with the original renders.
+// The three design visualisations from the company profile. Image sizes are the extracted placeholders; replace with the original renders.
 
 export type ProjectImage = { src: string; alt: string; width: number; height: number; room?: string };
 export type Project = {
@@ -31,7 +31,7 @@ export const projects: Project[] = [
     category: 'Residential',
     location: 'Dubai Marina',
     area: '2,500 sq ft',
-    summary: 'A residence where architecture, material and light come together, from feature walls and joinery to lighting and finishing details.',
+    summary: 'A residence designed so that architecture, material and light come together, from feature walls and joinery to lighting and finishing details.',
     description: [
       'We design interiors where architecture, material, and light come together seamlessly, from feature walls and joinery to lighting and finishing details.',
       'Each space is shaped around how its owners would live day to day, with precision carried from concept to detail. The aim is simple: interiors that feel easy to live in, every single day.',
@@ -60,7 +60,7 @@ export const projects: Project[] = [
     category: 'Commercial',
     location: 'Jumeirah Lake Towers (JLT)',
     area: '2,000 sq ft',
-    summary: 'Commercial spaces that make the right first impression, from reception areas and lounges to a full office.',
+    summary: 'An office designed to make the right first impression, from reception areas and lounges to the working floor.',
     description: [
       'Commercial spaces that make the right first impression, from reception areas and lounges to full office fit-outs.',
       'Every detail, from material selection to lighting, is considered to reflect the brand and support how people would work and meet. The aim is simple: a workplace its team would be proud to welcome people into, every day.',
@@ -85,7 +85,7 @@ export const projects: Project[] = [
     category: 'Landscape',
     location: 'Arabian Ranches 2',
     area: '6,500 sqm',
-    summary: 'A landscape that brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors.',
+    summary: 'A landscape design that brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors.',
     description: [
       'This landscape design brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors. Palms and layered greenery line a stone path to the entrance, setting a calm, welcoming tone from the moment you arrive.',
       "We design outdoor spaces where architecture and nature meet, from softscaping and hardscaping to pools, irrigation, and lighting. This design is shaped around the owners' lifestyle and the character of the property. The aim is simple: an outdoor space made for living in, season after season.",

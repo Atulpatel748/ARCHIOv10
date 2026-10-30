@@ -115,6 +115,10 @@ export default function Preloader() {
     if (document.documentElement.hasAttribute('data-no-preloader')) return; // not the landing page, or not the first time in this tab: the CSS keeps the overlay hidden
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout>;
+    // The overlay is only aria-hidden, so keyboard focus would walk into links hidden behind it: make the page inert until it leaves.
+    const covered = [...document.querySelectorAll<HTMLElement>('header, main, footer')];
+    covered.forEach((el) => el.setAttribute('inert', ''));
+    const release = () => covered.forEach((el) => el.removeAttribute('inert'));
     const until = (ms: number) => new Promise((r) => setTimeout(r, ms - performance.now())); // ms counted from the page's start
     const imgs = [...document.querySelectorAll<HTMLImageElement>('#main img:not([loading="lazy"])')];
     // allSettled: an image that fails to decode only stops being waited for; it must not keep the overlay up (or open it early).
@@ -126,12 +130,12 @@ export default function Preloader() {
       setLeaving(true); // the wordmark fades first
       timer = setTimeout(() => {
         const [root, room, door, win, light] = [rootRef.current, roomRef.current, doorRef.current, winRef.current, lightRef.current];
-        const finish = () => { setGone(true); dispatchEvent(new Event('preloader:done')); }; // the hero's WebGL waits for this
+        const finish = () => { release(); setGone(true); dispatchEvent(new Event('preloader:done')); }; // the hero's WebGL waits for this
         if (root && room && door && win && light) openDoorway(root, room, door, win, light).then(finish, finish);
         else finish();
       }, 200);
     });
-    return () => { cancelled = true; clearTimeout(timer); };
+    return () => { cancelled = true; clearTimeout(timer); release(); };
   }, []);
 
   if (gone) return null;
