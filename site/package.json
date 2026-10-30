@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test src/app/api/contact/route.test.ts",
+    "test": "node --test src/app/api/contact/route.test.ts src/lib/imageLoader.test.ts",
+    "images": "node scripts/resize-images.mjs",
     "check": "npm run typecheck && npm run lint && npm test",
     "check:full": "npm run check && npm run build && npm audit --audit-level=high"
   },

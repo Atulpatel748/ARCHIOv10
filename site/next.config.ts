@@ -25,8 +25,9 @@ const csp = [
 ].join('; ');
 
 const nextConfig: NextConfig = {
-  // WebP only: AVIF takes far longer to encode on a first request. 65 is the lighter quality used for gallery thumbnails.
-  images: { formats: ['image/webp'], qualities: [65, 75] },
+  // Photos are resized ahead of time (npm run images) and picked by src/lib/imageLoader.ts, so Vercel never resizes on request.
+  // 65 stays listed because the gallery thumbnails still ask for it; the fixed copies are all made at 70.
+  images: { loader: 'custom', loaderFile: './src/lib/imageLoader.ts', qualities: [65, 75] },
   poweredByHeader: false,
   async headers() {
     const headers: { key: string; value: string }[] = [
