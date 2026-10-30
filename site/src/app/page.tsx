@@ -7,7 +7,7 @@ import RoomJourney from '@/components/RoomJourney';
 import Sequence from '@/components/Sequence';
 import StageList from '@/components/StageList';
 import Split from '@/components/Split';
-import { projects } from '@/content/projects';
+import { projects, visualisation } from '@/content/projects';
 import { about, philosophy, processSteps, serviceStages as stages, team } from '@/content/site';
 import styles from './home.module.scss';
 import Roll from '@/components/Roll';
@@ -119,6 +119,7 @@ export default function HomePage() {
             <Image src={flagship.hero.src} alt={flagship.hero.alt} fill sizes="(max-width: 1023px) 100vw, 60vw" />
           </Link>
           <div className={styles.factsCard} data-reveal>
+            <p className="label">{visualisation}</p>
             <h3>{flagship.title}</h3>
             <p className="serif">{flagship.summary}</p>
             <dl>

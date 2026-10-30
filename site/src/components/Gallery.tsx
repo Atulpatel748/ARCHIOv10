@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { gsap } from 'gsap';
-import type { ProjectImage } from '@/content/projects';
+import { visualisation, type ProjectImage } from '@/content/projects';
 import styles from './Gallery.module.scss';
 
 type Lenis = { stop(): void; start(): void };
@@ -227,7 +227,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
             <div className={styles.frame} data-frame>
               <Image src={img.src} alt={img.alt} fill sizes="100vw" />
             </div>
-            <figcaption>{img.room ?? img.alt}</figcaption>
+            <figcaption>{img.room ?? img.alt} · {visualisation}</figcaption>
           </figure>
         ))}
         <button type="button" className={`${styles.btn} ${styles.close}`} onClick={close} aria-label="Close" autoFocus><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button>

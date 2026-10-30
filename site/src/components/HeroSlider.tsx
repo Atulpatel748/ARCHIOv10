@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import styles from './HeroSlider.module.scss';
 import Roll from '@/components/Roll';
+import { visualisation } from '@/content/projects';
 
 export type Slide = { src: string; poster?: string; alt: string; title: string; place: string; href: string };
 
@@ -229,7 +230,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
         <div className={styles.caption} aria-live={playing ? 'off' : 'polite'}>
           <p className={styles.place}>
             <svg viewBox="0 0 12 16" aria-hidden="true"><path d="M6 15s5-5.2 5-9A5 5 0 0 0 1 6c0 3.8 5 9 5 9Z" fill="none" stroke="currentColor" /><circle cx="6" cy="6" r="1.6" fill="currentColor" /></svg>
-            {slide.place}
+            <span className={styles.placeText}>{slide.place}<span className={styles.note}>{visualisation}</span></span>
           </p>
           <Link prefetch={false} href={slide.href} className={styles.slideLink} data-cursor="View">
             <Roll>View project</Roll><span className="visually-hidden">: {slide.title}</span> <span aria-hidden="true">→</span>
