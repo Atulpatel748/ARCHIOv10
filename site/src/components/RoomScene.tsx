@@ -10,7 +10,8 @@ import styles from './RoomJourney.module.scss';
 // Everywhere else (phones, tablets, short windows, reduced motion, no WebGL) it is the CSS room, standing still (RoomModel).
 const RoomModel = dynamic(() => import('./RoomModel'), { ssr: false });
 
-const pinned = () => matchMedia('(min-width: 1024px) and (min-height: 640px) and (prefers-reduced-motion: no-preference)').matches;
+const query = '(min-width: 1024px) and (min-height: 640px) and (prefers-reduced-motion: no-preference)';
+const pinned = () => matchMedia(query).matches;
 
 export default function RoomScene() {
   const box = useRef<HTMLDivElement>(null);
@@ -21,6 +22,16 @@ export default function RoomScene() {
     io.observe(box.current!);
     return () => io.disconnect();
   }, []);
+
+  // Once built, follow the window across the breakpoint (resize, rotation, reduced motion toggled).
+  const built = mode !== 'idle';
+  useEffect(() => {
+    if (!built) return;
+    const mq = matchMedia(query);
+    const onChange = () => setMode(mq.matches ? '3d' : 'flat');
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, [built]);
 
   useEffect(() => {
     if (mode !== '3d') return;

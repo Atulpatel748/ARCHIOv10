@@ -63,6 +63,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
     const s = state.current;
     if (s.busy) return;
     s.index = i;
+    gsap.set(figs.current, { clearProps: 'all' });
     show(i);
     fit(i);
     gsap.set(veil.current, { clearProps: 'all' });
@@ -83,6 +84,9 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
     if (!dialog.current?.open) return;
     s.tl?.kill();
     const i = s.index;
+    // A step cut short leaves the outgoing figure half faded and shifted.
+    gsap.set(figs.current, { clearProps: 'all' });
+    show(i);
     const finish = () => { dialog.current?.close(); reset(i); gsap.set(veil.current, { clearProps: 'all' }); s.busy = false; lenis()?.start(); thumbs.current[i]?.focus(); };
     if (reduced()) { finish(); return; }
     s.busy = true;
@@ -112,6 +116,12 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
       .to(figs.current[from], { opacity: 0, x: -50 * dir, duration: 0.5, ease: 'power2.inOut' }, 0)
       .fromTo(figs.current[to], { opacity: 0, x: 50 * dir }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out', clearProps: 'opacity,x' }, 0.12);
   }
+
+  // Leaving the page with the viewer open (browser Back) must not leave the layout's smooth scroll stopped.
+  useEffect(() => {
+    const s = state.current;
+    return () => { s.tl?.kill(); lenis()?.start(); };
+  }, []);
 
   // The room index marks the chapter that is crossing the middle of the screen.
   useEffect(() => {
