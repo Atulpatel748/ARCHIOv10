@@ -6,10 +6,15 @@ import { approach, sectors, serviceStages, servicesIntro } from '@/content/site'
 import styles from './services.module.scss';
 import Roll from '@/components/Roll';
 
+const title = 'Services';
+const description = 'Consultancy-based interior design in Dubai: design consultation, concept development, space planning, material selection, design review and project coordination support.';
+
 export const metadata: Metadata = {
-  title: 'Services',
-  description: 'Consultancy-based interior design in Dubai: design consultation, concept development, space planning, material selection, design review and project coordination support.',
+  title,
+  description,
   alternates: { canonical: '/services' },
+  // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
+  openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: ['/images/projects/dubai-marina-residence/main-bedroom.webp'], title, description },
 };
 
 export default function ServicesPage() {

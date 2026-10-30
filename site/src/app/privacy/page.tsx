@@ -4,10 +4,15 @@ import PageHead from '@/components/PageHead';
 import { site } from '@/content/site';
 import styles from './privacy.module.scss';
 
+const title = 'Privacy Notice';
+const description = 'How Archió handles personal information submitted through its website and enquiry form.';
+
 export const metadata: Metadata = {
-  title: 'Privacy Notice',
-  description: 'How Archió handles personal information submitted through its website and enquiry form.',
+  title,
+  description,
   alternates: { canonical: '/privacy' },
+  // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
+  openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: ['/images/projects/dubai-marina-residence/main-bedroom.webp'], title, description },
 };
 
 export default function PrivacyPage() {

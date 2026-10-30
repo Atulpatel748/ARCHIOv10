@@ -4,10 +4,15 @@ import PageHead from '@/components/PageHead';
 import { about, mission, philosophy, team, vision, whyUs } from '@/content/site';
 import styles from './about.module.scss';
 
+const title = 'About';
+const description = 'Archió is a consultancy-led interior design studio in Dubai, founded by Pooja Vijayakumar and S. Harshitha. Our vision, mission and philosophy.';
+
 export const metadata: Metadata = {
-  title: 'About',
-  description: 'Archió is a consultancy-led interior design studio in Dubai, founded by Pooja Vijayakumar and S. Harshitha. Our vision, mission and philosophy.',
+  title,
+  description,
   alternates: { canonical: '/about' },
+  // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
+  openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: ['/images/projects/dubai-marina-residence/main-bedroom.webp'], title, description },
 };
 
 export default function AboutPage() {

@@ -4,10 +4,15 @@ import Split from '@/components/Split';
 import { site } from '@/content/site';
 import styles from './contact.module.scss';
 
+const title = 'Contact';
+const description = 'Start a conversation with Archió about a residential, commercial, mixed-use or landscape project in Dubai. WhatsApp, phone, email or enquiry form.';
+
 export const metadata: Metadata = {
-  title: 'Contact',
-  description: 'Start a conversation with Archió about a residential, commercial, mixed-use or landscape project in Dubai. WhatsApp, phone, email or enquiry form.',
+  title,
+  description,
   alternates: { canonical: '/contact' },
+  // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
+  openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: ['/images/projects/dubai-marina-residence/main-bedroom.webp'], title, description },
 };
 
 export default function ContactPage() {
