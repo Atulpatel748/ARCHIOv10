@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import type { Project } from '@/content/projects';
+import { visualisation, type Project } from '@/content/projects';
 import styles from './ProjectCard.module.scss';
 
 type Props = { project: Project; size?: 'large' | 'regular'; priority?: boolean };
@@ -20,6 +20,7 @@ export default function ProjectCard({ project, size = 'regular', priority = fals
           />
         </div>
         <div className={styles.meta}>
+          <span className="label">{visualisation}</span>
           <h3 className="h3">{project.title}</h3>
           <p>{project.category}, {project.location} · {project.area}</p>
           <span className={styles.more}>See the project <span aria-hidden="true">→</span></span>
