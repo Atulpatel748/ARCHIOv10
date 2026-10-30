@@ -47,7 +47,7 @@ Spam check (Cloudflare Turnstile, free): in the Cloudflare dashboard open Turnst
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY`: the public site key. It is built into the page, so redeploy after setting it.
 - `TURNSTILE_SECRET_KEY`: the secret key, checked on the server.
 
-With the secret set, the form must send a passing Turnstile token, or the endpoint refuses it (`captcha`, or `captcha_unavailable` when Cloudflare cannot be reached). Without the secret the check is skipped, so the form keeps working until the keys are added; set both together. The widget's script is loaded only on `/contact`, and only once someone uses the form. For local testing, Cloudflare's test keys always pass: site key `1x00000000000000000000AA`, secret `1x0000000000000000000000000000000AA`.
+With the secret set, the form must send a passing Turnstile token, or the endpoint refuses it (`captcha`, or `captcha_unavailable` when Cloudflare cannot be reached). In production the secret is required: without it the endpoint refuses every enquiry with `not_configured` (503), even when the mail settings are set, so a spam-open form can never go live by accident. Only outside production (local development and the tests) is the check skipped. Set both keys together, alongside the five mail settings. The widget's script is loaded only on `/contact`, and only once someone uses the form. For local testing, Cloudflare's test keys always pass: site key `1x00000000000000000000AA`, secret `1x0000000000000000000000000000000AA`.
 
 ## Before launch
 

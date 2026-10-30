@@ -44,6 +44,7 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 | JavaScript loaded on first visit | about 145 KB, compressed | must not grow |
 | Fonts | about 58 KB (3 files, Latin only); it was 96 KB (6 files) until 28 Oct 2026, and an earlier note of 47 KB had counted only the two biggest files | must not grow |
 | Whole page weight on mobile | 311 to 527 KB | must not grow |
+| Vercel image resizing on request (`/_next/image`) | 0 per visit since 30 Oct 2026 (photos are resized ahead of time, ADR-007); it was about 57 for a three-page visit | must stay 0 |
 | Contact form emails delivered | none yet (the SMTP settings are not set in Vercel) | must reach "works" before launch |
 
 Note (30 Oct 2026): Lighthouse (mobile) reports 199 to 214 KB of JavaScript transfer per page, not 145 KB; no script in this repo reproduces the 145 KB figure, so treat it as measured another way. Until one does, compare against the Lighthouse figure. `Reveals` now loads gsap, ScrollTrigger and Lenis when the browser is idle (about 59 KB compressed, expected to leave the first load); measure again after the next deploy and record the new baseline here.
