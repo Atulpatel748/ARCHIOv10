@@ -42,6 +42,13 @@ Enquiries are emailed over SMTP, the normal way a mailbox (Gmail, Microsoft 365,
 
 Without all five (host, user, password, to, from), the endpoint returns a controlled error and the form offers WhatsApp/email as a fallback rather than pretending a message was sent. If sending fails, the visitor sees the same fallback, and the cause code (never the settings) is written to the server log. The current rate limiter is per-process only; the intended guard is a Vercel Firewall rate-limit rule on `/api/contact`.
 
+Spam check (Cloudflare Turnstile, free): in the Cloudflare dashboard open Turnstile, add a widget for the site's domain, and copy its two keys into Vercel:
+
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY`: the public site key. It is built into the page, so redeploy after setting it.
+- `TURNSTILE_SECRET_KEY`: the secret key, checked on the server.
+
+With the secret set, the form must send a passing Turnstile token, or the endpoint refuses it (`captcha`, or `captcha_unavailable` when Cloudflare cannot be reached). Without the secret the check is skipped, so the form keeps working until the keys are added; set both together. The widget's script is loaded only on `/contact`, and only once someone uses the form. For local testing, Cloudflare's test keys always pass: site key `1x00000000000000000000AA`, secret `1x0000000000000000000000000000000AA`.
+
 ## Before launch
 
 1. Confirm the production domain, registered business/legal name and address, and whether `info@beracahlogistics.com` is the correct public and privacy contact email.
