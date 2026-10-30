@@ -1,16 +1,8 @@
-'use client';
-
 import Link from 'next/link';
-import { useSyncExternalStore } from 'react';
 import { nav, site } from '@/content/site';
 import styles from './Footer.module.scss';
 
-// The page is prerendered, so the build year is only the first paint; the visitor's clock takes over after hydration.
-const built = new Date().getFullYear();
-const noop = () => () => {};
-
 export default function Footer() {
-  const year = useSyncExternalStore(noop, () => new Date().getFullYear(), () => built);
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.grid}`}>
@@ -32,7 +24,7 @@ export default function Footer() {
       </div>
 
       <div className={`container ${styles.bottom}`}>
-        <p>© {year} <span translate="no">{site.legalName}</span></p>
+        <p>© {new Date().getFullYear()} <span translate="no">{site.legalName}</span></p>
         <p>{site.parentLine}</p>
         <Link prefetch={false} href="/privacy">Privacy notice</Link>
       </div>
