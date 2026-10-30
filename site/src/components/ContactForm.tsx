@@ -72,7 +72,7 @@ export default function ContactForm() {
         <legend>Type of project</legend>
         <div className={styles.choices}>
           {TYPES.map((t) => (
-            <label key={t} className={styles.choice}><input type="radio" name="type" value={t} required={t === TYPES[0]} aria-invalid={!!errors.type} aria-describedby={errors.type ? 'type-error' : undefined} /> {t}</label>
+            <label key={t} className={styles.choice}><input type="radio" name="type" value={t} required={t === TYPES[0]} aria-describedby={errors.type ? 'type-error' : undefined} /> {t}</label>
           ))}
         </div>
         {errors.type && <p id="type-error" className={styles.error}>{errors.type}</p>}
