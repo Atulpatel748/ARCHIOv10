@@ -67,11 +67,12 @@ export default function ContactForm() {
         <input id="contact" name="contact" autoComplete="email" spellCheck={false} autoCapitalize="none" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
         {errors.contact && <p id="contact-error" className={styles.error}>{errors.contact}</p>}
       </div>
-      <fieldset className={styles.field} data-invalid={!!errors.type} aria-describedby={errors.type ? 'type-error' : undefined}>
+      {/* The error is tied to each radio, not the fieldset: aria-describedby on a fieldset is not read out reliably. */}
+      <fieldset className={styles.field} data-invalid={!!errors.type}>
         <legend>Type of project</legend>
         <div className={styles.choices}>
           {TYPES.map((t) => (
-            <label key={t} className={styles.choice}><input type="radio" name="type" value={t} required={t === TYPES[0]} /> {t}</label>
+            <label key={t} className={styles.choice}><input type="radio" name="type" value={t} required={t === TYPES[0]} aria-invalid={!!errors.type} aria-describedby={errors.type ? 'type-error' : undefined} /> {t}</label>
           ))}
         </div>
         {errors.type && <p id="type-error" className={styles.error}>{errors.type}</p>}
@@ -91,7 +92,7 @@ export default function ContactForm() {
       </div>
       <div className={styles.field} data-invalid={!!errors.consent}>
         <label className={styles.consent}>
-          <input type="checkbox" name="consent" value="yes" required aria-describedby={errors.consent ? 'consent-error' : undefined} />
+          <input type="checkbox" name="consent" value="yes" required aria-invalid={!!errors.consent} aria-describedby={errors.consent ? 'consent-error' : undefined} />
           <span>I agree to Archió using these details to reply to my enquiry.</span>
         </label>
         <p className={styles.privacyLink}>Read our <Link prefetch={false} href="/privacy">Privacy Notice</Link>.</p>

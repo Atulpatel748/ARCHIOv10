@@ -20,12 +20,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const project = getProject((await params).slug);
   if (!project) return {};
+  const title = `${project.title}, ${project.category} project`;
+  const description = `${project.summary} ${project.location}, ${project.area}.`;
   return {
-    title: `${project.title}, ${project.category} project`,
-    description: `${project.summary} ${project.location}, ${project.area}.`,
+    title,
+    description,
     alternates: { canonical: `/projects/${project.slug}` },
     // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
-    openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: [project.cover.src] },
+    openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: [project.cover.src], title, description },
   };
 }
 
