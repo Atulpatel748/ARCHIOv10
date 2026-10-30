@@ -20,6 +20,8 @@ Other commands, all run inside `site/`:
 
 | Command | What it does |
 | --- | --- |
+| `npm run check` | Types, lint and tests: run after every change. |
+| `npm run check:full` | `check`, then the production build and `npm audit --audit-level=high`, the same steps as CI: run before every push. |
 | `npm test` | Runs the contact form's server tests (plain Node, no extra library). |
 | `npm run lint` | Checks the code style. |
 | `npm run typecheck` | Checks the TypeScript types. |

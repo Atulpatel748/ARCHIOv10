@@ -1,4 +1,4 @@
-import { useEffect, type MutableRefObject, type RefObject } from 'react';
+import { useEffect, useRef, type MutableRefObject, type RefObject } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -12,6 +12,9 @@ const SPAN = 0.55; // how much of the scroll each photo travels for; the photos 
 // sits on a golden-angle spiral around the middle and travels from far to near. `startAt` begins the journey part-way, so the
 // first photos are already on their way when the page opens. `onBest` gets the index of the photo that is halfway along.
 export function useTunnel(root: RefObject<HTMLElement | null>, cards: MutableRefObject<HTMLDivElement[]>, n: number, startAt = 0, onBest?: (i: number) => void) {
+  // Held in a ref so a new callback on each render does not rebuild the ScrollTrigger; render() always calls the latest one.
+  const onBestRef = useRef(onBest);
+  useEffect(() => { onBestRef.current = onBest; }, [onBest]);
   useEffect(() => {
     const mid = (i: number) => (i / n) * (1 - SPAN) + SPAN / 2; // progress at which photo i is halfway along its travel
     let w = innerWidth, h = innerHeight, phone = innerWidth < 768, shown = -1;
@@ -29,13 +32,12 @@ export function useTunnel(root: RefObject<HTMLElement | null>, cards: MutableRef
         el.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), ${z}px) rotateZ(${rot}deg)`;
         el.style.opacity = String(lp < 0.18 ? lp / 0.18 : lp > 0.82 ? clamp((0.98 - lp) / 0.16) : 1);
       });
-      if (best !== shown) { shown = best; onBest?.(best); }
+      if (best !== shown) { shown = best; onBestRef.current?.(best); }
     };
     render(0);
     const st = ScrollTrigger.create({ trigger: root.current, start: 'top top', end: 'bottom bottom', scrub: true, onUpdate: (self) => render(self.progress) });
     const onResize = () => { w = innerWidth; h = innerHeight; phone = w < 768; render(st.progress); };
     addEventListener('resize', onResize);
     return () => { removeEventListener('resize', onResize); st.kill(); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- onBest only calls a state setter
-  }, [n, startAt]);
+  }, [root, cards, n, startAt]);
 }
