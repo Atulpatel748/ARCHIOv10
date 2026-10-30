@@ -23,7 +23,7 @@ Run from inside `site/` unless a different place is given.
 | --- | --- | --- | --- | --- |
 | Types | Zero errors | `npm run typecheck` | 0 errors | every change |
 | Lint | Zero errors | `npm run lint` | 0 errors | every change |
-| Tests | All pass | `npm test` (contact form route and mail sender) | 19 of 19 pass | every change |
+| Tests | All pass | `npm test` (contact form route and mail sender) | 20 of 20 pass | every change |
 | Build | Succeeds | `npm run build` | passes | before every push, and on GitHub |
 | Dependencies | No known problems | `npm audit --audit-level=high` | 0 | before every push, and on GitHub |
 | Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 8 pages checked | after every deploy |
@@ -46,7 +46,11 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 | Whole page weight on mobile | 311 to 527 KB | must not grow |
 | Contact form emails delivered | none yet (the SMTP settings are not set in Vercel) | must reach "works" before launch |
 
+Note (30 Oct 2026): Lighthouse (mobile) reports 199 to 214 KB of JavaScript transfer per page, not 145 KB; no script in this repo reproduces the 145 KB figure, so treat it as measured another way. Until one does, compare against the Lighthouse figure. `Reveals` now loads gsap, ScrollTrigger and Lenis when the browser is idle (about 59 KB compressed, expected to leave the first load); measure again after the next deploy and record the new baseline here.
+
 ## Not set up yet (no tool behind it, so not a constraint)
+
+- The Lighthouse rows above are run by hand after a deploy; no script or CI job runs them.
 
 - Test coverage: there is no coverage tool, so no number is claimed.
 - Blocking a merge on a red check: GitHub runs the checks on every push and pull request (`.github/workflows/ci.yml`, first green run on 28 Oct 2026, 46 seconds), but Vercel deploys on its own, and branch protection (a repository setting for the owner) is not turned on.
