@@ -41,12 +41,13 @@ export default function Reveals() {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const below = (el: Element) => el.getBoundingClientRect().top > window.innerHeight * 0.92;
 
-      const fade = { autoAlpha: 1, y: 0, duration: 1, ease: 'power2.out' };
+      // opacity, not autoAlpha: visibility:hidden would take headings and links out of the accessibility tree until scrolled to.
+      const fade = { opacity: 1, y: 0, duration: 1, ease: 'power2.out' };
       const once = (el: Element) => ({ trigger: el, start: 'top 90%', once: true });
 
       // Split headings keep their word markup (for screen readers and layout) but fade in as one line.
       gsap.utils.toArray<HTMLElement>('[data-reveal], [data-split], [data-mask]').filter(below).forEach((el) => {
-        gsap.fromTo(el, { autoAlpha: 0, y: 20 }, { ...fade, scrollTrigger: once(el) });
+        gsap.fromTo(el, { opacity: 0, y: 20 }, { ...fade, scrollTrigger: once(el) });
       });
 
       // Hero recedes (scales down, fades, drifts up) while the next section slides up over it.
