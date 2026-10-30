@@ -14,10 +14,23 @@ const status = async (res: Response) => [res.status, await res.json()] as const;
 
 const SETTINGS = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'CONTACT_TO_EMAIL', 'CONTACT_FROM_EMAIL'];
 const realSend = mailer.send;
+const realFetch = globalThis.fetch;
 afterEach(() => {
   mailer.send = realSend;
-  for (const key of SETTINGS) delete process.env[key];
+  globalThis.fetch = realFetch;
+  for (const key of [...SETTINGS, 'TURNSTILE_SECRET_KEY']) delete process.env[key];
 });
+// Stands in for Cloudflare's siteverify: answers with `answer`, or throws it, and keeps every request it gets.
+const siteverify = (answer: object | Error) => {
+  const calls: { url: string; form: URLSearchParams }[] = [];
+  globalThis.fetch = async (url, init) => {
+    calls.push({ url: String(url), form: new URLSearchParams(String(init?.body)) });
+    if (answer instanceof Error) throw answer;
+    return Response.json(answer);
+  };
+  process.env.TURNSTILE_SECRET_KEY = 'secret';
+  return calls;
+};
 const configure = () => Object.assign(process.env, { SMTP_HOST: 'mail.example.com', SMTP_USER: 'u', SMTP_PASS: 'p', CONTACT_TO_EMAIL: 'to@example.com', CONTACT_FROM_EMAIL: 'from@example.com' });
 
 test('rejects a body that is not JSON', async () => {
@@ -44,12 +57,54 @@ test('lists every invalid field', async () => {
   assert.deepEqual(body.fields, ['name', 'contact', 'type', 'consent']);
 });
 
+test('refuses an email that would add a second reply-to address', async () => {
+  for (const contact of ['asha@example.com,eve@example.net', 'asha@example.com;eve', 'Eve <eve@example.net>']) {
+    const [code, body] = await status(await post({ ...valid, contact }));
+    assert.equal(code, 422, contact);
+    assert.deepEqual(body.fields, ['contact']);
+  }
+});
+
 test('accepts a phone number as the contact', async () => {
   assert.equal((await post({ ...valid, contact: '+971 55 654 1410' })).status, 503); // valid, but no mail settings set
 });
 
 test('says not_configured when the mail settings are missing', async () => {
   assert.deepEqual(await status(await post(valid)), [503, { error: 'not_configured' }]);
+});
+
+test('without a Turnstile secret no captcha is asked for and Cloudflare is not called', async () => {
+  let called = false;
+  globalThis.fetch = async () => { called = true; return Response.json({ success: true }); };
+  assert.deepEqual(await status(await post(valid)), [503, { error: 'not_configured' }]);
+  assert.equal(called, false);
+});
+
+test('with a Turnstile secret, a missing token is refused before Cloudflare is asked', async () => {
+  const calls = siteverify({ success: true });
+  assert.deepEqual(await status(await post(valid)), [400, { error: 'captcha' }]);
+  assert.equal(calls.length, 0);
+});
+
+test('a token Cloudflare rejects is refused', async () => {
+  siteverify({ success: false, 'error-codes': ['invalid-input-response'] });
+  assert.deepEqual(await status(await post({ ...valid, turnstileToken: 'bad' })), [403, { error: 'captcha' }]);
+});
+
+test('a token Cloudflare accepts goes on to the mail step, checked with the secret and the visitor address', async () => {
+  const calls = siteverify({ success: true });
+  assert.deepEqual(await status(await post({ ...valid, turnstileToken: 'good' }, { ip: '198.51.100.7' })), [503, { error: 'not_configured' }]);
+  assert.equal(calls[0].url, 'https://challenges.cloudflare.com/turnstile/v0/siteverify');
+  assert.deepEqual(Object.fromEntries(calls[0].form), { secret: 'secret', response: 'good', remoteip: '198.51.100.7' });
+});
+
+test('when Cloudflare cannot be reached the enquiry is refused, not let through', async () => {
+  configure();
+  let called = false;
+  mailer.send = async () => { called = true; };
+  siteverify(new Error('fetch failed'));
+  assert.deepEqual(await status(await post({ ...valid, turnstileToken: 'good' })), [503, { error: 'captcha_unavailable' }]);
+  assert.equal(called, false);
 });
 
 test('sends the enquiry by email and escapes the text in the HTML part', async () => {

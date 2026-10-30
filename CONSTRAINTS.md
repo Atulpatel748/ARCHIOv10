@@ -2,7 +2,7 @@
 
 The quality bar for the Archió site. The numbers were measured on 28 Oct 2026 on the live site (`https://archio-v10.vercel.app`) and the code in `site/`. Do not lower a number or remove a check just to make a change pass; fix the change, or add a dated exception below.
 
-Last reviewed: 28 Oct 2026
+Last reviewed: 30 Oct 2026
 
 ## Floor (always enforced)
 
@@ -13,7 +13,7 @@ Last reviewed: 28 Oct 2026
 - Nothing may say or suggest that a design visualisation is a finished project, and nothing may invent facts (years of experience, completed projects, testimonials, awards, qualifications, addresses, prices, client names).
 - This file is not weakened to make a change pass.
 
-Today the floor passes: 0 suppression comments, 0 stubs, 0 empty catches, 0 skipped tests.
+Today the floor passes (checked 30 Oct 2026): 0 suppression comments, 0 stubs, 0 empty catches, 0 skipped tests.
 
 ## Enforced, with numbers
 
@@ -23,7 +23,7 @@ Run from inside `site/` unless a different place is given.
 | --- | --- | --- | --- | --- |
 | Types | Zero errors | `npm run typecheck` | 0 errors | every change |
 | Lint | Zero errors | `npm run lint` | 0 errors | every change |
-| Tests | All pass | `npm test` (contact form route and mail sender) | 13 of 13 pass | every change |
+| Tests | All pass | `npm test` (contact form route and mail sender) | 19 of 19 pass | every change |
 | Build | Succeeds | `npm run build` | passes | before every push, and on GitHub |
 | Dependencies | No known problems | `npm audit --audit-level=high` | 0 | before every push, and on GitHub |
 | Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 8 pages checked | after every deploy |
@@ -55,7 +55,8 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 
 ## Exceptions
 
-None. An exception needs a reason, an owner and an end date (90 days at most).
+An exception needs a reason, an owner and an end date (90 days at most).
 
 | ID | Rule | Where | Reason | Owner | Ends |
 | --- | --- | --- | --- | --- | --- |
+| E1 (30 Oct 2026) | JavaScript loaded on first visit must not grow | `/` +1.7 KB, project pages +1.3 KB, `/contact` +0.8 KB, other pages about +0.05 KB (compressed, measured against `5ef9497`) | The audit fixes added a pause button and labelled slide buttons to the hero (WCAG 2.2.2), WebGL cleanup, the design visualisation labels and the lazy Turnstile loader. Before the end date, either win the bytes back (e.g. load `Reveals` and gsap only where needed) or record the new size as the baseline. | Atul Patel | 28 Jan 2027 |

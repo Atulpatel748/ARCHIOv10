@@ -1,7 +1,8 @@
 // Contact enquiries are validated server-side and emailed over SMTP, only when all the mail settings are set (see lib/mailer.ts).
-// The in-memory rate limit is a per-instance best-effort guard; use a shared store for multi-instance deployments.
+// The in-memory rate limit is a per-instance best-effort guard; the Cloudflare Turnstile check (when its secret is set) is the real one.
 import { isValidContact, TYPES } from '../../../content/contact.ts';
 import { mailSettings, mailer } from '../../../lib/mailer.ts';
+import { verifyTurnstile } from '../../../lib/turnstile.ts';
 
 export const runtime = 'nodejs';
 
@@ -100,6 +101,21 @@ export async function POST(request: Request) {
   if (!TYPES.includes(type)) errors.push('type');
   if (body.consent !== 'yes') errors.push('consent');
   if (errors.length) return fail('invalid', 422, { fields: errors });
+
+  // Turnstile is required once its secret is set; without it the form keeps working on the checks above.
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (secret) {
+    const token = typeof body.turnstileToken === 'string' ? body.turnstileToken.slice(0, 2048) : '';
+    if (!token) return fail('captcha', 400);
+    let passed: boolean;
+    try {
+      passed = await verifyTurnstile(secret, token, safeIp);
+    } catch (error) {
+      console.error('contact form: captcha check failed:', (error as Error).name);
+      return fail('captcha_unavailable', 503);
+    }
+    if (!passed) return fail('captcha', 403);
+  }
 
   const settings = mailSettings();
   if (!settings) return fail('not_configured', 503);

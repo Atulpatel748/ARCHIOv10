@@ -7,5 +7,5 @@
 .title { position: relative; display: grid; place-content: center; justify-items: center; gap: 1rem; height: 100%; text-align: center; padding-top: var(--header-h); padding-bottom: 12dvh; text-shadow: 0 4px 50px rgb(20 6 7 / 0.5); }
 .title :global(h1) { text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(2.6rem, 1rem + 7vw, 8.5rem); line-height: 0.92; max-width: 16ch; text-wrap: balance; }
 .title > p { margin: 0; @media (prefers-reduced-motion: no-preference) { animation: up 1.4s var(--ease) 0.9s both; } }
-.title > p:last-child { font-family: var(--font-display); font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.8rem); color: var(--blush); }
+.title > :global(h1) + p { font-family: var(--font-display); font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.8rem); color: var(--blush); }
 @keyframes up { from { opacity: 0; translate: 0 14px; } }

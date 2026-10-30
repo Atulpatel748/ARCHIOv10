@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 import Roll from '@/components/Roll';
 import { useTunnel } from '@/components/useTunnel';
 import t from '@/components/tunnel.module.scss';
-import type { Project } from '@/content/projects';
+import { visualisation, type Project } from '@/content/projects';
 import styles from './Work.module.scss';
 
 // Three photos of each project: its cover, one from the middle of its gallery and the last one.
@@ -30,6 +30,7 @@ export default function Tunnel({ projects }: { projects: Project[] }) {
             <span className={t.tag}>{now.category}</span>
             <h2 className={t.name}><Link prefetch={false} href={`/projects/${now.slug}`} data-cursor="View">{now.title}</Link></h2>
             <p className={t.meta}>{now.location}, {now.area}</p>
+            <span className={t.note}>{visualisation}</span>
             <Link prefetch={false} href={`/projects/${now.slug}`} className="text-link"><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
           </div>
           <div className={t.space} aria-hidden="true">
@@ -49,6 +50,7 @@ export default function Tunnel({ projects }: { projects: Project[] }) {
             <span className={t.tag}>{p.category}</span>
             <h2 className={t.name}>{p.title}</h2>
             <p className={t.meta}>{p.location}, {p.area}</p>
+            <span className={t.note}>{visualisation}</span>
             <Link prefetch={false} href={`/projects/${p.slug}`} className="text-link"><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
           </article>
         ))}

@@ -2,9 +2,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import styles from './HeroSlider.module.scss';
 import Roll from '@/components/Roll';
+import { visualisation } from '@/content/projects';
 
 export type Slide = { src: string; poster?: string; alt: string; title: string; place: string; href: string };
 
@@ -54,7 +55,12 @@ const FRAGMENT = `
 // processed on the first request, so the picture is there as soon as it has downloaded.
 const heroLoader = ({ src, width }: { src: string; width: number }) => src.replace(/\.webp$/, `-${width <= 640 ? 640 : width <= 1080 ? 1080 : width <= 1920 ? 1920 : 2560}.webp`);
 
-type GL = { go(from: number, to: number): Promise<void>; dispose(): void };
+type GL = { show(index: number): void; go(from: number, to: number): Promise<void>; dispose(): void };
+
+const REDUCED = '(prefers-reduced-motion: reduce)';
+const subscribeReduced = (cb: () => void) => { const mq = matchMedia(REDUCED); mq.addEventListener('change', cb); return () => mq.removeEventListener('change', cb); };
+const getReduced = () => matchMedia(REDUCED).matches;
+const getReducedServer = () => false;
 
 async function createGL(stage: HTMLDivElement, srcs: string[]): Promise<GL | null> {
   const probe = document.createElement('canvas');
@@ -72,11 +78,16 @@ async function createGL(stage: HTMLDivElement, srcs: string[]): Promise<GL | nul
     uPlaneAspect: { value: 1 }, uProgress: { value: 0 },
   };
   const scene = new THREE.Scene();
-  scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
+  const geometry = new THREE.PlaneGeometry(2, 2);
+  const material = new THREE.ShaderMaterial({
     uniforms, fragmentShader: FRAGMENT, vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
-  })));
+  });
+  scene.add(new THREE.Mesh(geometry, material));
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-  const render = () => renderer.render(scene, camera);
+  let disposed = false;
+  let frameId = 0;
+  let settle: (() => void) | null = null;
+  const render = () => { if (!disposed) renderer.render(scene, camera); };
   const ro = new ResizeObserver(() => {
     const { width, height } = stage.getBoundingClientRect();
     renderer.setSize(width, height, false);
@@ -89,34 +100,56 @@ async function createGL(stage: HTMLDivElement, srcs: string[]): Promise<GL | nul
   stage.appendChild(renderer.domElement);
   const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
   return {
+    // Both images on one slide: the canvas then matches the slide already on screen when it takes over from the <img>s.
+    show(index) {
+      uniforms.uFrom.value = textures[index]; uniforms.uFromAspect.value = aspect(imgs[index]);
+      uniforms.uTo.value = textures[index]; uniforms.uToAspect.value = aspect(imgs[index]);
+      uniforms.uProgress.value = 0;
+      render();
+    },
     go(from, to) {
       uniforms.uFrom.value = textures[from]; uniforms.uFromAspect.value = aspect(imgs[from]);
       uniforms.uTo.value = textures[to]; uniforms.uToAspect.value = aspect(imgs[to]);
       const start = performance.now();
       return new Promise((done) => {
+        if (disposed) { done(); return; }
+        settle = done;
         const frame = (now: number) => {
+          if (disposed) return;
           const t = Math.min((now - start) / 1400, 1);
           uniforms.uProgress.value = ease(t);
           render();
-          if (t < 1) requestAnimationFrame(frame);
-          else { uniforms.uFrom.value = textures[to]; uniforms.uFromAspect.value = aspect(imgs[to]); uniforms.uProgress.value = 0; render(); done(); }
+          if (t < 1) frameId = requestAnimationFrame(frame);
+          else { uniforms.uFrom.value = textures[to]; uniforms.uFromAspect.value = aspect(imgs[to]); uniforms.uProgress.value = 0; render(); settle = null; done(); }
         };
-        requestAnimationFrame(frame);
+        frameId = requestAnimationFrame(frame);
       });
     },
-    dispose() { ro.disconnect(); textures.forEach((t) => t.dispose()); renderer.dispose(); renderer.domElement.remove(); },
+    dispose() {
+      disposed = true;
+      cancelAnimationFrame(frameId);
+      settle?.(); settle = null;
+      ro.disconnect();
+      geometry.dispose(); material.dispose(); textures.forEach((t) => t.dispose());
+      renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
+    },
   };
 }
 
 // Full-screen hero: the three projects, changed by a WebGL displacement transition ("GL slider").
-// Autoplays every 8 s, pauses on hover/focus or when the tab is hidden; reduced motion means no autoplay and a crossfade.
+// Autoplays every 8 s, pauses on hover/focus or when the tab is hidden, and stops with the pause button (WCAG 2.2.2);
+// reduced motion means no autoplay and a crossfade.
 export default function HeroSlider({ slides, children }: { slides: Slide[]; children: React.ReactNode }) {
   const stage = useRef<HTMLDivElement>(null);
   const gl = useRef<GL | null>(null);
   const busy = useRef(false);
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [stopped, setStopped] = useState(false);
   const [glReady, setGlReady] = useState(false);
+  const reduced = useSyncExternalStore(subscribeReduced, getReduced, getReducedServer);
+  const autoplay = !reduced && !stopped;
+  const playing = autoplay && !paused;
   const currentRef = useRef(0);
 
   const go = useCallback(async (next: number) => {
@@ -133,13 +166,17 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   useEffect(() => {
     // The WebGL transition is for larger screens; phones and data-saver users keep the plain crossfade and skip three.js.
     const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches || matchMedia('(max-width: 767px)').matches || saveData) return;
+    if (matchMedia(REDUCED).matches || matchMedia('(max-width: 767px)').matches || saveData) return;
     let cancelled = false;
     const start = () => createGL(stage.current!, slides.map((s) => (s.poster ? heroLoader({ src: s.poster, width: 1920 }) : s.src))).then((g) => {
       if (cancelled) { g?.dispose(); return; }
       gl.current = g;
-      if (g) setGlReady(true);
-    }).catch(() => undefined);
+      // The slide may have moved on while three.js and the photos loaded: start the canvas on the slide being shown.
+      if (g) { g.show(currentRef.current); setGlReady(true); }
+    }).catch(() => {
+      // Deliberate fallback: if three.js or a photo fails to load, the WebGL effect is skipped and the <img> crossfade stays.
+      gl.current = null;
+    });
     // After first paint, so the LCP image is never delayed, and after the preloader, whose motion it would otherwise stall.
     let idle: ReturnType<typeof setTimeout> | undefined;
     const preloading = !document.documentElement.hasAttribute('data-no-preloader') && !!document.querySelector('[data-preloader]');
@@ -154,10 +191,10 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   }, [slides]);
 
   useEffect(() => {
-    if (paused || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!playing) return;
     const id = setInterval(() => { if (!document.hidden) go((currentRef.current + 1) % slides.length); }, 8000);
     return () => clearInterval(id);
-  }, [paused, go, slides.length]);
+  }, [playing, go, slides.length]);
 
   const slide = slides[current];
   return (
@@ -189,20 +226,43 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       <div className={styles.shade} aria-hidden="true" />
       <div className={`container ${styles.content}`}>{children}</div>
       <div className={styles.bar}>
-        <div className={styles.caption} aria-live="polite">
+        {/* Silent while slides change on their own; announced once the visitor is in control (paused, hovering or focused). */}
+        <div className={styles.caption} aria-live={playing ? 'off' : 'polite'}>
           <p className={styles.place}>
             <svg viewBox="0 0 12 16" aria-hidden="true"><path d="M6 15s5-5.2 5-9A5 5 0 0 0 1 6c0 3.8 5 9 5 9Z" fill="none" stroke="currentColor" /><circle cx="6" cy="6" r="1.6" fill="currentColor" /></svg>
-            {slide.place}
+            <span className={styles.placeText}>{slide.place}<span className={styles.note}>{visualisation}</span></span>
           </p>
           <Link prefetch={false} href={slide.href} className={styles.slideLink} data-cursor="View">
             <Roll>View project</Roll><span className="visually-hidden">: {slide.title}</span> <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className={styles.controls} aria-hidden="true">
+        <div className={styles.controls}>
+          {!reduced && (
+            <button
+              type="button"
+              className={styles.toggle}
+              aria-label={stopped ? 'Play slideshow' : 'Pause slideshow'}
+              onClick={() => setStopped((s) => !s)}
+            >
+              {stopped ? (
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5Z" fill="currentColor" /></svg>
+              ) : (
+                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9M9 1.5v9" stroke="currentColor" strokeWidth="1.6" /></svg>
+              )}
+            </button>
+          )}
           {slides.map((s, i) => (
-            <span key={s.src} className={styles.dot} data-current={i === current}>
-              <span className={`${styles.track} ${i === current && !paused ? styles.running : ''}`} />
-            </span>
+            <button
+              key={s.src}
+              type="button"
+              className={styles.dot}
+              data-current={i === current}
+              aria-label={`Show slide ${i + 1} of ${slides.length}: ${s.title}`}
+              aria-current={i === current ? 'true' : undefined}
+              onClick={() => go(i)}
+            >
+              <span className={`${styles.track} ${i === current && playing ? styles.running : ''}`} aria-hidden="true" />
+            </button>
           ))}
         </div>
       </div>
