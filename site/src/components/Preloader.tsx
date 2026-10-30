@@ -5,7 +5,7 @@ import styles from './Preloader.module.scss';
 
 // A furnished room drawn in thin lines, in four passes, while the wordmark fills in and warm light gathers in the arched doorway.
 // It covers the first screen on every full page load, so nobody sees the page half-loaded. Once the fonts and the eager
-// (above-the-fold) images are in, and at least 2 s after the page started (at most 4 s), the doorway opens: it grows, keeping its
+// (above-the-fold) images are in, and at least 2 s after the page started (no minimum with reduced motion; at most 4 s), the doorway opens: it grows, keeping its
 // arch shape, until it fills the screen. Client-side navigation keeps the layout, so it never shows again until the next full load.
 
 // [pass, path] in a 1440 x 900 drawing; the doorway is the arch from (600, 640) up to (720, 300) and back down to (840, 640).
@@ -117,7 +117,10 @@ export default function Preloader() {
     let timer: ReturnType<typeof setTimeout>;
     const until = (ms: number) => new Promise((r) => setTimeout(r, ms - performance.now())); // ms counted from the page's start
     const imgs = [...document.querySelectorAll<HTMLImageElement>('#main img:not([loading="lazy"])')];
-    const ready = Promise.all([document.fonts.ready, ...imgs.map((img) => img.decode().catch(() => undefined)), until(2000)]);
+    // allSettled: an image that fails to decode only stops being waited for; it must not keep the overlay up (or open it early).
+    // With reduced motion there is no drawing to watch, so the 2 s minimum is skipped and the overlay leaves as soon as the page is ready.
+    const minimum = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 2000;
+    const ready = Promise.all([document.fonts.ready, Promise.allSettled(imgs.map((img) => img.decode())), until(minimum)]);
     Promise.race([ready, until(4000)]).then(() => {
       if (cancelled) return;
       setLeaving(true); // the wordmark fades first

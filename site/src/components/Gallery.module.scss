@@ -33,6 +33,8 @@
 .s1 { --w: 38%; --d: -60px; left: 62%; top: 6%; z-index: 2; }
 .s2 { --w: 44%; --d: 70px; left: 50%; top: 52%; z-index: 3; }
 .s3 { --w: 28%; --d: -30px; left: 8%; top: 68%; z-index: 4; }
+/* On a phone the photos stack, so the collage offsets above (declared after .shot, so they would win) are undone */
+@include phone { .s0, .s1, .s2, .s3 { left: auto; top: auto; } }
 
 /* Mosaic (room by room, all projects): plain columns until the script has packed the tiles, then absolutely placed */
 .mosaic {

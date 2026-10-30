@@ -6,6 +6,8 @@ Multi-page marketing site for Archió, a consultancy-led interior design studio 
 - `docs/`: reference analysis, industry research, brand inventory, design strategy and `06-DECISIONS.md` (why the site is built the way it is: hosting, contact form, fonts, images, hero, Services).
 - `design-previews/`: earlier design explorations and screenshot helper.
 
+The images in `design-previews/` and `docs/` are stored with [Git LFS](https://git-lfs.com) (see `.gitattributes`). Run `git lfs install` once before cloning to get them; the site in `site/` does not need them.
+
 ## Run locally
 
 ```bash
@@ -20,6 +22,8 @@ Other commands, all run inside `site/`:
 
 | Command | What it does |
 | --- | --- |
+| `npm run check` | Types, lint and tests: run after every change. |
+| `npm run check:full` | `check`, then the production build and `npm audit --audit-level=high`, the same steps as CI: run before every push. |
 | `npm test` | Runs the contact form's server tests (plain Node, no extra library). |
 | `npm run lint` | Checks the code style. |
 | `npm run typecheck` | Checks the TypeScript types. |
@@ -37,6 +41,13 @@ Enquiries are emailed over SMTP, the normal way a mailbox (Gmail, Microsoft 365,
 - `CONTACT_FROM_EMAIL`: the "From" address; best if it belongs to the same mailbox or domain as `SMTP_USER`, so the mail is less likely to land in spam.
 
 Without all five (host, user, password, to, from), the endpoint returns a controlled error and the form offers WhatsApp/email as a fallback rather than pretending a message was sent. If sending fails, the visitor sees the same fallback, and the cause code (never the settings) is written to the server log. The current rate limiter is per-process only; the intended guard is a Vercel Firewall rate-limit rule on `/api/contact`.
+
+Spam check (Cloudflare Turnstile, free): in the Cloudflare dashboard open Turnstile, add a widget for the site's domain, and copy its two keys into Vercel:
+
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY`: the public site key. It is built into the page, so redeploy after setting it.
+- `TURNSTILE_SECRET_KEY`: the secret key, checked on the server.
+
+With the secret set, the form must send a passing Turnstile token, or the endpoint refuses it (`captcha`, or `captcha_unavailable` when Cloudflare cannot be reached). Without the secret the check is skipped, so the form keeps working until the keys are added; set both together. The widget's script is loaded only on `/contact`, and only once someone uses the form. For local testing, Cloudflare's test keys always pass: site key `1x00000000000000000000AA`, secret `1x0000000000000000000000000000000AA`.
 
 ## Before launch
 

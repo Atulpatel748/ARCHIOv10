@@ -7,12 +7,20 @@ import RoomJourney from '@/components/RoomJourney';
 import Sequence from '@/components/Sequence';
 import StageList from '@/components/StageList';
 import Split from '@/components/Split';
-import { projects } from '@/content/projects';
+import { projects, visualisation } from '@/content/projects';
 import { about, philosophy, processSteps, serviceStages as stages, team } from '@/content/site';
 import styles from './home.module.scss';
 import Roll from '@/components/Roll';
 
-export const metadata: Metadata = { alternates: { canonical: '/' } };
+// The root layout's title and description, repeated for the openGraph link preview.
+const title = 'Archió | Interior Design Studio in Dubai';
+const description = 'Archió is a consultancy-led interior design studio in Dubai for residential, commercial, mixed-use and landscape projects.';
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+  // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
+  openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: ['/images/projects/dubai-marina-residence/main-bedroom.webp'], title, description },
+};
 
 const slides = projects.map((p) => ({
   src: p.cover.src, poster: `/images/hero/${p.slug}.webp`, alt: p.cover.alt, title: p.title, place: p.location, href: `/projects/${p.slug}`,
@@ -111,6 +119,7 @@ export default function HomePage() {
             <Image src={flagship.hero.src} alt={flagship.hero.alt} fill sizes="(max-width: 1023px) 100vw, 60vw" />
           </Link>
           <div className={styles.factsCard} data-reveal>
+            <p className="label">{visualisation}</p>
             <h3>{flagship.title}</h3>
             <p className="serif">{flagship.summary}</p>
             <dl>

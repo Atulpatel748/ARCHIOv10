@@ -12,4 +12,5 @@
 }
 .tag { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-color); }
 .name { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 1rem + 4.4vw, 6rem); line-height: 0.95; letter-spacing: -0.01em; text-transform: uppercase; text-wrap: balance; max-width: 14ch; a { text-decoration: none; } }
+.note { font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.75; }
 .meta { margin: 0; font-family: var(--font-display); font-size: 1.35rem; color: var(--accent-color); }

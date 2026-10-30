@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -14,6 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 // Elements already on screen at load are left alone so nothing flashes; reduced motion turns all of it off.
 export default function Reveals() {
   const pathname = usePathname();
+  const popped = useRef<string | null>(null);
 
   useEffect(() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -26,18 +27,27 @@ export default function Reveals() {
     return () => { gsap.ticker.remove(tick); lenis.destroy(); };
   }, []);
 
+  // Back/forward restores its own scroll position, so it is not reset to the top.
   useEffect(() => {
-    (window as unknown as { lenis?: Lenis }).lenis?.scrollTo(0, { immediate: true });
+    const onPop = () => { popped.current = location.pathname; };
+    addEventListener('popstate', onPop);
+    return () => removeEventListener('popstate', onPop);
+  }, []);
+
+  useEffect(() => {
+    if (popped.current !== pathname && !location.hash) (window as unknown as { lenis?: Lenis }).lenis?.scrollTo(0, { immediate: true });
+    popped.current = null;
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const below = (el: Element) => el.getBoundingClientRect().top > window.innerHeight * 0.92;
 
-      const fade = { autoAlpha: 1, y: 0, duration: 1, ease: 'power2.out' };
+      // opacity, not autoAlpha: visibility:hidden would take headings and links out of the accessibility tree until scrolled to.
+      const fade = { opacity: 1, y: 0, duration: 1, ease: 'power2.out' };
       const once = (el: Element) => ({ trigger: el, start: 'top 90%', once: true });
 
       // Split headings keep their word markup (for screen readers and layout) but fade in as one line.
       gsap.utils.toArray<HTMLElement>('[data-reveal], [data-split], [data-mask]').filter(below).forEach((el) => {
-        gsap.fromTo(el, { autoAlpha: 0, y: 20 }, { ...fade, scrollTrigger: once(el) });
+        gsap.fromTo(el, { opacity: 0, y: 20 }, { ...fade, scrollTrigger: once(el) });
       });
 
       // Hero recedes (scales down, fades, drifts up) while the next section slides up over it.

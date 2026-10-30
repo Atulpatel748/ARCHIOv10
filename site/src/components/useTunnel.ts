@@ -12,8 +12,9 @@ const SPAN = 0.55; // how much of the scroll each photo travels for; the photos 
 // sits on a golden-angle spiral around the middle and travels from far to near. `startAt` begins the journey part-way, so the
 // first photos are already on their way when the page opens. `onBest` gets the index of the photo that is halfway along.
 export function useTunnel(root: RefObject<HTMLElement | null>, cards: MutableRefObject<HTMLDivElement[]>, n: number, startAt = 0, onBest?: (i: number) => void) {
+  // Held in a ref so a new callback on each render does not rebuild the ScrollTrigger; render() always calls the latest one.
   const onBestRef = useRef(onBest);
-  useEffect(() => { onBestRef.current = onBest; });
+  useEffect(() => { onBestRef.current = onBest; }, [onBest]);
   useEffect(() => {
     const mid = (i: number) => (i / n) * (1 - SPAN) + SPAN / 2; // progress at which photo i is halfway along its travel
     let w = innerWidth, h = innerHeight, phone = innerWidth < 768, shown = -1;

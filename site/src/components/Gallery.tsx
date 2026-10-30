@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { gsap } from 'gsap';
-import type { ProjectImage } from '@/content/projects';
+import { visualisation, type ProjectImage } from '@/content/projects';
 import styles from './Gallery.module.scss';
 
 type Lenis = { stop(): void; start(): void };
@@ -63,6 +63,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
     const s = state.current;
     if (s.busy) return;
     s.index = i;
+    gsap.set(figs.current, { clearProps: 'all' });
     show(i);
     fit(i);
     gsap.set(veil.current, { clearProps: 'all' });
@@ -83,6 +84,9 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
     if (!dialog.current?.open) return;
     s.tl?.kill();
     const i = s.index;
+    // A step cut short leaves the outgoing figure half faded and shifted.
+    gsap.set(figs.current, { clearProps: 'all' });
+    show(i);
     const finish = () => { dialog.current?.close(); reset(i); gsap.set(veil.current, { clearProps: 'all' }); s.busy = false; lenis()?.start(); thumbs.current[i]?.focus(); };
     if (reduced()) { finish(); return; }
     s.busy = true;
@@ -112,6 +116,12 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
       .to(figs.current[from], { opacity: 0, x: -50 * dir, duration: 0.5, ease: 'power2.inOut' }, 0)
       .fromTo(figs.current[to], { opacity: 0, x: 50 * dir }, { opacity: 1, x: 0, duration: 0.6, ease: 'power3.out', clearProps: 'opacity,x' }, 0.12);
   }
+
+  // Leaving the page with the viewer open (browser Back) must not leave the layout's smooth scroll stopped.
+  useEffect(() => {
+    const s = state.current;
+    return () => { s.tl?.kill(); lenis()?.start(); };
+  }, []);
 
   // The room index marks the chapter that is crossing the middle of the screen.
   useEffect(() => {
@@ -217,7 +227,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
             <div className={styles.frame} data-frame>
               <Image src={img.src} alt={img.alt} fill sizes="100vw" />
             </div>
-            <figcaption>{img.room ?? img.alt}</figcaption>
+            <figcaption>{img.room ?? img.alt} · {visualisation}</figcaption>
           </figure>
         ))}
         <button type="button" className={`${styles.btn} ${styles.close}`} onClick={close} aria-label="Close" autoFocus><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button>

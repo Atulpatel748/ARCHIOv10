@@ -108,7 +108,7 @@ export const philosophy = {
 };
 
 export const team = [
-  { name: 'Pooja Vijayakumar', role: 'Co-Founder, Design', image: '/images/team/pooja-vijayakumar.png' },
-  { name: 'S. Harshitha', role: 'Co-Founder, Strategy & Growth', image: '/images/team/s-harshitha.png' },
+  { name: 'Pooja Vijayakumar', role: 'Co-Founder, Design', image: '/images/team/pooja-vijayakumar.webp' },
+  { name: 'S. Harshitha', role: 'Co-Founder, Strategy & Growth', image: '/images/team/s-harshitha.webp' },
 ];
 

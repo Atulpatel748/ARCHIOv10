@@ -6,7 +6,7 @@ import Gallery from '@/components/Gallery';
 import ProjectHero from '@/components/ProjectHero';
 import Split from '@/components/Split';
 import { site } from '@/content/site';
-import { getProject, projects } from '@/content/projects';
+import { getProject, projects, visualisation } from '@/content/projects';
 import styles from './project.module.scss';
 import Roll from '@/components/Roll';
 
@@ -20,12 +20,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const project = getProject((await params).slug);
   if (!project) return {};
+  const title = `${project.title}, ${project.category} project`;
+  const description = `${project.summary} ${project.location}, ${project.area}.`;
   return {
-    title: `${project.title}, ${project.category} design concept`,
-    description: `${project.summary} ${project.location}, ${project.area}.`,
+    title,
+    description,
     alternates: { canonical: `/projects/${project.slug}` },
     // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
-    openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: [project.cover.src] },
+    openGraph: { type: 'website', siteName: 'Archió Interior Design Studio', locale: 'en_AE', images: [project.cover.src], title, description },
   };
 }
 
@@ -41,6 +43,7 @@ export default async function ProjectPage({ params }: Params) {
         <p className="label">{project.category}</p>
         <Split as="h1" text={project.title} />
         <p>{project.location}</p>
+        <p className="label">{visualisation}</p>
       </ProjectHero>
 
       {/* Facts beside the story */}
@@ -49,7 +52,7 @@ export default async function ProjectPage({ params }: Params) {
           <div><dt>Where</dt><dd>{project.location}</dd></div>
           <div><dt>Category</dt><dd>{project.category}</dd></div>
           <div><dt>Area</dt><dd>{project.area}</dd></div>
-          <div><dt>Images</dt><dd>Design visualisations</dd></div>
+          <div><dt>Images</dt><dd>{visualisation}</dd></div>
         </dl>
         <div className={styles.story}>
           <Split className={styles.storyLead} text={project.summary} />
