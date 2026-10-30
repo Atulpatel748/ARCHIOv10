@@ -59,10 +59,10 @@
 .dot[data-current='true'] .track::after { transform: scaleX(1); }
 .running::after { animation: fill 8s linear; }
 @include phone {
-  .bar { bottom: 16px; }
+  .bar { bottom: 16px; flex-wrap: wrap; row-gap: 0; }
   .dot { width: 24px; }
-  .controls { gap: 6px; }
-  .toggle { width: 32px; height: 32px; margin-right: 2px; } /* keeps the bar on one line at 320px; still above the 24px target size */
+  /* The caption needs the full width on a phone, so the controls take their own row above it, on the right */
+  .controls { order: -1; width: 100%; justify-content: flex-end; gap: 6px; }
   .place { padding-right: 14px; font-size: 0.6875rem; letter-spacing: 0.1em; }
   .slideLink { font-size: 0.75rem; }
 }
