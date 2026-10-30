@@ -112,7 +112,7 @@ export default function HomePage() {
       <section className={`section ${styles.work}`}>
         <div className="container">
           <p className="label" data-reveal>The work</p>
-          <Split className={styles.big} text="Three spaces," accent="designed in full." />
+          <Split className={styles.big} text="Three spaces," accent="as design visualisations." />
         </div>
         <div className={`container ${styles.flagship}`}>
           <Link prefetch={false} href={`/projects/${flagship.slug}`} className={styles.flagshipMedia} data-cursor="View" data-mask>

@@ -12,7 +12,7 @@ export default function WorkPage({ projects }: { projects: Project[] }) {
         <div className="container">
           <div className={styles.headA}>
             <p className="label" data-reveal>Projects</p>
-            <h1 className={styles.title}>Selected work.</h1>
+            <h1 className={styles.title}>Selected designs.</h1>
             <p className={styles.lead} data-reveal>Residential, commercial and landscape design across Dubai.</p>
           </div>
         </div>
