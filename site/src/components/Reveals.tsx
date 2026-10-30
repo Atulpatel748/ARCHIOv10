@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
@@ -14,6 +14,7 @@ gsap.registerPlugin(ScrollTrigger);
 // Elements already on screen at load are left alone so nothing flashes; reduced motion turns all of it off.
 export default function Reveals() {
   const pathname = usePathname();
+  const popped = useRef<string | null>(null);
 
   useEffect(() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -26,8 +27,16 @@ export default function Reveals() {
     return () => { gsap.ticker.remove(tick); lenis.destroy(); };
   }, []);
 
+  // Back/forward restores its own scroll position, so it is not reset to the top.
   useEffect(() => {
-    (window as unknown as { lenis?: Lenis }).lenis?.scrollTo(0, { immediate: true });
+    const onPop = () => { popped.current = location.pathname; };
+    addEventListener('popstate', onPop);
+    return () => removeEventListener('popstate', onPop);
+  }, []);
+
+  useEffect(() => {
+    if (popped.current !== pathname && !location.hash) (window as unknown as { lenis?: Lenis }).lenis?.scrollTo(0, { immediate: true });
+    popped.current = null;
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const below = (el: Element) => el.getBoundingClientRect().top > window.innerHeight * 0.92;
