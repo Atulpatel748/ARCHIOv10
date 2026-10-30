@@ -55,7 +55,8 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 
 ## Exceptions
 
-None. An exception needs a reason, an owner and an end date (90 days at most).
+An exception needs a reason, an owner and an end date (90 days at most).
 
 | ID | Rule | Where | Reason | Owner | Ends |
 | --- | --- | --- | --- | --- | --- |
+| E1 (30 Oct 2026) | JavaScript loaded on first visit must not grow | `/` +1.7 KB, project pages +1.3 KB, `/contact` +0.8 KB, other pages about +0.05 KB (compressed, measured against `5ef9497`) | The audit fixes added a pause button and labelled slide buttons to the hero (WCAG 2.2.2), WebGL cleanup, the design visualisation labels and the lazy Turnstile loader. Before the end date, either win the bytes back (e.g. load `Reveals` and gsap only where needed) or record the new size as the baseline. | Atul Patel | 28 Jan 2027 |
