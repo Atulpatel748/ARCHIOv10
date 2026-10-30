@@ -31,7 +31,7 @@ export const projects: Project[] = [
     summary: 'A residence where architecture, material and light come together, from feature walls and joinery to lighting and finishing details.',
     description: [
       'We design interiors where architecture, material, and light come together seamlessly, from feature walls and joinery to lighting and finishing details.',
-      'Every space is shaped around how our clients actually live, with precision from concept to completion. Our aim is simple: interiors our clients love living in, every single day.',
+      'Every space is designed around how people actually live, with precision from concept to detail. Our aim is simple: interiors made to be lived in, every single day.',
     ],
     cover: img(dm, 'main-bedroom', 800, 707, 'Bedroom with an upholstered panel wall, a sculpted light line and paired lamps'),
     hero: img(dm, 'living-room', 707, 800, 'Double-height living room with book-matched marble wall panels and a sculptural chandelier'),
@@ -60,7 +60,7 @@ export const projects: Project[] = [
     summary: 'Commercial spaces that make the right first impression, from reception areas and lounges to a full office.',
     description: [
       'Commercial spaces that make the right first impression, from reception areas and lounges to full office fit-outs.',
-      'Every detail, from material selection to lighting, is considered to reflect the brand and support how people actually work and meet. Our aim is simple: commercial spaces our clients are proud to welcome people into, every day.',
+      'Every detail, from material selection to lighting, is considered to reflect the brand and support how people actually work and meet. Our aim is simple: commercial spaces that welcome people in, every day.',
     ],
     cover: img(jlt, 'managers-office', 800, 626, "Manager's office with a marble feature wall and lit shelving"),
     hero: img(jlt, 'boardroom', 800, 640, 'Boardroom with a white stone table, cream leather chairs and a perforated ceiling'),
@@ -84,8 +84,8 @@ export const projects: Project[] = [
     area: '6,500 sqm',
     summary: 'A landscape that brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors.',
     description: [
-      'This landscape design brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors. Palms and layered greenery line a stone path to the entrance, setting a calm, welcoming tone from the moment you arrive.',
-      "We design outdoor spaces where architecture and nature meet, from softscaping and hardscaping to pools, irrigation, and lighting. Every project is shaped around the client's lifestyle and the character of the property. Our aim is simple: outdoor spaces our clients love living in, season after season.",
+      'This landscape design brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors. Palms and layered greenery line a stone path to the entrance, setting a calm, welcoming tone at arrival.',
+      "We design outdoor spaces where architecture and nature meet, from softscaping and hardscaping to pools, irrigation, and lighting. Every design is shaped around the client's lifestyle and the character of the property. Our aim is simple: outdoor spaces made to be lived in, season after season.",
     ],
     cover: img(ar, 'pergola-kitchen-dusk', 800, 640, 'Pergola with an outdoor kitchen beside the pool at dusk'),
     hero: img(ar, 'entrance-path', 800, 640, 'Villa entrance with a stepping-stone path, palms and layered planting'),

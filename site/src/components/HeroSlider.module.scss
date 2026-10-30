@@ -40,8 +40,12 @@
   background: linear-gradient(currentColor 0 0) left calc(100% - 6px) / 100% 1px no-repeat; transition: background-size 400ms var(--ease);
   @include hover { &:hover { background-size: 40% 1px; } }
 }
-.controls { display: flex; gap: 8px; pointer-events: none; } /* progress marks only, not buttons */
-.dot { width: 40px; min-height: 44px; display: flex; align-items: center; }
+.controls { display: flex; align-items: center; gap: 8px; }
+.pause {
+  min-height: 44px; margin-right: 8px; padding: 0 4px; color: inherit; font: inherit; font-size: 0.6875rem; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase; background: none; border: 0; cursor: pointer;
+}
+.dot { width: 40px; min-height: 44px; display: flex; align-items: center; padding: 0; background: none; border: 0; cursor: pointer; }
 .track {
   position: relative; display: block; width: 100%; height: 2px; background: rgb(248 247 244 / 0.35); overflow: hidden;
   &::after { content: ''; position: absolute; inset: 0; background: var(--paper); transform: scaleX(0); transform-origin: left; }

@@ -37,7 +37,7 @@ export const about = {
   lead: 'An interior design consultancy focused on creating spaces that work functionally, aesthetically, and commercially.',
   body: [
     'Not driven by trends or superficial styling. We work closely with clients to understand how a space needs to perform, then design solutions that align with real-life use, business goals, and long-term value.',
-    'Our team brings a strong foundation in luxury residential and high-end commercial design, with a track record of delivering spaces that balance refined aesthetics with real-world function.',
+    'Our team works across residential and commercial design, focused on spaces that balance refined aesthetics with real-world function.',
     "We apply that same rigour to Dubai's market across residential, commercial, and mixed-use environments, prioritising clarity, practicality, and thoughtful design decisions over unnecessary complexity.",
   ],
 };
@@ -82,7 +82,7 @@ export const serviceStages = [
 
 // Residential, commercial and landscape copy adapted from the profile's project pages; mixed-use is CLIENT TO REVIEW.
 export const sectors = [
-  { title: 'Residential', text: 'Interiors where architecture, material and light come together, from feature walls and joinery to lighting and finishing details, shaped around how our clients actually live.', image: '/images/projects/dubai-marina-residence/main-bedroom.webp' },
+  { title: 'Residential', text: 'Interiors where architecture, material and light come together, from feature walls and joinery to lighting and finishing details, shaped around how people actually live.', image: '/images/projects/dubai-marina-residence/main-bedroom.webp' },
   { title: 'Commercial', text: 'Spaces that make the right first impression, from reception areas and lounges to full offices, considered to reflect the brand and support how people work and meet.', image: '/images/projects/jlt-office/managers-office.webp' },
   { title: 'Mixed-use', text: 'Environments that combine living, working and hospitality, planned so that each part works on its own and together.', image: '/images/projects/dubai-marina-residence/dining-room.webp' },
   { title: 'Landscape', text: 'Outdoor spaces where architecture and nature meet, from softscape and hardscape to pools, irrigation and lighting, shaped around the lifestyle of the home.', image: '/images/projects/arabian-ranches-garden/pool-courtyard.webp' },
@@ -97,7 +97,7 @@ export const whyUs = {
     'Function carries equal weight to aesthetics, never an afterthought',
     "Advice that's unbiased and consultancy-driven, not sales-driven",
     'Solutions shaped by real constraints, not idealised scenarios',
-    'Clarity in communication, from first brief to final handover',
+    'Clarity in communication, from first brief to final design',
     'Involvement where it matters, not where it adds noise',
   ],
 };

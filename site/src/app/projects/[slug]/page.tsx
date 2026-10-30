@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const project = getProject((await params).slug);
   if (!project) return {};
   return {
-    title: `${project.title}, ${project.category} project`,
+    title: `${project.title}, ${project.category} design concept`,
     description: `${project.summary} ${project.location}, ${project.area}.`,
     alternates: { canonical: `/projects/${project.slug}` },
     // A page's openGraph replaces the root one whole, so the site-wide fields are repeated here.
@@ -49,6 +49,7 @@ export default async function ProjectPage({ params }: Params) {
           <div><dt>Where</dt><dd>{project.location}</dd></div>
           <div><dt>Category</dt><dd>{project.category}</dd></div>
           <div><dt>Area</dt><dd>{project.area}</dd></div>
+          <div><dt>Images</dt><dd>Design visualisations</dd></div>
         </dl>
         <div className={styles.story}>
           <Split className={styles.storyLead} text={project.summary} />

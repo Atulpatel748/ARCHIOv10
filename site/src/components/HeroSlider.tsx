@@ -116,6 +116,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   const busy = useRef(false);
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [stopped, setStopped] = useState(false); // the visitor pressed pause or picked a slide: no autoplay after that
   const [glReady, setGlReady] = useState(false);
   const currentRef = useRef(0);
 
@@ -154,10 +155,10 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   }, [slides]);
 
   useEffect(() => {
-    if (paused || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (paused || stopped || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const id = setInterval(() => { if (!document.hidden) go((currentRef.current + 1) % slides.length); }, 8000);
     return () => clearInterval(id);
-  }, [paused, go, slides.length]);
+  }, [paused, stopped, go, slides.length]);
 
   const slide = slides[current];
   return (
@@ -189,7 +190,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       <div className={styles.shade} aria-hidden="true" />
       <div className={`container ${styles.content}`}>{children}</div>
       <div className={styles.bar}>
-        <div className={styles.caption} aria-live="polite">
+        <div className={styles.caption} aria-live={stopped ? 'polite' : 'off'}>
           <p className={styles.place}>
             <svg viewBox="0 0 12 16" aria-hidden="true"><path d="M6 15s5-5.2 5-9A5 5 0 0 0 1 6c0 3.8 5 9 5 9Z" fill="none" stroke="currentColor" /><circle cx="6" cy="6" r="1.6" fill="currentColor" /></svg>
             {slide.place}
@@ -198,11 +199,22 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
             <Roll>View project</Roll><span className="visually-hidden">: {slide.title}</span> <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className={styles.controls} aria-hidden="true">
+        <div className={styles.controls}>
+          <button type="button" className={styles.pause} onClick={() => setStopped((v) => !v)} aria-pressed={stopped}>
+            {stopped ? 'Play slideshow' : 'Pause slideshow'}
+          </button>
           {slides.map((s, i) => (
-            <span key={s.src} className={styles.dot} data-current={i === current}>
-              <span className={`${styles.track} ${i === current && !paused ? styles.running : ''}`} />
-            </span>
+            <button
+              key={s.src}
+              type="button"
+              className={styles.dot}
+              data-current={i === current}
+              aria-label={`Show ${s.title}`}
+              aria-current={i === current ? 'true' : undefined}
+              onClick={() => { setStopped(true); go(i); }}
+            >
+              <span className={`${styles.track} ${i === current && !paused && !stopped ? styles.running : ''}`} />
+            </button>
           ))}
         </div>
       </div>
