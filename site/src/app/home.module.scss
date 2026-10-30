@@ -11,7 +11,8 @@
 @keyframes rise { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .heroMark { animation: none; } }
 
-.big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.5rem, 1rem + 4.8vw, 6.75rem); line-height: 0.96; max-width: 18ch; }
+/* overflow-wrap: the longest word ("visualisations.") is wider than a 320px column at the old minimum size */
+.big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2rem, 0.6rem + 5.2vw, 6.75rem); line-height: 0.96; max-width: 18ch; overflow-wrap: anywhere; }
 
 /* We do (after YODEZEEN's): a tall section with a sticky stage. <Sequence> sets --progress (0 to 1) as you scroll through it.
    Without it (no JS, reduced motion) the same content is a plain static block. */
@@ -55,7 +56,7 @@
 .positionCols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px var(--gutter); max-width: 900px; @include phone { grid-template-columns: 1fr; } }
 
 /* What we do: a heading over the stage index (see StageList) */
-.headRow { display: grid; gap: 22px; margin-bottom: clamp(40px, 5vw, 72px); .big { font-size: clamp(2.25rem, 1rem + 3.8vw, 5.25rem); line-height: 1; max-width: 24ch; } }
+.headRow { display: grid; gap: 22px; margin-bottom: clamp(40px, 5vw, 72px); .big { font-size: clamp(1.75rem, 0.8rem + 3.9vw, 5.25rem); line-height: 1; max-width: 24ch; } }
 
 /* The work */
 .work :global(.label) { margin-bottom: 22px; }

@@ -8,7 +8,7 @@ import styles from './ProjectHero.module.scss';
 export default function ProjectHero({ photo, children }: { photo: ProjectImage; children: ReactNode }) {
   return (
     <section className={styles.hero}>
-      <Image src={photo.src} alt={photo.alt} fill priority sizes="100vw" className={styles.photo} />
+      <Image src={photo.src} alt={photo.alt} fill priority fetchPriority="high" sizes="100vw" className={styles.photo} />
       <div className={styles.shade} aria-hidden="true" />
       <div className={`container ${styles.title}`}>{children}</div>
     </section>

@@ -42,6 +42,10 @@ export default function RoomScene() {
     import('./room3d').then((m) => {
       const dispose = m.createRoom3D(host, progress);
       if (cancelled) dispose?.(); else if (dispose) stop = dispose; else setMode('flat'); // no WebGL
+    }).catch(() => {
+      // The chunk failed to load (flaky network) or the scene threw while building: drop any half-built canvas and show the CSS room.
+      host.querySelector('canvas')?.remove();
+      if (!cancelled) setMode('flat');
     });
     return () => { cancelled = true; stop?.(); };
   }, [mode]);

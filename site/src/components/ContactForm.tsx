@@ -98,8 +98,13 @@ export default function ContactForm() {
     };
   }, []);
 
+  // After a send the form is replaced by the thank-you note: move focus to it so keyboard and screen-reader users hear that it worked.
+  const done = useRef<HTMLDivElement>(null);
+  useEffect(() => { if (state === 'sent') done.current?.focus(); }, [state]);
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (state === 'sending') return; // the button is aria-disabled, not disabled, so it keeps focus while sending
     const form = e.currentTarget;
     const data = new FormData(form);
     const found = validate(data);
@@ -129,7 +134,9 @@ export default function ContactForm() {
         return;
       }
       if (captcha.current.id) window.turnstile?.remove(captcha.current.id); // the form goes away
-      captcha.current = {};
+      // Cleared on the same object, not replaced: the unmount cleanup holds this object and must not remove the widget a second time.
+      captcha.current.id = undefined;
+      captcha.current.ready = undefined;
       setState('sent');
       form.reset();
     } catch {
@@ -142,7 +149,7 @@ export default function ContactForm() {
 
   if (state === 'sent') {
     return (
-      <div className={styles.done} role="status">
+      <div ref={done} tabIndex={-1} className={styles.done} role="status">
         <h2 className="h3">Thank you, your enquiry has been sent.</h2>
         <p>We will reply to arrange a first conversation.</p>
       </div>
@@ -158,7 +165,7 @@ export default function ContactForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="contact">Email or phone</label>
-        <input id="contact" name="contact" autoComplete="email" spellCheck={false} autoCapitalize="none" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
+        <input id="contact" name="contact" autoComplete="on" spellCheck={false} autoCapitalize="none" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
         {errors.contact && <p id="contact-error" className={styles.error}>{errors.contact}</p>}
       </div>
       {/* The error is tied to each radio, not the fieldset: aria-describedby on a fieldset is not read out reliably. */}
@@ -194,7 +201,7 @@ export default function ContactForm() {
         {/* Turnstile draws here only if it needs the visitor to click; otherwise it takes no room. */}
         {SITE_KEY && <div ref={box} />}
       </div>
-      <button type="submit" className="btn btn--light" disabled={state === 'sending'}>{state === 'sending' ? 'Sending…' : 'Send enquiry'}</button>
+      <button type="submit" className="btn btn--light" aria-disabled={state === 'sending'}>{state === 'sending' ? 'Sending…' : 'Send enquiry'}</button>
       <p className={styles.status} role="status">
         {state === 'captcha' && <>Sorry, the security check did not load or did not pass. Please try again, or message us on <a href={site.whatsappHref}>WhatsApp</a> or email <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
         {state === 'failed' && <>Sorry, your enquiry could not be sent. Please message us on <a href={site.whatsappHref}>WhatsApp</a> or email <a href={`mailto:${site.email}`}>{site.email}</a>.</>}

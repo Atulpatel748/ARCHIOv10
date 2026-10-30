@@ -102,8 +102,10 @@ export async function POST(request: Request) {
   if (body.consent !== 'yes') errors.push('consent');
   if (errors.length) return fail('invalid', 422, { fields: errors });
 
-  // Turnstile is required once its secret is set; without it the form keeps working on the checks above.
+  // Turnstile is required once its secret is set. In production a missing secret refuses the request instead of
+  // skipping the check; outside production (local dev, tests) the form keeps working on the checks above.
   const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (!secret && process.env.NODE_ENV === 'production') return fail('not_configured', 503);
   if (secret) {
     const token = typeof body.turnstileToken === 'string' ? body.turnstileToken.slice(0, 2048) : '';
     if (!token) return fail('captcha', 400);

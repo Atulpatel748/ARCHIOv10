@@ -65,6 +65,21 @@ test('refuses an email that would add a second reply-to address', async () => {
   }
 });
 
+test('in production a missing Turnstile secret refuses the request instead of skipping the check', async () => {
+  const env = process.env as Record<string, string | undefined>;
+  const before = env.NODE_ENV;
+  let called = false;
+  mailer.send = async () => { called = true; };
+  configure();
+  env.NODE_ENV = 'production';
+  try {
+    assert.deepEqual(await status(await post(valid)), [503, { error: 'not_configured' }]);
+    assert.equal(called, false);
+  } finally {
+    if (before === undefined) delete env.NODE_ENV; else env.NODE_ENV = before;
+  }
+});
+
 test('accepts a phone number as the contact', async () => {
   assert.equal((await post({ ...valid, contact: '+971 55 654 1410' })).status, 503); // valid, but no mail settings set
 });

@@ -175,6 +175,7 @@ export function createRoom3D(host: HTMLElement, getProgress: () => number): (() 
   return () => {
     dead = true; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect();
     scene.traverse((o) => { if (o instanceof THREE.Mesh) { o.geometry.dispose(); (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m.dispose()); } });
-    renderer.dispose(); renderer.domElement.remove();
+    // forceContextLoss: the room is rebuilt each time the window crosses the 1024px breakpoint, and browsers allow only about 16 contexts
+    renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
   };
 }
