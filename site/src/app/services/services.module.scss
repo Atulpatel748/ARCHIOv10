@@ -8,7 +8,9 @@
   @include tablet-down { grid-template-columns: 1fr; min-height: 0; &:nth-child(even) .bandMedia { order: 0; } }
 }
 .bandMedia { position: relative; min-height: 360px; img { object-fit: cover; } @include tablet-down { min-height: 0; aspect-ratio: 4 / 3; } }
-.bandBody { display: grid; align-content: center; gap: clamp(24px, 3vw, 40px); padding: clamp(40px, 6vw, 96px) clamp(24px, 6vw, 112px); }
+.bandBody { display: grid; align-content: center; gap: clamp(24px, 3vw, 40px); padding: clamp(40px, 6vw, 96px) clamp(24px, 6vw, 112px); @include tablet-down { padding-inline: var(--margin); } }
+/* Every render on the site says it is a design visualisation; a solid backing keeps it readable on any picture */
+.bandNote { position: absolute; left: 16px; bottom: 16px; padding: 6px 10px; background: var(--oxblood); color: var(--paper); }
 .bandName { font: 400 clamp(3rem, 1rem + 5.5vw, 7rem)/0.95 var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; }
 .offers {
   display: grid; margin: 0;
@@ -18,18 +20,21 @@
   p { max-width: 46ch; }
 }
 
-/* Spaces we design: a quiet index, a small picture and a name and a line for each */
-.sectors { padding-block: var(--section); }
+/* A quiet way to the contact page straight after the stages */
+.bandsNext { padding-block: clamp(40px, 5vw, 72px); font-size: 1.125rem; a { color: var(--oxblood); text-decoration: underline; text-underline-offset: 4px; } }
+
+/* Spaces we design: a quiet index, a small picture and a name and a line for each. Not links, so nothing reacts on hover. */
+.sectors { padding-block: clamp(56px, 6vw, 96px); :global(.label) { margin-bottom: 18px; } }
 .sectorsTitle { margin-bottom: clamp(32px, 4vw, 56px); }
 .spaces { margin: 0; border-bottom: 1px solid var(--line); }
 .space {
   display: grid; grid-template-columns: clamp(120px, 14vw, 200px) minmax(0, 5fr) minmax(0, 6fr); gap: 16px clamp(24px, 4vw, 72px); align-items: center; padding: 28px 0; border-top: 1px solid var(--line);
   p { max-width: 46ch; }
-  @include tablet-down { grid-template-columns: 120px 1fr; p { grid-column: 1 / -1; } }
-  @include phone { grid-template-columns: 96px 1fr; }
+  @include tablet-down { grid-template-columns: 120px minmax(0, 1fr); p { grid-column: 1 / -1; } }
+  @include phone { grid-template-columns: 96px minmax(0, 1fr); }
 }
-.spaceMedia { position: relative; aspect-ratio: 4 / 3; overflow: hidden; img { object-fit: cover; transition: transform 1s var(--ease); } @include hover { .space:hover & img { transform: scale(1.06); } } }
-.spaceName { font: 400 clamp(1.75rem, 1.2rem + 2vw, 3rem)/1.05 var(--font-display); text-transform: uppercase; }
+.spaceMedia { position: relative; aspect-ratio: 4 / 3; overflow: hidden; img { object-fit: cover; } }
+.spaceName { font: 400 clamp(1.375rem, 1rem + 1.1vw, 2.125rem)/1.1 var(--font-display); text-transform: uppercase; }
 
 /* How we work: the approach on the left, its four commitments on the right */
 .process { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 56px clamp(32px, 6vw, 112px); align-items: start; @include tablet-down { grid-template-columns: 1fr; } }
@@ -38,6 +43,6 @@
   margin: 0; display: grid;
   li { position: relative; padding: 24px 0 24px 32px; border-top: 1px solid var(--line); font: 400 clamp(1.25rem, 1.05rem + 0.6vw, 1.625rem)/1.3 var(--font-display); }
   li:last-child { border-bottom: 1px solid var(--line); }
-  li::before { content: ''; position: absolute; left: 0; top: 1.95rem; width: 10px; height: 10px; border: 1px solid var(--oxblood); transform: rotate(45deg); }
+  li::before { content: ''; position: absolute; left: 0; top: calc(24px + 0.65em - 5px); width: 10px; height: 10px; border: 1px solid var(--oxblood); transform: rotate(45deg); }
 }
 

@@ -83,10 +83,20 @@ html.lenis, html.lenis body { height: auto; }
   transition: background-color 250ms var(--ease), color 250ms var(--ease), transform 120ms var(--ease);
   &:active { transform: scale(0.98); }
 }
-.btn--solid { background: var(--oxblood); border-color: var(--oxblood); color: var(--paper); @include hover { &:hover { background: var(--deep); } } }
+.btn--solid { background: var(--oxblood); border-color: var(--oxblood); color: var(--paper); @include hover { &:hover { background: var(--deep); } } &:focus-visible { outline-color: var(--oxblood); } }
 .btn--light { background: var(--paper); border-color: var(--paper); color: var(--oxblood); @include hover { &:hover { background: var(--sand); border-color: var(--sand); } } }
 .btn--outline { @include hover { &:hover { background: var(--oxblood); border-color: var(--oxblood); color: var(--paper); } } }
 .btn--outline-light { color: var(--paper); @include hover { &:hover { background: var(--paper); color: var(--oxblood); } } }
+
+/* 404 page. Kept here, not in a module: Next.js preloads the not-found page's own CSS on every page, which the browser flags as unused. */
+.not-found {
+  min-height: 80dvh; display: flex; align-items: center; background: var(--oxblood); color: var(--paper);
+  padding-top: calc(var(--header-h) + 48px); padding-bottom: 96px;
+  .container { display: grid; gap: 22px; justify-items: start; }
+  .label { color: var(--blush); }
+}
+.not-found__text { max-width: 44ch; color: var(--sand); }
+.not-found__links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
 
 /* Label roll: the text slides up and an identical copy rolls in from below (see <Roll>) */
 .roll { display: inline-block; height: 1.25em; line-height: 1.25; overflow: hidden; vertical-align: bottom; }

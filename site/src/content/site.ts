@@ -44,7 +44,7 @@ export const about = {
 
 export const approach = {
   title: "We don't just design spaces. We guide decisions.",
-  body: "Every project begins with a clear understanding of the client's needs, constraints, and expectations. From there, we translate ideas into structured design strategies balancing creativity with feasibility.",
+  body: "Every project begins with a clear understanding of the client's needs, constraints, and expectations. From there, we turn ideas into a structured design plan that balances creativity with what is realistic.",
   points: [
     'Clear direction, from concept through to site coordination',
     'Efficient use of budget and resources',
@@ -58,19 +58,19 @@ export const processSteps = [
   { title: 'The first conversation', text: "Every project begins with a clear understanding of your needs, constraints and expectations." },
   { title: 'A structured strategy', text: 'Ideas become a structured design strategy, balancing creativity with feasibility.' },
   { title: 'Decisions, guided', text: "Layout, materials and budget, decided with advice that's unbiased and consultancy-driven." },
-  { title: 'Through to the site', text: 'Clear direction from concept to site, keeping the design intent clear, with consistent communication throughout.' },
+  { title: 'Through to the site', text: 'From concept to site, keeping the design intent clear, with consistent communication throughout.' },
 ];
 
-export const servicesIntro = 'We focus primarily on consultancy-based interior design, offering expertise at every stage of a project.';
+export const servicesIntro = 'We focus on consultancy-based interior design: clear, honest advice from the first brief through to site.';
 
 // Service names are from the profile; the one-line descriptions are CLIENT TO REVIEW.
 export const services = [
   { title: 'Interior Design Consultation', text: 'A focused first stage to understand your space, how it needs to perform, your budget and your goals, and to set a clear direction before decisions are made.' },
-  { title: 'Concept Development', text: 'A design concept that brings layout, mood, materials and lighting together into one clear direction for the space.' },
+  { title: 'Concept Development', text: 'A design concept that brings layout, mood, materials and lighting together into one design idea for the space.' },
   { title: 'Space Planning', text: 'Layouts that organise how a space is used and moved through, so every area works for daily life or for business.' },
   { title: 'Material & Finish Selection', text: 'Guidance on materials, finishes and fixtures, chosen for how they look, how they wear and what they cost.' },
   { title: 'Design Review & Advisory', text: 'An unbiased review of existing plans or designs, with practical advice on what to keep and what to change.' },
-  { title: 'Project Coordination Support', text: 'Support in keeping the design intent clear as the project moves from drawings to site, with consistent communication throughout.' },
+  { title: 'Project Coordination Support', text: 'Support in keeping the design intent clear as the project moves from drawings to site.' },
 ];
 
 // Services grouped by stage (proposed grouping, owner to confirm), each with a render.
@@ -83,7 +83,7 @@ export const serviceStages = [
 // Residential, commercial and landscape copy adapted from the profile's project pages; mixed-use is CLIENT TO REVIEW.
 export const sectors = [
   { title: 'Residential', text: 'Interiors where architecture, material and light come together, from feature walls and joinery to lighting and finishing details, shaped around how people actually live.', image: '/images/projects/dubai-marina-residence/main-bedroom.webp' },
-  { title: 'Commercial', text: 'Spaces that make the right first impression, from reception areas and lounges to full offices, considered to reflect the brand and support how people work and meet.', image: '/images/projects/jlt-office/managers-office.webp' },
+  { title: 'Commercial', text: 'Spaces that make the right first impression, from reception areas and lounges to full offices, designed to reflect the brand and support how people work and meet.', image: '/images/projects/jlt-office/managers-office.webp' },
   { title: 'Mixed-use', text: 'Environments that combine living, working and hospitality, planned so that each part works on its own and together.', image: '/images/projects/dubai-marina-residence/dining-room.webp' },
   { title: 'Landscape', text: 'Outdoor spaces where architecture and nature meet, from softscape and hardscape to pools, irrigation and lighting, shaped around the lifestyle of the home.', image: '/images/projects/arabian-ranches-garden/pool-courtyard.webp' },
 ];

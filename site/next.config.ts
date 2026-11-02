@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
   // 65 stays listed because the gallery thumbnails still ask for it; the fixed copies are all made at 70.
   images: { loader: 'custom', loaderFile: './src/lib/imageLoader.ts', qualities: [65, 75] },
   poweredByHeader: false,
+  // The icon is app/icon.svg; older browsers and tools still ask for /favicon.ico, so send them to it.
+  async redirects() {
+    return [{ source: '/favicon.ico', destination: '/icon.svg', permanent: true }];
+  },
   async headers() {
     const headers: { key: string; value: string }[] = [
       { key: 'X-Content-Type-Options', value: 'nosniff' },

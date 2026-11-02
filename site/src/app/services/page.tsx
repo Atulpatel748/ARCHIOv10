@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import PageHead from '@/components/PageHead';
 import { approach, sectors, serviceStages, servicesIntro } from '@/content/site';
+import { visualisation } from '@/content/projects';
 import styles from './services.module.scss';
 import Roll from '@/components/Roll';
 
@@ -28,6 +29,7 @@ export default function ServicesPage() {
           <section key={stage.name} className={styles.band}>
             <div className={styles.bandMedia}>
               <Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 1023px) 100vw, 50vw" priority={i === 0} fetchPriority={i === 0 ? 'high' : undefined} />
+              <span className={`label ${styles.bandNote}`}>{visualisation}</span>
             </div>
             <div className={styles.bandBody}>
               <h2 className={styles.bandName} data-reveal>{stage.name}</h2>
@@ -44,7 +46,12 @@ export default function ServicesPage() {
         ))}
       </div>
 
+      <p className={`container ${styles.bandsNext}`} data-reveal>
+        Not sure which stage you need? <Link prefetch={false} href="/contact">Let&apos;s talk</Link>
+      </p>
+
       <section className={`container ${styles.sectors}`}>
+        <p className="label" data-reveal>Sectors</p>
         <h2 className={`h2 ${styles.sectorsTitle}`} data-reveal>Spaces we design</h2>
         <ul className={styles.spaces}>
           {sectors.map((s) => (
@@ -64,7 +71,7 @@ export default function ServicesPage() {
           <p className="label" data-reveal>How we work</p>
           <h2 className="h2" data-reveal>{approach.title}</h2>
           <p className="serif" data-reveal>{approach.body}</p>
-          <Link prefetch={false} href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--solid" data-reveal><Roll>Book a consultation</Roll></Link>
         </div>
         <ul className={styles.points}>
           {approach.points.map((p) => (
