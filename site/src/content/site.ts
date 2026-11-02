@@ -46,7 +46,7 @@ export const approach = {
   title: "We don't just design spaces. We guide decisions.",
   body: "Every project begins with a clear understanding of the client's needs, constraints, and expectations. From there, we translate ideas into structured design strategies balancing creativity with feasibility.",
   points: [
-    'Clear direction, from concept through to execution',
+    'Clear direction, from concept through to site coordination',
     'Efficient use of budget and resources',
     'Practical solutions tailored to real-world use',
     'Consistent communication throughout the project',
@@ -58,7 +58,7 @@ export const processSteps = [
   { title: 'The first conversation', text: "Every project begins with a clear understanding of your needs, constraints and expectations." },
   { title: 'A structured strategy', text: 'Ideas become a structured design strategy, balancing creativity with feasibility.' },
   { title: 'Decisions, guided', text: "Layout, materials and budget, decided with advice that's unbiased and consultancy-driven." },
-  { title: 'Through to execution', text: 'Clear direction from concept through to execution, with consistent communication throughout.' },
+  { title: 'Through to the site', text: 'Clear direction from concept to site, keeping the design intent clear, with consistent communication throughout.' },
 ];
 
 export const servicesIntro = 'We focus primarily on consultancy-based interior design, offering expertise at every stage of a project.';

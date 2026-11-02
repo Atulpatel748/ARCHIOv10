@@ -82,7 +82,7 @@ export default function HomePage() {
         <div className="container">
           <div className={styles.headRow}>
             <p className="label" data-reveal>What we do</p>
-            <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to handover." />
+            <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to site coordination." />
           </div>
           <StageList stages={stages} />
         </div>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ARCHIÓ: questions for Atul</title>
+<style>
+@page{size:A4;margin:18mm 16mm}
+body{font:11pt/1.5 Arial,Helvetica,sans-serif;color:#2a1a1a}
+h1{font-size:22pt;color:#4C1114;margin:0 0 2mm}
+.sub{color:#6b5550;margin:0 0 8mm}
+h2{font-size:13pt;color:#4C1114;border-bottom:2px solid #CEB6A8;padding-bottom:1mm;margin:8mm 0 3mm;break-after:avoid}
+.q{break-inside:avoid;margin:0 0 4mm;display:flex;gap:3mm}
+.n{flex:none;width:7mm;height:7mm;border-radius:50%;background:#4C1114;color:#fff;font-size:9pt;text-align:center;line-height:7mm;margin-top:.5mm}
+.b{flex:1}
+.why{color:#6b5550;font-size:9.5pt}
+.opt{font-size:9.5pt;margin-top:1mm}
+.line{border-bottom:1px solid #bbb;height:7mm}
+.note{background:#DACFBA;padding:3mm 4mm;border-radius:2mm;margin:0 0 6mm}
+</style></head><body>
+<h1>ARCHIÓ: questions for Atul</h1>
+<p class="sub">Things only you can decide or do. Status on 31 Oct 2026: code, GitHub and the live site are all at commit 5db77a5 and working.</p>
+<div class="note"><b>Biggest blockers to going live:</b> the contact form sends no email yet (questions 1 to 3), and the free Vercel plan is non-commercial (question 5).</div>
+
+<h2>1. Contact form (needs you in the Vercel dashboard)</h2>
+<div class="q"><div class="n">1</div><div class="b"><b>Which mailbox will send the enquiry emails, and can you get its SMTP details from the client?</b><div class="why">Five settings are needed: SMTP_HOST, SMTP_USER, SMTP_PASS, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL (SMTP_PORT is 587 unless you change it). I never see the password. You enter it in Vercel.</div><div class="line"></div></div></div>
+<div class="q"><div class="n">2</div><div class="b"><b>Will you create the Cloudflare Turnstile keys (site key and secret) and put them in Vercel?</b><div class="why">In production the form refuses every enquiry without the secret. This is on purpose.</div><div class="line"></div></div></div>
+<div class="q"><div class="n">3</div><div class="b"><b>After the settings are in, may I send one test enquiry from the live site to check that the email arrives?</b><div class="line"></div></div></div>
+<div class="q"><div class="n">4</div><div class="b"><b>Will you add the Vercel Firewall rate-limit rule on /api/contact (for example 5 requests per 10 minutes per visitor)?</b><div class="why">The built-in limit lives in server memory and is weak on Vercel.</div><div class="line"></div></div></div>
+
+<h2>2. Hosting and money</h2>
+<div class="q"><div class="n">5</div><div class="b"><b>Who pays for Vercel Pro, and whose account owns the project?</b><div class="why">The free Hobby plan is "personal, non-commercial use only" (Vercel Terms). A studio site needs Pro. Pro includes a USD 20 usage credit; check the monthly price on vercel.com/pricing.</div><div class="opt">☐ Client pays, client owns &nbsp; ☐ You pay and bill the client &nbsp; ☐ Other: ________</div></div></div>
+<div class="q"><div class="n">6</div><div class="b"><b>Should I buy or connect a domain? Who pays, and which name?</b><div class="why">I will not buy anything without your yes and the exact price.</div><div class="line"></div></div></div>
+<div class="q"><div class="n">7</div><div class="b"><b>Do you want a budget alert or spend limit on Vercel once Pro is on?</b><div class="line"></div></div></div>
+
+<h2>3. Legal and content</h2>
+<div class="q"><div class="n">8</div><div class="b"><b>Who will have the privacy notice checked by a lawyer? When?</b><div class="why">It needs the studio's legal name and a contact for data requests (see the client questions).</div><div class="line"></div></div></div>
+<div class="q"><div class="n">9</div><div class="b"><b>Do you accept that I add nothing the client has not confirmed (no years, projects, reviews, awards, prices, addresses)?</b><div class="line"></div></div></div>
+<div class="q"><div class="n">10</div><div class="b"><b>The client PDF is ready to send. Will you send it, or do you want me to change it first?</b><div class="line"></div></div></div>
+
+<h2>4. Work still open on my side</h2>
+<div class="q"><div class="n">11</div><div class="b"><b>Which should I do next?</b>
+<div class="opt">☐ Write a "cost to go live" note for the client &nbsp; ☐ Run Lighthouse on the live site again &nbsp; ☐ Win back JavaScript size (exception E1 ends 28 Jan 2027) &nbsp; ☐ Turn on branch protection steps in GitHub (your setting) &nbsp; ☐ Other: ________</div></div></div>
+<div class="q"><div class="n">12</div><div class="b"><b>Should I commit the graphify lines in CLAUDE.md and the graphify-out folder, or leave them local?</b><div class="line"></div></div></div>
+<div class="q"><div class="n">13</div><div class="b"><b>Do you still want the "progress bar" for Claude Code? You said skip. Say so if you want it back.</b><div class="line"></div></div></div>
+</body></html>

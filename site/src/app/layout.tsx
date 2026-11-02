@@ -31,7 +31,7 @@ const organization = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Archió Interior Design Studio',
-  alternateName: ['ARCHIÓ', 'Archio'],
+  alternateName: ['ARCHIÓ', 'Archio'], // 'Archio' (no accent) is search data only, so people who type it without the accent still find the studio
   url: site.url,
   logo: `${site.url}/brand/logo-lockup.svg`,
   email: site.email,
