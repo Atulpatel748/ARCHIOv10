@@ -26,10 +26,10 @@ Run from inside `site/` unless a different place is given.
 | Tests | All pass | `npm test` (contact form route, mail sender, image loader) | 34 of 34 pass | every change |
 | Browser tests | All pass, none skipped or marked fixme without a "BUG:" reason | `npm run test:e2e` (Playwright, Chromium, production build: pages, navigation, axe WCAG 2.2 AA, overflow at ten widths from 320 to 1920, hero, gallery, contact form, honesty rules, SEO) | 221 of 221 pass (3 Nov 2026, two clean runs; the overflow test now covers 360, 375, 414, 1024 and 1440 too); 175 of 175 earlier the same day (the contact spec also passed 3 repeats); the earlier 166 were stable across 3 repeats, serial, 6 workers and a fresh CI build | before every push, and on GitHub |
 | Build | Succeeds | `npm run build` | passes | before every push, and on GitHub |
-| Dependencies | No known problems | `npm audit --audit-level=high` | 0 | before every push, and on GitHub |
-| Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 8 pages checked | after every deploy |
-| Speed | Lighthouse performance 90 or more on every page | `npx lighthouse <URL> --only-categories=performance` | 94 to 100 | after every deploy |
-| Layout shift | CLS 0.1 or less | the same Lighthouse run | 0 to 0.035 | after every deploy |
+| Dependencies | No known problems | `npm audit --audit-level=high` | 0 high; 16 moderate, all one ESLint helper (see the note below) | before every push, and on GitHub |
+| Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 9 pages (3 Nov 2026, `b77513f`) | after every deploy |
+| Speed | Lighthouse performance 90 or more on every page | `npx lighthouse <URL> --only-categories=performance` | 94 to 99, except `/projects/arabian-ranches-garden` 88 to 90 and `/projects/dubai-marina-residence` 91 to 93 (3 Nov 2026, each page run on its own; see E2) | after every deploy |
+| Layout shift | CLS 0.1 or less | the same Lighthouse run | 0 on all 9 pages (3 Nov 2026) | after every deploy |
 | Best practices and SEO | 100 | the same Lighthouse run | 100 | after every deploy |
 | Page overflow | No sideways scroll at 320, 360, 375, 390, 414, 768, 1024, 1280, 1440, 1920 px | `e2e/layout.spec.ts` | none found | every browser test run |
 
@@ -41,14 +41,16 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 
 | What | Today | Direction |
 | --- | --- | --- |
-| Mobile LCP, slow-network test | 0.8 to 0.9 s on most pages; 2.5 s on `/services`; 2.6 to 3.1 s on `/projects` and project pages | must not rise; the goal is 2.5 s or less |
-| JavaScript loaded on first visit | about 145 KB, compressed | must not grow |
+| Mobile LCP, slow-network test | 2.1 to 2.5 s on most pages; 2.5 to 2.8 s on `/projects`; 3.1 to 3.4 s on the Dubai Marina and Arabian Ranches pages (3 Nov 2026). It was 0.8 to 0.9 s on most pages before the first-visit preloader (28 Oct 2026): Lighthouse is always a first visit, and the page title is the largest thing on screen but stays covered for the preloader's 2 s minimum | must not rise; the goal is 2.5 s or less |
+| JavaScript per page, Lighthouse mobile transfer | 202 to 216 KB (3 Nov 2026): about 117 KB is React and Next.js, about 58 KB is gsap, ScrollTrigger and Lenis fetched once the browser is idle (after the first load), the rest is the page's own code | must not grow |
 | Fonts | about 58 KB (3 files, Latin only); it was 96 KB (6 files) until 28 Oct 2026, and an earlier note of 47 KB had counted only the two biggest files | must not grow |
 | Whole page weight on mobile | 311 to 527 KB | must not grow |
 | Vercel image resizing on request (`/_next/image`) | 0 per visit since 30 Oct 2026 (photos are resized ahead of time, ADR-007); it was about 57 for a three-page visit | must stay 0 |
 | Contact form emails delivered | none yet (the SMTP settings are not set in Vercel) | must reach "works" before launch |
 
-Note (30 Oct 2026): Lighthouse (mobile) reports 199 to 214 KB of JavaScript transfer per page, not 145 KB; no script in this repo reproduces the 145 KB figure, so treat it as measured another way. Until one does, compare against the Lighthouse figure. `Reveals` now loads gsap, ScrollTrigger and Lenis when the browser is idle (about 59 KB compressed, expected to leave the first load); measure again after the next deploy and record the new baseline here.
+Note (3 Nov 2026): the old 145 KB figure could not be reproduced by any script here, so the JavaScript row now uses the Lighthouse figure, which anyone can re-run. No script loads where it is not needed: three.js is not in the first load, and gsap and Lenis already wait for the browser to be idle.
+
+Note (3 Nov 2026): the 16 moderate `npm audit` warnings are one advisory, GHSA-g3hv-75wg-m249 in `minimatch` below 11.0.1, reached only through ESLint and its plugins (a tool on the developer's computer, never sent to visitors). It matters only when an attacker writes the glob patterns; here we write them in our own lint settings. npm's offered fix downgrades ESLint to version 4, and forcing `minimatch` 11 breaks `eslint-plugin-import` and `@eslint/config-array`, which still call it as a plain function. Recheck when eslint-config-next or ESLint updates.
 
 ## Not set up yet (no tool behind it, so not a constraint)
 
@@ -63,6 +65,8 @@ Note (30 Oct 2026): Lighthouse (mobile) reports 199 to 214 KB of JavaScript tran
 
 An exception needs a reason, an owner and an end date (90 days at most).
 
+E1 (JavaScript growth, 30 Oct 2026) was closed on 3 Nov 2026 by recording the new size as the baseline, as it allowed.
+
 | ID | Rule | Where | Reason | Owner | Ends |
 | --- | --- | --- | --- | --- | --- |
-| E1 (30 Oct 2026) | JavaScript loaded on first visit must not grow | `/` +1.7 KB, project pages +1.3 KB, `/contact` +0.8 KB, other pages about +0.05 KB (compressed, measured against `5ef9497`) | The audit fixes added a pause button and labelled slide buttons to the hero (WCAG 2.2.2), WebGL cleanup, the design visualisation labels and the lazy Turnstile loader. Before the end date, either win the bytes back (e.g. load `Reveals` and gsap only where needed) or record the new size as the baseline. | Atul Patel | 28 Jan 2027 |
+| E2 (3 Nov 2026) | Lighthouse performance 90 or more on every page | `/projects/arabian-ranches-garden` 88 to 90, `/projects/dubai-marina-residence` 91 to 93 | The first-visit preloader (an owner design choice) covers the page for at least 2 s, so the page title, which Lighthouse counts as the largest paint, shows late. Before the end date, the owner either shortens the preloader's minimum time or skips it when a visitor lands straight on a project page, or keeps the design and accepts the lower score here. | Atul Patel | 1 Feb 2027 |
