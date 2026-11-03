@@ -38,14 +38,31 @@ test.describe('hero slider, normal motion', () => {
   // Phone width: the hero keeps the plain crossfade there and never loads WebGL (ADR-005).
   test.use({ reducedMotion: 'no-preference', viewport: { width: 390, height: 844 } });
 
-  test('pause button toggles its name', async ({ page }) => {
+  test('has no pause button (removed by the owner, ADR-010); the tracks sit in a centred row above the caption', async ({ page }) => {
     await page.goto('/');
-    const pause = hero(page).getByRole('button', { name: 'Pause slideshow' });
-    await pause.click();
-    const play = hero(page).getByRole('button', { name: 'Play slideshow' });
-    await expect(play).toBeVisible();
-    await play.click();
-    await expect(hero(page).getByRole('button', { name: 'Pause slideshow' })).toBeVisible();
+    await expect(hero(page).getByRole('button', { name: /slideshow/ })).toHaveCount(0);
+    const dots = hero(page).getByRole('button', { name: /^Show slide \d of 3/ });
+    const first = (await dots.nth(0).boundingBox())!;
+    const last = (await dots.nth(2).boundingBox())!;
+    expect(Math.abs((first.x + last.x + last.width) / 2 - 390 / 2)).toBeLessThan(2);
+    const link = (await hero(page).getByRole('link', { name: /^View project/ }).boundingBox())!;
+    expect(link.y).toBeGreaterThan(first.y + first.height - 1);
+  });
+});
+
+test.describe('hero bar on a desktop', () => {
+  test.use({ reducedMotion: 'no-preference', viewport: { width: 1280, height: 800 } });
+
+  test('place on the left, slide tracks centred, View project on the right', async ({ page }) => {
+    await page.goto('/');
+    await expect(hero(page).getByRole('button', { name: /slideshow/ })).toHaveCount(0);
+    const dots = hero(page).getByRole('button', { name: /^Show slide \d of 3/ });
+    const first = (await dots.nth(0).boundingBox())!;
+    const last = (await dots.nth(2).boundingBox())!;
+    expect(Math.abs((first.x + last.x + last.width) / 2 - 1280 / 2)).toBeLessThan(2);
+    const link = (await hero(page).getByRole('link', { name: /^View project/ }).boundingBox())!;
+    expect(link.x).toBeGreaterThan(last.x + last.width);
+    expect(1280 - (link.x + link.width)).toBeLessThan(100); // against the right margin
   });
 });
 

@@ -143,8 +143,8 @@ async function createGL(stage: HTMLDivElement, srcs: string[], onLost: () => voi
 }
 
 // Full-screen hero: the three projects, changed by a WebGL displacement transition ("GL slider").
-// Autoplays every 8 s, pauses on hover/focus or when the tab is hidden, and stops with the pause button (WCAG 2.2.2);
-// reduced motion means no autoplay and a crossfade.
+// Autoplays every 8 s and pauses on hover/focus or when the tab is hidden. The owner removed the pause button (ADR-010),
+// so there is no way to stop it for good (short of WCAG 2.2.2); reduced motion means no autoplay and a crossfade.
 export default function HeroSlider({ slides, children }: { slides: Slide[]; children: React.ReactNode }) {
   const stage = useRef<HTMLDivElement>(null);
   const gl = useRef<GL | null>(null);
@@ -154,11 +154,9 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const paused = hovered || focused;
-  const [stopped, setStopped] = useState(false);
   const [glReady, setGlReady] = useState(false);
   const reduced = useSyncExternalStore(subscribeReduced, getReduced, getReducedServer);
-  const autoplay = !reduced && !stopped;
-  const playing = autoplay && !paused;
+  const playing = !reduced && !paused;
   const currentRef = useRef(0);
 
   const go = useCallback(async (next: number) => {
@@ -237,7 +235,8 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       <div className={styles.shade} aria-hidden="true" />
       <div className={`container ${styles.content}`}>{children}</div>
       <div className={styles.bar}>
-        {/* Silent while slides change on their own; announced once the visitor is in control (paused, hovering or focused). */}
+        {/* Silent while slides change on their own; announced once the visitor is in control (hovering or focused).
+            The place sits on the left and the link on the right, with the slide tracks centred between them. */}
         <div className={styles.caption} aria-live={playing ? 'off' : 'polite'}>
           <p className={styles.place}>
             <svg viewBox="0 0 12 16" aria-hidden="true"><path d="M6 15s5-5.2 5-9A5 5 0 0 0 1 6c0 3.8 5 9 5 9Z" fill="none" stroke="currentColor" /><circle cx="6" cy="6" r="1.6" fill="currentColor" /></svg>
@@ -248,20 +247,6 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
           </Link>
         </div>
         <div className={styles.controls}>
-          {!reduced && (
-            <button
-              type="button"
-              className={styles.toggle}
-              aria-label={stopped ? 'Play slideshow' : 'Pause slideshow'}
-              onClick={() => setStopped((s) => !s)}
-            >
-              {stopped ? (
-                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9l7.5-4.5Z" fill="currentColor" /></svg>
-              ) : (
-                <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.5v9M9 1.5v9" stroke="currentColor" strokeWidth="1.6" /></svg>
-              )}
-            </button>
-          )}
           {slides.map((s, i) => (
             <button
               key={s.src}
