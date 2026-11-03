@@ -19,6 +19,7 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
   filter: drop-shadow(0 2px 28px rgb(20 6 7 / calc(0.55 * (1 - var(--p))))); /* the hero wordmark's shadow fades as it docks */
   transition: $slide, visibility 0s;
   @include phone { --w1: 88px; }
+  @media (max-width: 359px) { --w1: 76px; padding-inline: 4px; } /* the narrowest phones: clear of the "Let's talk" pill */
 }
 /* Before the page's script has run, home starts with the logo big and mid-screen. It stays hidden until the script has
    measured the hero's own logo (html[data-hero-brand]), which shows in its place meanwhile: a CSS guess would show a second,
@@ -57,6 +58,7 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
   > span[aria-hidden] { font-size: 1rem; line-height: 1; transition: transform 400ms var(--ease); }
   @include hover { &:hover { background: var(--deep); > span[aria-hidden] { transform: rotate(90deg); } } }
   @include phone { padding: 0 14px; font-size: 0.6875rem; letter-spacing: 0.1em; > span[aria-hidden] { display: none; } }
+  @media (max-width: 359px) { padding: 0 12px; }
 }
 .onMenu .talk { background: var(--paper); color: var(--oxblood); }
 

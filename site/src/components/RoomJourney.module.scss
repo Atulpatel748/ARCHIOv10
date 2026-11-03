@@ -51,7 +51,7 @@
   }
 }
 .big { font-size: clamp(1.875rem, 1rem + 1.7vw, 3rem); line-height: 1.02; margin-bottom: 28px; max-width: 18ch; text-transform: uppercase; letter-spacing: 0.01em; }
-.eyebrow { display: block; margin-bottom: 4px; font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: #8A2E34; }
+.eyebrow { display: block; margin-bottom: 4px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: #8A2E34; }
 /* When pinned, only the current step shows its text, so the column stays short */
 @media (min-width: 1024px) and (min-height: 640px) {
   /* 20em, not 7em: a visitor's own text spacing or larger font must not cut the end off a step (WCAG 1.4.12) */

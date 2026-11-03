@@ -24,14 +24,14 @@ Run from inside `site/` unless a different place is given.
 | Types | Zero errors | `npm run typecheck` | 0 errors | every change |
 | Lint | Zero errors | `npm run lint` | 0 errors | every change |
 | Tests | All pass | `npm test` (contact form route, mail sender, image loader) | 34 of 34 pass | every change |
-| Browser tests | All pass, none skipped or marked fixme without a "BUG:" reason | `npm run test:e2e` (Playwright, Chromium, production build: pages, navigation, axe WCAG 2.2 AA, overflow at 320–1920, hero, gallery, contact form, honesty rules, SEO) | 175 of 175 pass (3 Nov 2026; the contact spec also passed 3 repeats); the earlier 166 were stable across 3 repeats, serial, 6 workers and a fresh CI build | before every push, and on GitHub |
+| Browser tests | All pass, none skipped or marked fixme without a "BUG:" reason | `npm run test:e2e` (Playwright, Chromium, production build: pages, navigation, axe WCAG 2.2 AA, overflow at ten widths from 320 to 1920, hero, gallery, contact form, honesty rules, SEO) | 221 of 221 pass (3 Nov 2026, two clean runs; the overflow test now covers 360, 375, 414, 1024 and 1440 too); 175 of 175 earlier the same day (the contact spec also passed 3 repeats); the earlier 166 were stable across 3 repeats, serial, 6 workers and a fresh CI build | before every push, and on GitHub |
 | Build | Succeeds | `npm run build` | passes | before every push, and on GitHub |
 | Dependencies | No known problems | `npm audit --audit-level=high` | 0 | before every push, and on GitHub |
 | Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 8 pages checked | after every deploy |
 | Speed | Lighthouse performance 90 or more on every page | `npx lighthouse <URL> --only-categories=performance` | 94 to 100 | after every deploy |
 | Layout shift | CLS 0.1 or less | the same Lighthouse run | 0 to 0.035 | after every deploy |
 | Best practices and SEO | 100 | the same Lighthouse run | 100 | after every deploy |
-| Page overflow | No sideways scroll at 320, 360, 390, 768, 1024, 1280, 1440, 1920 px | open each page at each width | none found | after layout changes |
+| Page overflow | No sideways scroll at 320, 360, 375, 390, 414, 768, 1024, 1280, 1440, 1920 px | `e2e/layout.spec.ts` | none found | every browser test run |
 
 Why these numbers: they are what the live site scores today, so a drop is a real change that someone has to explain. The Lighthouse rows are the outside opinion in this list: they run in a real browser and the project's own tests cannot influence them.
 
