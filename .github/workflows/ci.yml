@@ -18,7 +18,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     defaults:
       run:
         working-directory: site
@@ -49,3 +49,10 @@ jobs:
 
       - name: Dependency audit
         run: npm audit --audit-level=high
+
+      # Browser tests (Playwright, Chromium) against a fresh production build on :3100; CI=true is set by GitHub
+      - name: Browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser tests
+        run: npm run test:e2e

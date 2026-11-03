@@ -14,7 +14,8 @@
     "test": "node --test src/app/api/contact/route.test.ts src/lib/imageLoader.test.ts",
     "images": "node scripts/resize-images.mjs",
     "check": "npm run typecheck && npm run lint && npm test",
-    "check:full": "npm run check && npm run build && npm audit --audit-level=high"
+    "check:full": "npm run check && npm run build && npm audit --audit-level=high",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "gsap": "3.15.0",
@@ -26,6 +27,8 @@
     "three": "^0.186.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
     "@types/node": "^22",
     "@types/nodemailer": "^8.0.2",
     "@types/react": "^19",

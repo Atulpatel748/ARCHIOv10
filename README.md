@@ -25,6 +25,7 @@ Other commands, all run inside `site/`:
 | `npm run check` | Types, lint and tests: run after every change. |
 | `npm run check:full` | `check`, then the production build and `npm audit --audit-level=high`, the same steps as CI: run before every push. |
 | `npm test` | Runs the contact form's server tests (plain Node, no extra library). |
+| `npm run test:e2e` | Browser tests (Playwright, Chromium) on a fresh production build: every page, navigation and the mobile menu, accessibility (axe, WCAG 2.2 AA), no sideways scroll at five widths, hero, gallery, contact form states, honesty rules and SEO. The first time, run `npx playwright install chromium`. Run before every push; CI runs it too. |
 | `npm run lint` | Checks the code style. |
 | `npm run typecheck` | Checks the TypeScript types. |
 | `npm run build` | Makes the production build. |

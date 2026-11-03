@@ -2,7 +2,7 @@
 
 The quality bar for the Archió site. The numbers were measured on 28 Oct 2026 on the live site (`https://archio-v10.vercel.app`) and the code in `site/`. Do not lower a number or remove a check just to make a change pass; fix the change, or add a dated exception below.
 
-Last reviewed: 30 Oct 2026
+Last reviewed: 3 Nov 2026
 
 ## Floor (always enforced)
 
@@ -23,7 +23,8 @@ Run from inside `site/` unless a different place is given.
 | --- | --- | --- | --- | --- |
 | Types | Zero errors | `npm run typecheck` | 0 errors | every change |
 | Lint | Zero errors | `npm run lint` | 0 errors | every change |
-| Tests | All pass | `npm test` (contact form route and mail sender) | 20 of 20 pass | every change |
+| Tests | All pass | `npm test` (contact form route, mail sender, image loader) | 23 of 23 pass | every change |
+| Browser tests | All pass, none skipped or marked fixme without a "BUG:" reason | `npm run test:e2e` (Playwright, Chromium, production build: pages, navigation, axe WCAG 2.2 AA, overflow at 320–1920, hero, gallery, contact form, honesty rules, SEO) | 166 of 166 pass; stable across 3 repeats, serial, 6 workers and a fresh CI build (3 Nov 2026) | before every push, and on GitHub |
 | Build | Succeeds | `npm run build` | passes | before every push, and on GitHub |
 | Dependencies | No known problems | `npm audit --audit-level=high` | 0 | before every push, and on GitHub |
 | Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 8 pages checked | after every deploy |
