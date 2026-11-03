@@ -59,6 +59,12 @@ test.describe('home with full motion and the preloader', () => {
     await expect(page.locator('h1')).toBeVisible();
     expect(consoleErrors).toEqual([]);
   });
+
+  test('once the preloader leaves, the logo and links over the hero photo are white, not oxblood', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-preloader]')).toHaveCount(0, { timeout: 15_000 });
+    await expect(page.getByRole('banner')).toHaveCSS('color', 'rgb(248, 247, 244)');
+  });
 });
 
 test.describe('preloader', () => {

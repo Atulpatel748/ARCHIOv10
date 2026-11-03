@@ -44,9 +44,11 @@ export default function Header() {
     const ask = () => { if (!queued) { queued = true; setTimeout(check, 60); } };
     addEventListener('scroll', ask, { passive: true });
     addEventListener('resize', ask);
+    // While the first-visit preloader is up the page is inert, and inert elements are invisible to elementsFromPoint: check again once it leaves.
+    addEventListener('preloader:done', ask);
     ask();
     const settle = setTimeout(ask, 700); // after the new page's images and layout have settled
-    return () => { removeEventListener('scroll', ask); removeEventListener('resize', ask); clearTimeout(settle); };
+    return () => { removeEventListener('scroll', ask); removeEventListener('resize', ask); removeEventListener('preloader:done', ask); clearTimeout(settle); };
   }, [pathname]);
 
   // Home: the hero wordmark docks into the header, the way archio-v10's does. The logo stays fixed on screen and glides in a
