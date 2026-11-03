@@ -20,8 +20,11 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
   transition: $slide, visibility 0s;
   @include phone { --w1: 88px; }
 }
-/* Before the page's script has run, home starts with the logo big and mid-screen */
+/* Before the page's script has run, home starts with the logo big and mid-screen. It stays hidden until the script has
+   measured the hero's own logo (html[data-hero-brand]), which shows in its place meanwhile: a CSS guess would show a second,
+   bigger wordmark for a moment. */
 .onHome .brand { --p: 0; --y0: calc(50vh - 20px); --s0: 4.2; }
+:global(html:not([data-hero-brand])) .onHome .brand { visibility: hidden; }
 /* With the menu open the logo sits small in the header, never big over the menu's links (!important beats the inline --p) */
 .onMenu .brand { --p: 1 !important; }
 .brand[data-over-hero] { opacity: 0; visibility: hidden; }

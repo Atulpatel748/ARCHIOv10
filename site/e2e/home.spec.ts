@@ -60,10 +60,52 @@ test.describe('home with full motion and the preloader', () => {
     expect(consoleErrors).toEqual([]);
   });
 
-  test('once the preloader leaves, the logo and links over the hero photo are white, not oxblood', async ({ page }) => {
-    await page.goto('/');
+  test('the logo and links over the hero photo are white from the start: during the preloader and after it', async ({ page }) => {
+    // Record the header colour on every frame from the first paint, so even a brief switch to oxblood is caught.
+    await page.addInitScript(() => {
+      const seen = new Set<string>();
+      (window as unknown as { headerColours: Set<string> }).headerColours = seen;
+      const tick = () => { const h = document.querySelector('header'); if (h) seen.add(getComputedStyle(h).color); requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+    });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('[data-preloader]')).toBeVisible();
     await expect(page.locator('[data-preloader]')).toHaveCount(0, { timeout: 15_000 });
-    await expect(page.getByRole('banner')).toHaveCSS('color', 'rgb(248, 247, 244)');
+    await page.waitForTimeout(1000); // and the checks that follow it
+    const colours = await page.evaluate(() => [...(window as unknown as { headerColours: Set<string> }).headerColours]);
+    expect(colours).toEqual(['rgb(248, 247, 244)']);
+  });
+});
+
+test.describe('only one hero wordmark at a time', () => {
+  const headerLogo = (page: import('@playwright/test').Page) => page.getByRole('banner').locator('a[href="/"] .logo');
+
+  test.describe('before the page script runs', () => {
+    test.use({ javaScriptEnabled: false });
+
+    test('the hero shows its own wordmark and the header copy is hidden', async ({ page }) => {
+      await page.goto('/');
+      await expect(page.locator('[data-hero-mark]')).toBeVisible();
+      await expect(headerLogo(page)).toBeHidden();
+    });
+  });
+
+  test.describe('normal motion, once the script has placed the header logo', () => {
+    test.use({ reducedMotion: 'no-preference' });
+
+    test('the header logo takes over and the hero copy hides', async ({ page }) => {
+      await page.goto('/');
+      await expect(page.locator('html')).toHaveAttribute('data-hero-brand', '');
+      await expect(headerLogo(page)).toBeVisible();
+      await expect(page.locator('[data-hero-mark]')).toBeHidden();
+    });
+  });
+
+  test('reduced motion keeps the hero wordmark and hides the header copy over the hero', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('html')).toHaveAttribute('data-hero-brand', '');
+    await expect(page.locator('[data-hero-mark]')).toBeVisible();
+    await expect(headerLogo(page)).toBeHidden();
   });
 });
 

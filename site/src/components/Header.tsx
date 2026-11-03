@@ -26,6 +26,9 @@ export default function Header() {
     let queued = false;
     const check = () => {
       queued = false;
+      // While the first-visit preloader (or the menu) is up the page is inert, and inert elements are invisible to
+      // elementsFromPoint, so the check would see only the paper background and wrongly pick oxblood. Keep the current colour.
+      if (document.getElementById('main')?.inert) return;
       const box = brandRef.current?.getBoundingClientRect();
       const onScreen = box && box.height > 0 && box.top + box.height / 2 > 0;
       const x = onScreen ? box.left + box.width / 2 : innerWidth / 2;
@@ -44,8 +47,7 @@ export default function Header() {
     const ask = () => { if (!queued) { queued = true; setTimeout(check, 60); } };
     addEventListener('scroll', ask, { passive: true });
     addEventListener('resize', ask);
-    // While the first-visit preloader is up the page is inert, and inert elements are invisible to elementsFromPoint: check again once it leaves.
-    addEventListener('preloader:done', ask);
+    addEventListener('preloader:done', ask); // the check skipped while the preloader was up
     ask();
     const settle = setTimeout(ask, 700); // after the new page's images and layout have settled
     return () => { removeEventListener('scroll', ask); removeEventListener('resize', ask); removeEventListener('preloader:done', ask); clearTimeout(settle); };
@@ -97,6 +99,8 @@ export default function Header() {
     const onResize = () => { measure(); update(); };
     measure();
     update();
+    // Placed: the header logo now takes over from the hero's own wordmark (see .heroLogo and .brand in the styles)
+    document.documentElement.setAttribute('data-hero-brand', '');
     const ro = new ResizeObserver(onResize);
     ro.observe(hero);
     document.fonts?.ready.then(onResize);
@@ -109,6 +113,7 @@ export default function Header() {
       removeEventListener('resize', onResize);
       reduced.removeEventListener('change', onResize);
       ['--p', '--y0', '--s0'].forEach((v) => el.style.removeProperty(v));
+      document.documentElement.removeAttribute('data-hero-brand');
       el.removeAttribute('data-over-hero');
       el.inert = false;
       tag?.style.removeProperty('transform');
