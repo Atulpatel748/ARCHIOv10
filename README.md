@@ -40,6 +40,8 @@ Enquiries are emailed over SMTP, the normal way a mailbox (Gmail, Microsoft 365,
 - `SMTP_USER` and `SMTP_PASS`: the mailbox login and password. Gmail and Microsoft 365 want an "app password", not the real one.
 - `CONTACT_TO_EMAIL`: inbox receiving enquiries.
 - `CONTACT_FROM_EMAIL`: the "From" address; best if it belongs to the same mailbox or domain as `SMTP_USER`, so the mail is less likely to land in spam.
+- `CONTACT_AUTOREPLY`: optional. Set to `on` (exactly) to send a visitor who gave an email a short fixed confirmation after the studio email is sent; any other value or empty means off. Turn it on only after the client approves the wording in `site/src/content/contact.ts`. It repeats nothing the visitor typed, replies go to `CONTACT_TO_EMAIL`, and if it fails the visitor still sees success (the studio already has the enquiry) and only the cause code is logged.
+  Before turning it on, work through the owner checklist in ADR-009 (`docs/06-DECISIONS.md`).
 
 Without all five (host, user, password, to, from), the endpoint returns a controlled error and the form offers WhatsApp/email as a fallback rather than pretending a message was sent. If sending fails, the visitor sees the same fallback, and the cause code (never the settings) is written to the server log. The current rate limiter is per-process only; the intended guard is a Vercel Firewall rate-limit rule on `/api/contact`.
 

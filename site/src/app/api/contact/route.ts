@@ -1,14 +1,19 @@
 // Contact enquiries are validated server-side and emailed over SMTP, only when all the mail settings are set (see lib/mailer.ts).
 // The in-memory rate limit is a per-instance best-effort guard; the Cloudflare Turnstile check (when its secret is set) is the real one.
-import { isValidContact, TYPES } from '../../../content/contact.ts';
+import { AUTOREPLY, isValidContact, TYPES } from '../../../content/contact.ts';
 import { mailSettings, mailer } from '../../../lib/mailer.ts';
 import { verifyTurnstile } from '../../../lib/turnstile.ts';
 
 export const runtime = 'nodejs';
+// Two SMTP sessions (10 s timeouts each) must finish; a request cut off early makes visitors resend, so the studio gets duplicates.
+export const maxDuration = 60;
 
 const recent = new Map<string, number[]>();
 const LIMIT = 5;
 const WINDOW_MS = 10 * 60 * 1000;
+// shortcut: per-instance memory, so one confirmation per address per day is best effort; the Vercel Firewall rule is the real guard.
+const confirmed = new Map<string, number>();
+const CONFIRM_WINDOW_MS = 24 * 60 * 60 * 1000;
 const MAX_BODY_BYTES = 16 * 1024;
 
 const clean = (v: unknown, max: number) => (typeof v === 'string' ? v : '').replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max);
@@ -137,6 +142,29 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('contact form: sending failed:', (error as { code?: string }).code ?? (error as Error).name); // the cause, never the settings
     return fail('send_failed', 502);
+  }
+  // Read per request so the switch works without a rebuild; awaited because a serverless function stops after it answers.
+  const address = contact.toLowerCase();
+  if (process.env.CONTACT_AUTOREPLY === 'on' && contact.includes('@') && now - (confirmed.get(address) ?? -Infinity) >= CONFIRM_WINDOW_MS) {
+    for (const [key, at] of confirmed) if (now - at >= CONFIRM_WINDOW_MS) confirmed.delete(key);
+    if (confirmed.size >= 5000) {
+      const oldest = confirmed.keys().next().value;
+      if (oldest) confirmed.delete(oldest);
+    }
+    confirmed.set(address, now);
+    try {
+      await mailer.send(settings, {
+        to: contact,
+        replyTo: settings.to,
+        subject: AUTOREPLY.subject,
+        text: AUTOREPLY.paragraphs.join('\n\n'),
+        html: AUTOREPLY.paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join('\n'),
+        headers: { 'Auto-Submitted': 'auto-generated' }, // tells the visitor's mail server not to auto-reply back
+      });
+    } catch (error) {
+      // The studio already has the enquiry, so the visitor still gets the same ok.
+      console.error('contact form: confirmation failed:', (error as { code?: string }).code ?? (error as Error).name);
+    }
   }
   return Response.json({ ok: true });
 }

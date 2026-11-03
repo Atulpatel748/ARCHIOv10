@@ -3,7 +3,7 @@
 import nodemailer from 'nodemailer';
 
 export type MailSettings = { host: string; port: number; user: string; pass: string; to: string; from: string };
-export type Mail = { replyTo?: string; subject: string; text: string; html: string };
+export type Mail = { to?: string; replyTo?: string; subject: string; text: string; html: string; headers?: Record<string, string> };
 
 // All five must be set; the port defaults to 587 (the usual "STARTTLS" port). Without them the form says "not configured".
 export function mailSettings(env: Record<string, string | undefined> = process.env): MailSettings | null {
@@ -27,7 +27,7 @@ async function send(settings: MailSettings, mail: Mail): Promise<void> {
     socketTimeout: 10_000,
   });
   try {
-    await transporter.sendMail({ from, to, ...mail });
+    await transporter.sendMail({ ...mail, from, to: mail.to ?? to }); // the studio inbox unless a mail names another; always the configured sender
   } finally {
     transporter.close();
   }

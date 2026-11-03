@@ -180,6 +180,8 @@ test.describe('contact field rules (site/src/content/contact.ts)', () => {
     ['a 7-digit phone (the shortest allowed)', '1234567', true],
     ['two emails in one field', 'a@example.test,b@example.test', false],
     ['an email with a display name', 'Visitor <a@example.test>', false],
+    ['an email with a mail comment', 'a(b)@example.test', false],
+    ['an email that is an address group', 'x:victim@example.test', false],
   ];
   for (const [label, value, ok] of cases) {
     test(`${label} is ${ok ? 'accepted' : 'refused'}`, async ({ page }) => {

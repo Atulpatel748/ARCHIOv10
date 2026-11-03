@@ -3,6 +3,7 @@
 import assert from 'node:assert/strict';
 import net from 'node:net';
 import { afterEach, test } from 'node:test';
+import { AUTOREPLY, isValidContact } from '../../../content/contact.ts';
 import { mailSettings, mailer, type Mail, type MailSettings } from '../../../lib/mailer.ts';
 import { POST } from './route.ts';
 
@@ -18,7 +19,7 @@ const realFetch = globalThis.fetch;
 afterEach(() => {
   mailer.send = realSend;
   globalThis.fetch = realFetch;
-  for (const key of [...SETTINGS, 'TURNSTILE_SECRET_KEY']) delete process.env[key];
+  for (const key of [...SETTINGS, 'TURNSTILE_SECRET_KEY', 'CONTACT_AUTOREPLY']) delete process.env[key];
 });
 // Stands in for Cloudflare's siteverify: answers with `answer`, or throws it, and keeps every request it gets.
 const siteverify = (answer: object | Error) => {
@@ -148,6 +149,133 @@ test('reports send_failed when the mail server cannot be reached', async () => {
   assert.deepEqual(await status(await post(valid)), [502, { error: 'send_failed' }]);
 });
 
+// Keeps every mail the route sends, in order.
+const recordSends = () => {
+  const sent: Mail[] = [];
+  mailer.send = async (_settings, mail) => { sent.push(mail); };
+  return sent;
+};
+
+test('no confirmation unless CONTACT_AUTOREPLY is exactly "on"', async () => {
+  configure();
+  for (const value of [undefined, 'ON', 'yes']) {
+    if (value === undefined) delete process.env.CONTACT_AUTOREPLY; else process.env.CONTACT_AUTOREPLY = value;
+    const sent = recordSends();
+    assert.deepEqual(await status(await post(valid)), [200, { ok: true }]);
+    assert.equal(sent.length, 1, String(value));
+  }
+});
+
+test('the visitor gets a fixed confirmation after the studio email', async () => {
+  configure();
+  process.env.CONTACT_AUTOREPLY = 'on';
+  const sent = recordSends();
+  const markers = { name: 'Zqxname Marker', location: 'Zqxlocation-marker', message: 'Zqxmessage-marker' };
+  assert.deepEqual(await status(await post({ ...valid, ...markers, contact: 'fixed@example.com' })), [200, { ok: true }]);
+  assert.equal(sent.length, 2);
+  assert.equal(sent[0].to, undefined); // the studio email goes first, to the default address
+  const reply = sent[1];
+  assert.equal(reply.to, 'fixed@example.com');
+  assert.equal(reply.replyTo, 'to@example.com');
+  assert.deepEqual(reply.headers, { 'Auto-Submitted': 'auto-generated' });
+  assert.equal(reply.subject, AUTOREPLY.subject);
+  assert.equal(reply.text, AUTOREPLY.paragraphs.join('\n\n'));
+  const everything = JSON.stringify(reply);
+  for (const marker of ['Zqxname', 'Zqxlocation', 'Zqxmessage']) assert.ok(!everything.includes(marker), marker);
+});
+
+test('no confirmation for a phone contact', async () => {
+  configure();
+  process.env.CONTACT_AUTOREPLY = 'on';
+  const sent = recordSends();
+  await post({ ...valid, contact: '+971 55 654 1410' });
+  assert.equal(sent.length, 1);
+});
+
+test('no confirmation when the studio email fails', async () => {
+  configure();
+  process.env.CONTACT_AUTOREPLY = 'on';
+  let calls = 0;
+  mailer.send = async () => { calls++; throw Object.assign(new Error('down'), { code: 'ECONNECTION' }); };
+  const realError = console.error;
+  console.error = () => {};
+  try {
+    assert.deepEqual(await status(await post(valid)), [502, { error: 'send_failed' }]);
+  } finally {
+    console.error = realError;
+  }
+  assert.equal(calls, 1);
+});
+
+test('a failed confirmation still answers ok and logs only the error code', async () => {
+  configure();
+  process.env.CONTACT_AUTOREPLY = 'on';
+  let calls = 0;
+  mailer.send = async () => { if (++calls === 2) throw Object.assign(new Error('rejected fail@example.com at mail.example.com'), { code: 'EENVELOPE' }); };
+  const logged: unknown[][] = [];
+  const realError = console.error;
+  console.error = (...args: unknown[]) => { logged.push(args); };
+  try {
+    assert.deepEqual(await status(await post({ ...valid, contact: 'fail@example.com' })), [200, { ok: true }]);
+  } finally {
+    console.error = realError;
+  }
+  assert.equal(calls, 2);
+  assert.deepEqual(logged, [['contact form: confirmation failed:', 'EENVELOPE']]);
+  const text = JSON.stringify(logged);
+  for (const secret of ['fail@example.com', 'to@example.com', 'from@example.com', 'mail.example.com']) assert.ok(!text.includes(secret), secret);
+});
+
+test('an email with ( ) or \\ is refused', async () => {
+  for (const contact of ['a(b)@c.d', 'asha@example.com(eve)', 'a\\b@c.d']) {
+    const [code, body] = await status(await post({ ...valid, contact }));
+    assert.equal(code, 422, contact);
+    assert.deepEqual(body.fields, ['contact']);
+  }
+});
+
+test('an email with : [ or ] is refused (an address group or a raw IP address)', async () => {
+  for (const contact of ['x:victim@evil.com', 'a:b:c@d.e', 'a@[127.0.0.1]']) {
+    const [code, body] = await status(await post({ ...valid, contact }));
+    assert.equal(code, 422, contact);
+    assert.deepEqual(body.fields, ['contact']);
+  }
+});
+
+test('contact rule: refuses ( ) \\ : [ ] in an email, still accepts a normal email and a phone', () => {
+  for (const bad of ['a(b)@c.d', 'a\\b@c.d', 'x:victim@evil.com', 'a:b:c@d.e', 'a@[127.0.0.1]']) assert.equal(isValidContact(bad), false, bad);
+  assert.equal(isValidContact('asha@example.com'), true);
+  assert.equal(isValidContact('+971 55 654 1410'), true);
+});
+
+test('one confirmation per address per 24 hours; the studio still gets every enquiry', async () => {
+  configure();
+  process.env.CONTACT_AUTOREPLY = 'on';
+  const sent = recordSends();
+  const realNow = Date.now;
+  const start = realNow();
+  try {
+    Date.now = () => start;
+    await post({ ...valid, contact: 'once@example.com' });
+    assert.equal(sent.length, 2);
+    Date.now = () => start + 23 * 60 * 60 * 1000;
+    assert.deepEqual(await status(await post({ ...valid, contact: 'ONCE@Example.com' })), [200, { ok: true }]);
+    assert.equal(sent.length, 3); // studio email only: same address in another case, from another IP
+    Date.now = () => start + 24 * 60 * 60 * 1000;
+    await post({ ...valid, contact: 'once@example.com' });
+    assert.equal(sent.length, 5);
+    assert.equal(sent[4].to, 'once@example.com');
+  } finally {
+    Date.now = realNow;
+  }
+});
+
+test('confirmation wording makes no promises', () => {
+  const words = [AUTOREPLY.subject, ...AUTOREPLY.paragraphs].join(' ');
+  assert.doesNotMatch(words, /\d/);
+  for (const promise of ['within', 'hour', 'day', 'guarantee', 'years', 'always']) assert.ok(!words.toLowerCase().includes(promise), promise);
+});
+
 test('limits one address to 5 enquiries per 10 minutes', async () => {
   const ip = '203.0.113.9';
   for (let i = 0; i < 5; i++) assert.notEqual((await post(valid, { ip })).status, 429);
@@ -206,6 +334,23 @@ test('the real sender delivers a message to a mail server', async () => {
     assert.match(message, /^Reply-To: asha@example\.com$/m);
     assert.match(message, /^To: to@example\.com$/m);
     assert.match(message, /Location: Dubai Marina/);
+  } finally {
+    server.close();
+  }
+});
+
+test('the real sender uses Mail.to when given', async () => {
+  const server = await fakeMailServer();
+  try {
+    await realSend(
+      { host: '127.0.0.1', port: server.port, user: 'u', pass: 'p', to: 'to@example.com', from: 'from@example.com' },
+      { to: 'asha@example.com', replyTo: 'to@example.com', subject: 's', text: 't', html: 'h', headers: { 'Auto-Submitted': 'auto-generated' } },
+    );
+    const message = server.received.join('\n');
+    assert.match(message, /^To: asha@example\.com$/m);
+    assert.match(message, /^Reply-To: to@example\.com$/m);
+    assert.match(message, /^From: from@example\.com$/m);
+    assert.match(message, /^Auto-Submitted: auto-generated$/m);
   } finally {
     server.close();
   }
