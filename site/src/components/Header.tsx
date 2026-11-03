@@ -21,13 +21,17 @@ export default function Header() {
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Colour: look at what sits behind the logo (a photo or canvas counts as dark, otherwise the first solid background).
+  // Sample the logo's real centre: on the home page it starts big and mid-screen, far below the header strip.
   useEffect(() => {
     let queued = false;
     const check = () => {
       queued = false;
-      const y = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) / 2;
+      const box = brandRef.current?.getBoundingClientRect();
+      const onScreen = box && box.height > 0 && box.top + box.height / 2 > 0;
+      const x = onScreen ? box.left + box.width / 2 : innerWidth / 2;
+      const y = onScreen ? box.top + box.height / 2 : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) / 2;
       let theme = 'light';
-      for (const el of document.elementsFromPoint(innerWidth / 2, y)) {
+      for (const el of document.elementsFromPoint(x, y)) {
         if (el.closest('header, #site-menu, [data-preloader]')) continue;
         if (el instanceof HTMLImageElement || el instanceof HTMLCanvasElement || el instanceof HTMLVideoElement) { theme = 'dark'; break; }
         const c = (getComputedStyle(el).backgroundColor.match(/[0-9.]+/g) ?? []).map(Number);
@@ -194,7 +198,7 @@ export default function Header() {
           <Link prefetch={false} href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
           <div className={styles.menuContact}>
             <a href={site.whatsappHref}>WhatsApp {site.phone}</a>
-            <a href={site.phoneHref}>{site.phone}</a>
+            <a href={site.phoneHref}>Call {site.phone}</a>
             <a href={`mailto:${site.email}`}>{site.email}</a>
           </div>
         </div>

@@ -92,6 +92,30 @@ test.describe('mobile menu at 390px', () => {
       await page.getByRole('button', { name: 'Open the menu' }).click();
       await expect(page.getByRole('dialog', { name: 'Menu' }).getByRole('link', { name: 'Home' })).toBeFocused();
     });
+
+    test('on the home page the big hero logo is white, and moves small into the header when the menu opens', async ({ page }) => {
+      await page.goto('/');
+      const brand = page.getByRole('banner').locator('a[href="/"]');
+      // White (paper) over the hero photo, never oxblood.
+      await expect(page.getByRole('banner')).toHaveCSS('color', 'rgb(248, 247, 244)');
+      await page.getByRole('button', { name: 'Open the menu' }).click();
+      const contact = page.getByRole('dialog', { name: 'Menu' }).getByRole('link', { name: 'Contact' });
+      await expect(contact).toBeVisible();
+      await expect(async () => {
+        const logo = (await brand.boundingBox())!;
+        const link = (await contact.boundingBox())!;
+        expect(logo.y + logo.height).toBeLessThanOrEqual(link.y); // above the links, not across them
+        expect(logo.height).toBeLessThan(80);
+      }).toPass();
+    });
+  });
+
+  test('the menu labels the call link, so the phone number does not look repeated', async ({ page }) => {
+    await page.goto('/about');
+    await page.getByRole('button', { name: 'Open the menu' }).click();
+    const menu = page.getByRole('dialog', { name: 'Menu' });
+    await expect(menu.getByRole('link', { name: /^WhatsApp \+/ })).toHaveAttribute('href', /^https:\/\/wa\.me\//);
+    await expect(menu.getByRole('link', { name: /^Call \+/ })).toHaveAttribute('href', /^tel:/);
   });
 
   test('closes after choosing a link', async ({ page }) => {
