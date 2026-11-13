@@ -25,7 +25,7 @@
   li { padding: 16px 0; border-bottom: 1px solid var(--line); }
 }
 
-/* Team: the heading on the left, the two founders in arches filling the right (the same arches as on the home page) */
+/* Team: the heading on the left, the two founders' names and roles on the right (no photos: the studio asked for none) */
 .teamSection {
   display: grid; gap: 48px clamp(32px, 6vw, 112px); align-items: end;
   @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
@@ -35,11 +35,6 @@
 .team {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px var(--gutter);
   li { display: grid; gap: 18px; align-content: start; }
-}
-/* The photographs have white backgrounds: multiplying them onto the sand arch lets the arch show through instead of a hard white cut-out */
-.arch {
-  aspect-ratio: 3 / 4; overflow: hidden; border-radius: 999px 999px 0 0; background: var(--sand);
-  img { width: 100%; height: 100%; object-fit: cover; object-position: top; mix-blend-mode: multiply; }
 }
 .who {
   display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--line);

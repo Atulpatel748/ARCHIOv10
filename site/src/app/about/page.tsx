@@ -67,9 +67,6 @@ export default function AboutPage() {
         <ul className={styles.team}>
           {team.map((m) => (
             <li key={m.name} data-reveal>
-              <div className={styles.arch}>
-                <Image src={m.image} alt={`Portrait of ${m.name}`} width={479} height={720} sizes="(max-width: 767px) 50vw, 30vw" />
-              </div>
               <div className={styles.who}>
                 <h3>{m.name}</h3>
                 <p>{m.role}</p>
