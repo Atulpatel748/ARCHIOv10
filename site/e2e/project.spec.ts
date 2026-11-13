@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test';
 import { projects } from '../src/content/projects';
 import { test, expect } from './fixtures';
 
-const captionFor = (img: { room?: string; alt: string }) => `${img.room ?? img.alt} · Design visualisation`;
+const captionFor = (img: { room?: string; alt: string }) => img.room ?? img.alt;
 
 for (const project of projects) {
   const route = `/projects/${project.slug}`;
@@ -72,7 +72,7 @@ for (const project of projects) {
       }).toPass({ timeout: 5000 });
     });
 
-    test('every gallery caption says Design visualisation, one per image', async ({ page }) => {
+    test('every gallery caption names its room, one per image', async ({ page }) => {
       await page.goto(route);
       const captions = page.locator('dialog figcaption');
       await expect(captions).toHaveCount(images.length);

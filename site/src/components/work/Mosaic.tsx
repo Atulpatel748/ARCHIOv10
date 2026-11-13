@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger); // Reveals now loads the plugin later, so this component registers it itself
 import Gallery from '@/components/Gallery';
-import { visualisation, type Project } from '@/content/projects';
+import type { Project } from '@/content/projects';
 import styles from './Work.module.scss';
 
 const FILTERS = ['All', 'Residential', 'Commercial', 'Landscape'] as const;
@@ -125,7 +125,7 @@ export default function Mosaic({ projects }: { projects: Project[] }) {
   return (
     <section className={`container ${styles.om}`} aria-label="More of the work, room by room">
       <div className={styles.omHead}>
-        <p className="label" data-reveal>Rooms · {visualisation}</p>
+        <p className="label" data-reveal>Rooms</p>
         <h2 className={styles.omTitle} data-reveal>More of the work, room by room.</h2>
       </div>
       <div className={styles.omFilters} role="group" aria-label="Filter images by category" data-reveal>

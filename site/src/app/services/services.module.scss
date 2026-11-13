@@ -9,8 +9,6 @@
 }
 .bandMedia { position: relative; min-height: 360px; img { object-fit: cover; } @include tablet-down { min-height: 0; aspect-ratio: 4 / 3; } }
 .bandBody { display: grid; align-content: center; gap: clamp(24px, 3vw, 40px); padding: clamp(40px, 6vw, 96px) clamp(24px, 6vw, 112px); @include tablet-down { padding-inline: var(--margin); } }
-/* Every render on the site says it is a design visualisation; a solid backing keeps it readable on any picture */
-.bandNote { position: absolute; left: 16px; bottom: 16px; padding: 6px 10px; background: var(--oxblood); color: var(--paper); }
 .bandName { font: 400 clamp(3rem, 1rem + 5.5vw, 7rem)/0.95 var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; }
 .offers {
   display: grid; margin: 0;

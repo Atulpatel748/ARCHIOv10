@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import PageHead from '@/components/PageHead';
 import { approach, sectors, serviceStages, servicesIntro } from '@/content/site';
-import { visualisation } from '@/content/projects';
 import styles from './services.module.scss';
 import Roll from '@/components/Roll';
 
@@ -29,7 +28,6 @@ export default function ServicesPage() {
           <section key={stage.name} className={styles.band}>
             <div className={styles.bandMedia}>
               <Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 1023px) 100vw, 50vw" priority={i === 0} fetchPriority={i === 0 ? 'high' : undefined} />
-              <span className={`label ${styles.bandNote}`}>{visualisation}</span>
             </div>
             <div className={styles.bandBody}>
               <h2 className={styles.bandName} data-reveal>{stage.name}</h2>

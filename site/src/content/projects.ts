@@ -1,4 +1,4 @@
-// The three design visualisations from the company profile. Image sizes are the extracted placeholders; replace with the original renders.
+// The three projects from the company profile. Image sizes are the extracted placeholders; replace with the original renders.
 
 export type ProjectImage = { src: string; alt: string; width: number; height: number; room?: string };
 export type Project = {
@@ -15,7 +15,6 @@ export type Project = {
 };
 
 // Every project image is a design render, so wherever the work is shown as a project it carries this label.
-export const visualisation = 'Design visualisation';
 
 const img = (slug: string, file: string, width: number, height: number, alt: string, room?: string): ProjectImage =>
   ({ src: `/images/projects/${slug}/${file}.webp`, width, height, alt, room });
@@ -34,7 +33,7 @@ export const projects: Project[] = [
     summary: 'A residence designed so that architecture, material and light come together, from feature walls and joinery to lighting and finishing details.',
     description: [
       'We design interiors where architecture, material, and light come together seamlessly, from feature walls and joinery to lighting and finishing details.',
-      'Each space is shaped around how its owners would live day to day, with care carried from concept to detail. Shown here as a design visualisation.',
+      'Each space is shaped around how its owners would live day to day, with care carried from concept to detail.',
     ],
     cover: img(dm, 'main-bedroom', 800, 707, 'Bedroom with an upholstered panel wall, a sculpted light line and paired lamps'),
     hero: img(dm, 'living-room', 707, 800, 'Double-height living room with book-matched marble wall panels and a sculptural chandelier'),
@@ -63,7 +62,7 @@ export const projects: Project[] = [
     summary: 'An office designed to make the right first impression, from reception areas and lounges to the working floor.',
     description: [
       'Commercial spaces that make the right first impression, from reception areas and lounges to full office layouts.',
-      'Every detail, from material selection to lighting, is considered to reflect the brand and support how people would work and meet. Shown here as a design visualisation.',
+      'Every detail, from material selection to lighting, is considered to reflect the brand and support how people would work and meet.',
     ],
     cover: img(jlt, 'managers-office', 800, 626, "Manager's office with a marble feature wall and lit shelving"),
     hero: img(jlt, 'boardroom', 800, 640, 'Boardroom with a white stone table, cream leather chairs and a perforated ceiling'),
@@ -88,7 +87,7 @@ export const projects: Project[] = [
     summary: 'A landscape design that brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors.',
     description: [
       'This landscape design brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors. Palms and layered greenery line a stone path to the entrance, setting a calm, welcoming tone from the moment you arrive.',
-      "We design outdoor spaces where architecture and nature meet, from softscaping and hardscaping to pools, irrigation, and lighting. This design is shaped around the owners' lifestyle and the character of the property. Shown here as a design visualisation.",
+      "We design outdoor spaces where architecture and nature meet, from softscaping and hardscaping to pools, irrigation, and lighting. This design is shaped around the owners' lifestyle and the character of the property.",
     ],
     cover: img(ar, 'pergola-kitchen-dusk', 800, 640, 'Pergola with an outdoor kitchen beside the pool at dusk'),
     hero: img(ar, 'entrance-path', 800, 640, 'Villa entrance with a stepping-stone path, palms and layered planting'),
