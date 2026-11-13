@@ -1,18 +1,15 @@
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import Sequence from './Sequence';
-import RoomScene from './RoomScene';
+import Elevation from './Elevation';
 import Split from './Split';
 import Roll from './Roll';
 import styles from './RoomJourney.module.scss';
 
 type Step = { title: string; text: string };
 
-// "How it goes" as a 3D room that builds itself and turns one full circle while you scroll through the four steps (an illustration
-// in thin lines, after Wood & Weave's process section). <Sequence> publishes the scroll progress as --progress. On large screens with
-// WebGL, RoomScene draws the room in three.js (room3d.ts), which reads that progress each frame. Everywhere else (phones, small
-// windows, reduced motion, no WebGL) it is the CSS 3D room (RoomModel), the finished room standing still. The room loads only when you
-// near it (RoomScene), so it costs nothing at page load.
+// "How it goes": the four steps beside a line drawing of a building that draws itself while you scroll (see Elevation). <Sequence>
+// publishes the scroll progress as --progress. The drawing is pure CSS, so it costs no script.
 
 const LABELS = ['Brief', 'Strategy', 'Decisions', 'Execution'];
 const vars = (o: Record<string, string | number>) => o as CSSProperties;
@@ -36,7 +33,7 @@ export default function RoomJourney({ steps }: { steps: Step[] }) {
           <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
         </div>
 
-        <RoomScene />
+        <Elevation />
 
         <p className={`label ${styles.tag}`}>Illustration</p>
       </div>
