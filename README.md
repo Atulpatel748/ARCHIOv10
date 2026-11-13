@@ -4,7 +4,7 @@ Multi-page marketing site for Archió, a consultancy-led interior design studio 
 
 - `site/`: Next.js 16, SCSS modules, GSAP + Lenis, Three.js hero.
 - `docs/`: reference analysis, industry research, brand inventory, design strategy and `06-DECISIONS.md` (why the site is built the way it is: hosting, contact form, fonts, images, hero, Services).
-- `design-previews/`: earlier design explorations and screenshot helper.
+- `design-previews/assets/`: the studio's source pictures only: `originals-800px` (the original renders) and `profile-extract` (images taken from the company profile). The earlier design prototypes (options A to D, preloader and 3D tests) were removed on 13 Nov 2026; they are still in git history, and `docs/` describes them.
 
 The images in `design-previews/` and `docs/` are stored with [Git LFS](https://git-lfs.com) (see `.gitattributes`). Run `git lfs install` once before cloning to get them; the site in `site/` does not need them.
 
