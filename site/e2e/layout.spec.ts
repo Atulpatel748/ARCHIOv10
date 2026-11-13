@@ -33,9 +33,10 @@ test.describe('header at 320px', () => {
 test.describe('200% zoom (1280px screen)', () => {
   test.use({ viewport: { width: 640, height: 400 }, deviceScaleFactor: 2 });
   for (const route of ROUTES) {
-    test(`${route} has no horizontal overflow`, async ({ page }) => {
+    test(`${route} has no horizontal overflow`, async ({ page, browserName }) => {
       await page.goto(route);
-      expect(await page.evaluate(() => devicePixelRatio)).toBe(2);
+      // Playwright's Firefox cannot emulate a pixel ratio; the 640px layout width is what the overflow check needs.
+      if (browserName !== 'firefox') expect(await page.evaluate(() => devicePixelRatio)).toBe(2);
       await expect.poll(() => overflow(page)).toBeLessThanOrEqual(0);
     });
   }
