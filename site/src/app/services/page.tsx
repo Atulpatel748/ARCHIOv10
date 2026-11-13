@@ -8,7 +8,7 @@ import styles from './services.module.scss';
 import Roll from '@/components/Roll';
 
 const title = 'Services';
-const description = 'Consultancy-based interior design in Dubai: design consultation, concept development, space planning, material selection, design review and project coordination support.';
+const description = 'Consultancy-led interior design in Dubai: consultation, concept development, space planning, material and finish selection, design review and coordination support.';
 
 export const metadata: Metadata = {
   title,
@@ -69,7 +69,7 @@ export default function ServicesPage() {
           <p className="label" data-reveal>How we work</p>
           <h2 className="h2" data-reveal>{approach.title}</h2>
           <p className="serif" data-reveal>{approach.body}</p>
-          <Link prefetch={false} href="/contact" className="btn btn--solid" data-reveal><Roll>Book a consultation</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
         </div>
         <ul className={styles.points}>
           {approach.points.map((p) => (
