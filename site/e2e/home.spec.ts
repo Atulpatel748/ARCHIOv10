@@ -162,7 +162,10 @@ test.describe('back button, with motion', () => {
     await page.waitForURL('**/projects/**');
     await page.goBack();
     await page.waitForURL((url) => url.pathname === '/');
-    await expect.poll(() => page.evaluate(() => Math.round(scrollY)), { timeout: 5000 }).toBeGreaterThan(before - 60);
-    expect(await page.evaluate(() => Math.round(scrollY))).toBeLessThan(before + 60);
+    // The browser may put the scroll back first and the page corrects it a moment later: wait for the right place, then check it stays.
+    const off = () => page.evaluate((b) => Math.abs(Math.round(scrollY) - b), before);
+    await expect.poll(off, { timeout: 5000 }).toBeLessThan(60);
+    await page.waitForTimeout(700);
+    expect(await off()).toBeLessThan(60);
   });
 });
