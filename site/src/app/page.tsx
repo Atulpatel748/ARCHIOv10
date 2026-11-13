@@ -9,7 +9,7 @@ import Sequence from '@/components/Sequence';
 import StageList from '@/components/StageList';
 import Split from '@/components/Split';
 import { projects, visualisation } from '@/content/projects';
-import { about, philosophy, processSteps, serviceStages as stages, team } from '@/content/site';
+import { approach, philosophy, processSteps, serviceStages as stages } from '@/content/site';
 import styles from './home.module.scss';
 import Roll from '@/components/Roll';
 
@@ -43,10 +43,10 @@ export default function HomePage() {
           while the sectors rise from below, one after another, to the middle. */}
       <Sequence className={styles.sequence}>
         <div className={styles.seqStage}>
-          <h2 className="visually-hidden">We do residential, commercial and landscape design</h2>
+          <h2 className="visually-hidden">We design residential, commercial and landscape spaces</h2>
           <div className={styles.seqTitle} aria-hidden="true">
             <span className={styles.seqStart}>We</span>
-            <span className={styles.seqEnd}>Do</span>
+            <span className={styles.seqEnd}>Design</span>
           </div>
           <div className={styles.seqItems}>
             {['Residential', 'Commercial', 'Landscape'].map((name, i) => (
@@ -60,21 +60,15 @@ export default function HomePage() {
       {/* Philosophy: a quiet dark statement, text only */}
       <section className={styles.philosophy}>
         <blockquote className={`container ${styles.philosophyInner}`}>
-          <Split as="p" className={styles.quote} text="Good design is not about making something" accent="look expensive." />
+          <Split as="p" className={styles.quote} text="Spaces made" accent="to be lived in." />
           <p className={`serif ${styles.philosophyBody}`} data-reveal>{philosophy.body}</p>
         </blockquote>
       </section>
 
       {/* The position */}
       <section className={`section container ${styles.position}`}>
-        <p className="label" data-reveal>Our position</p>
-        <div className={styles.positionBody}>
-          <Split as="p" className={styles.positionLead} text={about.body[0]} />
-          <div className={styles.positionCols}>
-            <p data-reveal>{about.body[1]}</p>
-            <p data-reveal>{about.body[2]}</p>
-          </div>
-        </div>
+        <p className="label" data-reveal>Our positioning</p>
+        <Split as="p" className={styles.positionLead} text={approach.title} />
       </section>
 
       {/* What we do: an index of the three stages, after YODEZEEN's service list */}
@@ -82,37 +76,17 @@ export default function HomePage() {
         <div className="container">
           <div className={styles.headRow}>
             <p className="label" data-reveal>What we do</p>
-            <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to site coordination." />
+            <Split className={styles.big} text="Consultancy at every stage," accent="from the first brief to the final handover." />
           </div>
           <StageList stages={stages} />
         </div>
       </section>
 
-      {/* Who you get: founders in arched frames (after Wood & Weave) */}
-      <section className={`section container ${styles.founders}`}>
-        <div className={styles.foundersHead}>
-          <p className="label" data-reveal>Who you work with</p>
-          <Split className={styles.big} text="The people behind" accent="Archió." />
-          <Link prefetch={false} href="/about" className="text-link" data-reveal><Roll>About the studio</Roll></Link>
-        </div>
-        <ul className={styles.foundersGrid}>
-          {team.map((m) => (
-            <li key={m.name} data-reveal>
-              <div className={styles.arch}>
-                <Image src={m.image} alt={`Portrait of ${m.name}`} width={479} height={720} sizes="(max-width: 767px) 80vw, 26vw" />
-              </div>
-              <h3>{m.name}</h3>
-              <p>{m.role}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
 
       {/* The work: a flagship with a facts card, then the other projects */}
       <section className={`section ${styles.work}`}>
         <div className="container">
-          <p className="label" data-reveal>The work</p>
-          <Split className={styles.big} text="Three spaces," accent="as design visualisations." />
+          <h2 className="label" data-reveal>The work</h2>
         </div>
         <div className={`container ${styles.flagship}`}>
           <Link prefetch={false} href={`/projects/${flagship.slug}`} className={styles.flagshipMedia} data-cursor="View" data-mask>
