@@ -53,8 +53,32 @@ export default function Reveals() {
 
   useEffect(() => {
     if (popped.current !== pathname && !location.hash) (window as unknown as { lenis?: LenisLike }).lenis?.scrollTo(0, { immediate: true });
+    const wasPopped = popped.current === pathname;
     popped.current = null;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Back and forward: the browser restores the scroll before the pinned sections have their full height, so it lands too high.
+    // Remember where you were on each page and put it back once the layout has settled.
+    const key = `archio-y:${pathname}`;
+    let saved = NaN;
+    try { saved = parseFloat(sessionStorage.getItem(key) ?? ''); } catch { saved = NaN; } // private mode: the browser's own restore stays
+    const restore = wasPopped && !location.hash && saved > 0;
+    let settling = restore;
+    let keepFrame = 0;
+    const keep = () => {
+      keepFrame ||= requestAnimationFrame(() => {
+        keepFrame = 0;
+        if (settling || location.pathname !== pathname) return; // a scroll from the page change itself is not where you were
+        try { sessionStorage.setItem(key, String(Math.round(scrollY))); } catch { return; } // private mode
+      });
+    };
+    const back = () => { const l = (window as unknown as { lenis?: LenisLike }).lenis; if (l) l.scrollTo(saved, { immediate: true }); else scrollTo(0, saved); };
+    let restoreFrame = 0;
+    let settled: ReturnType<typeof setTimeout> | undefined;
+    if (restore) {
+      restoreFrame = requestAnimationFrame(() => requestAnimationFrame(back));
+      settled = setTimeout(() => { settling = false; }, 700);
+    }
+    addEventListener('scroll', keep, { passive: true });
     let revert: (() => void) | undefined;
     let dead = false;
     let refresh: ReturnType<typeof setTimeout> | undefined;
@@ -101,9 +125,13 @@ export default function Reveals() {
         const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
         if (lenis && goal !== undefined) lenis.scrollTo(goal);
         else if (target) lenis?.scrollTo(target, { immediate: true, offset: -parseFloat(getComputedStyle(target).scrollMarginTop) || 0 });
+        else if (restore) back(); // the refresh has just measured the finished layout
       }, 300);
     }).catch(() => undefined));
-    return () => { dead = true; cancelIdle(); clearTimeout(refresh); revert?.(); };
+    return () => {
+      dead = true; cancelIdle(); clearTimeout(refresh); revert?.();
+      removeEventListener('scroll', keep); cancelAnimationFrame(keepFrame); cancelAnimationFrame(restoreFrame); clearTimeout(settled);
+    };
   }, [pathname]);
 
   return null;

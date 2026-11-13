@@ -219,14 +219,14 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       <div ref={stage} className={`${styles.stage} ${glReady ? styles.glReady : ''}`}>
         {slides.map((s, i) => (
           <div key={s.src} className={`${styles.slide} ${i === current ? styles.active : ''}`}>
-            <Image src={s.poster ?? s.src} loader={s.poster ? heroLoader : undefined} alt="" fill sizes="100vw" className={styles.backdrop} aria-hidden="true" />
+            <Image src={s.poster ?? s.src} loader={s.poster ? heroLoader : undefined} alt="" fill sizes="100vw" fetchPriority={i === 0 ? undefined : 'low'} className={styles.backdrop} aria-hidden="true" />
             <Image
               src={s.poster ?? s.src}
               loader={s.poster ? heroLoader : undefined}
               alt={i === current ? s.alt : ''}
               fill
               priority={i === 0}
-              fetchPriority={i === 0 ? 'high' : undefined}
+              fetchPriority={i === 0 ? 'high' : 'low'}
               sizes="100vw"
               className={styles.photo}
             />

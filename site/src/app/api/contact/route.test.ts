@@ -243,8 +243,9 @@ test('an email with : [ or ] is refused (an address group or a raw IP address)',
 });
 
 test('contact rule: refuses ( ) \\ : [ ] in an email, still accepts a normal email and a phone', () => {
-  for (const bad of ['a(b)@c.d', 'a\\b@c.d', 'x:victim@evil.com', 'a:b:c@d.e', 'a@[127.0.0.1]']) assert.equal(isValidContact(bad), false, bad);
+  for (const bad of ['a(b)@c.d', 'a\\b@c.d', 'x:victim@evil.com', 'a:b:c@d.e', 'a@[127.0.0.1]', 'x@y.c']) assert.equal(isValidContact(bad), false, bad);
   assert.equal(isValidContact('asha@example.com'), true);
+  assert.equal(isValidContact('x@y.co'), true);
   assert.equal(isValidContact('+971 55 654 1410'), true);
 });
 

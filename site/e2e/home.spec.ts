@@ -144,3 +144,25 @@ test.describe('preloader', () => {
     await expect(page.locator('#main')).not.toHaveAttribute('inert');
   });
 });
+
+test.describe('back button, with motion', () => {
+  test.use({ reducedMotion: 'no-preference' });
+
+  // Pinned sections only get their full height once scripts have run, so the browser alone restored the scroll far too high.
+  test('going back from a project returns to the same place on the home page', async ({ page }) => {
+    await page.addInitScript(() => sessionStorage.setItem('archio-seen', '1'));
+    await page.goto('/');
+    await page.waitForTimeout(2500); // smooth scroll and reveals load when the browser is idle
+    const top = await page.evaluate(() => (document.querySelector('[class*="factsCard"]')?.getBoundingClientRect().top ?? 3000) + scrollY - 200);
+    for (let i = 1; i <= 12; i++) { await page.evaluate((y) => scrollTo(0, y), (top * i) / 12); await page.waitForTimeout(80); }
+    await page.waitForTimeout(1200);
+    const before = await page.evaluate(() => Math.round(scrollY));
+    expect(before).toBeGreaterThan(2000);
+    await page.locator('[class*="factsCard"] a[href^="/projects/"]').first().click();
+    await page.waitForURL('**/projects/**');
+    await page.goBack();
+    await page.waitForURL((url) => url.pathname === '/');
+    await expect.poll(() => page.evaluate(() => Math.round(scrollY)), { timeout: 5000 }).toBeGreaterThan(before - 60);
+    expect(await page.evaluate(() => Math.round(scrollY))).toBeLessThan(before + 60);
+  });
+});

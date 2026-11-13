@@ -2,7 +2,7 @@
 
 The quality bar for the Archió site. The numbers were measured on 28 Oct 2026 on the live site (`https://archio-v10.vercel.app`) and the code in `site/`. Do not lower a number or remove a check just to make a change pass; fix the change, or add a dated exception below.
 
-Last reviewed: 3 Nov 2026
+Last reviewed: 13 Nov 2026
 
 ## Floor (always enforced)
 
@@ -24,12 +24,12 @@ Run from inside `site/` unless a different place is given.
 | Types | Zero errors | `npm run typecheck` | 0 errors | every change |
 | Lint | Zero errors | `npm run lint` | 0 errors | every change |
 | Tests | All pass | `npm test` (contact form route, mail sender, image loader) | 34 of 34 pass | every change |
-| Browser tests | All pass, none skipped or marked fixme without a "BUG:" reason | `npm run test:e2e` (Playwright, Chromium, production build: pages, navigation, axe WCAG 2.2 AA, overflow at ten widths from 320 to 1920, hero, gallery, contact form, honesty rules, SEO) | 221 of 221 pass (3 Nov 2026, two clean runs; the overflow test now covers 360, 375, 414, 1024 and 1440 too); 175 of 175 earlier the same day (the contact spec also passed 3 repeats); the earlier 166 were stable across 3 repeats, serial, 6 workers and a fresh CI build | before every push, and on GitHub |
+| Browser tests | All pass, none skipped or marked fixme without a "BUG:" reason | `npm run test:e2e` (Playwright, Chromium, production build: pages, navigation, axe WCAG 2.2 AA, overflow at ten widths from 320 to 1920, hero, gallery, contact form, honesty rules, SEO) | 221 of 221 pass (13 Nov 2026) | before every push, and on GitHub |
 | Build | Succeeds | `npm run build` | passes | before every push, and on GitHub |
 | Dependencies | No known problems | `npm audit --audit-level=high` | 0 high; 16 moderate, all one ESLint helper (see the note below) | before every push, and on GitHub |
-| Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 9 pages (3 Nov 2026, `b77513f`) | after every deploy |
-| Speed | Lighthouse performance 90 or more on every page | `npx lighthouse <URL> --only-categories=performance` | 94 to 99, except `/projects/arabian-ranches-garden` 88 to 90 and `/projects/dubai-marina-residence` 91 to 93 (3 Nov 2026, each page run on its own; see E2) | after every deploy |
-| Layout shift | CLS 0.1 or less | the same Lighthouse run | 0 on all 9 pages (3 Nov 2026) | after every deploy |
+| Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 9 pages (13 Nov 2026, `a994b71`, live site) | after every deploy |
+| Speed | Lighthouse performance 90 or more on every page | `npx lighthouse <URL> --only-categories=performance` | 95 to 100 on all 9 pages (13 Nov 2026, `a994b71`, live site, each page run on its own) | after every deploy |
+| Layout shift | CLS 0.1 or less | the same Lighthouse run | 0 on all 9 pages (13 Nov 2026) | after every deploy |
 | Best practices and SEO | 100 | the same Lighthouse run | 100 | after every deploy |
 | Page overflow | No sideways scroll at 320, 360, 375, 390, 414, 768, 1024, 1280, 1440, 1920 px | `e2e/layout.spec.ts` | none found | every browser test run |
 
@@ -67,7 +67,8 @@ An exception needs a reason, an owner and an end date (90 days at most).
 
 E1 (JavaScript growth, 30 Oct 2026) was closed on 3 Nov 2026 by recording the new size as the baseline, as it allowed.
 
+E2 (Lighthouse speed on two project pages, 3 Nov 2026) was closed on 13 Nov 2026: the first-visit preloader now runs only on the home page, and every page scores 95 or more.
+
 | ID | Rule | Where | Reason | Owner | Ends |
 | --- | --- | --- | --- | --- | --- |
 | E3 (13 Nov 2026) | Floor: nothing may say or suggest that a design visualisation is a finished project | The "Design visualisation" labels, captions and "Images" fact row were removed from every page, and the pages' search descriptions no longer say "design visualisation" | The studio answered in writing (client questionnaire, question 18, 13 Nov 2026) that the three projects were completed as white-label work and asked for the label to go. This is the studio's own statement and has not been checked against photos or client permission. The site still does not name any client, say "completed", give a year, or claim awards. | The studio owners (Pooja Vijayakumar and the person who answered the questionnaire) | 11 Feb 2027: send written proof (photos or the client's permission), or the labels come back |
-| E2 (3 Nov 2026) | Lighthouse performance 90 or more on every page | `/projects/arabian-ranches-garden` 88 to 90, `/projects/dubai-marina-residence` 91 to 93 | The first-visit preloader (an owner design choice) covers the page for at least 2 s, so the page title, which Lighthouse counts as the largest paint, shows late. Before the end date, the owner either shortens the preloader's minimum time or skips it when a visitor lands straight on a project page, or keeps the design and accepts the lower score here. | Atul Patel | 1 Feb 2027 |
