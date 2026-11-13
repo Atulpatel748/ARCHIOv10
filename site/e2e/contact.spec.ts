@@ -209,7 +209,7 @@ test.describe('contact field rules (site/src/content/contact.ts)', () => {
         await expect(page.getByRole('status').filter({ hasText: SENT })).toBeVisible();
         expect(posted).toBe(true);
       } else {
-        await expect(field).toHaveAccessibleDescription(new RegExp(CONTACT_ERROR.replace('.', '\.')));
+        await expect(field).toHaveAccessibleDescription(new RegExp(CONTACT_ERROR.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
         await expect(field).toBeFocused();
         expect(posted).toBe(false);
       }

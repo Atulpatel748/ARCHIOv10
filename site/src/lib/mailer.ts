@@ -7,7 +7,8 @@ export type Mail = { to?: string; replyTo?: string; subject: string; text: strin
 
 // All five must be set; the port defaults to 587 (the usual "STARTTLS" port). Without them the form says "not configured".
 export function mailSettings(env: Record<string, string | undefined> = process.env): MailSettings | null {
-  const { SMTP_HOST: host, SMTP_USER: user, SMTP_PASS: pass, CONTACT_TO_EMAIL: to, CONTACT_FROM_EMAIL: from } = env;
+  const host = env.SMTP_HOST?.trim(); // a blank host counts as not set
+  const { SMTP_USER: user, SMTP_PASS: pass, CONTACT_TO_EMAIL: to, CONTACT_FROM_EMAIL: from } = env;
   const port = Number(env.SMTP_PORT || 587);
   if (!host || !user || !pass || !to || !from || !Number.isInteger(port) || port < 1 || port > 65535) return null;
   return { host, port, user, pass, to, from };

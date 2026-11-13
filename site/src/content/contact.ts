@@ -6,7 +6,7 @@ export const TYPES = ['Residential', 'Commercial', 'Mixed-use', 'Landscape'];
 // (, ; < > ") are refused along with spaces; so are ( ) \ because mail parsers read (...) as a comment, : because the
 // mail sender reads "x:a@b.c" as an address group, and [ ] because no real enquiry needs a [1.2.3.4] address.
 const EMAIL = /^[A-Za-z0-9._+-]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)*\.[A-Za-z]{2,}$/;
-export const isValidContact = (v: string) => EMAIL.test(v) || /^\+?[\d\s()-]{7,20}$/.test(v);
+export const isValidContact = (v: string) => EMAIL.test(v) || (/^\+?[\d\s()-]{7,20}$/.test(v) && (v.match(/\d/g) ?? []).length >= 7);
 
 // The automatic confirmation sent to a visitor who gave an email (only when CONTACT_AUTOREPLY=on). It repeats nothing they typed.
 // CLIENT TO REVIEW
