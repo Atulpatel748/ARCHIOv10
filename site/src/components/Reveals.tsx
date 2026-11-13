@@ -40,7 +40,16 @@ export default function Reveals() {
       const tick = (time: number) => lenis.raf(time * 1000);
       gsap.ticker.add(tick);
       gsap.ticker.lagSmoothing(0);
-      off = () => { gsap.ticker.remove(tick); lenis.destroy(); delete (window as unknown as { lenis?: unknown }).lenis; };
+      // Lenis ignores scroll-padding, so a field reached with Tab or Shift+Tab could end up under the header or off screen (WCAG 2.4.11).
+      const onFocus = (e: FocusEvent) => {
+        const el = e.target as HTMLElement;
+        if (!el.closest?.('main') || !el.matches('input, textarea, select, button, a')) return;
+        const head = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) + 24;
+        const r = el.getBoundingClientRect();
+        if (r.top < head || r.bottom > innerHeight - 24) lenis.scrollTo(el, { offset: -head }); // the bottom edge counts too: a field half off the screen is not visible
+      };
+      addEventListener('focusin', onFocus);
+      off = () => { removeEventListener('focusin', onFocus); gsap.ticker.remove(tick); lenis.destroy(); delete (window as unknown as { lenis?: unknown }).lenis; };
     }).catch(() => undefined)); // without the libraries the page scrolls natively and nothing is hidden
     return () => { dead = true; cancelIdle(); off?.(); };
   }, []);

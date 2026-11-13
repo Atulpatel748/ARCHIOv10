@@ -1,28 +1,51 @@
 @use '../styles/tokens' as *;
 
 /* The form sits on the dark contact section: text inherits its colour, rules are drawn in that colour too. */
-.form { display: grid; gap: clamp(28px, 3vw, 40px); }
+.form { display: grid; gap: clamp(32px, 3.2vw, 44px); }
 .field { display: grid; gap: 4px; border: 0; margin: 0; padding: 0; min-width: 0; }
 .field > label, .field legend { padding: 0; font-size: 0.875rem; color: var(--blush); }
 .field > label.consent { font-size: 1rem; color: inherit; } /* the consent line is a label too; keep it full size, not the small field-label size */
-.optional { color: rgb(206 182 168 / 0.75); }
+.optional { color: #C4A99B; } /* solid, 6.5:1 on the oxblood */
+.field:focus-within > label, .field:focus-within legend { color: var(--paper); }
+.alt { margin: -16px 0 0; font-size: 0.9375rem; a { font-weight: 500; text-decoration: underline; text-underline-offset: 3px; padding: 10px 0; display: inline-block; } }
+.form :is(input, textarea, button) { scroll-margin-top: calc(var(--header-h) + 24px); } /* for the page's own scroll, when the smooth scroll is off */
+.hint { margin: 0 0 2px; font-size: 0.8125rem; line-height: 1.4; color: var(--blush); }
 .field input:not([type='radio']):not([type='checkbox']), .field textarea {
   width: 100%; padding: 14px 0 12px; border: 0; border-bottom: 1px solid rgb(248 247 244 / 0.7); border-radius: 0;
   background: transparent; color: inherit; font: inherit; resize: vertical;
-  &:focus-visible { outline: 2px solid var(--paper); outline-offset: 4px; }
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+  &:focus-visible { outline: 0; border-bottom-color: var(--paper); box-shadow: 0 1px 0 0 var(--paper); } /* the line thickens: no box around an underline field */
   &[aria-invalid='true'] { border-bottom-color: var(--error); }
 }
 .field textarea { min-height: 9rem; }
 .choices { display: flex; flex-wrap: wrap; gap: 4px 28px; margin-top: 6px; }
 .choice {
   display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer;
-  input { accent-color: var(--paper); width: 20px; height: 20px; margin: 0; }
+  input { appearance: none; flex: none; width: 20px; height: 20px; margin: 0; border: 1px solid rgb(248 247 244 / 0.7); border-radius: 50%; background: transparent; cursor: pointer; &:checked { border-color: var(--paper); background: radial-gradient(circle, var(--paper) 0 42%, transparent 48%); } }
   &:has(input:focus-visible) { outline: 2px solid var(--paper); outline-offset: 2px; }
 }
-.consent { display: flex; gap: 14px; align-items: flex-start; font-size: 1rem; line-height: 1.5; input { accent-color: var(--paper); width: 22px; height: 22px; margin: 2px 0 0; flex: none; } }
+.consent {
+  display: flex; gap: 14px; align-items: flex-start; font-size: 1rem; line-height: 1.5;
+  input {
+    appearance: none; flex: none; width: 22px; height: 22px; margin: 2px 0 0; border: 1px solid rgb(248 247 244 / 0.7); border-radius: 2px; background: transparent; cursor: pointer;
+    &:checked { border-color: var(--paper); background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%234C1114' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 78% no-repeat; }
+    &:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; }
+    &[aria-invalid='true'] { border-color: var(--error); }
+  }
+}
 .privacyLink { margin-left: 36px; font-size: 0.875rem; a { text-decoration: underline; text-underline-offset: 3px; } }
 .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-.error { color: var(--error); font-size: 0.875rem; font-weight: 400; }
-.status { min-height: 1.5em; font-size: 0.9375rem; a { font-weight: 500; } }
-.form :global(.btn) { justify-self: start; &:disabled { opacity: 0.6; cursor: progress; } }
-.done { display: grid; gap: 12px; padding: 32px; border: 1px solid rgb(248 247 244 / 0.3); }
+.error { margin: 6px 0 0; color: var(--error); font-size: 0.875rem; line-height: 1.4; font-weight: 400; }
+.field:has(.consent) .error { margin-left: 36px; }
+.status { min-height: 1.5em; font-size: 0.9375rem; a { font-weight: 500; text-underline-offset: 3px; } }
+.form :global(.btn) {
+  justify-self: start; min-width: 11rem; /* the label changes while sending, the button does not */
+  &[aria-disabled='true'] { opacity: 0.7; cursor: progress; }
+  &:focus-visible { outline: 2px solid var(--paper); outline-offset: 3px; } /* the light button's own ring is oxblood, invisible on this oxblood section */
+  @media (max-width: 600px) { justify-self: stretch; min-height: 52px; }
+}
+.done {
+  display: grid; gap: 12px; padding: 32px; border: 1px solid rgb(248 247 244 / 0.3);
+  &:focus { outline: 0; } /* focus is moved here after a send so it is announced */
+  h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.5rem, 1rem + 1.5vw, 2rem); line-height: 1.15; }
+}

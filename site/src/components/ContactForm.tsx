@@ -39,15 +39,16 @@ function loadTurnstile() {
 }
 
 type Errors = Partial<Record<'name' | 'contact' | 'type' | 'consent', string>>;
+const FIELD_NAMES = { name: 'Name', contact: 'Email or phone', type: 'Type of project', consent: 'the consent box' };
 
 function validate(data: FormData): Errors {
   const errors: Errors = {};
   const name = String(data.get('name') ?? '').trim();
   const contact = String(data.get('contact') ?? '').trim();
   if (name.length < 2) errors.name = 'Please enter your name.';
-  if (!isValidContact(contact)) errors.contact = 'Please enter a valid email address or phone number.';
-  if (!data.get('type')) errors.type = 'Please choose a type of project.';
-  if (!data.get('consent')) errors.consent = 'Please confirm so we can reply to you.';
+  if (!isValidContact(contact)) errors.contact = 'Enter an email address or phone number we can reply to.';
+  if (!data.get('type')) errors.type = 'Choose the type of project closest to yours.';
+  if (!data.get('consent')) errors.consent = 'Tick the box to confirm, so we can reply to you.';
   return errors;
 }
 
@@ -154,17 +155,25 @@ export default function ContactForm() {
     }
   }
 
+  const invalid = Object.keys(errors) as (keyof Errors)[];
+  // An error goes as soon as its field is put right, not only at the next send; a field that is still wrong keeps its message.
+  function clearFixed(e: React.ChangeEvent<HTMLFormElement>) {
+    if (!invalid.length) return;
+    const now = validate(new FormData(e.currentTarget));
+    setErrors((prev) => Object.fromEntries(Object.entries(prev).filter(([k]) => now[k as keyof Errors])) as Errors);
+  }
+
   if (state === 'sent') {
     return (
       <div ref={done} tabIndex={-1} className={styles.done} role="status">
-        <h2 className="h3">Thank you, your enquiry has been sent.</h2>
-        <p>We will reply to arrange a first conversation.</p>
+        <h2 className="h3">Thank you. Your enquiry has been sent.</h2>
+        <p>We will reply to the contact details you gave, to arrange a first conversation.</p>
       </div>
     );
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit} onFocus={() => { prepare(); }} noValidate>
+    <form className={styles.form} onSubmit={onSubmit} onFocus={() => { prepare(); }} onChange={clearFixed} noValidate>
       <div className={styles.field}>
         <label htmlFor="name">Name</label>
         <input id="name" name="name" autoComplete="name" maxLength={100} required aria-invalid={!!errors.name} aria-describedby={errors.name ? 'name-error' : undefined} />
@@ -172,7 +181,8 @@ export default function ContactForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="contact">Email or phone</label>
-        <input id="contact" name="contact" autoComplete="email" spellCheck={false} autoCapitalize="none" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
+        <p id="contact-hint" className={styles.hint}>Email, or a phone number with country code.</p>
+        <input id="contact" name="contact" autoComplete="email" spellCheck={false} autoCapitalize="none" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-hint contact-error' : 'contact-hint'} />
         {errors.contact && <p id="contact-error" className={styles.error}>{errors.contact}</p>}
       </div>
       {/* The error is tied to each radio, not the fieldset: aria-describedby on a fieldset is not read out reliably. */}
@@ -191,7 +201,8 @@ export default function ContactForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="message">About the space <span className={styles.optional}>(optional)</span></label>
-        <textarea id="message" name="message" rows={4} maxLength={2000} />
+        <p id="message-hint" className={styles.hint}>For example: the property, what you want to change, and when.</p>
+        <textarea id="message" name="message" rows={4} maxLength={2000} aria-describedby="message-hint" />
       </div>
       {/* Honeypot: hidden from people, often filled by bots */}
       <div className={styles.trap} aria-hidden="true">
@@ -209,10 +220,12 @@ export default function ContactForm() {
         {SITE_KEY && <div ref={box} />}
       </div>
       <button type="submit" className="btn btn--light" aria-disabled={state === 'sending'}>{state === 'sending' ? 'Sending…' : 'Send enquiry'}</button>
+      <p className={styles.alt}>Prefer to message? <a href={site.whatsappHref}>WhatsApp us</a>.</p>
       <p className={styles.status} role="status">
-        {state === 'sending' && askHuman && <>Please tick the box above to confirm you are a person, and the enquiry will send.</>}
-        {state === 'captcha' && <>Sorry, the security check did not load or did not pass. Please try again, or message us on <a href={site.whatsappHref}>WhatsApp</a> or email <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
-        {state === 'failed' && <>Sorry, your enquiry could not be sent. Please message us on <a href={site.whatsappHref}>WhatsApp</a> or email <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
+        {state === 'idle' && invalid.length > 0 && <>{invalid.length === 1 ? '1 field needs' : `${invalid.length} fields need`} attention: {invalid.map((k) => FIELD_NAMES[k]).join(', ')}.</>}
+        {state === 'sending' && (askHuman ? <>One more step: tick the box above to confirm you are a person. Your enquiry will then send.</> : <>Sending your enquiry…</>)}
+        {state === 'captcha' && <>The security check did not complete. Your details are still in the form. Try sending again, or message us on <a href={site.whatsappHref}>WhatsApp</a> or by email at <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
+        {state === 'failed' && <>Your enquiry did not send. Your details are still in the form. Try again, or message us on <a href={site.whatsappHref}>WhatsApp</a> or by email at <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
       </p>
     </form>
   );

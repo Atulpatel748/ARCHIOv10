@@ -2,9 +2,9 @@ import type { Page } from '@playwright/test';
 import { test, expect } from './fixtures';
 
 // Copy from site/src/components/ContactForm.tsx and site/src/content/site.ts.
-const FAILED = 'Sorry, your enquiry could not be sent.';
-const CAPTCHA = 'Sorry, the security check did not load or did not pass.';
-const SENT = 'Thank you, your enquiry has been sent.';
+const FAILED = 'Your enquiry did not send.';
+const CAPTCHA = 'The security check did not complete.';
+const SENT = 'Thank you. Your enquiry has been sent.';
 
 const form = (page: Page) => page.locator('#main form');
 
@@ -39,12 +39,26 @@ test('empty submit shows every required error and focuses the first field', asyn
   await expect(name).toHaveAccessibleDescription('Please enter your name.');
   const contact = page.getByLabel('Email or phone');
   await expect(contact).toHaveAttribute('aria-invalid', 'true');
-  await expect(contact).toHaveAccessibleDescription('Please enter a valid email address or phone number.');
-  await expect(page.getByRole('radio', { name: 'Residential' })).toHaveAccessibleDescription('Please choose a type of project.');
+  await expect(contact).toHaveAccessibleDescription(/Enter an email address or phone number we can reply to./);
+  await expect(page.getByRole('radio', { name: 'Residential' })).toHaveAccessibleDescription('Choose the type of project closest to yours.');
   const consent = page.getByRole('checkbox', { name: /I agree to Archió/ });
   await expect(consent).toHaveAttribute('aria-invalid', 'true');
-  await expect(consent).toHaveAccessibleDescription('Please confirm so we can reply to you.');
+  await expect(consent).toHaveAccessibleDescription('Tick the box to confirm, so we can reply to you.');
+  // The status line (a live region) says how many fields need attention, so the later errors are not silent for a screen reader.
+  await expect(page.getByRole('status').filter({ hasText: '4 fields need attention: Name, Email or phone, Type of project, the consent box.' })).toHaveCount(1);
   expect(posted).toBe(false);
+});
+
+test('an error goes as soon as its field is put right, and the summary follows', async ({ page }) => {
+  await page.route('**/api/contact', (route) => route.abort());
+  await send(page);
+  await expect(page.getByText('Please enter your name.')).toBeVisible();
+  await page.getByLabel('Name').fill('Asha');
+  await expect(page.getByText('Please enter your name.')).toHaveCount(0);
+  await expect(page.getByRole('status').filter({ hasText: '3 fields need attention: Email or phone, Type of project, the consent box.' })).toHaveCount(1);
+  await page.getByRole('radio', { name: 'Residential' }).check();
+  await expect(page.getByText('Choose the type of project closest to yours.')).toHaveCount(0);
+  await expect(page.getByLabel('Email or phone')).toHaveAttribute('aria-invalid', 'true'); // still wrong: its message stays
 });
 
 test('missing consent alone blocks the send', async ({ page }) => {
@@ -53,7 +67,7 @@ test('missing consent alone blocks the send', async ({ page }) => {
   await consent.uncheck();
   await send(page);
   await expect(consent).toBeFocused();
-  await expect(consent).toHaveAccessibleDescription('Please confirm so we can reply to you.');
+  await expect(consent).toHaveAccessibleDescription('Tick the box to confirm, so we can reply to you.');
   await expect(page.getByLabel('Name')).toHaveAttribute('aria-invalid', 'false');
 });
 
@@ -62,7 +76,7 @@ test('an invalid email is refused before sending', async ({ page }) => {
   await page.getByLabel('Email or phone').fill('not an email');
   await send(page);
   await expect(page.getByLabel('Email or phone')).toBeFocused();
-  await expect(page.getByText('Please enter a valid email address or phone number.')).toBeVisible();
+  await expect(page.getByText('Enter an email address or phone number we can reply to.')).toBeVisible();
 });
 
 test('the honeypot is off-screen, hidden from assistive tech and never focused by Tab', async ({ page }) => {
@@ -164,7 +178,7 @@ test.describe('in flight', () => {
 });
 
 test.describe('contact field rules (site/src/content/contact.ts)', () => {
-  const CONTACT_ERROR = 'Please enter a valid email address or phone number.';
+  const CONTACT_ERROR = 'Enter an email address or phone number we can reply to.';
 
   test('a phone number is accepted and sent as typed', async ({ page }) => {
     await page.route('**/api/contact', (route) => route.fulfill({ status: 200, json: { ok: true } }));
@@ -195,7 +209,7 @@ test.describe('contact field rules (site/src/content/contact.ts)', () => {
         await expect(page.getByRole('status').filter({ hasText: SENT })).toBeVisible();
         expect(posted).toBe(true);
       } else {
-        await expect(field).toHaveAccessibleDescription(CONTACT_ERROR);
+        await expect(field).toHaveAccessibleDescription(new RegExp(CONTACT_ERROR.replace('.', '\.')));
         await expect(field).toBeFocused();
         expect(posted).toBe(false);
       }
