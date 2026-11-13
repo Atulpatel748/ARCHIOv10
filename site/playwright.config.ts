@@ -18,7 +18,11 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  // Firefox runs on GitHub only (CI=true): Playwright cannot start it on the owner's Windows PC.
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    ...(process.env.CI ? [{ name: 'firefox', use: { ...devices['Desktop Firefox'] } }] : []),
+  ],
   webServer: {
     command: `npm run build && npm run start -- -p ${PORT}`,
     url: baseURL,
