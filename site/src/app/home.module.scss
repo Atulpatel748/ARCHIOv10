@@ -3,7 +3,7 @@
 .heroMark { display: grid; justify-items: center; gap: clamp(14px, 1.6vw, 22px); animation: rise 1.4s ease-out 0.2s both; }
 /* The hero's own wordmark shows until the header has measured it (html[data-hero-brand]); then the header logo is drawn over
    it and scrolls up into the header, so this one hides. With reduced motion nothing docks, so it always shows. */
-.heroLogo { width: clamp(260px, 37vw, 660px); }
+.heroLogo { width: clamp(260px, 37vw, 660px); color: var(--oxblood); }
 @media (prefers-reduced-motion: no-preference) { :global(html[data-hero-brand]) .heroLogo { visibility: hidden; } }
 /* Small caps line between two rules */
 .heroTag {
