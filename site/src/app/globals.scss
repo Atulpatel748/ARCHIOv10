@@ -55,6 +55,7 @@ main > section.container { max-width: none; padding-inline: max(var(--margin), c
 
 /* A control reached by Tab inside something still waiting to fade in shows at once (WCAG 2.4.7) */
 [data-reveal]:focus-within, [data-split]:focus-within, [data-mask]:focus-within { opacity: 1 !important; transform: none !important; }
+@media print { [data-reveal], [data-split], [data-mask] { opacity: 1 !important; transform: none !important; } } /* text revealed by scrolling would print blank otherwise */
 
 .skip-link {
   position: absolute; left: 12px; top: -80px; z-index: 100; padding: 12px 16px;

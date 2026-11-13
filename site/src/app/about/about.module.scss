@@ -21,23 +21,27 @@
 .media img { width: 100%; height: auto; }
 .why {
   display: grid; gap: 22px;
+  h2 :global(.label) { display: block; margin-bottom: 22px; font-family: var(--font-ui); text-transform: uppercase; } /* the small eyebrow is part of the heading, so heading navigation finds it */
   ul { border-top: 1px solid var(--line); margin-top: 8px; }
   li { padding: 16px 0; border-bottom: 1px solid var(--line); }
 }
 
 /* Team: the heading on the left, the two founders' names and roles on the right (no photos: the studio asked for none) */
 .teamSection {
-  display: grid; gap: 48px clamp(32px, 6vw, 112px); align-items: end;
+  display: grid; gap: 48px clamp(32px, 6vw, 112px); align-items: end; padding-bottom: clamp(64px, 8vw, 120px);
   @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
 }
+.closing { display: grid; gap: 28px; justify-items: start; padding-top: clamp(48px, 6vw, 88px); }
+.closingLine { margin: 0; max-width: 34ch; font-family: var(--font-display); font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); line-height: 1.25; }
+.closingActions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
 .teamHead { display: grid; gap: 1.25rem; justify-items: start; align-self: start; }
 .teamTitle { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); line-height: 1; }
 .team {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px var(--gutter);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 40px var(--gutter); /* one column when two would make a role wrap */
   li { display: grid; gap: 18px; align-content: start; }
 }
 .who {
   display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--line);
   h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem); line-height: 1.2; }
-  p { font-size: 0.875rem; color: var(--accent-color); }
+  p { font-size: 0.9375rem; font-weight: 400; color: var(--accent-color); }
 }
