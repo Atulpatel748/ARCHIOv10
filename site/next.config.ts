@@ -52,6 +52,7 @@ const nextConfig: NextConfig = {
       { source: '/:path*', headers },
       { source: '/images/:path*', headers: [assetCache] },
       { source: '/brand/:path*', headers: [assetCache] },
+      { source: '/api/:path*', headers: [{ key: 'Cache-Control', value: 'no-store' }] },
     ];
   },
 };

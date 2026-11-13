@@ -62,6 +62,14 @@ async function readJson(request: Request): Promise<unknown> {
 }
 
 export async function POST(request: Request) {
+  // A browser adds Origin to a cross-site post: refuse any that is not this site. (The JSON content type already forces a preflight
+  // that is refused; this is a second lock. Requests without an Origin, such as the tests and curl, are judged by Turnstile alone.)
+  const origin = request.headers.get('origin');
+  if (origin) {
+    let same = false;
+    try { same = new URL(origin).host === new URL(request.url).host; } catch { same = false; }
+    if (!same) return fail('forbidden', 403);
+  }
   let parsed: unknown;
   try {
     parsed = await readJson(request);
@@ -113,7 +121,7 @@ export async function POST(request: Request) {
   const secret = process.env.TURNSTILE_SECRET_KEY;
   if (!secret && process.env.NODE_ENV === 'production') return fail('not_configured', 503);
   if (secret) {
-    const token = typeof body.turnstileToken === 'string' ? body.turnstileToken.slice(0, 2048) : '';
+    const token = typeof body.turnstileToken === 'string' ? body.turnstileToken.trim().slice(0, 2048) : '';
     if (!token) return fail('captcha', 400);
     let passed: boolean;
     try {

@@ -150,7 +150,8 @@ export default function Reveals() {
         const lenis = (window as unknown as { lenis?: LenisLike }).lenis;
         const goal = lenis?.isScrolling === 'smooth' ? lenis.targetScroll : undefined;
         ScrollTrigger.refresh();
-        const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        const hashId = (() => { try { return decodeURIComponent(location.hash.slice(1)); } catch { return ''; } })(); // a broken % sequence in the address is ignored
+        const target = hashId && document.getElementById(hashId);
         if (lenis && goal !== undefined) lenis.scrollTo(goal);
         else if (target) lenis?.scrollTo(target, { immediate: true, offset: -parseFloat(getComputedStyle(target).scrollMarginTop) || 0 });
       }, 300);

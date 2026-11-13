@@ -46,7 +46,7 @@ export default async function ProjectPage({ params }: Params) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs).replace(/</g, '\\u003c') }} />
       {/* Hero: the main photo full screen with the name on it; a calm entrance, nothing moves on scroll. */}
       <ProjectHero photo={project.hero}>
         <p className="label">{project.category}</p>

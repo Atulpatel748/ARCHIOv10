@@ -242,6 +242,19 @@ test('an email with : [ or ] is refused (an address group or a raw IP address)',
   }
 });
 
+test('contact rule: plain ASCII emails only (no look-alike letters, no odd characters)', () => {
+  for (const bad of ['a|b@c.test', 'a%40b@c.test', 'a!b@c.test', "a'b@c.test", 'victim@ｃ.test', 'victim@с.test', 'a@b..test', 'a@-b.test']) assert.equal(isValidContact(bad), false, bad);
+  for (const good of ['victim+x@c.test', 'first.last@sub.example.co.uk', 'a_b-c@d-e.ae']) assert.equal(isValidContact(good), true, good);
+});
+
+test('a post from another origin is refused; the same origin and no origin are not', async () => {
+  const send = (origin?: string) => POST(new Request('http://localhost/api/contact', { method: 'POST', headers: { 'content-type': 'application/json', 'x-real-ip': `10.8.0.${++n}`, ...(origin ? { origin } : {}) }, body: JSON.stringify({}) }));
+  assert.equal((await send('https://evil.test')).status, 403);
+  assert.equal((await send('not a url')).status, 403);
+  assert.notEqual((await send('http://localhost')).status, 403);
+  assert.notEqual((await send()).status, 403);
+});
+
 test('contact rule: refuses ( ) \\ : [ ] in an email, still accepts a normal email and a phone', () => {
   for (const bad of ['a(b)@c.d', 'a\\b@c.d', 'x:victim@evil.com', 'a:b:c@d.e', 'a@[127.0.0.1]', 'x@y.c']) assert.equal(isValidContact(bad), false, bad);
   assert.equal(isValidContact('asha@example.com'), true);
