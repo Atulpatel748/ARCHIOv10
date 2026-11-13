@@ -19,7 +19,7 @@ export default function Tunnel({ projects }: { projects: Project[] }) {
   const cards = useRef<HTMLDivElement[]>([]);
   const [current, setCurrent] = useState(0);
   const shots = projects.flatMap((p, owner) => pick(p).map((img) => ({ img, owner })));
-  useTunnel(root, cards, shots.length, 0, (i) => setCurrent(shots[i].owner));
+  useTunnel(root, cards, shots.length, (i) => setCurrent(shots[i].owner));
 
   const now = projects[current];
   return (

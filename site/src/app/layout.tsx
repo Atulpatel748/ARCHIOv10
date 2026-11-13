@@ -30,14 +30,15 @@ export const viewport: Viewport = { themeColor: '#4C1114' };
 const organization = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': `${site.url}/#organization`,
   name: 'Archió Interior Design Studio',
   alternateName: ['ARCHIÓ', 'Archio'], // 'Archio' (no accent) is search data only, so people who type it without the accent still find the studio
   url: site.url,
   logo: `${site.url}/brand/logo-lockup.svg`,
   email: site.email,
-  telephone: site.phone,
+  telephone: site.phoneHref.replace('tel:', ''), // no spaces, as search engines expect
   sameAs: [site.instagramHref],
-  areaServed: 'Dubai, United Arab Emirates',
+  areaServed: { '@type': 'City', name: 'Dubai' },
   parentOrganization: { '@type': 'Organization', name: 'Beracah Trading' },
   founder: [
     { '@type': 'Person', name: 'Pooja Vijayakumar', jobTitle: 'Co-Founder, Design' },

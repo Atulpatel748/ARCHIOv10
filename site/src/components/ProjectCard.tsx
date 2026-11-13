@@ -3,20 +3,16 @@ import Link from 'next/link';
 import { visualisation, type Project } from '@/content/projects';
 import styles from './ProjectCard.module.scss';
 
-type Props = { project: Project; size?: 'large' | 'regular'; priority?: boolean };
-
-export default function ProjectCard({ project, size = 'regular', priority = false }: Props) {
+export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className={`${styles.card} ${size === 'large' ? styles.large : ''}`} data-reveal>
+    <article className={styles.card} data-reveal>
       <Link prefetch={false} href={`/projects/${project.slug}`} className={styles.link} data-cursor="View">
         <div className={styles.media} data-mask>
           <Image
             src={project.cover.src}
             alt={project.cover.alt}
             fill
-            priority={priority}
-            fetchPriority={priority ? 'high' : undefined}
-            sizes={size === 'large' ? '(max-width: 767px) 100vw, 92vw' : '(max-width: 767px) 100vw, 46vw'}
+            sizes="(max-width: 767px) 100vw, 46vw"
             className={styles.image}
           />
         </div>

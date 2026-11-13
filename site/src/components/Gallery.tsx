@@ -6,9 +6,20 @@ import { gsap } from 'gsap';
 import { visualisation, type ProjectImage } from '@/content/projects';
 import styles from './Gallery.module.scss';
 
-type Lenis = { stop(): void; start(): void };
+type Lenis = { stop(): void; start(): void; scrollTo(target: HTMLElement, o?: { offset?: number }): void };
 const lenis = () => (window as unknown as { lenis?: Lenis }).lenis;
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Room links scroll here, not by the browser: a native jump made while the smooth scroll was starting up was pulled back by it.
+function goToRoom(e: React.MouseEvent, i: number) {
+  const target = document.getElementById(`room-${i}`);
+  if (!target) return;
+  e.preventDefault();
+  history.replaceState(null, '', `#room-${i}`);
+  const l = lenis();
+  if (l) l.scrollTo(target, { offset: -parseFloat(getComputedStyle(target).scrollMarginTop) || 0 });
+  else target.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth' });
+}
 
 // The thumbnail's rectangle expressed as an inset() of the full image, so the image can open out of
 // (and close back into) the exact spot that was clicked. No overlap: a centred 35% inset.
@@ -39,6 +50,8 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
   const veil = useRef<HTMLDivElement>(null);
   const thumbs = useRef<HTMLButtonElement[]>([]);
   const figs = useRef<HTMLElement[]>([]);
+  const live = useRef<HTMLParagraphElement>(null);
+  const announce = (i: number) => { if (live.current) live.current.textContent = `Image ${i + 1} of ${images.length}: ${images[i].alt}`; };
   const state = useRef({ index: 0, busy: false, tl: null as gsap.core.Timeline | null });
   const [room, setRoom] = useState(0);
   const roomsEl = useRef<HTMLDivElement>(null);
@@ -63,6 +76,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
     const s = state.current;
     if (s.busy) return;
     s.index = i;
+    announce(i);
     gsap.set(figs.current, { clearProps: 'all' });
     show(i);
     fit(i);
@@ -108,6 +122,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
     const from = s.index;
     const to = (from + dir + images.length) % images.length;
     s.index = to;
+    announce(to);
     fit(to);
     figs.current[to].hidden = false;
     if (reduced()) { figs.current[from].hidden = true; return; }
@@ -185,7 +200,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
                 type="button" className={styles.tileBtn} data-cursor="Open" onClick={() => open(index)}
                 aria-label={`Open image ${index + 1} of ${images.length}: ${img.alt}`}
               >
-                <Image src={img.src} alt="" fill quality={65} sizes="(min-width: 64em) 30vw, 50vw" />
+                <Image src={img.src} alt={img.alt} fill quality={65} sizes="(min-width: 64em) 30vw, 50vw" />
               </button>
             </li>
           ))}
@@ -195,7 +210,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
         <nav className={styles.index} aria-label="Rooms">
           <ol>
             {groupByRoom(images).map((g, gi) => (
-              <li key={`${g.room}-${gi}`}><a href={`#room-${gi}`} aria-current={room === gi ? 'true' : undefined}><span>{String(gi + 1).padStart(2, '0')}</span>{g.room}</a></li>
+              <li key={`${g.room}-${gi}`}><a href={`#room-${gi}`} onClick={(e) => goToRoom(e, gi)} aria-current={room === gi ? 'true' : undefined}><span>{String(gi + 1).padStart(2, '0')}</span>{g.room}</a></li>
             ))}
           </ol>
         </nav>
@@ -211,7 +226,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
                   style={{ '--ar': img.width / img.height } as CSSProperties} data-cursor="Open" onClick={() => open(index)}
                   aria-label={`Open image ${index + 1} of ${images.length}: ${img.alt}`}
                 >
-                  <Image src={img.src} alt="" fill quality={65} sizes="(max-width: 767px) 90vw, 50vw" />
+                  <Image src={img.src} alt={img.alt} fill quality={65} sizes="(max-width: 767px) 90vw, (max-width: 1023px) 52vw, 40vw" />
                 </button>
               ))}
             </section>
@@ -222,6 +237,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
 
       <dialog ref={dialog} className={styles.viewer} aria-label={`${title}, full screen`} onClick={(e) => { if (e.target === dialog.current || e.target === veil.current) close(); }}>
         <div ref={veil} className={styles.veil} aria-hidden="true" />
+        <p ref={live} className="visually-hidden" aria-live="polite" />
         {images.map((img, i) => (
           <figure key={img.src} ref={(f) => { if (f) figs.current[i] = f; }} className={styles.fig} hidden>
             <div className={styles.frame} data-frame>

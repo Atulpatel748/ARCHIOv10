@@ -67,6 +67,7 @@ export default function Header() {
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     let dy = 0;
     let distance = 1;
+    let dead = false;
     const measure = () => {
       let y0 = mark.offsetHeight / 2;
       // Stop at the hero itself: it is sticky, so its own offsetTop grows as you scroll. It sits at the top of the page.
@@ -103,11 +104,12 @@ export default function Header() {
     document.documentElement.setAttribute('data-hero-brand', '');
     const ro = new ResizeObserver(onResize);
     ro.observe(hero);
-    document.fonts?.ready.then(onResize);
+    document.fonts?.ready.then(() => { if (!dead) onResize(); }); // fonts can settle after you have left the page
     addEventListener('scroll', update, { passive: true });
     addEventListener('resize', onResize);
     reduced.addEventListener('change', onResize);
     return () => {
+      dead = true;
       ro.disconnect();
       removeEventListener('scroll', update);
       removeEventListener('resize', onResize);
@@ -147,8 +149,9 @@ export default function Header() {
   useEffect(() => {
     const main = document.getElementById('main');
     const footer = document.querySelector('footer');
+    const skip = document.querySelector<HTMLElement>('.skip-link');
     // Only touch inert when the menu opens or has just closed: on mount, resetting it would undo the preloader's inert.
-    if (open || menuWasOpen.current) [main, footer].forEach((el) => { if (el) el.inert = open; });
+    if (open || menuWasOpen.current) [main, footer, skip].forEach((el) => { if (el) el.inert = open; });
     menuWasOpen.current = open;
     document.documentElement.style.overflow = open ? 'hidden' : '';
     const lenis = (window as unknown as { lenis?: { stop(): void; start(): void } }).lenis;
@@ -156,7 +159,11 @@ export default function Header() {
     if (open) menuRef.current?.querySelector('a')?.focus();
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && open) { setOpen(false); toggleRef.current?.focus(); } };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    // The menu button exists only under 1024px: a menu left open when the window widens (a tablet turned) would have no way out
+    const wide = matchMedia('(min-width: 1024px)');
+    const onWide = () => { if (wide.matches) setOpen(false); };
+    if (open) wide.addEventListener('change', onWide);
+    return () => { document.removeEventListener('keydown', onKey); wide.removeEventListener('change', onWide); };
   }, [open]);
 
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`));
@@ -194,7 +201,7 @@ export default function Header() {
         </div>
       </header>
 
-      <div ref={menuRef} id="site-menu" className={`${styles.menu} ${open ? styles.menuOpen : ''}`} role="dialog" aria-modal="true" aria-label="Menu" aria-hidden={!open} inert={!open}>
+      <div ref={menuRef} id="site-menu" className={`${styles.menu} ${open ? styles.menuOpen : ''}`} role="dialog" aria-label="Menu" aria-hidden={!open} inert={!open}>
         <nav aria-label="Menu links" className={styles.menuNav}>
           {links.map((item) => (
             <Link prefetch={false} key={item.href} href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</Link>

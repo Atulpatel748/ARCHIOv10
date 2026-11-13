@@ -39,6 +39,7 @@ const nextConfig: NextConfig = {
       { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
       { key: 'X-Frame-Options', value: 'DENY' },
       { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+      { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
       { key: 'Content-Security-Policy', value: csp },
     ];
     // HSTS must not be enabled for local HTTP development; production is expected to use HTTPS.

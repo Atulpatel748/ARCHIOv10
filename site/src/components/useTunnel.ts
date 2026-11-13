@@ -9,17 +9,16 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const SPAN = 0.55; // how much of the scroll each photo travels for; the photos start one after another
 
 // The photos fly towards you through a corridor (after "perspective tunnel hero" on 21st.dev) while `root` is pinned. Each photo
-// sits on a golden-angle spiral around the middle and travels from far to near. `startAt` begins the journey part-way, so the
-// first photos are already on their way when the page opens. `onBest` gets the index of the photo that is halfway along.
-export function useTunnel(root: RefObject<HTMLElement | null>, cards: MutableRefObject<HTMLDivElement[]>, n: number, startAt = 0, onBest?: (i: number) => void) {
+// sits on a golden-angle spiral around the middle and travels from far to near.
+// `onBest` gets the index of the photo that is halfway along.
+export function useTunnel(root: RefObject<HTMLElement | null>, cards: MutableRefObject<HTMLDivElement[]>, n: number, onBest?: (i: number) => void) {
   // Held in a ref so a new callback on each render does not rebuild the ScrollTrigger; render() always calls the latest one.
   const onBestRef = useRef(onBest);
   useEffect(() => { onBestRef.current = onBest; }, [onBest]);
   useEffect(() => {
     const mid = (i: number) => (i / n) * (1 - SPAN) + SPAN / 2; // progress at which photo i is halfway along its travel
     let w = innerWidth, h = innerHeight, phone = innerWidth < 768, shown = -1;
-    const render = (progress: number) => {
-      const p = startAt + (1 - startAt) * progress;
+    const render = (p: number) => {
       let best = 0;
       cards.current.forEach((el, i) => {
         const lp = clamp((p - (i / n) * (1 - SPAN)) / SPAN);
@@ -39,5 +38,5 @@ export function useTunnel(root: RefObject<HTMLElement | null>, cards: MutableRef
     const onResize = () => { w = innerWidth; h = innerHeight; phone = w < 768; render(st.progress); };
     addEventListener('resize', onResize);
     return () => { removeEventListener('resize', onResize); st.kill(); };
-  }, [root, cards, n, startAt]);
+  }, [root, cards, n]);
 }

@@ -53,7 +53,7 @@ const FRAGMENT = `
 
 // The hero photos come as ready-sized files (-640, -1080, -1920, -2560 .webp in /images/hero), served as they are: nothing is
 // processed on the first request, so the picture is there as soon as it has downloaded.
-const heroLoader = ({ src, width }: { src: string; width: number }) => src.replace(/\.webp$/, `-${width <= 640 ? 640 : width <= 1080 ? 1080 : width <= 1920 ? 1920 : 2560}.webp`);
+const heroLoader = ({ src, width }: { src: string; width: number }) => src.replace(/\.webp$/, `-${width <= 640 ? 640 : width <= 1200 ? 1080 : width <= 1920 ? 1920 : 2560}.webp`);
 
 type GL = { show(index: number): void; go(from: number, to: number): Promise<void>; dispose(): void };
 
@@ -176,7 +176,9 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
     if (matchMedia(REDUCED).matches || matchMedia('(max-width: 767px)').matches || saveData) return;
     let cancelled = false;
     const onLost = () => { gl.current?.dispose(); gl.current = null; setGlReady(false); };
-    const start = () => createGL(stage.current!, slides.map((s) => (s.poster ? heroLoader({ src: s.poster, width: 1920 }) : s.src)), onLost).then((g) => {
+    // The canvas reuses the file each slide's <img> already downloaded (currentSrc), so no photo is fetched twice at two sizes.
+    const shown = () => [...stage.current!.querySelectorAll<HTMLImageElement>('img:not([aria-hidden])')].map((img) => img.currentSrc);
+    const start = () => createGL(stage.current!, slides.map((s, i) => shown()[i] || (s.poster ? heroLoader({ src: s.poster, width: 1920 }) : s.src)), onLost).then((g) => {
       if (cancelled) { g?.dispose(); return; }
       gl.current = g;
       // The slide may have moved on while three.js and the photos loaded: start the canvas on the slide being shown.
@@ -210,8 +212,8 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       className={styles.hero}
       aria-roledescription="carousel"
       aria-label="Featured projects"
-      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)} onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}
+      onPointerEnter={(e) => { if (e.pointerType === 'mouse') setHovered(true); }} onPointerLeave={() => setHovered(false)}
+      onFocus={(e) => { if (e.target.matches(':focus-visible')) setFocused(true); }} onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}
       data-recede
     >
       <div className={styles.inner} data-recede-inner>

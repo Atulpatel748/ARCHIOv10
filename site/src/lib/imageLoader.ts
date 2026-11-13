@@ -9,6 +9,8 @@ export const SIZES = [256, 384, 640, 828, 1080, 1920];
 
 export default function imageLoader({ src, width }: { src: string; width: number; quality?: number }): string {
   if (!src.startsWith('/images/') || !src.endsWith('.webp')) return src; // anything else is served as it is
-  const size = SIZES.find((s) => s >= width) ?? SIZES[SIZES.length - 1];
+  // A 3x phone asks for 1200: the 1080 copy is half the weight of the 1920 one, and the originals are only 800 px wide anyway
+  const want = width > 1080 && width <= 1200 ? 1080 : width;
+  const size = SIZES.find((s) => s >= want) ?? SIZES[SIZES.length - 1];
   return src.replace(/\.webp$/, `-${size}.webp`);
 }

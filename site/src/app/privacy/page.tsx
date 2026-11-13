@@ -19,7 +19,7 @@ export default function PrivacyPage() {
   return (
     <>
       <PageHead label="Website information" title="Privacy notice" intro="This notice explains how Archió Interior Design Studio (“Archió”, “we” or “us”) handles information you submit through this website.">
-        <p className={styles.updated}>Last updated: 27 October 2026</p>
+        <p className={styles.updated}>Last updated: 12 November 2026</p>
       </PageHead>
       <section className={`section container ${styles.page}`}>
       <div className={styles.body}>
@@ -39,6 +39,10 @@ export default function PrivacyPage() {
         <section>
           <h2>Service providers and email delivery</h2>
           <p>When the enquiry email service is enabled, form submissions are sent by email, through the mail provider the operator has set up for this website, to the business inbox configured for it. The website is also hosted by a deployment provider chosen by the operator. Those providers may process information to deliver, secure and maintain their services; please consult their current privacy terms for details.</p>
+        </section>
+        <section>
+          <h2>Spam protection</h2>
+          <p>The enquiry form uses Cloudflare Turnstile to tell people from automated programs. When you use the form, Cloudflare receives your IP address and technical information about your browser and device, and tells us only whether the check passed. Cloudflare handles this information under its own privacy policy.</p>
         </section>
         <section>
           <h2>Retention and security</h2>

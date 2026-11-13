@@ -170,12 +170,12 @@ export function createRoom3D(host: HTMLElement, getProgress: () => number): (() 
     renderer.toneMappingExposure = 1.05 - 0.12 * on;
     renderer.render(scene, camera);
   };
-  frame();
-
-  return () => {
+  const stop = () => {
     dead = true; cancelAnimationFrame(raf); ro.disconnect(); io.disconnect();
     scene.traverse((o) => { if (o instanceof THREE.Mesh) { o.geometry.dispose(); (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => m.dispose()); } });
     // forceContextLoss: the room is rebuilt each time the window crosses the 1024px breakpoint, and browsers allow only about 16 contexts
     renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
   };
+  try { frame(); } catch (error) { stop(); throw error; } // a first frame that fails must not leave the loop or the context behind
+  return stop;
 }

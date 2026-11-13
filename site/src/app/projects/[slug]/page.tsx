@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!project) return {};
   // The images are design renders, so search and share previews say so (CONSTRAINTS.md, Floor).
   const title = `${project.title}, ${visualisation.toLowerCase()}`;
-  const description = `${visualisation}: ${project.summary} ${project.location}, ${project.area}.`;
+  const description = `${visualisation}, ${project.location}, ${project.area}: ${project.summary}`; // facts first: search results cut the text at about 160 characters
   return {
     title,
     description,
@@ -37,8 +37,17 @@ export default async function ProjectPage({ params }: Params) {
   if (!project) notFound();
   const next = projects[(projects.indexOf(project) + 1) % projects.length];
 
+  const breadcrumbs = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [['Home', ''], ['Projects', '/projects'], [project.title, `/projects/${project.slug}`]].map(([name, path], i) => (
+      { '@type': 'ListItem', position: i + 1, name, item: site.url + path }
+    )),
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }} />
       {/* Hero: the main photo full screen with the name on it; a calm entrance, nothing moves on scroll. */}
       <ProjectHero photo={project.hero}>
         <p className="label">{project.category}</p>

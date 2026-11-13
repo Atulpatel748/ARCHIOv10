@@ -36,7 +36,7 @@ ul, ol { padding: 0; list-style: none; }
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-h1, h2, h3 { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; line-height: 1.08; }
+h1, h2, h3 { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; line-height: 1.08; overflow-wrap: anywhere; } /* a big word wraps rather than widen a 320px page when a reader sets wider text spacing (WCAG 1.4.12) */
 :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
 /* Every section after the hero is a layer that slides up over it (the hero is sticky). */
@@ -50,6 +50,9 @@ h1, h2, h3 { font-family: var(--font-display), 'Optima', sans-serif; font-weight
 main > section.container { max-width: none; padding-inline: max(var(--margin), calc((100% - 1440px) / 2 + var(--margin))); }
 .section { padding-block: var(--section); } /* block only, so .container keeps its side margins */
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* A control reached by Tab inside something still waiting to fade in shows at once (WCAG 2.4.7) */
+[data-reveal]:focus-within, [data-split]:focus-within, [data-mask]:focus-within { opacity: 1 !important; transform: none !important; }
 
 .skip-link {
   position: absolute; left: 12px; top: -80px; z-index: 100; padding: 12px 16px;
@@ -71,8 +74,8 @@ html.lenis, html.lenis body { height: auto; }
 /* Big uppercase display headings in the brand's Optima-style face, which matches the logo caps */
 .caps { text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.95; }
 
-.display { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(3rem, 1rem + 6vw, 7.5rem); line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; }
-.h2 { font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; text-wrap: balance; }
+.display { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(3rem, 1rem + 6vw, 7.5rem); line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; overflow-wrap: anywhere; }
+.h2 { font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; text-wrap: balance; overflow-wrap: anywhere; }
 .h3 { font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.875rem); line-height: 1.2; }
 .lead { font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem); line-height: 1.55; }
 .serif { font-family: var(--font-body), Georgia, serif; font-weight: 400; }
@@ -118,9 +121,7 @@ html.lenis, html.lenis body { height: auto; }
 
 /* Logos: exact outlines from the brand kit, tinted with currentColor */
 .logo { display: block; background: currentColor; -webkit-mask: var(--logo) no-repeat center / contain; mask: var(--logo) no-repeat center / contain; }
-.logo--lockup { --logo: url('/brand/logo-lockup.svg'); aspect-ratio: 452 / 209; }
 .logo--wordmark { --logo: url('/brand/logo-wordmark.svg'); aspect-ratio: 248 / 61; }
-.logo--monogram { --logo: url('/brand/logo-monogram.svg'); aspect-ratio: 376 / 359; }
 
 
 /* No preloader on any page but the landing page, nor after the first time in a tab (set by the script in the layout's head) */

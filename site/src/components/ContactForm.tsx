@@ -54,6 +54,7 @@ function validate(data: FormData): Errors {
 export default function ContactForm() {
   const [errors, setErrors] = useState<Errors>({});
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'failed' | 'captcha'>('idle');
+  const [askHuman, setAskHuman] = useState(false); // Turnstile wants a click before it will pass the form
   const box = useRef<HTMLDivElement>(null);
   const captcha = useRef<{ ready?: Promise<string>; id?: string; pending?: { resolve: (token: string) => void; reject: (error: Error) => void } }>({});
 
@@ -74,6 +75,8 @@ export default function ContactForm() {
           return true; // handled here, so Turnstile does not log it too
         },
         'timeout-callback': () => c.pending?.reject(new Error('turnstile timed out')),
+        'before-interactive-callback': () => setAskHuman(true),
+        'after-interactive-callback': () => setAskHuman(false),
       });
       return c.id;
     });
@@ -112,7 +115,11 @@ export default function ContactForm() {
     const firstInvalid = Object.keys(found)[0];
     if (firstInvalid) {
       const field = form.elements.namedItem(firstInvalid);
-      ((field instanceof RadioNodeList ? field[0] : field) as HTMLElement | null)?.focus();
+      const el = (field instanceof RadioNodeList ? field[0] : field) as HTMLElement | null;
+      el?.focus({ preventScroll: true });
+      // Scrolled by the page's smooth scroll when it runs, so the two do not fight and leave the field off screen
+      const lenis = (window as unknown as { lenis?: { scrollTo(t: HTMLElement, o: object): void } }).lenis;
+      if (el && lenis) lenis.scrollTo(el, { offset: -160 }); else el?.scrollIntoView({ block: 'center' });
       return;
     }
     setState('sending');
@@ -165,7 +172,7 @@ export default function ContactForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="contact">Email or phone</label>
-        <input id="contact" name="contact" autoComplete="on" spellCheck={false} autoCapitalize="none" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
+        <input id="contact" name="contact" autoComplete="email" spellCheck={false} autoCapitalize="none" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-error' : undefined} />
         {errors.contact && <p id="contact-error" className={styles.error}>{errors.contact}</p>}
       </div>
       {/* The error is tied to each radio, not the fieldset: aria-describedby on a fieldset is not read out reliably. */}
@@ -203,6 +210,7 @@ export default function ContactForm() {
       </div>
       <button type="submit" className="btn btn--light" aria-disabled={state === 'sending'}>{state === 'sending' ? 'Sending…' : 'Send enquiry'}</button>
       <p className={styles.status} role="status">
+        {state === 'sending' && askHuman && <>Please tick the box above to confirm you are a person, and the enquiry will send.</>}
         {state === 'captcha' && <>Sorry, the security check did not load or did not pass. Please try again, or message us on <a href={site.whatsappHref}>WhatsApp</a> or email <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
         {state === 'failed' && <>Sorry, your enquiry could not be sent. Please message us on <a href={site.whatsappHref}>WhatsApp</a> or email <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
       </p>

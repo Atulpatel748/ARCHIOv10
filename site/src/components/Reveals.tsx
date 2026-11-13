@@ -14,14 +14,14 @@ let loading: Promise<Libs> | undefined;
 const load = () => (loading ??= Promise.all([import('gsap'), import('gsap/ScrollTrigger'), import('lenis')]).then(([g, s, l]) => {
   g.gsap.registerPlugin(s.ScrollTrigger);
   return { gsap: g.gsap, ScrollTrigger: s.ScrollTrigger, Lenis: l.default };
-}));
+}).catch((error: unknown) => { loading = undefined; throw error; })); // a failed download (flaky network, a deploy mid-visit) is tried again on the next page
 const whenIdle = (fn: () => void) => {
   if ('requestIdleCallback' in window) { const id = requestIdleCallback(fn, { timeout: 1500 }); return () => cancelIdleCallback(id); }
   const id = setTimeout(fn, 300);
   return () => clearTimeout(id);
 };
 
-type LenisLike = { scrollTo(y: number, o?: { immediate?: boolean }): void };
+type LenisLike = { scrollTo(target: number | HTMLElement, o?: { immediate?: boolean; offset?: number }): void; isScrolling: false | string; targetScroll: number };
 
 export default function Reveals() {
   const pathname = usePathname();
@@ -40,7 +40,7 @@ export default function Reveals() {
       gsap.ticker.add(tick);
       gsap.ticker.lagSmoothing(0);
       off = () => { gsap.ticker.remove(tick); lenis.destroy(); delete (window as unknown as { lenis?: unknown }).lenis; };
-    }));
+    }).catch(() => undefined)); // without the libraries the page scrolls natively and nothing is hidden
     return () => { dead = true; cancelIdle(); off?.(); };
   }, []);
 
@@ -92,8 +92,17 @@ export default function Reveals() {
         return () => heroes.forEach((el) => el.removeAttribute('inert'));
       });
       revert = () => mm.revert();
-      refresh = setTimeout(() => ScrollTrigger.refresh(), 300);
-    }));
+      refresh = setTimeout(() => {
+        // The refresh measures from the top and puts back the scroll it found, which cuts short a jump still under way: a #room
+        // deep link (the browser's own smooth scroll) or an early click on a room link (Lenis). Finish whichever it was.
+        const lenis = (window as unknown as { lenis?: LenisLike }).lenis;
+        const goal = lenis?.isScrolling === 'smooth' ? lenis.targetScroll : undefined;
+        ScrollTrigger.refresh();
+        const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (lenis && goal !== undefined) lenis.scrollTo(goal);
+        else if (target) lenis?.scrollTo(target, { immediate: true, offset: -parseFloat(getComputedStyle(target).scrollMarginTop) || 0 });
+      }, 300);
+    }).catch(() => undefined));
     return () => { dead = true; cancelIdle(); clearTimeout(refresh); revert?.(); };
   }, [pathname]);
 

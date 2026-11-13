@@ -12,7 +12,8 @@ test('picks the smallest ready-made size that is at least as wide as asked', () 
   assert.equal(imageLoader({ src, width: 384 }), '/images/projects/jlt-office/boardroom-384.webp');
   assert.equal(imageLoader({ src, width: 385 }), '/images/projects/jlt-office/boardroom-640.webp');
   assert.equal(imageLoader({ src, width: 750 }), '/images/projects/jlt-office/boardroom-828.webp');
-  assert.equal(imageLoader({ src, width: 1200 }), '/images/projects/jlt-office/boardroom-1920.webp');
+  assert.equal(imageLoader({ src, width: 1200 }), '/images/projects/jlt-office/boardroom-1080.webp'); // a 3x phone: not the 1920 copy
+  assert.equal(imageLoader({ src, width: 1201 }), '/images/projects/jlt-office/boardroom-1920.webp');
   assert.equal(imageLoader({ src, width: 3840 }), '/images/projects/jlt-office/boardroom-1920.webp'); // never larger than the biggest copy
 });
 

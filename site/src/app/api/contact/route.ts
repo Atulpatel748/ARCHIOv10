@@ -17,7 +17,8 @@ const CONFIRM_WINDOW_MS = 24 * 60 * 60 * 1000;
 const MAX_BODY_BYTES = 16 * 1024;
 
 const clean = (v: unknown, max: number) => (typeof v === 'string' ? v : '').replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max);
-const fail = (code: string, status: number, extra: object = {}) => Response.json({ error: code, ...extra }, { status });
+const noStore = { 'Cache-Control': 'no-store' }; // answers about one visitor's enquiry are never cached
+const fail = (code: string, status: number, extra: object = {}) => Response.json({ error: code, ...extra }, { status, headers: noStore });
 const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
 // A request problem that knows its own answer: the JSON error code and the HTTP status.
@@ -74,7 +75,7 @@ export async function POST(request: Request) {
   const body = parsed as Record<string, unknown>;
 
   // Honeypot: silently discard likely bot submissions.
-  if (clean(body.company, 200)) return Response.json({ ok: true });
+  if (clean(body.company, 200)) return Response.json({ ok: true }, { headers: noStore });
 
   // Hosting proxies should overwrite these headers; configure a shared rate-limit store for production.
   const ip = request.headers.get('x-real-ip')?.trim() || request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
@@ -144,14 +145,15 @@ export async function POST(request: Request) {
     return fail('send_failed', 502);
   }
   // Read per request so the switch works without a rebuild; awaited because a serverless function stops after it answers.
-  const address = contact.toLowerCase();
-  if (process.env.CONTACT_AUTOREPLY === 'on' && contact.includes('@') && now - (confirmed.get(address) ?? -Infinity) >= CONFIRM_WINDOW_MS) {
+  // name+tag@ reaches the same mailbox as name@, so the tag is dropped; the visitor's IP is limited too, so one person cannot have many sent
+  const keys = [contact.toLowerCase().replace(/\+[^@]*@/, '@'), ...(safeIp === 'unknown' ? [] : [`ip:${safeIp}`])];
+  if (process.env.CONTACT_AUTOREPLY === 'on' && contact.includes('@') && keys.every((key) => now - (confirmed.get(key) ?? -Infinity) >= CONFIRM_WINDOW_MS)) {
     for (const [key, at] of confirmed) if (now - at >= CONFIRM_WINDOW_MS) confirmed.delete(key);
     if (confirmed.size >= 5000) {
       const oldest = confirmed.keys().next().value;
       if (oldest) confirmed.delete(oldest);
     }
-    confirmed.set(address, now);
+    keys.forEach((key) => confirmed.set(key, now));
     try {
       await mailer.send(settings, {
         to: contact,
@@ -166,5 +168,5 @@ export async function POST(request: Request) {
       console.error('contact form: confirmation failed:', (error as { code?: string }).code ?? (error as Error).name);
     }
   }
-  return Response.json({ ok: true });
+  return Response.json({ ok: true }, { headers: noStore });
 }
