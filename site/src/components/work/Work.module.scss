@@ -16,11 +16,12 @@
 /* ---------- Room by room ---------- */
 .om { padding-block: clamp(6rem, 5rem + 5vw, 10rem); }
 .omHead { display: grid; gap: 1.25rem; margin-bottom: clamp(2rem, 1.5rem + 1.5vw, 3rem); }
-.omTitle { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; max-width: 18ch; }
+.omTitle { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; max-width: 24ch; text-wrap: balance; }
 .omFilters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: clamp(2rem, 1.5rem + 1.5vw, 3rem); }
+@include phone { .omFilters { display: grid; grid-template-columns: 1fr 1fr; } .omFilter { padding: 0 12px; } } /* a tidy 2 by 2 instead of ragged rows */
 .omFilter {
-  min-height: 44px; padding: 0 22px; border: 1px solid var(--line); border-radius: 999px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  min-height: 44px; padding: 0 22px; border: 1px solid rgb(76 17 20 / 0.32); border-radius: 999px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
   transition: background-color 250ms var(--ease), color 250ms var(--ease), border-color 250ms var(--ease);
   @include hover { &:hover { border-color: var(--oxblood); } }
-  &[aria-pressed='true'] { background: var(--oxblood); border-color: var(--oxblood); color: var(--paper); }
+  &[aria-pressed='true'] { background: var(--oxblood); border-color: var(--oxblood); color: var(--paper); @media (forced-colors: active) { border-width: 3px; text-decoration: underline; } }
 }

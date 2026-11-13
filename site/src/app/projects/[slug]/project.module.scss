@@ -3,7 +3,7 @@
 
 /* Facts beside the story: a heavy rule on top, hairlines between rows; the summary large, the rest smaller */
 .info {
-  display: grid; gap: 3rem; align-items: start;
+  padding-bottom: clamp(2rem, 1.5rem + 2vw, 3.5rem); display: grid; gap: 3rem; align-items: start;
   @media (min-width: 64em) { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 6rem; }
 }
 .facts {
@@ -12,7 +12,7 @@
   dt { font-size: 0.875rem; color: var(--accent-color); }
   dd { margin: 0; font-family: var(--font-display); font-size: 1.35rem; line-height: 1.2; }
 }
-.story { display: grid; gap: 1.25rem; justify-items: start; p { margin: 0; max-width: 52ch; font-size: 1.0625rem; line-height: 1.6; } }
+.story { display: grid; gap: 1.25rem; justify-items: start; p { margin: 0; max-width: 52ch; font-size: 0.9375rem; line-height: 1.6; color: rgb(76 17 20 / 0.85); } } /* the paragraphs below the large summary read as secondary (the first one echoes it) */
 .storyLead { font-family: var(--font-display); font-size: clamp(1.5rem, 1.15rem + 1.2vw, 2.3rem); line-height: 1.25; max-width: 28ch; text-wrap: balance; }
 .storyActions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 0.75rem; }
 
@@ -28,6 +28,7 @@
   @media (min-width: 64em) { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 4rem; align-items: center; }
   .label { color: var(--accent-color); }
 }
+.allProjects { margin-top: 1.5rem; }
 .nextText { display: grid; gap: 0.75rem; justify-items: start; }
 .nextTitle { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2.25rem, 1.5rem + 2.4vw, 3.75rem); line-height: 1.04; transition: color 500ms var(--ease); }
 .nextPlace { font-size: 0.875rem; color: var(--accent-color); }

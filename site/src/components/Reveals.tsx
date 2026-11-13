@@ -44,7 +44,10 @@ export default function Reveals() {
       const onFocus = (e: FocusEvent) => {
         const el = e.target as HTMLElement;
         if (!el.closest?.('main') || el.closest('[data-recede], [data-seq]') || !el.matches('input, textarea, select, button, a')) return; // pinned scenes and the sticky hero scroll themselves
-        const head = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) + 24;
+        // On phones a project's room list is a bar of chips that sticks under the header: leave room for it too
+        const rooms = document.querySelector<HTMLElement>('nav[aria-label="Rooms"]');
+        const bar = rooms && getComputedStyle(rooms).position === 'sticky' && rooms.offsetWidth > innerWidth * 0.8 ? rooms.offsetHeight : 0;
+        const head = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) + 24 + bar;
         const fix = () => {
           const r = el.getBoundingClientRect();
           if (r.top < head || r.bottom > innerHeight - 24) lenis.scrollTo(el, { offset: -head }); // the bottom edge counts too: a field half off the screen is not visible

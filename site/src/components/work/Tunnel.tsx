@@ -24,13 +24,14 @@ export default function Tunnel({ projects }: { projects: Project[] }) {
   const now = projects[current];
   return (
     <>
-      <section ref={root} className={t.tunnel} style={{ '--len': '520dvh' } as React.CSSProperties} aria-label="Projects">
+      <section ref={root} className={t.tunnel} style={{ '--len': '440dvh' } as React.CSSProperties} aria-label="Projects">
         <div className={t.stage}>
           <div className={t.centre} data-tunnel-text>
             <span className={t.tag}>{now.category}</span>
             <h2 className={t.name}><Link prefetch={false} href={`/projects/${now.slug}`} data-cursor="View">{now.title}</Link></h2>
             <p className={t.meta}>{now.location}, {now.area}</p>
-            <Link prefetch={false} href={`/projects/${now.slug}`} className="text-link"><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
+            <Link prefetch={false} href={`/projects/${now.slug}`} className="text-link"><Roll>See the project</Roll><span className="visually-hidden">: {now.title}</span> <span aria-hidden="true">→</span></Link>
+            <p className="visually-hidden" aria-live="polite">Project {current + 1} of {projects.length}: {now.title}</p>
           </div>
           <div className={t.space} aria-hidden="true">
             {shots.map(({ img }, i) => (
@@ -45,11 +46,11 @@ export default function Tunnel({ projects }: { projects: Project[] }) {
       <section className={styles.plain} aria-label="Projects">
         {projects.map((p) => (
           <article key={p.slug} className={`container ${styles.plainItem}`}>
-            <Link prefetch={false} href={`/projects/${p.slug}`} className={styles.plainPhoto}><Image src={p.cover.src} alt={p.cover.alt} fill sizes="(max-width: 1023px) 100vw, 60vw" /></Link>
+            <Link prefetch={false} href={`/projects/${p.slug}`} className={styles.plainPhoto} tabIndex={-1} aria-hidden="true"><Image src={p.cover.src} alt={p.cover.alt} fill sizes="(max-width: 1023px) 100vw, 60vw" /></Link>
             <span className={t.tag}>{p.category}</span>
             <h2 className={t.name}>{p.title}</h2>
             <p className={t.meta}>{p.location}, {p.area}</p>
-            <Link prefetch={false} href={`/projects/${p.slug}`} className="text-link"><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
+            <Link prefetch={false} href={`/projects/${p.slug}`} className="text-link"><Roll>See the project</Roll><span className="visually-hidden">: {p.title}</span> <span aria-hidden="true">→</span></Link>
           </article>
         ))}
       </section>

@@ -11,11 +11,17 @@
     display: flex; gap: 1rem; align-items: baseline; padding: 0.4rem 0; text-decoration: none; font-family: var(--font-display); font-size: 1.35rem; line-height: 1.2;
     color: var(--accent-color); transition: color 400ms var(--ease), translate 400ms var(--ease);
     span { font-family: inherit; font-size: 0.8rem; letter-spacing: 0.08em; }
-    &[aria-current='true'] { color: var(--oxblood); translate: 0.6rem 0; }
+    &[aria-current='true'] { color: var(--oxblood); translate: 0.6rem 0; @media (forced-colors: active) { text-decoration: underline; } }
   }
   @media (min-width: 64em) { position: sticky; top: calc(var(--header-h) + 32px); }
-  @include tablet-down { display: none; }
+  /* Phones and tablets: the rooms become a strip of chips that stays under the header, so a long page can be jumped through */
+  @include tablet-down {
+    position: sticky; top: var(--header-h); z-index: 5; margin-inline: calc(-1 * var(--margin)); padding: 8px var(--margin); background: var(--paper); border-bottom: 1px solid var(--line);
+    ol { position: relative; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    a { align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid rgb(76 17 20 / 0.32); border-radius: 999px; white-space: nowrap; font-size: 1rem; translate: none; span { display: none; } &[aria-current='true'] { translate: none; color: var(--paper); background: var(--oxblood); border-color: var(--oxblood); } }
+  }
 }
+@include tablet-down { .rooms { display: block; } .chapters { margin-top: 2rem; } .chapter { scroll-margin-top: calc(var(--header-h) + 100px); } }
 .chapters { display: grid; gap: clamp(2rem, 1rem + 3vw, 4rem); container-type: inline-size; }
 /* A room with one or two photos: only as tall as its photos (--fill is that height as a share of the column width) */
 .chapter[data-small] { min-height: calc(var(--fill) * 100cqw); @include tablet-down { min-height: calc(var(--fill) * 100cqw + 3.5rem); } @include phone { min-height: 0; } }
@@ -26,7 +32,7 @@
 .shot {
   --d: 0px;
   position: absolute; width: var(--w); aspect-ratio: var(--ar); padding: 0; border: 0; overflow: hidden; background: var(--sand); cursor: zoom-in;
-  box-shadow: 0 8px 24px rgb(59 12 15 / 0.08); translate: 0 calc((var(--p, 0.5) - 0.5) * var(--d));
+  box-shadow: 0 0 0 clamp(4px, 0.5vw, 8px) var(--paper), 0 8px 24px rgb(59 12 15 / 0.08); translate: 0 calc((var(--p, 0.5) - 0.5) * var(--d));
   img { object-fit: cover; transition: scale 1.2s var(--ease); }
   @include hover { &:hover img { scale: 1.03; } }
   @include phone { position: relative; left: auto; top: auto; width: 88%; translate: none; &:nth-of-type(even) { margin-inline-start: auto; } }

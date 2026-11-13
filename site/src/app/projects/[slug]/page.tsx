@@ -101,6 +101,7 @@ export default async function ProjectPage({ params }: Params) {
             <Image src={next.cover.src} alt="" fill sizes="(max-width: 1023px) 100vw, 55vw" />
           </span>
         </Link>
+        <p className={styles.allProjects} data-reveal><Link prefetch={false} href="/projects" className="text-link"><Roll>All projects</Roll></Link></p>
       </section>
     </>
   );
