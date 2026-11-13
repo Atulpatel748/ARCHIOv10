@@ -6,6 +6,15 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
 /* No bar: a transparent frame holding the logo, the pill and the menu button. Only the logo slides away on scroll. */
 .header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); pointer-events: none; color: var(--oxblood); transition: color 300ms var(--ease); }
 .dark { color: var(--paper); }
+/* Phones: once scrolled, a plain bar sits behind the menu button and the pill, so the text below never runs under them.
+   Paper over light sections, oxblood over dark ones; none on the open menu. */
+.header::before {
+  content: ''; position: absolute; inset: 0; background: var(--paper); opacity: 0; transition: opacity 300ms var(--ease), background-color 300ms var(--ease);
+  @media (min-width: 768px) { display: none; }
+}
+.dark::before { background: var(--oxblood); }
+.scrolled::before { opacity: 1; }
+.onMenu::before { opacity: 0; }
 .onMenu { color: var(--paper); }
 
 /* The logo is positioned from --p (0 = big, over the hero; 1 = in the header), which the page sets while scrolling on the home page */

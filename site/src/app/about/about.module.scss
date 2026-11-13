@@ -1,11 +1,10 @@
 @use '../../styles/tokens' as *;
 
 .about {
-  display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 40px clamp(32px, 6vw, 112px); align-items: start;
+  display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 40px clamp(32px, 6vw, 112px); align-items: start;
   @include tablet-down { grid-template-columns: 1fr; }
 }
-.lead { line-height: 1.15; }
-.body { display: grid; gap: 20px; padding-top: 10px; }
+.body { display: grid; gap: 20px; max-width: 62ch; font-size: 1.125rem; line-height: 1.7; }
 
 .vm { /* plain paper, ruled by the section border */ }
 .vmGrid {
@@ -24,14 +23,6 @@
   display: grid; gap: 22px;
   ul { border-top: 1px solid var(--line); margin-top: 8px; }
   li { padding: 16px 0; border-bottom: 1px solid var(--line); }
-}
-
-.philosophy {
-  text-align: center;
-  .label { margin-bottom: 28px; }
-  blockquote { display: grid; gap: 28px; justify-items: center; }
-  .display { max-width: 18ch; }
-  .serif { max-width: 52ch; font-size: 1.125rem; line-height: 1.7; }
 }
 
 /* Team: the heading on the left, the two founders in arches filling the right (the same arches as on the home page) */

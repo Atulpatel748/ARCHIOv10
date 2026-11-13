@@ -15,9 +15,11 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false); // past the top (on home, past the hero): phones get a bar behind the buttons
   const [dark, setDark] = useState(true); // is the page behind the logo dark?
   const toggleRef = useRef<HTMLButtonElement>(null);
   const brandRef = useRef<HTMLAnchorElement>(null);
+  const scrolledRef = useRef(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Colour: look at what sits behind the logo (a photo or canvas counts as dark, otherwise the first solid background).
@@ -36,7 +38,11 @@ export default function Header() {
       let theme = 'light';
       for (const el of document.elementsFromPoint(x, y)) {
         if (el.closest('header, #site-menu, [data-preloader]')) continue;
-        if (el instanceof HTMLImageElement || el instanceof HTMLCanvasElement || el instanceof HTMLVideoElement) { theme = 'dark'; break; }
+        if (el instanceof HTMLImageElement || el instanceof HTMLCanvasElement || el instanceof HTMLVideoElement) {
+          // With the phone bar showing, the bar takes the section's own colour: a photo passing under it must not flip it back and forth
+          if (scrolledRef.current && matchMedia('(max-width: 767px)').matches) continue;
+          theme = 'dark'; break;
+        }
         const c = (getComputedStyle(el).backgroundColor.match(/[0-9.]+/g) ?? []).map(Number);
         if (c.length < 3 || (c.length > 3 && c[3] < 0.5)) continue;
         theme = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] < 128 ? 'dark' : 'light';
@@ -131,6 +137,8 @@ export default function Header() {
       const home = location.pathname === '/';
       const hideAt = home ? innerHeight : 24;
       const showAt = home ? innerHeight * 0.9 : 1;
+      scrolledRef.current = scrollY > showAt;
+      setScrolled(scrolledRef.current);
       if (scrollY <= showAt) { setHidden(false); last = scrollY; return; } // back at the top: always show
       const d = scrollY - last;
       if (Math.abs(d) < 6) return;
@@ -172,7 +180,7 @@ export default function Header() {
   return (
     <>
       <header
-        className={`${styles.header} ${dark ? styles.dark : ''} ${open ? styles.onMenu : ''} ${pathname === '/' ? styles.onHome : ''} ${hidden && !open ? styles.hidden : ''}`}
+        className={`${styles.header} ${dark ? styles.dark : ''} ${open ? styles.onMenu : ''} ${pathname === '/' ? styles.onHome : ''} ${hidden && !open ? styles.hidden : ''} ${scrolled ? styles.scrolled : ''}`}
         onFocusCapture={() => setHidden(false)}
       >
         <div className={styles.menuSlot}>

@@ -10,6 +10,15 @@ type Lenis = { stop(): void; start(): void; scrollTo(target: HTMLElement, o?: { 
 const lenis = () => (window as unknown as { lenis?: Lenis }).lenis;
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// A room with one or two photos is only as tall as they need (the collage height is for three or four): the tallest of the first
+// photo (56% wide, from the top) and the second (38% wide, 6% down), as a share of the room's width, plus room for the drift.
+function smallRoom(shots: { img: ProjectImage }[]) {
+  if (shots.length > 2) return {};
+  const [a, b] = shots.map(({ img }) => img.width / img.height);
+  const fill = Math.max(0.56 / a, b ? 0.38 / b / 0.94 : 0) + 0.06;
+  return { 'data-small': '', style: { '--fill': fill.toFixed(3) } as CSSProperties };
+}
+
 // Room links scroll here, not by the browser: a native jump made while the smooth scroll was starting up was pulled back by it.
 function goToRoom(e: React.MouseEvent, i: number) {
   const target = document.getElementById(`room-${i}`);
@@ -216,7 +225,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
         </nav>
         <div className={styles.chapters}>
           {groupByRoom(images).map((g, gi) => (
-            <section key={`${g.room}-${gi}`} id={`room-${gi}`} data-chapter={gi} aria-label={g.room} className={styles.chapter}>
+            <section key={`${g.room}-${gi}`} id={`room-${gi}`} data-chapter={gi} aria-label={g.room} className={styles.chapter} {...smallRoom(g.shots)}>
               <h3 className={styles.chapterName}>{g.room}</h3>
               {g.shots.map(({ img, index }, si) => (
                 <button

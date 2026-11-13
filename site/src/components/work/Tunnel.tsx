@@ -19,14 +19,14 @@ export default function Tunnel({ projects }: { projects: Project[] }) {
   const cards = useRef<HTMLDivElement[]>([]);
   const [current, setCurrent] = useState(0);
   const shots = projects.flatMap((p, owner) => pick(p).map((img) => ({ img, owner })));
-  useTunnel(root, cards, shots.length, (i) => setCurrent(shots[i].owner));
+  useTunnel(root, cards, shots.length, (i) => setCurrent(shots[i].owner), (i) => shots[i].owner);
 
   const now = projects[current];
   return (
     <>
       <section ref={root} className={t.tunnel} style={{ '--len': '520dvh' } as React.CSSProperties} aria-label="Projects">
         <div className={t.stage}>
-          <div className={t.centre}>
+          <div className={t.centre} data-tunnel-text>
             <span className={t.tag}>{now.category}</span>
             <h2 className={t.name}><Link prefetch={false} href={`/projects/${now.slug}`} data-cursor="View">{now.title}</Link></h2>
             <p className={t.meta}>{now.location}, {now.area}</p>

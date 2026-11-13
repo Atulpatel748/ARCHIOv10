@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: 'Page not found' };
 
 export default function NotFound() {
   return (
-    <section className="not-found">
+    <section className="not-found" data-dark-end>
       <div className="container">
         <p className="label">Page not found</p>
         <h1 className="display">This page is not here.</h1>

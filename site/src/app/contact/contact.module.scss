@@ -1,7 +1,7 @@
 @use '../../styles/tokens' as *;
 
 /* Start a conversation: a dark section, the invitation and the direct details on the left, the form on the right */
-.talk { padding-top: calc(var(--header-h) + var(--section)); background: var(--oxblood); color: var(--paper); --accent-color: var(--blush); }
+.talk { padding-top: calc(var(--header-h) + var(--section)); padding-bottom: clamp(48px, 6vw, 88px); background: var(--oxblood); color: var(--paper); --accent-color: var(--blush); }
 .grid {
   display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 56px clamp(32px, 8vw, 128px); align-items: start;
   @include tablet-down { grid-template-columns: 1fr; }

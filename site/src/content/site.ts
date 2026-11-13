@@ -34,7 +34,6 @@ export const nav = [
 ];
 
 export const about = {
-  lead: 'An interior design consultancy focused on creating spaces that work functionally, aesthetically, and commercially.',
   body: [
     'Not driven by trends or superficial styling. We work closely with clients to understand how a space needs to perform, then design solutions that align with real-life use, business goals, and long-term value.',
     'Our team works across residential and commercial design, focused on spaces that balance refined aesthetics with real-world function.',
@@ -103,7 +102,6 @@ export const whyUs = {
 };
 
 export const philosophy = {
-  quote: 'Good design is not about making something look expensive.',
   body: "It's about making it work efficiently, intuitively, and consistently. We believe the best spaces are the ones that feel effortless to use, even if they require careful thinking to create.",
 };
 

@@ -17,15 +17,18 @@
 .storyActions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 0.75rem; }
 
 /* End: a conversation beside the next project */
-.end { display: grid; gap: 4rem; @media (min-width: 64em) { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: 6rem; align-items: end; } }
-.endCta { display: grid; gap: 28px; justify-items: start; }
-.endTitle { font-size: clamp(1.9rem, 1.35rem + 1.7vw, 3rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1.08; max-width: 18ch; text-wrap: balance; }
-.endActions { display: grid; gap: 14px; justify-items: start; }
-.endNext { display: grid; gap: 12px; }
+/* The invitation: a full-width oxblood band, centred, at the size of the other section headings */
+.cta { --accent-color: var(--blush); background: var(--oxblood); color: var(--paper); }
+.ctaInner { display: grid; gap: 32px; justify-items: center; text-align: center; }
+.endTitle { font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; max-width: 20ch; text-wrap: balance; }
+.endActions { display: flex; flex-wrap: wrap; gap: 14px 32px; align-items: center; justify-content: center; }
+/* The next project: its name beside a wide photo */
 .next {
-  display: grid; gap: 0.75rem; text-decoration: none;
+  display: grid; gap: 1.5rem; text-decoration: none;
+  @media (min-width: 64em) { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 4rem; align-items: center; }
   .label { color: var(--accent-color); }
 }
+.nextText { display: grid; gap: 0.75rem; justify-items: start; }
 .nextTitle { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2.25rem, 1.5rem + 2.4vw, 3.75rem); line-height: 1.04; transition: color 500ms var(--ease); }
 .nextPlace { font-size: 0.875rem; color: var(--accent-color); }
 .nextPhoto { position: relative; display: block; margin-top: 1rem; aspect-ratio: 16 / 10; overflow: hidden; background: var(--sand); img { object-fit: cover; transition: scale 1.2s var(--ease); } }

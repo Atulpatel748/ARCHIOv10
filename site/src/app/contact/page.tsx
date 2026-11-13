@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <section className={`section ${styles.talk}`}>
+      <section className={`section ${styles.talk}`} data-dark-end>
         <div className={`container ${styles.grid}`}>
           <div className={styles.info}>
             <Split as="h1" className={styles.title} text="Start a conversation" />

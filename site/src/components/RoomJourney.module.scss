@@ -15,7 +15,7 @@
   position: relative; border-top: 1px solid var(--line);
 }
 .stage {
-  position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px clamp(24px, 4vw, 72px); align-items: center;
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px clamp(24px, 4vw, 72px); align-items: center;
   padding: clamp(64px, 8vw, 120px) var(--margin); max-width: 1440px; margin-inline: auto;
   @include tablet-down { grid-template-columns: 1fr; }
 }
@@ -50,7 +50,7 @@
     p { margin: 0; max-width: 42ch; font-size: 1rem; }
   }
 }
-.big { font-size: clamp(1.875rem, 1rem + 1.7vw, 3rem); line-height: 1.02; margin-bottom: 28px; max-width: 18ch; text-transform: uppercase; letter-spacing: 0.01em; }
+.big { font-size: clamp(2.25rem, 1rem + 3.6vw, min(5rem, 7.5dvh)); line-height: 1; margin-bottom: 28px; max-width: 16ch; text-transform: uppercase; letter-spacing: 0.01em; }
 .eyebrow { display: block; margin-bottom: 4px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: #8A2E34; }
 /* When pinned, only the current step shows its text, so the column stays short */
 @media (min-width: 1024px) and (min-height: 640px) {

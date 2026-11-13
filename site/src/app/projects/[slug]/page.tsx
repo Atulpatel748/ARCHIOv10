@@ -83,24 +83,27 @@ export default async function ProjectPage({ params }: Params) {
       </section>
 
       {/* A conversation, then the next project */}
-      <section className={`section container ${styles.end}`}>
-        <div className={styles.endCta}>
+      {/* The ending: the invitation first, as a full-width band; the next project after it, on paper, so it does not meet the footer */}
+      <section className={`section ${styles.cta}`}>
+        <div className={`container ${styles.ctaInner}`}>
           <Split className={styles.endTitle} text="Tell us about the space." />
           <div className={styles.endActions} data-reveal>
-            <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
+            <Link prefetch={false} href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
             <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
           </div>
         </div>
-        <div className={styles.endNext}>
-          <Link prefetch={false} href={`/projects/${next.slug}`} className={styles.next} data-cursor="View" data-reveal>
+      </section>
+      <section className={`section container ${styles.end}`}>
+        <Link prefetch={false} href={`/projects/${next.slug}`} className={styles.next} data-cursor="View" data-reveal>
+          <span className={styles.nextText}>
             <span className="label label--rule">Next project</span>
             <span className={styles.nextTitle}>{next.title}</span>
             <span className={styles.nextPlace}>{next.category}, {next.location}</span>
-            <span className={styles.nextPhoto}>
-              <Image src={next.cover.src} alt="" fill sizes="(max-width: 1023px) 100vw, 45vw" />
-            </span>
-          </Link>
-        </div>
+          </span>
+          <span className={styles.nextPhoto}>
+            <Image src={next.cover.src} alt="" fill sizes="(max-width: 1023px) 100vw, 55vw" />
+          </span>
+        </Link>
       </section>
     </>
   );

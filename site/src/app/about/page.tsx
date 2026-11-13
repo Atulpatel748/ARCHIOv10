@@ -2,11 +2,11 @@ import type { Metadata } from 'next';
 import { pageOpenGraph } from '@/lib/pageMeta';
 import Image from 'next/image';
 import PageHead from '@/components/PageHead';
-import { about, mission, philosophy, team, vision, whyUs } from '@/content/site';
+import { about, mission, team, vision, whyUs } from '@/content/site';
 import styles from './about.module.scss';
 
 const title = 'About';
-const description = 'Archió is a consultancy-led interior design studio in Dubai, founded by Pooja Vijayakumar and S. Harshitha. Our vision, mission and philosophy.';
+const description = 'Archió is a consultancy-led interior design studio in Dubai, founded by Pooja Vijayakumar and S. Harshitha. Our vision, our mission and why clients choose us.';
 
 export const metadata: Metadata = {
   title,
@@ -26,7 +26,8 @@ export default function AboutPage() {
       />
 
       <section className={`section container ${styles.about}`}>
-        <p className={`h2 ${styles.lead}`} data-reveal>{about.lead}</p>
+        {/* No second statement here: the heading above already says it (the home page carries the philosophy quote) */}
+        <p className="label" data-reveal>Who we are</p>
         <div className={styles.body}>
           {about.body.map((p) => <p key={p} data-reveal>{p}</p>)}
         </div>
@@ -55,16 +56,6 @@ export default function AboutPage() {
           <ul>
             {whyUs.points.map((p) => <li key={p} data-reveal>{p}</li>)}
           </ul>
-        </div>
-      </section>
-
-      <section className={`section ${styles.philosophy}`}>
-        <div className="container">
-          <p className="label" data-reveal>Our philosophy</p>
-          <blockquote data-reveal>
-            <p className="display">{philosophy.quote}</p>
-            <p className="serif">{philosophy.body}</p>
-          </blockquote>
         </div>
       </section>
 
