@@ -4,6 +4,7 @@ import { Belleza, Lora, Public_Sans } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
+import ScrollCue from '@/components/ScrollCue';
 import Cursor from '@/components/Cursor';
 import Reveals from '@/components/Reveals';
 import Preloader from '@/components/Preloader';
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main">{children}</main>
         <Footer />
         <BackToTop />
+        <ScrollCue />
         <Reveals />
         <Cursor />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />

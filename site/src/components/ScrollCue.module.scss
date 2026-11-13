@@ -1,0 +1,17 @@
+@use '../styles/tokens' as *;
+
+/* A slim oxblood capsule with a paper ring, like the menu button and the "Let's talk" pill. Wide screens only: it lives in the side margin. */
+.cue {
+  display: none; position: fixed; left: max(8px, calc((var(--margin) - 32px) / 2)); top: 50%; z-index: 30; width: 32px; padding: 14px 0 12px; border-radius: 999px;
+  flex-direction: column; align-items: center; gap: 12px; background: var(--oxblood); color: var(--paper); box-shadow: inset 0 0 0 1px rgb(248 247 244 / 0.4); pointer-events: none;
+  opacity: 0; visibility: hidden; translate: 0 calc(-50% + 12px); transition: opacity 400ms var(--ease), translate 500ms var(--ease), visibility 0s 400ms;
+  &.on { opacity: 1; visibility: visible; translate: 0 -50%; transition-delay: 0s; }
+  @media (min-width: 1280px) { display: flex; }
+}
+.word { writing-mode: vertical-rl; font-size: 0.625rem; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; }
+.rail {
+  position: relative; display: block; width: 1px; height: 44px; background: rgb(248 247 244 / 0.3); overflow: hidden;
+  i { position: absolute; left: -1px; top: 0; width: 3px; height: 10px; border-radius: 2px; background: var(--paper); animation: drop 2.2s var(--ease) infinite; }
+}
+@keyframes drop { 0% { translate: 0 -12px; opacity: 0; } 20% { opacity: 1; } 80% { opacity: 1; } 100% { translate: 0 46px; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .rail i { animation: none; translate: 0 14px; } }
