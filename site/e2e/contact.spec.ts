@@ -258,3 +258,25 @@ test.describe('the real /api/contact', () => {
     expect(await res.json()).toEqual({ error: 'not_configured' });
   });
 });
+
+// The big heading must never split "conversation" or let it run past its column, whatever the window width or the visitor's
+// browser text size (a larger text size grows the rem part of the heading's size, which used to push the word out of the column).
+test('the Contact heading keeps the word "conversation" whole, at any width and text size', async ({ page }) => {
+  await page.goto('/contact');
+  for (const base of ['100%', '150%']) {
+    await page.evaluate((b) => { document.documentElement.style.fontSize = b; }, base);
+    for (const width of [320, 1024, 1280, 1536, 1920]) {
+      await page.setViewportSize({ width, height: 800 });
+      const result = await page.evaluate(() => {
+        const h1 = document.querySelector('h1')!;
+        const column = (document.querySelector('[class*="info"]') as HTMLElement).clientWidth;
+        const word = [...h1.querySelectorAll('span')].filter((s) => s.children.length === 0 && /conversation/i.test(s.textContent ?? ''));
+        const widest = Math.max(0, ...word.map((s) => s.getBoundingClientRect().width));
+        const range = document.createRange();
+        const split = word.some((s) => { range.selectNodeContents(s); return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size > 1; });
+        return { fits: widest <= column + 1, split };
+      });
+      expect(result, `text size ${base}, window ${width}px`).toEqual({ fits: true, split: false });
+    }
+  }
+});
