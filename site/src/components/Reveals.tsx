@@ -43,10 +43,14 @@ export default function Reveals() {
       // Lenis ignores scroll-padding, so a field reached with Tab or Shift+Tab could end up under the header or off screen (WCAG 2.4.11).
       const onFocus = (e: FocusEvent) => {
         const el = e.target as HTMLElement;
-        if (!el.closest?.('main') || !el.matches('input, textarea, select, button, a')) return;
+        if (!el.closest?.('main') || el.closest('[data-recede], [data-seq]') || !el.matches('input, textarea, select, button, a')) return; // pinned scenes and the sticky hero scroll themselves
         const head = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) + 24;
-        const r = el.getBoundingClientRect();
-        if (r.top < head || r.bottom > innerHeight - 24) lenis.scrollTo(el, { offset: -head }); // the bottom edge counts too: a field half off the screen is not visible
+        const fix = () => {
+          const r = el.getBoundingClientRect();
+          if (r.top < head || r.bottom > innerHeight - 24) lenis.scrollTo(el, { offset: -head }); // the bottom edge counts too: a field half off the screen is not visible
+        };
+        fix();
+        setTimeout(fix, 800); // and again once content that opens or moves on focus (the stage panels) has finished its transition
       };
       addEventListener('focusin', onFocus);
       off = () => { removeEventListener('focusin', onFocus); gsap.ticker.remove(tick); lenis.destroy(); delete (window as unknown as { lenis?: unknown }).lenis; };

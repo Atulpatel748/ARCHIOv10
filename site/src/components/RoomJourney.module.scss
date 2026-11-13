@@ -20,12 +20,12 @@
   @include tablet-down { grid-template-columns: 1fr; }
 }
 /* Pinned: the stage stays on screen while the tall track scrolls past (large screens that are tall enough) */
-@media (min-width: 1024px) and (min-height: 640px) {
-  .track[data-seq] { height: 520vh; }
+@media (min-width: 1024px) and (min-height: 760px) {
+  .track[data-seq] { height: 440vh; }
   .track[data-seq] .stage { position: sticky; top: 0; height: 100dvh; padding-block: calc(var(--header-h) + 8px) 24px; }
   .track[data-seq] .stage::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 70% at 68% 55%, rgb(238 223 200 / calc(var(--glow) * 0.55)), transparent 70%); pointer-events: none; }
 }
-@media (max-width: 1023px), (max-height: 639px) { .track { --p: 1; } } /* not pinned: the finished room */
+@media (max-width: 1023px), (max-height: 759px) { .track { --p: 1; } } /* not pinned: the finished room */
 
 /* Steps, left */
 .steps {
@@ -41,7 +41,7 @@
     --on: clamp(0, calc((var(--p) - var(--at)) * 1000), 1);
     --off: clamp(0, calc((var(--p) - var(--next)) * 1000), 1);
     --cur: clamp(0, calc(var(--on) - var(--off)), 1);
-    position: relative; opacity: calc(0.6 + var(--on) * 0.4); /* steps not yet reached stay readable: 4.9:1 on the paper */
+    position: relative; opacity: calc(0.8 + var(--on) * 0.2); /* steps not yet reached stay readable: the small labels keep 4.5:1 on the paper */
     &::before {
       content: ''; position: absolute; left: calc(-1 * clamp(28px, 3vw, 44px) - 4px); top: 4px; width: 9px; height: 9px; border-radius: 50%;
       background: color-mix(in srgb, var(--oxblood) calc(var(--on) * 100%), var(--paper)); box-shadow: inset 0 0 0 1px var(--oxblood);
@@ -52,8 +52,13 @@
 }
 .big { font-size: clamp(2.25rem, 1rem + 3.6vw, min(5rem, 7.5dvh)); line-height: 1; margin-bottom: 28px; max-width: 16ch; text-transform: uppercase; letter-spacing: 0.01em; }
 .eyebrow { display: block; margin-bottom: 4px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.24em; text-transform: uppercase; color: #8A2E34; }
+/* Pinned on a shorter screen (under 880px tall): a smaller heading and tighter spacing, so the whole column, down to "Start a project", fits above the bottom of the screen */
+@media (min-width: 1024px) and (min-height: 760px) and (max-height: 879px) {
+  .track[data-seq] .big { font-size: clamp(2rem, 1rem + 3vw, min(5rem, 6dvh)); margin-bottom: 20px; }
+  .track[data-seq] .steps ol { gap: 14px; margin-bottom: 24px; }
+}
 /* When pinned, only the current step shows its text, so the column stays short */
-@media (min-width: 1024px) and (min-height: 640px) {
+@media (min-width: 1024px) and (min-height: 760px) {
   /* 20em, not 7em: a visitor's own text spacing or larger font must not cut the end off a step (WCAG 1.4.12) */
   .track[data-seq] .steps li p { overflow: hidden; max-height: calc(var(--cur) * 20em); opacity: var(--cur); }
 }
@@ -63,7 +68,7 @@
   position: relative; height: 300px; display: grid; place-items: center;
   @media (min-width: 640px) { height: 400px; }
   @media (min-width: 1024px) { height: 480px; }
-  @media (min-width: 1024px) and (min-height: 640px) { height: 100%; }
+  @media (min-width: 1024px) and (min-height: 760px) { height: 100%; }
 }
 .drawing { width: 100%; height: 100%; max-width: 720px; overflow: visible; }
 .draw {
@@ -84,6 +89,6 @@
 
 /* The "Illustration" label, bottom right, once the lights are on; only when pinned */
 .tag { display: none; }
-@media (min-width: 1024px) and (min-height: 640px) {
+@media (min-width: 1024px) and (min-height: 760px) {
   .track[data-seq] .tag { display: block; position: absolute; right: calc(var(--margin) + 72px); bottom: 24px; margin: 0; opacity: var(--glow); }
 }

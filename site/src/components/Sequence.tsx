@@ -19,15 +19,26 @@ export default function Sequence({ className, children }: { className?: string; 
       const span = r.height - innerHeight;
       el.style.setProperty('--progress', (span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 1).toFixed(4));
     };
+    // A keyboard user can Tab to a link that only slides into view at the end of the scene ("See the work"): jump to the end so it is on screen.
+    const onFocusIn = (e: FocusEvent) => {
+      const q = (e.target as HTMLElement).getBoundingClientRect();
+      if (q.top >= 0 && q.bottom <= innerHeight) return;
+      const r = el.getBoundingClientRect();
+      const end = scrollY + r.top + (r.height - innerHeight);
+      const l = (window as unknown as { lenis?: { scrollTo(y: number, o?: object): void } }).lenis;
+      if (l) l.scrollTo(end, { immediate: true }); else scrollTo(0, end);
+    };
     const queue = () => { frame ||= requestAnimationFrame(update); };
     const resize = () => queue();
     el.dataset.seq = '';
+    el.addEventListener('focusin', onFocusIn);
     update();
     addEventListener('scroll', queue, { passive: true });
     addEventListener('resize', resize);
     return () => {
       removeEventListener('scroll', queue);
       removeEventListener('resize', resize);
+      el.removeEventListener('focusin', onFocusIn);
       cancelAnimationFrame(frame);
       delete el.dataset.seq;
       el.style.removeProperty('--progress');

@@ -8,6 +8,7 @@
 /* Small caps line between two rules */
 .heroTag {
   display: flex; align-items: center; gap: 16px; font: 500 clamp(0.6875rem, 0.6rem + 0.2vw, 0.875rem)/1 var(--font-ui); letter-spacing: 0.28em; text-transform: uppercase;
+  text-shadow: 0 0 10px rgb(20 6 7 / 0.8), 0 0 3px rgb(20 6 7 / 0.7);
   &::before, &::after { content: ''; width: clamp(24px, 3vw, 44px); height: 1px; background: currentColor; opacity: 0.6; }
 }
 @keyframes rise { from { opacity: 0; } }
@@ -60,6 +61,7 @@
 
 /* The work */
 .work :global(.label) { margin-bottom: 22px; }
+.workHead { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; :global(.label) { margin-bottom: 0; } }
 .flagship {
   position: relative; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: stretch; margin-top: clamp(40px, 5vw, 72px);
   @include tablet-down { grid-template-columns: 1fr; }
@@ -82,6 +84,8 @@
 
 /* Philosophy: dark, text only */
 .philosophy { display: flex; align-items: center; color: var(--paper); background: var(--deep); }
+/* Once "We Design" releases, the empty lower half of its pinned stage would show as blank paper: the dark section rises over it instead */
+.sequence[data-seq] + .philosophy { margin-top: -28svh; }
 .philosophyInner { display: grid; gap: 32px; justify-items: center; text-align: center; padding-block: var(--section); }
 .quote { text-transform: uppercase; letter-spacing: 0.01em; font-family: var(--font-display); font-size: clamp(2.5rem, 1.2rem + 4.4vw, 6rem); line-height: 1.04; max-width: 17ch; :global(.accent) { color: var(--sand); } }
 .philosophyBody { max-width: 52ch; font-size: 1.125rem; line-height: 1.7; color: var(--sand); }

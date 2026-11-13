@@ -86,10 +86,13 @@ export default function HomePage() {
       {/* The work: a flagship with a facts card, then the other projects */}
       <section className={`section ${styles.work}`}>
         <div className="container">
-          <h2 className="label" data-reveal>The work</h2>
+          <div className={styles.workHead}>
+            <h2 className="label" data-reveal>The work</h2>
+            <Link prefetch={false} href="/projects" className="text-link" data-reveal><Roll>All projects</Roll></Link>
+          </div>
         </div>
         <div className={`container ${styles.flagship}`}>
-          <Link prefetch={false} href={`/projects/${flagship.slug}`} className={styles.flagshipMedia} data-cursor="View" data-mask>
+          <Link prefetch={false} href={`/projects/${flagship.slug}`} className={styles.flagshipMedia} data-cursor="View" data-mask tabIndex={-1} aria-hidden="true">
             <Image src={flagship.hero.src} alt={flagship.hero.alt} fill sizes="(max-width: 1023px) 100vw, 60vw" />
           </Link>
           <div className={styles.factsCard} data-reveal>
@@ -99,7 +102,7 @@ export default function HomePage() {
               <div><dt>Where</dt><dd>{flagship.location}</dd></div>
               <div><dt>Area</dt><dd>{flagship.area}</dd></div>
             </dl>
-            <Link prefetch={false} href={`/projects/${flagship.slug}`} className="btn btn--solid"><Roll>See the project</Roll> <span aria-hidden="true">→</span></Link>
+            <Link prefetch={false} href={`/projects/${flagship.slug}`} className="btn btn--solid"><Roll>See the project</Roll><span className="visually-hidden">: {flagship.title}</span> <span aria-hidden="true">→</span></Link>
           </div>
         </div>
         <div className={`container ${styles.others}`}>

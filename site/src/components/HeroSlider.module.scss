@@ -20,7 +20,7 @@
   position: absolute; inset: 0; pointer-events: none;
   background:
     radial-gradient(ellipse 100% 24% at 50% 50%, rgb(20 6 7 / 0.32), transparent),
-    linear-gradient(180deg, rgb(20 6 7 / 0.48) 0%, rgb(20 6 7 / 0.12) 22%, rgb(20 6 7 / 0.12) 55%, rgb(20 6 7 / 0.58) 100%);
+    linear-gradient(180deg, rgb(20 6 7 / 0.48) 0%, rgb(20 6 7 / 0.12) 22%, rgb(20 6 7 / 0.12) 55%, rgb(20 6 7 / 0.66) 100%);
 }
 .content { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; padding: var(--header-h) var(--margin); }
 /* Bottom bar: place on the left and link on the right (one live region, so both are announced together), slide tracks centred */

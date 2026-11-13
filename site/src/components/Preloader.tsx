@@ -116,7 +116,7 @@ export default function Preloader() {
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout>;
     // The overlay is only aria-hidden, so keyboard focus would walk into links hidden behind it: make the page inert until it leaves.
-    const covered = [...document.querySelectorAll<HTMLElement>('header, main, footer')];
+    const covered = [...document.querySelectorAll<HTMLElement>('.skip-link, header, main, footer')];
     covered.forEach((el) => el.setAttribute('inert', ''));
     const release = () => covered.forEach((el) => el.removeAttribute('inert'));
     const until = (ms: number) => new Promise((r) => setTimeout(r, ms - performance.now())); // ms counted from the page's start

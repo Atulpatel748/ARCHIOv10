@@ -11,7 +11,7 @@ type Step = { title: string; text: string };
 // "How it goes": the four steps beside a line drawing of a building that draws itself while you scroll (see Elevation). <Sequence>
 // publishes the scroll progress as --progress. The drawing is pure CSS, so it costs no script.
 
-const LABELS = ['Brief', 'Strategy', 'Decisions', 'Execution'];
+const LABELS = ['Brief', 'Strategy', 'Decisions', 'Coordination'];
 const vars = (o: Record<string, string | number>) => o as CSSProperties;
 
 export default function RoomJourney({ steps }: { steps: Step[] }) {

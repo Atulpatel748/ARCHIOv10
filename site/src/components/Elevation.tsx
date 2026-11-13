@@ -25,7 +25,7 @@ const pieces: Piece[] = [
   { d: `M175 210H400V275H175Z${mullions([231, 287, 343], 210, 275)}M175 240H400`, a: 0.58, b: 0.72, w: 'thin' },
   { d: `M400 210H490V275H400Z${louvres}`, a: 0.62, b: 0.75, w: 'thin' },
   { d: `M20 372H110${mullions([40, 65, 90], 372, 400)}`, a: 0.64, b: 0.74, w: 'thin' },
-  // 4 · Execution: the roof, and the neighbours
+  // 4 · Coordination: the roof, and the neighbours
   { d: 'M230 178V150H330V178M240 150V140H320V150', a: 0.76, b: 0.86, w: 'thin' },
   { d: 'M400 178V132H440V178M396 132H444M420 132V108', a: 0.8, b: 0.9, w: 'thin' },
   { d: 'M530 400V250L545 238L560 250V400M565 400V300H585V400', a: 0.84, b: 0.96, w: 'faint' },
