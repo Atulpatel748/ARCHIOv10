@@ -26,6 +26,7 @@ type LenisLike = { scrollTo(target: number | HTMLElement, o?: { immediate?: bool
 export default function Reveals() {
   const pathname = usePathname();
   const popped = useRef<string | null>(null);
+  const restoring = useRef(0); // until when (performance.now) a Back/Forward restore is still putting the scroll back
 
   useEffect(() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -44,40 +45,51 @@ export default function Reveals() {
     return () => { dead = true; cancelIdle(); off?.(); };
   }, []);
 
-  // Back/forward restores its own scroll position, so it is not reset to the top.
+  // Back and forward: the browser and Next restore the scroll on their own schedule (late on a slow device) and before the pinned sections
+  // have their full height, so it lands too high. Remember where you were on each page (see below) and keep putting it back for a moment,
+  // until the visitor scrolls themselves. This runs on the popstate itself, not on the page change, so it also covers a quick Back.
   useEffect(() => {
-    const onPop = () => { popped.current = location.pathname; };
+    const events = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+    let timer: ReturnType<typeof setInterval> | undefined;
+    let moved = false;
+    const mine = () => { moved = true; };
+    const stop = () => { clearInterval(timer); restoring.current = 0; events.forEach((e) => removeEventListener(e, mine)); };
+    const onPop = () => {
+      popped.current = location.pathname; // not reset to the top
+      stop();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches || location.hash) return;
+      let saved = NaN;
+      try { saved = parseFloat(sessionStorage.getItem(`archio-y:${location.pathname}`) ?? ''); } catch { saved = NaN; } // private mode: the browser's own restore stays
+      if (!(saved > 0)) return;
+      moved = false;
+      const since = performance.now();
+      restoring.current = since + 2500;
+      events.forEach((e) => addEventListener(e, mine, { once: true, passive: true }));
+      timer = setInterval(() => {
+        if (moved || performance.now() - since > 2500) { stop(); return; }
+        if (Math.abs(scrollY - saved) <= 8) return;
+        const l = (window as unknown as { lenis?: LenisLike }).lenis;
+        if (l) l.scrollTo(saved, { immediate: true }); else scrollTo(0, saved);
+      }, 100);
+    };
     addEventListener('popstate', onPop);
-    return () => removeEventListener('popstate', onPop);
+    return () => { removeEventListener('popstate', onPop); stop(); };
   }, []);
 
   useEffect(() => {
     if (popped.current !== pathname && !location.hash) (window as unknown as { lenis?: LenisLike }).lenis?.scrollTo(0, { immediate: true });
-    const wasPopped = popped.current === pathname;
     popped.current = null;
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    // Back and forward: the browser restores the scroll before the pinned sections have their full height, so it lands too high.
-    // Remember where you were on each page and put it back once the layout has settled.
+    // Remember where you are on each page, for Back (see above). A scroll made while a restore is under way, or by the page change itself, is not where you were.
     const key = `archio-y:${pathname}`;
-    let saved = NaN;
-    try { saved = parseFloat(sessionStorage.getItem(key) ?? ''); } catch { saved = NaN; } // private mode: the browser's own restore stays
-    const restore = wasPopped && !location.hash && saved > 0;
-    let settling = restore;
     let keepFrame = 0;
     const keep = () => {
       keepFrame ||= requestAnimationFrame(() => {
         keepFrame = 0;
-        if (settling || location.pathname !== pathname) return; // a scroll from the page change itself is not where you were
+        if (performance.now() < restoring.current || location.pathname !== pathname) return;
         try { sessionStorage.setItem(key, String(Math.round(scrollY))); } catch { return; } // private mode
       });
     };
-    const back = () => { const l = (window as unknown as { lenis?: LenisLike }).lenis; if (l) l.scrollTo(saved, { immediate: true }); else scrollTo(0, saved); };
-    let restoreFrame = 0;
-    let settled: ReturnType<typeof setTimeout> | undefined;
-    if (restore) {
-      restoreFrame = requestAnimationFrame(() => requestAnimationFrame(back));
-      settled = setTimeout(() => { settling = false; }, 700);
-    }
     addEventListener('scroll', keep, { passive: true });
     let revert: (() => void) | undefined;
     let dead = false;
@@ -125,12 +137,11 @@ export default function Reveals() {
         const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
         if (lenis && goal !== undefined) lenis.scrollTo(goal);
         else if (target) lenis?.scrollTo(target, { immediate: true, offset: -parseFloat(getComputedStyle(target).scrollMarginTop) || 0 });
-        else if (restore) back(); // the refresh has just measured the finished layout
       }, 300);
     }).catch(() => undefined));
     return () => {
       dead = true; cancelIdle(); clearTimeout(refresh); revert?.();
-      removeEventListener('scroll', keep); cancelAnimationFrame(keepFrame); cancelAnimationFrame(restoreFrame); clearTimeout(settled);
+      removeEventListener('scroll', keep); cancelAnimationFrame(keepFrame);
     };
   }, [pathname]);
 
