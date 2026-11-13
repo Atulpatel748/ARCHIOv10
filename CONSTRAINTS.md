@@ -24,7 +24,7 @@ Run from inside `site/` unless a different place is given.
 | Types | Zero errors | `npm run typecheck` | 0 errors | every change |
 | Lint | Zero errors | `npm run lint` | 0 errors | every change |
 | Tests | All pass | `npm test` (contact form route, mail sender, image loader) | 34 of 34 pass | every change |
-| Browser tests | All pass, none skipped or marked fixme without a "BUG:" reason | `npm run test:e2e` (Playwright, Chromium, production build: pages, navigation, axe WCAG 2.2 AA, overflow at ten widths from 320 to 1920, hero, gallery, contact form, honesty rules, SEO) | 221 of 221 pass (13 Nov 2026) | before every push, and on GitHub |
+| Browser tests | All pass, none skipped or marked fixme without a "BUG:" reason | `npm run test:e2e` (Playwright, Chromium, and also Firefox on GitHub, production build: pages, navigation, axe WCAG 2.2 AA, overflow at ten widths from 320 to 1920, hero, gallery, contact form, honesty rules, SEO) | 221 of 221 pass in Chromium, and 221 of 221 in Firefox on GitHub (13 Nov 2026). Safari's engine (WebKit) was tried once by hand: 218 of 221, the other 3 are Safari's own keyboard-focus rules | before every push, and on GitHub |
 | Build | Succeeds | `npm run build` | passes | before every push, and on GitHub |
 | Dependencies | No known problems | `npm audit --audit-level=high` | 0 high; 16 moderate, all one ESLint helper (see the note below) | before every push, and on GitHub |
 | Accessibility | Lighthouse score 100 on every page | `npx lighthouse <URL> --only-categories=accessibility` | 100 on all 9 pages (13 Nov 2026, `a994b71`, live site) | after every deploy |
