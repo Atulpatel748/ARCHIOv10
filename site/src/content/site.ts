@@ -42,7 +42,7 @@ export const about = {
 };
 
 export const approach = {
-  title: "We don't just design spaces. We guide decisions.",
+  title: "We don't just design spaces. We guide decisions",
   body: "Every project begins with a clear understanding of the client's needs, constraints, and expectations. From there, we turn ideas into a structured design plan that balances creativity with what is realistic.",
   points: [
     'Clear direction, from concept through to site coordination',
@@ -60,7 +60,7 @@ export const processSteps = [
   { title: 'Through to the site', text: 'From concept to site, keeping the design intent clear, with consistent communication throughout.' },
 ];
 
-export const servicesIntro = 'We focus on consultancy-based interior design: clear, honest advice from the first brief through to site.';
+export const servicesIntro = 'We focus on consultancy-based interior design: clear, honest advice from the first brief through to site coordination.';
 
 // Service names are from the profile; the one-line descriptions are CLIENT TO REVIEW.
 export const services = [
@@ -91,7 +91,7 @@ export const vision = 'To create purposeful spaces that balance design integrity
 export const mission = 'To deliver design solutions rooted in clarity and practicality, guiding clients with honest, expert advice they can rely on. We aim to simplify the design process through structured consultancy, creating spaces that remain relevant well beyond short-term trends.';
 
 export const whyUs = {
-  title: 'We measure success in outcomes, not optics.',
+  title: 'We measure success in outcomes, not optics',
   points: [
     'Function carries equal weight to aesthetics, never an afterthought',
     "Advice that's unbiased and consultancy-driven, not sales-driven",

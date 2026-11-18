@@ -13,6 +13,6 @@
   .fill { stroke: var(--oxblood); stroke-linecap: round; stroke-dasharray: 138.23; stroke-dashoffset: calc(138.23 * (1 - var(--p))); rotate: -90deg; transform-origin: 24px 24px; }
   .arrow { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: translate 400ms var(--ease); }
   @include hover { &:hover { background: var(--sand); scale: 1.08; .arrow { translate: 0 -2px; } } }
-  &:focus-visible { background: var(--sand); outline: 2px solid var(--paper); outline-offset: 3px; }
+  &:focus-visible { background: var(--sand); outline: 2px solid var(--sand); outline-offset: 3px; }
   @include phone { bottom: 16px; right: 12px; width: 44px; height: 44px; }
 }

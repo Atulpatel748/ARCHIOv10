@@ -139,7 +139,7 @@ test('no reply-to when the contact is a phone number', async () => {
   configure();
   let mail: Mail | undefined;
   mailer.send = async (_settings, m) => { mail = m; };
-  await post({ ...valid, contact: '+971 55 654 1410' });
+  await post({ ...valid, contact: '+971 55 654 1410', message: 'phone reply-to case' });
   assert.equal(mail?.replyTo, undefined);
 });
 
@@ -161,7 +161,7 @@ test('no confirmation unless CONTACT_AUTOREPLY is exactly "on"', async () => {
   for (const value of [undefined, 'ON', 'yes']) {
     if (value === undefined) delete process.env.CONTACT_AUTOREPLY; else process.env.CONTACT_AUTOREPLY = value;
     const sent = recordSends();
-    assert.deepEqual(await status(await post(valid)), [200, { ok: true }]);
+    assert.deepEqual(await status(await post({ ...valid, message: `no autoreply ${value ?? 'unset'}` })), [200, { ok: true }]);
     assert.equal(sent.length, 1, String(value));
   }
 });
@@ -188,7 +188,7 @@ test('no confirmation for a phone contact', async () => {
   configure();
   process.env.CONTACT_AUTOREPLY = 'on';
   const sent = recordSends();
-  await post({ ...valid, contact: '+971 55 654 1410' });
+  await post({ ...valid, contact: '+971 55 654 1410', message: 'phone confirmation case' });
   assert.equal(sent.length, 1);
 });
 
@@ -200,7 +200,7 @@ test('no confirmation when the studio email fails', async () => {
   const realError = console.error;
   console.error = () => {};
   try {
-    assert.deepEqual(await status(await post(valid)), [502, { error: 'send_failed' }]);
+    assert.deepEqual(await status(await post({ ...valid, message: 'studio failure case' })), [502, { error: 'send_failed' }]);
   } finally {
     console.error = realError;
   }

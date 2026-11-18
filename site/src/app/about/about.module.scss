@@ -6,7 +6,7 @@
 }
 .body { display: grid; gap: 20px; max-width: 62ch; font-size: 1.125rem; line-height: 1.7; }
 
-.vm { /* plain paper, ruled by the section border */ }
+.vm { /* plain paper */ }
 .vmGrid {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px clamp(32px, 6vw, 112px);
   > div { display: grid; gap: 20px; align-content: start; }
@@ -22,8 +22,8 @@
 .why {
   display: grid; gap: 22px;
   h2 :global(.label) { display: block; margin-bottom: 22px; font-family: var(--font-ui); text-transform: uppercase; } /* the small eyebrow is part of the heading, so heading navigation finds it */
-  ul { border-top: 1px solid var(--line); margin-top: 8px; }
-  li { padding: 16px 0; border-bottom: 1px solid var(--line); }
+  ul { margin-top: 8px; }
+  li { padding: 16px 0; }
 }
 
 /* Team: the heading on the left, the two founders' names and roles on the right (no photos: the studio asked for none) */
@@ -41,7 +41,8 @@
   li { display: grid; gap: 18px; align-content: start; }
 }
 .who {
-  display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--line);
+  display: grid; gap: 4px; padding-top: 14px;
   h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem); line-height: 1.2; }
   p { font-size: 0.9375rem; font-weight: 400; color: var(--accent-color); }
 }
+.whoLabel { font-size: clamp(1.5rem, 1.2rem + 1vw, 2.25rem); }

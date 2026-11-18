@@ -23,13 +23,13 @@ export default function AboutPage() {
       <PageHead
         label="About us"
         title="Design that works, functionally,"
-        accent="aesthetically and commercially."
-        intro="Archió is a consultancy-led interior design studio in Dubai, founded by Pooja Vijayakumar and S. Harshitha."
+        accent="aesthetically and commercially"
+        intro={'Archió is a consultancy-led interior design studio in Dubai, founded by Pooja Vijayakumar and S. Harshitha.'}
       />
 
       <section className={`section container ${styles.about}`}>
         {/* No second statement here: the heading above already says it (the home page carries the philosophy quote) */}
-        <h2 className="label" data-reveal>Who we are</h2>
+        <h2 className={`label ${styles.whoLabel}`} data-reveal>Who we are</h2>
         <div className={styles.body}>
           {about.body.map((p) => <p key={p} data-reveal>{p}</p>)}
         </div>
@@ -79,7 +79,7 @@ export default function AboutPage() {
 
       {/* A quiet way on for a reader who has reached the end: no promise of a reply time */}
       <section className={`section container ${styles.closing}`}>
-        <p className={styles.closingLine} data-reveal>If you would like to talk through a space, start with our projects or get in touch.</p>
+        <p className={styles.closingLine} data-reveal>If you are looking to design, refurbish or revamp your space, let&apos;s talk.</p>
         <div className={styles.closingActions} data-reveal>
           <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Contact us</Roll></Link>
           <Link prefetch={false} href="/projects" className="text-link"><Roll>See our projects</Roll></Link>

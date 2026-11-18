@@ -62,7 +62,8 @@ export default async function ProjectPage({ params }: Params) {
           <div><dt>Area</dt><dd>{project.area}</dd></div>
         </dl>
         <div className={styles.story}>
-          <Split className={styles.storyLead} text={project.summary} />
+          {/* Headings carry no full stop; the summary keeps it where it is a paragraph (the home page card) */}
+          <Split className={styles.storyLead} text={project.summary.replace(/\.$/, '')} />
           {project.description.map((p) => <p key={p} data-reveal>{p}</p>)}
           <div className={styles.storyActions} data-reveal>
             <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
@@ -83,7 +84,7 @@ export default async function ProjectPage({ params }: Params) {
       {/* The ending: the invitation first, as a full-width band; the next project after it, on paper, so it does not meet the footer */}
       <section className={`section ${styles.cta}`}>
         <div className={`container ${styles.ctaInner}`}>
-          <Split className={styles.endTitle} text="Tell us about the space." />
+          <Split className={styles.endTitle} text="Tell us about your space" />
           <div className={styles.endActions} data-reveal>
             <Link prefetch={false} href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
             <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>

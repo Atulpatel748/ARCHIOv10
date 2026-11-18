@@ -9,7 +9,7 @@ export default function NotFound() {
     <section className="not-found" data-dark-end>
       <div className="container">
         <p className="label">Page not found</p>
-        <h1 className="display">This page is not here.</h1>
+        <h1 className="display">This page is not here</h1>
         <p className="not-found__text">The address may have changed. The projects, services and studio are one step away.</p>
         <div className="not-found__links">
           <Link prefetch={false} href="/projects" className="btn btn--light"><Roll>View projects</Roll></Link>

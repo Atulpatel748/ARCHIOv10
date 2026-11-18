@@ -18,7 +18,7 @@ const send = (body: unknown, headers: Record<string, string> = {}, raw?: string)
 const realSend = mailer.send;
 const realFetch = globalThis.fetch;
 const realNow = Date.now;
-const KEYS = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'CONTACT_TO_EMAIL', 'CONTACT_FROM_EMAIL', 'TURNSTILE_SECRET_KEY', 'CONTACT_AUTOREPLY'];
+const KEYS = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS', 'CONTACT_TO_EMAIL', 'CONTACT_FROM_EMAIL', 'TURNSTILE_SECRET_KEY', 'CONTACT_AUTOREPLY', 'N8N_CONTACT_WEBHOOK_URL'];
 afterEach(() => {
   mailer.send = realSend;
   globalThis.fetch = realFetch;
@@ -53,7 +53,7 @@ test('email edge cases', () => {
 // --- what reaches the studio's inbox ---
 test('line breaks in the name cannot add a mail header', async () => {
   const sent = capture();
-  assert.equal((await send({ ...valid, name: 'Asha\r\nBcc: evil@x.test' })).status, 200);
+  assert.equal((await send({ ...valid, name: 'Asha\r\nBcc: evil@x.test', message: 'header injection case' })).status, 200);
   assert.doesNotMatch(sent[0].subject, /[\r\n]/);
 });
 
@@ -167,7 +167,7 @@ test('in production, a configured site with a passed captcha sends the mail', as
   try {
     const sent = capture();
     siteverify();
-    assert.equal((await send({ ...valid, turnstileToken: 'tok' })).status, 200);
+    assert.equal((await send({ ...valid, message: 'production captcha case', turnstileToken: 'tok' })).status, 200);
     assert.equal(sent.length, 1);
   } finally {
     env.NODE_ENV = before;
@@ -179,8 +179,172 @@ test('a failed send logs only the error code, never the settings', async () => {
   configure();
   mailer.send = async () => { throw Object.assign(new Error('bad pass hunter2 at mail.example.com'), { code: 'EAUTH' }); };
   const log = mock.method(console, 'error', () => {});
-  assert.equal((await send(valid)).status, 502);
+  assert.equal((await send({ ...valid, message: 'failed SMTP case' })).status, 502);
   assert.deepEqual(log.mock.calls[0].arguments, ['contact form: sending failed:', 'EAUTH']);
+});
+
+test('n8n payload splits email and phone and retries only a failed destination', async () => {
+  const sent = capture();
+  process.env.N8N_CONTACT_WEBHOOK_URL = 'https://n8n.example/webhook/contact';
+  const payloads: Record<string, unknown>[] = [];
+  let webhookCalls = 0;
+  globalThis.fetch = async (_url, init) => {
+    webhookCalls++;
+    payloads.push(JSON.parse(String(init?.body)) as Record<string, unknown>);
+    return Response.json({}, { status: webhookCalls === 1 ? 500 : 200 });
+  };
+
+  assert.equal((await send({ ...valid, contact: 'Lead@Example.com', message: 'living\nspace' })).status, 200);
+  assert.deepEqual(payloads[0], {
+    name: 'Asha Rao',
+    contact: 'Lead@Example.com',
+    email: 'Lead@Example.com',
+    phone: '',
+    type: 'Residential',
+    location: '',
+    message: 'living\nspace',
+    follow_up_eligible: true,
+    submitted_at: payloads[0].submitted_at,
+    source: 'website',
+  });
+  assert.equal(typeof payloads[0].submitted_at, 'string');
+
+  const retry = await send({ ...valid, contact: 'lead@example.com', message: 'living   space' });
+  assert.deepEqual(await retry.json(), { ok: true, duplicate: true });
+  assert.equal(sent.length, 1);
+  assert.equal(webhookCalls, 2);
+
+  const duplicate = await send({ ...valid, contact: 'LEAD@example.com', message: 'living space' });
+  assert.deepEqual(await duplicate.json(), { ok: true, duplicate: true });
+  assert.equal(sent.length, 1);
+  assert.equal(webhookCalls, 2);
+
+  await send({ ...valid, contact: '+971 50 123 4567', message: 'phone lead case' });
+  assert.equal(payloads[2].email, '');
+  assert.equal(payloads[2].phone, '+971 50 123 4567');
+  assert.equal(payloads[2].follow_up_eligible, false);
+  assert.equal(sent.length, 2);
+});
+
+test('a webhook answering 200 with success: false counts as failed', async () => {
+  capture();
+  mailer.send = async () => { throw Object.assign(new Error('down'), { code: 'ECONNECTION' }); };
+  process.env.N8N_CONTACT_WEBHOOK_URL = 'https://script.example/macros/s/x/exec';
+  globalThis.fetch = async () => Response.json({ success: false, error: 'Inquiry could not be saved.' });
+  const log = mock.method(console, 'error', () => {});
+  assert.equal((await send({ ...valid, contact: 'apps-script@example.com', message: 'success false case' })).status, 502);
+  assert.ok(log.mock.calls.some((call) => call.arguments[0] === 'contact form: n8n webhook reported success: false'));
+});
+
+test('simultaneous duplicate submissions share the same in-flight deliveries', async () => {
+  capture();
+  process.env.N8N_CONTACT_WEBHOOK_URL = 'https://n8n.example/webhook/contact';
+  let release!: () => void;
+  const held = new Promise<void>((resolve) => { release = resolve; });
+  let smtpCalls = 0;
+  let webhookCalls = 0;
+  mailer.send = async () => { smtpCalls++; await held; };
+  globalThis.fetch = async () => { webhookCalls++; await held; return Response.json({}); };
+
+  const first = send({ ...valid, contact: 'parallel@example.com', message: 'parallel duplicate case' });
+  const second = send({ ...valid, contact: 'PARALLEL@example.com', message: 'parallel   duplicate case' });
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    assert.equal(smtpCalls, 1);
+    assert.equal(webhookCalls, 1);
+  } finally {
+    release();
+  }
+  const responses = await Promise.all([first, second]);
+  assert.deepEqual(responses.map((response) => response.status), [200, 200]);
+  assert.equal(smtpCalls, 1);
+  assert.equal(webhookCalls, 1);
+});
+
+test('waiting duplicates re-check failures and share a single retry attempt', async () => {
+  capture();
+  process.env.N8N_CONTACT_WEBHOOK_URL = 'https://n8n.example/webhook/contact';
+  let releaseInitial!: () => void;
+  let releaseRetry!: () => void;
+  const initialAttempt = new Promise<void>((resolve) => { releaseInitial = resolve; });
+  const retryAttempt = new Promise<void>((resolve) => { releaseRetry = resolve; });
+  let smtpCalls = 0;
+  let webhookCalls = 0;
+  mailer.send = async () => {
+    if (++smtpCalls === 1) {
+      await initialAttempt;
+      throw Object.assign(new Error('temporary SMTP failure'), { code: 'ECONNECTION' });
+    }
+    if (smtpCalls === 2) await retryAttempt;
+  };
+  globalThis.fetch = async () => {
+    if (++webhookCalls === 1) {
+      await initialAttempt;
+      return Response.json({}, { status: 500 });
+    }
+    if (webhookCalls === 2) await retryAttempt;
+    return Response.json({});
+  };
+  mock.method(console, 'error', () => {});
+
+  const enquiry = { ...valid, contact: 'waiting@example.com', message: 'waiting retry case' };
+  const first = send(enquiry);
+  for (let i = 0; i < 50 && (smtpCalls < 1 || webhookCalls < 1); i++) {
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  }
+  assert.equal(smtpCalls, 1);
+  assert.equal(webhookCalls, 1);
+  const duplicateA = send(enquiry);
+  const duplicateB = send({ ...enquiry, contact: 'WAITING@example.com' });
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  releaseInitial();
+  for (let i = 0; i < 50 && (smtpCalls < 2 || webhookCalls < 2); i++) {
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  }
+  assert.equal(smtpCalls, 2);
+  assert.equal(webhookCalls, 2);
+  releaseRetry();
+
+  const responses = await Promise.all([first, duplicateA, duplicateB]);
+  assert.deepEqual(responses.map((response) => response.status), [502, 200, 200]);
+  assert.deepEqual(await responses[1].json(), { ok: true, duplicate: true });
+  assert.deepEqual(await responses[2].json(), { ok: true, duplicate: true });
+  assert.equal(smtpCalls, 2);
+  assert.equal(webhookCalls, 2);
+});
+
+test('SMTP retries after an n8n success without sending the webhook twice', async () => {
+  capture();
+  process.env.N8N_CONTACT_WEBHOOK_URL = 'https://n8n.example/webhook/contact';
+  let smtpCalls = 0;
+  let webhookCalls = 0;
+  mailer.send = async () => {
+    if (++smtpCalls === 1) throw Object.assign(new Error('temporary SMTP failure'), { code: 'ECONNECTION' });
+  };
+  globalThis.fetch = async () => { webhookCalls++; return Response.json({}); };
+  mock.method(console, 'error', () => {});
+
+  const enquiry = { ...valid, contact: 'smtp-retry@example.com', message: 'SMTP retry case' };
+  assert.equal((await send(enquiry)).status, 200);
+  const retry = await send({ ...enquiry, contact: 'SMTP-RETRY@example.com' });
+  assert.deepEqual(await retry.json(), { ok: true, duplicate: true });
+  const duplicate = await send(enquiry);
+  assert.deepEqual(await duplicate.json(), { ok: true, duplicate: true });
+  assert.equal(smtpCalls, 2);
+  assert.equal(webhookCalls, 1);
+});
+
+test('duplicate tracking expires after ten minutes', async () => {
+  const sent = capture();
+  let now = 1_000_000_000_000;
+  Date.now = () => now;
+  const enquiry = { ...valid, contact: 'expiry@example.com', message: 'expiry case' };
+  assert.equal((await send(enquiry)).status, 200);
+  assert.deepEqual(await (await send(enquiry)).json(), { ok: true, duplicate: true });
+  now += 10 * 60 * 1000;
+  assert.deepEqual(await (await send(enquiry)).json(), { ok: true });
+  assert.equal(sent.length, 2);
 });
 
 test('the confirmation: tag dropped, one per address and per visitor, and a failed one is not retried', async () => {

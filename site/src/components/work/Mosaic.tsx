@@ -126,7 +126,7 @@ export default function Mosaic({ projects }: { projects: Project[] }) {
     <section className={`container ${styles.om}`} aria-label="More of the work, room by room">
       <div className={styles.omHead}>
         <p className="label" data-reveal>Rooms</p>
-        <h2 className={styles.omTitle} data-reveal>More of the work, room by room.</h2>
+        <h2 className={styles.omTitle} data-reveal>More of the work, room by room</h2>
       </div>
       <div className={styles.omFilters} role="group" aria-label="Filter images by category" data-reveal>
         {FILTERS.map((f) => (

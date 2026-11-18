@@ -22,7 +22,7 @@ export default function ContactPage() {
         <div className={`container ${styles.grid}`}>
           <div className={styles.info}>
             <Split as="h1" className={styles.title} text="Start a conversation" />
-            <p className={styles.invite} data-reveal>Tell us about the space and what it needs to do. We will reply to arrange a first conversation.</p>
+            <p className={styles.invite} data-reveal>Tell us about your space and what it needs to do. We will reply to arrange a first conversation.</p>
             <dl className={styles.details} data-reveal>
               <div><dt>WhatsApp or call</dt><dd><a href={site.whatsappHref}>{site.phone}</a></dd></div>
               <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>

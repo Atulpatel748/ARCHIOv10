@@ -1,7 +1,7 @@
 @use '../styles/tokens' as *;
 
 /* Phones and tablets: stacked, the open panel grows taller */
-.panels { margin: 0; display: grid; gap: 10px; color: var(--paper); }
+.panels { margin: 0; display: grid; gap: 10px; color: var(--sand); }
 .panels li {
   position: relative; overflow: hidden; height: 92px; background: var(--deep);
   transition: height 700ms var(--ease);

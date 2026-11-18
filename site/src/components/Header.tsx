@@ -145,8 +145,13 @@ export default function Header() {
       setHidden((h) => (d > 0 ? scrollY > hideAt : h));
       last = scrollY;
     };
+    // A reload part-way down the page restores the scroll before this runs and fires no scroll: start hidden there too
+    const home = location.pathname === '/';
+    const first = requestAnimationFrame(() => {
+      if (scrollY > (home ? innerHeight : 24)) { setHidden(true); scrolledRef.current = true; setScrolled(true); }
+    });
     addEventListener('scroll', onScroll, { passive: true });
-    return () => removeEventListener('scroll', onScroll);
+    return () => { cancelAnimationFrame(first); removeEventListener('scroll', onScroll); };
   }, []);
 
   // Close the menu on navigation (a render-time state adjustment rather than an effect).
@@ -205,7 +210,8 @@ export default function Header() {
           <span className={`logo logo--wordmark ${styles.logo}`} aria-hidden="true" />
         </Link>
         <div className={styles.right} inert={open}>
-          <Link prefetch={false} href="/contact" className={styles.talk}><Roll>{"Let's talk"}</Roll> <span aria-hidden="true">+</span></Link>
+          {/* Not on the contact page itself: it would only point back to where you are */}
+          {pathname !== '/contact' && <Link prefetch={false} href="/contact" className={styles.talk}><Roll>{"Contact us"}</Roll> <span aria-hidden="true">+</span></Link>}
         </div>
       </header>
 

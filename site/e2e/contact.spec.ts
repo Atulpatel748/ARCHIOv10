@@ -230,7 +230,7 @@ test.describe('contact field rules (site/src/content/contact.ts)', () => {
 
   test('each field caps its length to what the server keeps', async ({ page }) => {
     // The same caps as clean() in site/src/app/api/contact/route.ts.
-    for (const [label, max] of [['Name', 100], ['Email or phone', 120], ['Community or location', 120], ['About the space', 2000]] as const) {
+    for (const [label, max] of [['Name', 100], ['Email or phone', 120], ['Community or location', 120], ['About your space', 2000]] as const) {
       await expect(page.getByLabel(label)).toHaveAttribute('maxlength', String(max));
     }
   });

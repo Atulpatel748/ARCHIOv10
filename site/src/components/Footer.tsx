@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { nav, site } from '@/content/site';
 import styles from './Footer.module.scss';
+import { icons } from './ContactIcons';
 
 export default function Footer() {
   return (
@@ -14,12 +15,13 @@ export default function Footer() {
           <p className="label">Explore</p>
           {nav.map((item) => <Link prefetch={false} key={item.href} href={item.href}>{item.label}</Link>)}
         </nav>
-        <div className={styles.col}>
+        <div className={`${styles.col} ${styles.contact}`}>
           <p className="label">Contact</p>
-          <a href={site.whatsappHref}>WhatsApp {site.phone}</a>
-          <a href={site.phoneHref}>Call {site.phone}</a>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-          <a href={site.instagramHref}>Instagram {site.instagram}</a>
+          {/* The icon says which is which on screen; the hidden word says it to screen readers */}
+          <a href={site.whatsappHref}>{icons.whatsapp}<span className="visually-hidden">WhatsApp </span>{site.phone}</a>
+          <a href={site.phoneHref}>{icons.phone}<span className="visually-hidden">Call </span>{site.phone}</a>
+          <a href={`mailto:${site.email}`}>{icons.mail}<span className="visually-hidden">Email </span>{site.email}</a>
+          <a href={site.instagramHref}>{icons.instagram}<span className="visually-hidden">Instagram </span>{site.instagram}</a>
         </div>
       </div>
 

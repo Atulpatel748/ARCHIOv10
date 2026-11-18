@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <PageHead label="Services" title="Expertise at every stage" accent="of a project." intro={servicesIntro} />
+      <PageHead label="Services" title="Expertise at every stage" accent="of a project" intro={servicesIntro} />
 
       {/* Three bands, one per stage: a render to the edge of the screen, the stage name and its two services */}
       <div className={styles.bands}>
@@ -45,7 +45,7 @@ export default function ServicesPage() {
       </div>
 
       <p className={`container ${styles.bandsNext}`} data-reveal>
-        Not sure which stage you need? <Link prefetch={false} href="/contact">Let&apos;s talk</Link>
+        Not sure which stage you need? <Link prefetch={false} href="/contact">Contact us</Link>
       </p>
 
       <section className={`container ${styles.sectors}`}>
@@ -67,7 +67,7 @@ export default function ServicesPage() {
       <section className={`section container ${styles.process}`}>
         <div className={styles.processHead}>
           <p className="label" data-reveal>How we work</p>
-          <h2 className="h2" data-reveal>{approach.title}</h2>
+          <h2 className="h2" style={{ whiteSpace: 'pre-line' }} data-reveal>{approach.title.replace('. ', '.\n')}</h2>
           <p className="serif" data-reveal>{approach.body}</p>
           <Link prefetch={false} href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
         </div>

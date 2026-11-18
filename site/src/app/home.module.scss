@@ -32,10 +32,10 @@
 .sequence[data-seq] {
   height: 200svh;
   .seqStage { position: sticky; top: 0; display: block; height: 100svh; min-height: 0; padding: 0; }
-  /* The two words start together in the middle, slide apart and fade to a tenth */
+  /* The two words start together in the middle, slide apart and fade, gone just before the scene ends */
   .seqTitle {
     position: absolute; left: 0; top: 50%; justify-content: center; gap: 0.09em; padding: 0.06em 0 0; transform: translateY(-50%);
-    opacity: calc(1 - var(--progress, 0) * 0.9);
+    opacity: min(calc(1 - var(--progress, 0) * 0.9), calc((0.97 - var(--progress, 0)) * 20)); /* the usual faint fade, then gone in the last few frames before the next section starts */
   }
   .seqStart { transform: translateX(calc(-17vw * var(--progress, 0))); }
   .seqEnd { transform: translateX(calc(17vw * var(--progress, 0))); }
@@ -72,7 +72,7 @@
   background: var(--paper); border: 1px solid var(--line); border-left: 0; display: grid; gap: 18px; justify-items: start; align-content: center;
   :global(.label) { margin: 0; opacity: 0.75; }
   h3 { font-size: clamp(1.75rem, 1.3rem + 1.2vw, 2.5rem); }
-  dl { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+  dl { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   dl > div { padding: 14px 12px 0 0; display: grid; gap: 4px; }
   dt { font-size: 0.8125rem; opacity: 0.75; }
   dd { margin: 0; font-family: var(--font-display); font-size: 1.125rem; line-height: 1.25; }
@@ -83,9 +83,8 @@
 
 
 /* Philosophy: dark, text only */
-.philosophy { display: flex; align-items: center; color: var(--paper); background: var(--deep); }
+.philosophy { display: flex; align-items: center; color: var(--sand); background: var(--deep); }
 /* Once "We Design" releases, the empty lower half of its pinned stage would show as blank paper: the dark section rises over it instead */
-.sequence[data-seq] + .philosophy { margin-top: -28svh; }
 .philosophyInner { display: grid; gap: 32px; justify-items: center; text-align: center; padding-block: var(--section); }
-.quote { text-transform: uppercase; letter-spacing: 0.01em; font-family: var(--font-display); font-size: clamp(2.5rem, 1.2rem + 4.4vw, 6rem); line-height: 1.04; max-width: 17ch; :global(.accent) { color: var(--sand); } }
-.philosophyBody { max-width: 52ch; font-size: 1.125rem; line-height: 1.7; color: var(--sand); }
+.quote { text-transform: uppercase; letter-spacing: 0.01em; font-family: var(--font-display); font-size: clamp(2.5rem, 1.2rem + 4.4vw, 6rem); line-height: 1.04; max-width: 17ch; color: var(--sand); :global(.accent) { color: var(--sand); } }
+.philosophyBody { max-width: 52ch; font-size: 1.125rem; line-height: 1.7; color: var(--blush); }

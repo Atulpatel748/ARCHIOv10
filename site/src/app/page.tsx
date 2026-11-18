@@ -60,7 +60,7 @@ export default function HomePage() {
       {/* Philosophy: a quiet dark statement, text only */}
       <section className={styles.philosophy}>
         <blockquote className={`container ${styles.philosophyInner}`}>
-          <Split as="p" className={styles.quote} text="Spaces made" accent="to be lived in." />
+          <Split as="p" className={styles.quote} text="Spaces made" accent="to be lived in" />
           <p className={`serif ${styles.philosophyBody}`} data-reveal>{philosophy.body}</p>
         </blockquote>
       </section>
@@ -76,7 +76,7 @@ export default function HomePage() {
         <div className="container">
           <div className={styles.headRow}>
             <p className="label" data-reveal>What we do</p>
-            <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to site coordination." />
+            <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to site coordination" />
           </div>
           <StageList stages={stages} />
         </div>

@@ -12,7 +12,7 @@
 .track {
   --p: var(--progress, 1); /* the finished room when the script has not run */
   --glow: clamp(0, calc((var(--p) - 0.76) / 0.2), 1);
-  position: relative; border-top: 1px solid var(--line);
+  position: relative;
 }
 .stage {
   position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px clamp(24px, 4vw, 72px); align-items: center;
@@ -87,8 +87,3 @@
 /* A warm glow at the entrance once the drawing is nearly done */
 .warm { opacity: var(--glow); }
 
-/* The "Illustration" label, bottom right, once the lights are on; only when pinned */
-.tag { display: none; }
-@media (min-width: 1024px) and (min-height: 760px) {
-  .track[data-seq] .tag { display: block; position: absolute; right: calc(var(--margin) + 72px); bottom: 24px; margin: 0; opacity: var(--glow); }
-}

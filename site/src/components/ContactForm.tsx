@@ -166,7 +166,7 @@ export default function ContactForm() {
   if (state === 'sent') {
     return (
       <div ref={done} tabIndex={-1} className={styles.done} role="status">
-        <h2 className="h3">Thank you. Your enquiry has been sent.</h2>
+        <h2 className="h3">Thank you. Your enquiry has been sent</h2>
         <p>We will reply to the contact details you gave, to arrange a first conversation.</p>
       </div>
     );
@@ -181,7 +181,7 @@ export default function ContactForm() {
       </div>
       <div className={styles.field}>
         <label htmlFor="contact">Email or phone</label>
-        <p id="contact-hint" className={styles.hint}>Email, or a phone number with country code.</p>
+        <p id="contact-hint" className={styles.hint}>For a phone number, add the country code (e.g. +971).</p>
         <input id="contact" name="contact" autoComplete="email" spellCheck={false} autoCapitalize="none" maxLength={120} required aria-invalid={!!errors.contact} aria-describedby={errors.contact ? 'contact-hint contact-error' : 'contact-hint'} />
         {errors.contact && <p id="contact-error" className={styles.error}>{errors.contact}</p>}
       </div>
@@ -200,7 +200,7 @@ export default function ContactForm() {
         <input id="location" name="location" maxLength={120} />
       </div>
       <div className={styles.field}>
-        <label htmlFor="message">About the space <span className={styles.optional}>(optional)</span></label>
+        <label htmlFor="message">About your space <span className={styles.optional}>(optional)</span></label>
         <p id="message-hint" className={styles.hint}>For example: the property, what you want to change, and when.</p>
         <textarea id="message" name="message" rows={4} maxLength={2000} aria-describedby="message-hint" />
       </div>

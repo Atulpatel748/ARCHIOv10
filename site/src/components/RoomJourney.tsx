@@ -20,7 +20,7 @@ export default function RoomJourney({ steps }: { steps: Step[] }) {
       <div className={styles.stage}>
         <div className={styles.steps}>
           <p className="label">How it goes</p>
-          <Split className={styles.big} text="From the first conversation" accent="to the final design." />
+          <Split className={styles.big} text="From the first conversation" accent="to the final design" />
           <ol>
             {steps.map((s, i) => (
               <li key={s.title} style={vars({ '--at': i * 0.25, '--next': i < 3 ? (i + 1) * 0.25 : 2 })}>
@@ -34,8 +34,6 @@ export default function RoomJourney({ steps }: { steps: Step[] }) {
         </div>
 
         <Elevation />
-
-        <p className={`label ${styles.tag}`}>Illustration</p>
       </div>
     </Sequence>
   );
