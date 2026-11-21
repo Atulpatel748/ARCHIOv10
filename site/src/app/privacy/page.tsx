@@ -54,7 +54,7 @@ export default function PrivacyPage() {
         </section>
         <section>
           <h2>Cookies and analytics</h2>
-          <p>The current source code does not intentionally install third-party advertising or analytics trackers. The hosting platform and essential website functionality may still use technical logs or similar mechanisms. This section should be updated if analytics, advertising, embedded third-party media or other tracking tools are added.</p>
+          <p>This website does not use advertising or analytics trackers. Our hosting provider may keep basic technical logs needed to run the website securely. If we add analytics or other tracking tools in future, we will update this notice.</p>
         </section>
         <section>
           <h2>Changes</h2>
