@@ -3,6 +3,7 @@ import { test, expect } from './fixtures';
 
 // Copy from site/src/components/ContactForm.tsx and site/src/content/site.ts.
 const FAILED = 'Your enquiry did not send.';
+const OFFLINE = 'The form is not taking enquiries at the moment.';
 const CAPTCHA = 'The security check did not complete.';
 const SENT = 'Thank you. Your enquiry has been sent';
 
@@ -111,8 +112,13 @@ test.describe('with /api/contact mocked', () => {
   const failures: [string, number, object][] = [
     ['server validation error', 422, { error: 'invalid', fields: ['name'] }],
     ['rate limit', 429, { error: 'rate_limited' }],
-    ['not configured', 503, { error: 'not_configured' }],
   ];
+  test('not configured (503) sends visitors to WhatsApp and email', async ({ page }) => {
+    await page.route('**/api/contact', (route) => route.fulfill({ status: 503, json: { error: 'not_configured' } }));
+    await fillValid(page);
+    await send(page);
+    await expectFallback(page, OFFLINE);
+  });
   for (const [label, status, json] of failures) {
     test(`${label} (${status}) shows the WhatsApp and email fallback`, async ({ page }) => {
       await page.route('**/api/contact', (route) => route.fulfill({ status, json }));
@@ -148,7 +154,7 @@ test('the real server without mail settings answers 503 not_configured and the f
   const res = await response;
   expect(res.status()).toBe(503);
   expect(await res.json()).toEqual({ error: 'not_configured' });
-  await expectFallback(page, FAILED);
+  await expectFallback(page, OFFLINE);
 });
 
 test.describe('in flight', () => {

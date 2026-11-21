@@ -54,7 +54,7 @@ function validate(data: FormData): Errors {
 
 export default function ContactForm() {
   const [errors, setErrors] = useState<Errors>({});
-  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'failed' | 'captcha'>('idle');
+  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'failed' | 'captcha' | 'offline'>('idle');
   const [askHuman, setAskHuman] = useState(false); // Turnstile wants a click before it will pass the form
   const box = useRef<HTMLDivElement>(null);
   const captcha = useRef<{ ready?: Promise<string>; id?: string; pending?: { resolve: (token: string) => void; reject: (error: Error) => void } }>({});
@@ -138,7 +138,8 @@ export default function ContactForm() {
       const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fields) });
       if (!res.ok) {
         const { error } = (await res.json().catch(() => ({}))) as { error?: string };
-        setState(error?.startsWith('captcha') ? 'captcha' : 'failed');
+        // not_configured will not change on a retry, so point straight to the other ways in
+        setState(error?.startsWith('captcha') ? 'captcha' : error === 'not_configured' ? 'offline' : 'failed');
         return;
       }
       if (captcha.current.id) window.turnstile?.remove(captcha.current.id); // the form goes away
@@ -225,6 +226,7 @@ export default function ContactForm() {
         {state === 'idle' && invalid.length > 0 && <>{invalid.length === 1 ? '1 field needs' : `${invalid.length} fields need`} attention: {invalid.map((k) => FIELD_NAMES[k]).join(', ')}.</>}
         {state === 'sending' && (askHuman ? <>One more step: tick the box above to confirm you are a person. Your enquiry will then send.</> : <>Sending your enquiry…</>)}
         {state === 'captcha' && <>The security check did not complete. Your details are still in the form. Try sending again, or message us on <a href={site.whatsappHref}>WhatsApp</a> or by email at <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
+        {state === 'offline' && <>The form is not taking enquiries at the moment. Please message us on <a href={site.whatsappHref}>WhatsApp</a> or email <a href={`mailto:${site.email}`}>{site.email}</a>, and we will reply from there.</>}
         {state === 'failed' && <>Your enquiry did not send. Your details are still in the form. Try again, or message us on <a href={site.whatsappHref}>WhatsApp</a> or by email at <a href={`mailto:${site.email}`}>{site.email}</a>.</>}
       </p>
     </form>

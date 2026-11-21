@@ -66,7 +66,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScrollCue />
         <Reveals />
         <Cursor />
-        <Analytics />
+        {/* Only on Vercel: elsewhere /_vercel/insights/script.js does not exist and would log a console error */}
+        {process.env.VERCEL && <Analytics />}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization).replace(/</g, '\\u003c') }} />
       </body>
     </html>
