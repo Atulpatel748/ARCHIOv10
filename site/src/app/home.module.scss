@@ -15,7 +15,7 @@
 @media (prefers-reduced-motion: reduce) { .heroMark { animation: none; } }
 
 /* overflow-wrap: long words must not push a 320px column wider */
-.big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2rem, 0.6rem + 5.2vw, 6.75rem); line-height: 0.96; max-width: 18ch; overflow-wrap: anywhere; }
+.big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2rem, 0.6rem + 5.2vw, 6.75rem); line-height: 0.96; max-width: 18ch; overflow-wrap: break-word; }
 
 /* We do (after YODEZEEN's): a tall section with a sticky stage. <Sequence> sets --progress (0 to 1) as you scroll through it.
    Without it (no JS, reduced motion) the same content is a plain static block. */

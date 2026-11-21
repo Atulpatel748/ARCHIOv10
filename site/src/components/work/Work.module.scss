@@ -5,11 +5,16 @@
 /* ---------- Head ---------- */
 .head { padding-block: calc(var(--header-h) + clamp(3rem, 2rem + 4vw, 6rem)) clamp(2.5rem, 2rem + 3vw, 4.5rem); }
 .headA {
-  display: grid; gap: 1.5rem;
+  display: grid; gap: 1.5rem; container-type: inline-size;
   /* wide screens: the line sits to the right of the title, so the space beside it is not left empty */
   @media (min-width: 1025px) { grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); align-items: end; column-gap: clamp(32px, 5vw, 96px); > :global(.label) { grid-column: 1 / -1; } }
 }
-.title { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(3.4rem, 1.4rem + 9vw, 12rem); line-height: 0.9; }
+/* Never mid-word: the size is capped so the longest word ("SELECTED", about 4.6 times the font size) fits its column */
+.title {
+  font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: -0.01em; line-height: 0.9;
+  font-size: min(clamp(3.4rem, 1.4rem + 9vw, 12rem), calc(100cqw / 4.8));
+  @media (min-width: 1025px) { font-size: min(clamp(3.4rem, 1.4rem + 9vw, 12rem), calc((100cqw - 22rem - 96px) / 4.8)); }
+}
 .lead { max-width: 38ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; }
 
 

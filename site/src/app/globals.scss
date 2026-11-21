@@ -36,7 +36,7 @@ ul, ol { padding: 0; list-style: none; }
 img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-h1, h2, h3 { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; line-height: 1.08; overflow-wrap: anywhere; } /* a big word wraps rather than widen a 320px page when a reader sets wider text spacing (WCAG 1.4.12) */
+h1, h2, h3 { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; line-height: 1.08; overflow-wrap: break-word; } /* a big word wraps rather than widen a 320px page when a reader sets wider text spacing (WCAG 1.4.12) */
 :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
 
 /* Every section after the hero is a layer that slides up over it (the hero is sticky). */
@@ -75,8 +75,8 @@ html.lenis, html.lenis body { height: auto; }
 /* Big uppercase display headings in the brand's Optima-style face, which matches the logo caps */
 .caps { text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.95; }
 
-.display { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(3rem, 1rem + 6vw, 7.5rem); line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; overflow-wrap: anywhere; }
-.h2 { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; text-wrap: balance; overflow-wrap: anywhere; }
+.display { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(3rem, 1rem + 6vw, 7.5rem); line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; overflow-wrap: break-word; }
+.h2 { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; text-wrap: balance; overflow-wrap: break-word; }
 .h3 { font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.875rem); line-height: 1.2; }
 .lead { font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem); line-height: 1.55; }
 .serif { font-family: var(--font-body), Georgia, serif; font-weight: 400; }
