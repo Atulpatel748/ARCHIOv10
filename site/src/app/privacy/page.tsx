@@ -54,7 +54,7 @@ export default function PrivacyPage() {
         </section>
         <section>
           <h2>Cookies and analytics</h2>
-          <p>This website does not use advertising or analytics trackers. Our hosting provider may keep basic technical logs needed to run the website securely. If we add analytics or other tracking tools in future, we will update this notice.</p>
+          <p>This website does not use cookies or advertising trackers. We use Vercel Web Analytics to count page visits in aggregate; it does not use cookies and does not identify individual visitors. Our hosting provider may also keep basic technical logs needed to run the website securely.</p>
         </section>
         <section>
           <h2>Changes</h2>

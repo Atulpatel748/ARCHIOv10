@@ -9,6 +9,7 @@ import Cursor from '@/components/Cursor';
 import Reveals from '@/components/Reveals';
 import Preloader from '@/components/Preloader';
 import { site } from '@/content/site';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.scss';
 
 // Belleza stands in for Optima (not licensed for web); Public Sans and Lora are the brand kit's own fonts.
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScrollCue />
         <Reveals />
         <Cursor />
+        <Analytics />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization).replace(/</g, '\\u003c') }} />
       </body>
     </html>
