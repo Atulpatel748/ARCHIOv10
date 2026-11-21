@@ -90,7 +90,7 @@ test.describe('home with full motion and the preloader', () => {
     await expect(page.locator('[data-preloader]')).toHaveCount(0, { timeout: 15_000 });
     await page.waitForTimeout(1000); // and the checks that follow it
     const colours = await page.evaluate(() => [...(window as unknown as { headerColours: Set<string> }).headerColours]);
-    expect(colours).toEqual(['rgb(248, 247, 244)']);
+    expect(colours).toEqual(['rgb(218, 207, 186)']); // the brand beige: the client asked for no white
   });
 });
 

@@ -4,7 +4,7 @@ import { test, expect } from './fixtures';
 // Copy from site/src/components/ContactForm.tsx and site/src/content/site.ts.
 const FAILED = 'Your enquiry did not send.';
 const CAPTCHA = 'The security check did not complete.';
-const SENT = 'Thank you. Your enquiry has been sent.';
+const SENT = 'Thank you. Your enquiry has been sent';
 
 const form = (page: Page) => page.locator('#main form');
 

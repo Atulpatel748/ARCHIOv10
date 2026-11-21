@@ -11,9 +11,9 @@ test.describe('desktop header and footer', () => {
     });
   }
 
-  test("header Let's talk opens /contact and the logo goes home", async ({ page }) => {
+  test("header Contact us opens /contact and the logo goes home", async ({ page }) => {
     await page.goto('/about');
-    await page.getByRole('banner').getByRole('link', { name: "Let's talk" }).click();
+    await page.getByRole('banner').getByRole('link', { name: 'Contact us' }).click();
     await expect(page).toHaveURL('/contact');
     await page.getByRole('link', { name: 'Archió, home' }).click();
     await expect(page).toHaveURL('/');
@@ -43,9 +43,9 @@ test.describe('desktop header and footer', () => {
     await expect(page).toHaveURL(/#main$/);
   });
 
-  test("Tab reaches Let's talk with a visible focus outline", async ({ page }) => {
+  test("Tab reaches Contact us with a visible focus outline", async ({ page }) => {
     await page.goto('/about');
-    const cta = page.getByRole('banner').getByRole('link', { name: "Let's talk" });
+    const cta = page.getByRole('banner').getByRole('link', { name: 'Contact us' });
     // The logo is the Tab stop just before it; one Tab from there, so the press is a keyboard one and :focus-visible applies.
     await page.getByRole('link', { name: 'Archió, home' }).focus();
     await page.keyboard.press('Tab');
@@ -97,7 +97,7 @@ test.describe('mobile menu at 390px', () => {
       await page.goto('/');
       const brand = page.getByRole('banner').locator('a[href="/"]');
       // White (paper) over the hero photo, never oxblood.
-      await expect(page.getByRole('banner')).toHaveCSS('color', 'rgb(248, 247, 244)');
+      await expect(page.getByRole('banner')).toHaveCSS('color', 'rgb(218, 207, 186)');
       await page.getByRole('button', { name: 'Open the menu' }).click();
       const contact = page.getByRole('dialog', { name: 'Menu' }).getByRole('link', { name: 'Contact' });
       await expect(contact).toBeVisible();

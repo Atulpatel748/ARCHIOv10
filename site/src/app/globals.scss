@@ -14,7 +14,7 @@
   --night: #140607; /* the near-black behind photographs */
   --error: #ffb4ad; /* error text and rules on the dark contact section */
   --section: clamp(56px, 6.5vw, 104px); /* tighter: the client found the gaps between sections too large */
-  --accent-color: rgb(76 17 20 / 0.66); /* small labels and numbers: muted ink, about 6:1 on paper; dark sections switch to blush */
+  --accent-color: rgb(76 17 20 / 0.82); /* small labels and numbers: muted ink, still AA on the beige #DACFBA background; dark sections switch to blush */
   @include phone { --header-h: 68px; }
 }
 

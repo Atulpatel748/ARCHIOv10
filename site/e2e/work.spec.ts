@@ -18,7 +18,7 @@ test.describe('/projects with full motion', () => {
     test(`renders cleanly at ${width}px`, async ({ page, consoleErrors, badResponses }) => {
       await page.setViewportSize({ width, height: 900 });
       await page.goto('/projects');
-      await expect(page.locator('h1')).toHaveText('Selected designs.');
+      await expect(page.locator('h1')).toHaveText('Selected designs');
       // Smooth scroll and the scroll effects load when the browser is idle; wait for them so their errors would be caught.
       await expect.poll(() => page.evaluate(() => 'lenis' in window)).toBe(true);
       await expect(tiles(page)).toHaveCount(total);

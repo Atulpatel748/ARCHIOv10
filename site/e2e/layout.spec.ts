@@ -18,13 +18,13 @@ for (const width of WIDTHS) {
   });
 }
 
-// The narrowest phones: the centred logo's tap area must stay clear of the "Let's talk" pill.
+// The narrowest phones: the centred logo's tap area must stay clear of the "Contact us" pill.
 test.describe('header at 320px', () => {
   test.use({ viewport: { width: 320, height: 700 } });
   test('the logo and the Let\'s talk pill do not overlap', async ({ page }) => {
     await page.goto('/about');
     const brand = (await page.getByRole('banner').getByRole('link', { name: 'Archió, home' }).boundingBox())!;
-    const talk = (await page.getByRole('banner').getByRole('link', { name: /Let's talk/ }).boundingBox())!;
+    const talk = (await page.getByRole('banner').getByRole('link', { name: /Contact us/ }).boundingBox())!;
     expect(brand.x + brand.width).toBeLessThanOrEqual(talk.x);
   });
 });
