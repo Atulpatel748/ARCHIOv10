@@ -223,7 +223,7 @@ export default function Header() {
         </nav>
         <div className={styles.menuSide}>
           <p className={styles.menuLead}>Tell us about the <span className="accent">space.</span></p>
-          <Link prefetch={false} href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Start a project</Roll></Link>
           <div className={styles.menuContact}>
             <a href={site.whatsappHref}>WhatsApp {site.phone}</a>
             <a href={site.phoneHref}>Call {site.phone}</a>

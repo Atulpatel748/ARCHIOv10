@@ -45,7 +45,7 @@ export default function ServicesPage() {
       </div>
 
       <p className={`container ${styles.bandsNext}`} data-reveal>
-        Not sure which stage you need? <Link prefetch={false} href="/contact">Contact us</Link>
+        Not sure where to begin? Get in touch with us <Link prefetch={false} href="/contact">Contact us</Link>
       </p>
 
       <section className={`container ${styles.sectors}`}>
@@ -69,13 +69,8 @@ export default function ServicesPage() {
           <p className="label" data-reveal>How we work</p>
           <h2 className="h2" style={{ whiteSpace: 'pre-line' }} data-reveal>{approach.title.replace('. ', '.\n')}</h2>
           <p className="serif" data-reveal>{approach.body}</p>
-          <Link prefetch={false} href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--accent" data-reveal><Roll>Start a project</Roll></Link>
         </div>
-        <ul className={styles.points}>
-          {approach.points.map((p) => (
-            <li key={p} data-reveal>{p}</li>
-          ))}
-        </ul>
       </section>
     </>
   );

@@ -28,10 +28,10 @@
 
 /* Team: the heading on the left, the two founders' names and roles on the right (no photos: the studio asked for none) */
 .teamSection {
-  display: grid; gap: 48px clamp(32px, 6vw, 112px); align-items: end; padding-bottom: clamp(64px, 8vw, 120px);
+  display: grid; gap: 32px clamp(32px, 6vw, 112px); align-items: end; padding-bottom: clamp(32px, 4vw, 56px);
   @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
 }
-.closing { display: grid; gap: 28px; justify-items: start; padding-top: clamp(48px, 6vw, 88px); }
+.closing { display: grid; gap: 28px; justify-items: start; padding-top: clamp(24px, 3vw, 40px); }
 .closingLine { margin: 0; max-width: 34ch; font-family: var(--font-display); font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); line-height: 1.25; }
 .closingActions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
 .teamHead { display: grid; gap: 1.25rem; justify-items: start; align-self: start; }
@@ -46,3 +46,5 @@
   p { font-size: 0.9375rem; font-weight: 400; color: var(--accent-color); }
 }
 .whoLabel { font-size: clamp(1.5rem, 1.2rem + 1vw, 2.25rem); }
+/* "We measure success…" set as a quiet sentence, not another uppercase headline (client: it looked like every other section) */
+.whyTitle { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); line-height: 1.25; max-width: 24ch; }

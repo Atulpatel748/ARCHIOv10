@@ -3,8 +3,12 @@
 /* The projects page: a head, a pinned tunnel of the projects' photos (or a plain list), and a filterable room-by-room mosaic. */
 
 /* ---------- Head ---------- */
-.head { padding-block: calc(var(--header-h) + clamp(4rem, 3rem + 5vw, 8rem)) clamp(3rem, 2rem + 4vw, 6rem); }
-.headA { display: grid; gap: 1.5rem; }
+.head { padding-block: calc(var(--header-h) + clamp(3rem, 2rem + 4vw, 6rem)) clamp(2.5rem, 2rem + 3vw, 4.5rem); }
+.headA {
+  display: grid; gap: 1.5rem;
+  /* wide screens: the line sits to the right of the title, so the space beside it is not left empty */
+  @media (min-width: 1025px) { grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); align-items: end; column-gap: clamp(32px, 5vw, 96px); > :global(.label) { grid-column: 1 / -1; } }
+}
 .title { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(3.4rem, 1.4rem + 9vw, 12rem); line-height: 0.9; }
 .lead { max-width: 38ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; }
 

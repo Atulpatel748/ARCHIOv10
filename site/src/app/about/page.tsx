@@ -53,7 +53,7 @@ export default function AboutPage() {
           <Image src="/images/projects/dubai-marina-residence/bar-under-stair.webp" alt="Curved bar beneath a marble staircase" width={666} height={800} sizes="(max-width: 767px) 100vw, 40vw" />
         </div>
         <div className={styles.why}>
-          <h2 className="h2" data-reveal><span className="label">Why choose us</span> {whyUs.title}</h2>
+          <h2 className={styles.whyTitle} data-reveal><span className="label">Why choose us</span> {whyUs.title}</h2>
           <ul>
             {whyUs.points.map((p) => <li key={p} data-reveal>{p}</li>)}
           </ul>

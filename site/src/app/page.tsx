@@ -87,7 +87,7 @@ export default function HomePage() {
       <section className={`section ${styles.work}`}>
         <div className="container">
           <div className={styles.workHead}>
-            <h2 className="label" data-reveal>The work</h2>
+            <h2 className={`h2 ${styles.workTitle}`} data-reveal>The work</h2>
             <Link prefetch={false} href="/projects" className="text-link" data-reveal><Roll>All projects</Roll></Link>
           </div>
         </div>

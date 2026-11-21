@@ -62,6 +62,7 @@
 /* The work */
 .work :global(.label) { margin-bottom: 22px; }
 .workHead { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; :global(.label) { margin-bottom: 0; } }
+.workTitle { margin: 0; } /* a real headline, in the same display font as every other section title */
 .flagship {
   position: relative; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: stretch; margin-top: clamp(40px, 5vw, 72px);
   @include tablet-down { grid-template-columns: 1fr; }

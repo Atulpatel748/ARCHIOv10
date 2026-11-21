@@ -3,7 +3,7 @@ $oxblood: #4C1114;
 $deep: #3B0C0F;
 $blush: #CEB6A8;
 $sand: #DACFBA;
-$paper: #F8F7F4;
+$paper: #DACFBA; // the brand background (client kit: #DACFBA background, #CEB6A8 accent, #4C1114 text)
 
 @mixin phone { @media (max-width: 767px) { @content; } }
 @mixin tablet-down { @media (max-width: 1023px) { @content; } }

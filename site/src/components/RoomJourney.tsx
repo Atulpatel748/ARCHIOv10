@@ -30,7 +30,7 @@ export default function RoomJourney({ steps }: { steps: Step[] }) {
               </li>
             ))}
           </ol>
-          <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Start a project</Roll></Link>
         </div>
 
         <Elevation />

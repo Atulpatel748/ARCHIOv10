@@ -143,7 +143,7 @@ export default function Preloader() {
     <div ref={rootRef} className={`${styles.preloader} ${leaving ? styles.leaving : ''}`} data-preloader aria-hidden="true">
       <svg ref={roomRef} className={styles.room} viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
         <defs>
-          <radialGradient id="preloader-light" cx="0.5" cy="0.75" r="0.75"><stop offset="0" stopColor="#EEDFC8" /><stop offset="1" stopColor="#F8F7F4" /></radialGradient>
+          <radialGradient id="preloader-light" cx="0.5" cy="0.75" r="0.75"><stop offset="0" stopColor="#EEDFC8" /><stop offset="1" stopColor="#DACFBA" /></radialGradient>
         </defs>
         <g className={styles.tone}>
           <path fill="#F3F0EA" d="M0 0H1440L970 250H470Z" />

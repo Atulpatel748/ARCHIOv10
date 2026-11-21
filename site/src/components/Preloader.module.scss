@@ -15,7 +15,7 @@
    page's photo. Hidden until it opens. */
 .win { position: absolute; overflow: hidden; visibility: hidden; background: var(--night); will-change: transform; } /* night: behind a photo shown whole on very wide screens */
 .win canvas { position: absolute; will-change: transform; }
-.light { position: absolute; inset: 0; background: radial-gradient(75% 75% at 50% 75%, #EEDFC8, #F8F7F4); }
+.light { position: absolute; inset: 0; background: radial-gradient(75% 75% at 50% 75%, #EEDFC8, #DACFBA); }
 
 /* The wordmark, centred in the doorway: a faint copy, with a solid copy wiping across it from left to right */
 .center { position: absolute; inset: 0; display: grid; place-items: center; }
