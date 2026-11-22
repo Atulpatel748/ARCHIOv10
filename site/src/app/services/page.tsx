@@ -22,18 +22,22 @@ export default function ServicesPage() {
     <>
       <PageHead label="Services" title="Expertise at every stage" accent="of a project" intro={servicesIntro} />
 
-      {/* Three bands, one per stage: a render to the edge of the screen, the stage name and its two services */}
-      <div className={styles.bands}>
+      {/* The three stages as one row of cards (client: too much open space in the full-screen bands) */}
+      <div className={`container ${styles.route}`} aria-hidden="true">
+        {serviceStages.map((stage, i) => <span key={stage.name}>{String(i + 1).padStart(2, '0')} {stage.name}</span>)}
+      </div>
+      <div className={`container ${styles.stages}`}>
         {serviceStages.map((stage, i) => (
-          <section key={stage.name} className={styles.band}>
-            <div className={styles.bandMedia}>
-              <Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 1023px) 100vw, 50vw" priority={i === 0} fetchPriority={i === 0 ? 'high' : undefined} />
+          <section key={stage.name} className={styles.stage} data-reveal>
+            <div className={styles.stageMedia}>
+              <Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw" priority={i === 0} fetchPriority={i === 0 ? 'high' : undefined} />
+              <span className={`label ${styles.stageNum}`}>Stage {String(i + 1).padStart(2, '0')}</span>
             </div>
-            <div className={styles.bandBody}>
-              <h2 className={styles.bandName} data-reveal>{stage.name}</h2>
+            <div className={styles.stageBody}>
+              <h2 className={styles.stageName}>{stage.name}</h2>
               <ul className={styles.offers}>
                 {stage.items.map((s) => (
-                  <li key={s.title} data-reveal>
+                  <li key={s.title}>
                     <h3>{s.title}</h3>
                     <p>{s.text}</p>
                   </li>
@@ -44,9 +48,12 @@ export default function ServicesPage() {
         ))}
       </div>
 
-      <p className={`container ${styles.bandsNext}`} data-reveal>
-        Not sure where to begin? Get in touch with us <Link prefetch={false} href="/contact">Contact us</Link>
-      </p>
+      <div className="container">
+        <div className={styles.bandsNext} data-reveal>
+          <p>Not sure where to begin? Get in touch with us</p>
+          <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Contact us</Roll></Link>
+        </div>
+      </div>
 
       <section className={`container ${styles.sectors}`}>
         <p className="label" data-reveal>Sectors</p>
