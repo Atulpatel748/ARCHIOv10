@@ -23,16 +23,11 @@ export default function ServicesPage() {
       <PageHead label="Services" title="Expertise at every stage" accent="of a project" intro={servicesIntro} />
 
       {/* The three stages as one row of cards (client: too much open space in the full-screen bands) */}
-      <div className={`container ${styles.route}`} aria-hidden="true">
-        {serviceStages.map((stage, i) => <span key={stage.name}>{String(i + 1).padStart(2, '0')} {stage.name}</span>)}
-      </div>
       <div className={`container ${styles.stages}`}>
         {serviceStages.map((stage, i) => (
           <section key={stage.name} className={styles.stage} data-reveal>
             <div className={styles.stageMedia}>
-              <Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw" priority={i === 0} fetchPriority={i === 0 ? 'high' : undefined} />
-              <span className={`label ${styles.stageNum}`}>Stage {String(i + 1).padStart(2, '0')}</span>
-            </div>
+              <Image src={stage.image} alt={stage.alt} fill sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw" priority={i === 0} fetchPriority={i === 0 ? 'high' : undefined} />            </div>
             <div className={styles.stageBody}>
               <h2 className={styles.stageName}>{stage.name}</h2>
               <ul className={styles.offers}>
