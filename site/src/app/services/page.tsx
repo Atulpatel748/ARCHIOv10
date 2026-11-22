@@ -68,6 +68,9 @@ export default function ServicesPage() {
         <div className={styles.processHead}>
           <p className="label" data-reveal>How we work</p>
           <h2 className="h2" style={{ whiteSpace: 'pre-line' }} data-reveal>{approach.title.replace('. ', '.\n')}</h2>
+        </div>
+        {/* The words and the way in sit beside the heading, so its right side is not left empty */}
+        <div className={styles.processBody}>
           <p className="serif" data-reveal>{approach.body}</p>
           <Link prefetch={false} href="/contact" className="btn btn--accent" data-reveal><Roll>Start a project</Roll></Link>
         </div>
