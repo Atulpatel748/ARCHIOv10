@@ -92,13 +92,8 @@ export const mission = 'To deliver design solutions rooted in clarity and practi
 
 export const whyUs = {
   title: 'We measure success in outcomes, not optics',
-  points: [
-    'Function carries equal weight to aesthetics, never an afterthought',
-    "Advice that's unbiased and consultancy-driven, not sales-driven",
-    'Solutions shaped by real constraints, not idealised scenarios',
-    'Clarity in communication, from first brief to final design',
-    'Involvement where it matters, not where it adds noise',
-  ],
+  // One paragraph, not a list (client: "make it a paragraph")
+  body: 'Function carries equal weight to aesthetics, never an afterthought. Our advice is unbiased and consultancy-driven, not sales-driven, and our solutions are shaped by real constraints rather than idealised scenarios. We keep communication clear from the first brief to the final design, and stay involved where it matters, not where it adds noise.',
 };
 
 export const philosophy = {

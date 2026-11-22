@@ -1,50 +1,62 @@
 @use '../../styles/tokens' as *;
 
+/* The About page as in the approved mockup: every heading has its words beside it, so no half of the screen is left empty */
+
+%display { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.98; overflow-wrap: break-word; }
+
+/* Who we are: the heading on the left, the words on the right; the first paragraph larger, the other two side by side */
 .about {
-  display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 40px clamp(32px, 6vw, 112px); align-items: start;
+  display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 9fr); gap: 28px clamp(32px, 5.5vw, 80px); align-items: start;
   @include tablet-down { grid-template-columns: 1fr; }
 }
-.body { display: grid; gap: 20px; max-width: 62ch; font-size: 1.125rem; line-height: 1.7; }
+.whoTitle { @extend %display; font-size: clamp(2rem, 1.4rem + 1.6vw, 2.75rem); }
+.body {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 48px; font-size: 1rem; line-height: 1.7;
+  p:first-child { grid-column: 1 / -1; font-family: var(--font-body), Georgia, serif; font-size: clamp(1.25rem, 1rem + 0.7vw, 1.625rem); line-height: 1.45; }
+  @include phone { grid-template-columns: 1fr; }
+}
 
-.vm { /* plain paper */ }
+/* Vision and mission: one tinted band, side by side */
+.vm { background: color-mix(in srgb, var(--oxblood) 5%, var(--paper)); padding-block: clamp(48px, 5vw, 64px); }
 .vmGrid {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px clamp(32px, 6vw, 112px);
-  > div { display: grid; gap: 20px; align-content: start; }
-  .serif { font-size: 1.125rem; line-height: 1.75; }
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px clamp(32px, 5.5vw, 80px);
+  > div { display: grid; gap: 18px; align-content: start; }
+  :global(.serif) { font-size: 1.1875rem; line-height: 1.65; }
   @include phone { grid-template-columns: 1fr; }
 }
+.vmTitle { @extend %display; font-size: clamp(2.25rem, 1.5rem + 2.2vw, 3.5rem); }
 
+/* Why choose us: the picture, a sentence-style heading and one paragraph */
 .split {
-  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 48px clamp(32px, 6vw, 112px); align-items: center;
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px clamp(32px, 5.5vw, 80px); align-items: center;
   @include phone { grid-template-columns: 1fr; }
 }
-.media img { width: 100%; height: auto; }
+.media img { width: 100%; height: auto; display: block; }
 .why {
-  display: grid; gap: 22px;
-  h2 :global(.label) { display: block; margin-bottom: 22px; font-family: var(--font-ui); text-transform: uppercase; } /* the small eyebrow is part of the heading, so heading navigation finds it */
-  ul { margin-top: 8px; }
-  li { padding: 16px 0; }
+  display: grid; gap: 24px;
+  :global(.serif) { font-size: clamp(1.125rem, 1rem + 0.35vw, 1.3125rem); line-height: 1.7; }
+}
+.whyTitle {
+  font-family: var(--font-body), Georgia, serif; font-weight: 400; font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.875rem); line-height: 1.15;
+  :global(.label) { display: block; margin-bottom: 16px; }
 }
 
-/* Team: the heading on the left, the two founders' names and roles on the right (no photos: the studio asked for none) */
+/* Team: the heading with the two founders on the same line */
 .teamSection {
-  display: grid; gap: 32px clamp(32px, 6vw, 112px); align-items: end; padding-bottom: clamp(32px, 4vw, 56px);
-  @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); }
+  display: grid; gap: 28px clamp(32px, 5.5vw, 80px); align-items: end; padding-block: clamp(32px, 3vw, 40px);
+  @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 4.5fr) minmax(0, 4.5fr); }
 }
-.closing { display: grid; gap: 28px; justify-items: start; padding-top: clamp(24px, 3vw, 40px); }
-.closingLine { margin: 0; max-width: 34ch; font-family: var(--font-display); font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); line-height: 1.25; }
-.closingActions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
-.teamHead { display: grid; gap: 1.25rem; justify-items: start; align-self: start; }
-.teamTitle { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); line-height: 1; }
-.team {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 40px var(--gutter); /* one column when two would make a role wrap */
-  li { display: grid; gap: 18px; align-content: start; }
-}
+.teamHead { display: grid; gap: 14px; justify-items: start; }
+.teamTitle { @extend %display; font-size: clamp(2.5rem, 1.6rem + 2.6vw, 4rem); }
 .who {
-  display: grid; gap: 4px; padding-top: 14px;
-  h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem); line-height: 1.2; }
-  p { font-size: 0.9375rem; font-weight: 400; color: var(--accent-color); }
+  display: grid; gap: 6px;
+  h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.875rem); line-height: 1.2; }
+  p { font-size: 0.9375rem; color: var(--accent-color); }
 }
-.whoLabel { font-size: clamp(1.5rem, 1.2rem + 1vw, 2.25rem); }
-/* "We measure success…" set as a quiet sentence, not another uppercase headline (client: it looked like every other section) */
-.whyTitle { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.25rem); line-height: 1.25; max-width: 24ch; }
+
+/* The closing line on the left, the two ways on beside it */
+.closing {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px 40px; padding-block: clamp(32px, 3.5vw, 48px) clamp(56px, 6vw, 80px);
+}
+.closingLine { margin: 0; max-width: 30ch; font-family: var(--font-body), Georgia, serif; font-size: clamp(1.625rem, 1.1rem + 1.6vw, 2.5rem); line-height: 1.2; }
+.closingActions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 16px; }

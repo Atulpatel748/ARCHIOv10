@@ -29,20 +29,20 @@ export default function AboutPage() {
 
       <section className={`section container ${styles.about}`}>
         {/* No second statement here: the heading above already says it (the home page carries the philosophy quote) */}
-        <h2 className={`label ${styles.whoLabel}`} data-reveal>Who we are</h2>
+        <h2 className={styles.whoTitle} data-reveal>Who we are</h2>
         <div className={styles.body}>
           {about.body.map((p) => <p key={p} data-reveal>{p}</p>)}
         </div>
       </section>
 
-      <section className={`section ${styles.vm}`}>
+      <section className={styles.vm}>
         <div className={`container ${styles.vmGrid}`}>
           <div data-reveal>
-            <h2 className="h2">Our vision</h2>
+            <h2 className={styles.vmTitle}>Our vision</h2>
             <p className="serif">{vision}</p>
           </div>
           <div data-reveal>
-            <h2 className="h2">Our mission</h2>
+            <h2 className={styles.vmTitle}>Our mission</h2>
             <p className="serif">{mission}</p>
           </div>
         </div>
@@ -50,39 +50,34 @@ export default function AboutPage() {
 
       <section className={`section container ${styles.split}`}>
         <div className={styles.media} data-reveal>
-          <Image src="/images/projects/dubai-marina-residence/bar-under-stair.webp" alt="Curved bar beneath a marble staircase" width={666} height={800} sizes="(max-width: 767px) 100vw, 40vw" />
+          <Image src="/images/projects/dubai-marina-residence/bar-under-stair.webp" alt="Curved bar beneath a marble staircase" width={666} height={800} sizes="(max-width: 767px) 100vw, 36vw" />
         </div>
         <div className={styles.why}>
           <h2 className={styles.whyTitle} data-reveal><span className="label">Why choose us</span> {whyUs.title}</h2>
-          <ul>
-            {whyUs.points.map((p) => <li key={p} data-reveal>{p}</li>)}
-          </ul>
+          <p className="serif" data-reveal>{whyUs.body}</p>
         </div>
       </section>
 
-      <section className={`section container ${styles.teamSection}`}>
+      {/* The heading with the two founders on the same line (client's arrows pointed from the heading to the names) */}
+      <section className={`container ${styles.teamSection}`}>
         <div className={styles.teamHead}>
-          <p className="label label--rule" data-reveal>The founders</p>
+          <p className="label" data-reveal>The founders</p>
           <h2 className={styles.teamTitle} data-reveal>Our team</h2>
         </div>
-        <ul className={styles.team}>
-          {team.map((m) => (
-            <li key={m.name} data-reveal>
-              <div className={styles.who}>
-                <h3>{m.name}</h3>
-                <p>{m.role}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        {team.map((m) => (
+          <div key={m.name} className={styles.who} data-reveal>
+            <h3>{m.name}</h3>
+            <p>{m.role}</p>
+          </div>
+        ))}
       </section>
 
       {/* A quiet way on for a reader who has reached the end: no promise of a reply time */}
-      <section className={`section container ${styles.closing}`}>
-        <p className={styles.closingLine} data-reveal>If you are looking to design, refurbish or revamp your space, let&apos;s talk.</p>
+      <section className={`container ${styles.closing}`}>
+        <p className={styles.closingLine} data-reveal>If you are looking to design, refurbish or revamp your space, let&apos;s talk</p>
         <div className={styles.closingActions} data-reveal>
           <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Contact us</Roll></Link>
-          <Link prefetch={false} href="/projects" className="text-link"><Roll>See our projects</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Start a project</Roll></Link>
         </div>
       </section>
     </>
