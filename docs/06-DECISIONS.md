@@ -100,3 +100,10 @@ Why the site is built the way it is, so nobody has to guess later. Each entry sa
 - **Decision:** `site/src/content/projects.ts` gains an optional `status` and an optional `caseStudy` (one text per part, in a fixed order). Cards, the home flagship card and the project page facts show the status only when it is set; the project page shows each case-study part only when its text exists. None is set: nothing is invented, and no visible "to be confirmed" text goes on a public page. `docs/07-CONTENT-NEEDED.md` lists what to ask for.
 - **Consequences:** The pages look as before until the studio answers. Setting `status: 'Design Visualisation'` (or the others) is a one-line change per project once confirmed; E3 still governs whether renders carry that label.
 
+## ADR-014: Hero photos from the 4x upscales
+
+- **Status:** Accepted, 23 Nov 2026 (owner chose "Keep new 4x" after a side-by-side comparison); on the feature branch, waiting for approval
+- **Context:** The owner supplied 4x upscales of the three 800 px cover renders (3200 px wide, about 9:8). The old hero files were 16:9, widened with AI (ADR-004).
+- **Decision:** The hero files (`site/public/images/hero/*-640/1080/1920/2560.webp`) are made from the 4x files at their own shape, WebP quality 72. They are sharper; on wide screens the hero crops more of the top and bottom (the bedroom poufs, the Arabian Ranches pool). The old files stay in git history.
+- **Consequences:** These are still upscales, not originals (docs/07). The 1920 px hero file is heavier (82 to 132 KB, was 43 to 74 KB).
+
