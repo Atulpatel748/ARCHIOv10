@@ -19,7 +19,7 @@ export default function PrivacyPage() {
   return (
     <>
       <PageHead label="Website information" title="Privacy notice" intro="This notice explains how Archió Interior Design Studio (“Archió”, “we” or “us”) handles information you submit through this website.">
-        <p className={styles.updated}>Last updated: 12 November 2026</p>
+        <p className={styles.updated}>Last updated: 22 November 2026</p>
       </PageHead>
       <section className={`section container ${styles.page}`}>
       <div className={styles.body}>
@@ -39,6 +39,7 @@ export default function PrivacyPage() {
         <section>
           <h2>Service providers and email delivery</h2>
           <p>When the enquiry email service is enabled, form submissions are sent by email, through the mail provider the operator has set up for this website, to the business inbox configured for it. The website is also hosted by a deployment provider chosen by the operator. Those providers may process information to deliver, secure and maintain their services; please consult their current privacy terms for details.</p>
+          <p>The operator may also have each enquiry passed to an automation service it controls (an n8n workflow), for example to record it or arrange a follow-up. It receives the same details you enter in the form, plus the time it was sent.</p>
         </section>
         <section>
           <h2>Spam protection</h2>

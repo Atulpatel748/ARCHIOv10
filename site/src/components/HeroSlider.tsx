@@ -142,8 +142,8 @@ async function createGL(stage: HTMLDivElement, srcs: string[], onLost: () => voi
 }
 
 // Full-screen hero: the three projects, changed by a WebGL displacement transition ("GL slider").
-// Autoplays every 8 s and pauses on hover/focus or when the tab is hidden. The owner removed the pause button (ADR-010),
-// so there is no way to stop it for good (short of WCAG 2.2.2); reduced motion means no autoplay and a crossfade.
+// Autoplays every 8 s and pauses on hover/focus or when the tab is hidden. A pause/play button stops it for good (WCAG 2.2.2,
+// ADR-011, replacing ADR-010); reduced motion means no autoplay (so no button) and a crossfade.
 export default function HeroSlider({ slides, children }: { slides: Slide[]; children: React.ReactNode }) {
   const stage = useRef<HTMLDivElement>(null);
   const gl = useRef<GL | null>(null);
@@ -152,7 +152,8 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   // Hover and keyboard focus are tracked apart, so leaving with the mouse does not restart autoplay under a focused keyboard user.
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const paused = hovered || focused;
+  const [stopped, setStopped] = useState(false); // the visitor pressed pause
+  const paused = hovered || focused || stopped;
   const [glReady, setGlReady] = useState(false);
   const reduced = useSyncExternalStore(subscribeReduced, getReduced, getReducedServer);
   const playing = !reduced && !paused;
@@ -186,15 +187,11 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       // Deliberate fallback: if three.js or a photo fails to load, the WebGL effect is skipped and the <img> crossfade stays.
       gl.current = null;
     });
-    // After first paint, so the LCP image is never delayed, and after the preloader, whose motion it would otherwise stall.
-    let idle: ReturnType<typeof setTimeout> | undefined;
-    const preloading = !document.documentElement.hasAttribute('data-no-preloader') && !!document.querySelector('[data-preloader]');
-    if (preloading) addEventListener('preloader:done', start, { once: true });
-    else idle = setTimeout(start, 900);
+    // After first paint, so the LCP image is never delayed.
+    const idle = setTimeout(start, 900);
     return () => {
       cancelled = true;
       clearTimeout(idle);
-      removeEventListener('preloader:done', start);
       gl.current?.dispose(); gl.current = null;
     };
   }, [slides]);
@@ -261,6 +258,11 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
               <span className={`${styles.track} ${i === current && playing ? styles.running : ''}`} aria-hidden="true" />
             </button>
           ))}
+          {!reduced && (
+            <button type="button" className={styles.pause} aria-label={stopped ? 'Play slideshow' : 'Pause slideshow'} onClick={() => setStopped((s) => !s)}>
+              <svg viewBox="0 0 12 12" aria-hidden="true">{stopped ? <path d="M3 1.5v9l7-4.5z" fill="currentColor" /> : <path d="M3 1.5h2v9H3zM7 1.5h2v9H7z" fill="currentColor" />}</svg>
+            </button>
+          )}
         </div>
       </div>
       </div>

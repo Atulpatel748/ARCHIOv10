@@ -11,8 +11,16 @@
   text-shadow: 0 0 10px rgb(20 6 7 / 0.8), 0 0 3px rgb(20 6 7 / 0.7);
   &::before, &::after { content: ''; width: clamp(24px, 3vw, 44px); height: 1px; background: currentColor; opacity: 0.6; }
 }
+/* The proposition under the wordmark: two short display lines, one plain line, one button */
+.heroCopy {
+  display: grid; justify-items: center; gap: clamp(12px, 1.4vw, 18px); margin-top: clamp(22px, 3vw, 40px); text-align: center;
+  animation: rise 1.4s ease-out 0.5s both; text-shadow: 0 0 14px rgb(20 6 7 / 0.7);
+}
+.heroLead { font-family: var(--font-display); font-size: clamp(1.375rem, 1rem + 1.4vw, 2.375rem); line-height: 1.15; color: var(--sand); }
+.heroSub { max-width: 40ch; font-size: clamp(0.875rem, 0.82rem + 0.2vw, 1rem); line-height: 1.5; color: var(--sand); }
+.heroCopy :global(.btn) { margin-top: 6px; text-shadow: none; }
 @keyframes rise { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .heroMark { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .heroMark, .heroCopy { animation: none; } }
 
 /* overflow-wrap: long words must not push a 320px column wider */
 .big { text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(2rem, 0.6rem + 5.2vw, 6.75rem); line-height: 0.96; max-width: 18ch; overflow-wrap: break-word; }
@@ -48,13 +56,6 @@
     .seqEnd { transform: translateX(calc((100% + 2rem) * var(--progress, 0))); }
   }
 }
-
-/* The position */
-.position {
-  display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 32px var(--gutter);
-  @include tablet-down { grid-template-columns: 1fr; }
-}
-.positionLead { font-family: var(--font-display); font-size: clamp(1.75rem, 1.1rem + 2.2vw, 3.25rem); line-height: 1.18; max-width: 26ch; }
 
 /* What we do: a heading over the stage index (see StageList) */
 .headRow { display: grid; gap: 22px; margin-bottom: clamp(40px, 5vw, 72px); .big { font-size: clamp(1.75rem, 0.8rem + 3.9vw, 5.25rem); line-height: 1; max-width: 24ch; } }

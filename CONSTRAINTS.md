@@ -41,7 +41,7 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 
 | What | Today | Direction |
 | --- | --- | --- |
-| Mobile LCP, slow-network test | 2.1 to 2.5 s on most pages; 2.5 to 2.8 s on `/projects`; 3.1 to 3.4 s on the Dubai Marina and Arabian Ranches pages (3 Nov 2026). It was 0.8 to 0.9 s on most pages before the first-visit preloader (28 Oct 2026): Lighthouse is always a first visit, and the page title is the largest thing on screen but stays covered for the preloader's 2 s minimum | must not rise; the goal is 2.5 s or less |
+| Mobile LCP, slow-network test | Note 22 Nov 2026: the preloader is removed (ADR-012); re-measure on the live site after the next deploy. Earlier figures: 2.1 to 2.5 s on most pages; 2.5 to 2.8 s on `/projects`; 3.1 to 3.4 s on the Dubai Marina and Arabian Ranches pages (3 Nov 2026). It was 0.8 to 0.9 s on most pages before the first-visit preloader (28 Oct 2026): Lighthouse is always a first visit, and the page title is the largest thing on screen but stays covered for the preloader's 2 s minimum | must not rise; the goal is 2.5 s or less |
 | JavaScript per page, Lighthouse mobile transfer | 202 to 216 KB (3 Nov 2026): about 117 KB is React and Next.js, about 58 KB is gsap, ScrollTrigger and Lenis fetched once the browser is idle (after the first load), the rest is the page's own code | must not grow |
 | Fonts | about 58 KB (3 files, Latin only); it was 96 KB (6 files) until 28 Oct 2026, and an earlier note of 47 KB had counted only the two biggest files | must not grow |
 | Whole page weight on mobile | 311 to 527 KB | must not grow |
@@ -69,7 +69,8 @@ E1 (JavaScript growth, 30 Oct 2026) was closed on 3 Nov 2026 by recording the ne
 
 E2 (Lighthouse speed on two project pages, 3 Nov 2026) was closed on 13 Nov 2026: the first-visit preloader now runs only on the home page, and every page scores 95 or more.
 
+E4 (WCAG 2.2.2 on the hero slideshow, 13 Nov 2026) was closed on 22 Nov 2026: the pause/play button is back (ADR-011).
+
 | ID | Rule | Where | Reason | Owner | Ends |
 | --- | --- | --- | --- | --- | --- |
 | E3 (13 Nov 2026) | Floor: nothing may say or suggest that a design visualisation is a finished project | The "Design visualisation" labels, captions and "Images" fact row were removed from every page, and the pages' search descriptions no longer say "design visualisation" | The studio answered in writing (client questionnaire, question 18, 13 Nov 2026) that the three projects were completed as white-label work and asked for the label to go. This is the studio's own statement and has not been checked against photos or client permission. The site still does not name any client, say "completed", give a year, or claim awards. | The studio owners (Pooja Vijayakumar and the person who answered the questionnaire) | 11 Feb 2027: send written proof (photos or the client's permission), or the labels come back |
-| E4 (13 Nov 2026) | WCAG 2.2.2 Pause, Stop, Hide (an accessibility rule the project otherwise follows) | The hero slideshow on `/`: the slides change by themselves every 8 s and there is no pause control | The owner removed the pause button on purpose (the hero bar had been simplified) and chose, on 13 Nov 2026, to record an exception instead of adding it back. Softening: the slides pause while the mouse is over the hero and while a hero control has keyboard focus; with reduced motion there is no autoplay and no slide change. | The studio owners | 11 Feb 2027: add a pause control, or stop the autoplay after one round, or the owner renews this exception with a reason |

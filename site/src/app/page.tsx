@@ -9,9 +9,10 @@ import Sequence from '@/components/Sequence';
 import StageList from '@/components/StageList';
 import Split from '@/components/Split';
 import { projects } from '@/content/projects';
-import { approach, philosophy, processSteps, serviceStages as stages } from '@/content/site';
+import { philosophy, processSteps, serviceStages as stages } from '@/content/site';
 import styles from './home.module.scss';
 import Roll from '@/components/Roll';
+import EndCta from '@/components/EndCta';
 
 // The root layout's title and description, repeated for the openGraph link preview.
 const title = 'Archió | Interior Design Studio in Dubai';
@@ -37,6 +38,12 @@ export default function HomePage() {
           <span className={`logo logo--wordmark ${styles.heroLogo}`} data-hero-mark aria-hidden="true" />
           <span className={styles.heroTag} data-hero-tag aria-hidden="true">Interior design studio</span>
         </h1>
+        {/* The proposition, in the client's own words (company profile, Approach page); no full stops in headings */}
+        <div className={styles.heroCopy}>
+          <p className={styles.heroLead}>We don&apos;t just design spaces<br />We guide decisions</p>
+          <p className={styles.heroSub}>Consultancy-led interior design for residential and commercial spaces</p>
+          <Link prefetch={false} href="/contact" className="btn btn--light"><Roll>Start a conversation</Roll></Link>
+        </div>
       </HeroSlider>
 
       {/* We do, built like YODEZEEN's: a tall section with a pinned stage. As you scroll, "We" and "Do" slide apart and fade
@@ -65,12 +72,6 @@ export default function HomePage() {
         </blockquote>
       </section>
 
-      {/* The position */}
-      <section className={`section container ${styles.position}`}>
-        <p className="label" data-reveal>Our positioning</p>
-        <Split as="p" className={styles.positionLead} text={approach.title} />
-      </section>
-
       {/* What we do: an index of the three stages, after YODEZEEN's service list */}
       <section className={`section ${styles.whatWeDo}`}>
         <div className="container">
@@ -96,6 +97,7 @@ export default function HomePage() {
             <Image src={flagship.hero.src} alt={flagship.hero.alt} fill sizes="(max-width: 1023px) 100vw, 60vw" />
           </Link>
           <div className={styles.factsCard} data-reveal>
+            <p className="label">{[flagship.category, flagship.status].filter(Boolean).join(' · ')}</p>
             <h3>{flagship.title}</h3>
             <p className="serif">{flagship.summary}</p>
             <dl>
@@ -112,6 +114,9 @@ export default function HomePage() {
 
       {/* How it goes: a 3D room builds itself and turns once while the four steps scroll past */}
       <RoomJourney steps={processSteps} />
+
+      {/* A last invitation before the footer */}
+      <EndCta action="Start a conversation" />
     </>
   );
 }

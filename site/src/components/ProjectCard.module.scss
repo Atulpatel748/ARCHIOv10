@@ -6,6 +6,7 @@
 .image { object-fit: cover; transition: transform 900ms var(--ease); }
 .meta { display: grid; gap: 6px; justify-items: start; p { font-size: 0.9375rem; } }
 .link .meta :global(.label) { margin: 0; opacity: 0.75; }
+.summary { max-width: 48ch; color: rgb(76 17 20 / 0.85); line-height: 1.55; }
 .more {
   margin-top: 6px; font-size: 0.9375rem; font-weight: 500;
   background: linear-gradient(currentColor 0 0) left bottom / 0 1px no-repeat; transition: background-size 400ms var(--ease);

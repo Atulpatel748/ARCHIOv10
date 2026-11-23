@@ -28,8 +28,8 @@ export default function Header() {
     let queued = false;
     const check = () => {
       queued = false;
-      // While the first-visit preloader (or the menu) is up the page is inert, and inert elements are invisible to
-      // elementsFromPoint, so the check would see only the paper background and wrongly pick oxblood. Keep the current colour.
+      // While the menu is open the page is inert, and inert elements are invisible to elementsFromPoint, so the check would
+      // see only the paper background and wrongly pick oxblood. Keep the current colour.
       if (document.getElementById('main')?.inert) return;
       const box = brandRef.current?.getBoundingClientRect();
       const onScreen = box && box.height > 0 && box.top + box.height / 2 > 0;
@@ -37,7 +37,7 @@ export default function Header() {
       const y = onScreen ? box.top + box.height / 2 : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) / 2;
       let theme = 'light';
       for (const el of document.elementsFromPoint(x, y)) {
-        if (el.closest('header, #site-menu, [data-preloader]')) continue;
+        if (el.closest('header, #site-menu')) continue;
         if (el instanceof HTMLImageElement || el instanceof HTMLCanvasElement || el instanceof HTMLVideoElement) {
           // With the phone bar showing, the bar takes the section's own colour: a photo passing under it must not flip it back and forth
           if (scrolledRef.current && matchMedia('(max-width: 767px)').matches) continue;
@@ -53,10 +53,9 @@ export default function Header() {
     const ask = () => { if (!queued) { queued = true; setTimeout(check, 60); } };
     addEventListener('scroll', ask, { passive: true });
     addEventListener('resize', ask);
-    addEventListener('preloader:done', ask); // the check skipped while the preloader was up
     ask();
     const settle = setTimeout(ask, 700); // after the new page's images and layout have settled
-    return () => { removeEventListener('scroll', ask); removeEventListener('resize', ask); removeEventListener('preloader:done', ask); clearTimeout(settle); };
+    return () => { removeEventListener('scroll', ask); removeEventListener('resize', ask); clearTimeout(settle); };
   }, [pathname]);
 
   // Home: the hero wordmark docks into the header, the way archio-v10's does. The logo stays fixed on screen and glides in a
@@ -163,7 +162,7 @@ export default function Header() {
     const main = document.getElementById('main');
     const footer = document.querySelector('footer');
     const skip = document.querySelector<HTMLElement>('.skip-link');
-    // Only touch inert when the menu opens or has just closed: on mount, resetting it would undo the preloader's inert.
+    // Only touch inert when the menu opens or has just closed, so mounting never clears an inert set elsewhere.
     if (open || menuWasOpen.current) [main, footer, skip].forEach((el) => { if (el) el.inert = open; });
     menuWasOpen.current = open;
     document.documentElement.style.overflow = open ? 'hidden' : '';

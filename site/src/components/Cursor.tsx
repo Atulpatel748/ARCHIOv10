@@ -36,13 +36,16 @@ export default function Cursor() {
       r += (target - r) * 0.14;
       el.style.transform = `translate3d(${x - SIZE / 2}px, ${y - SIZE / 2}px, 0)`;
       ring.setAttribute('r', r.toFixed(2));
-      raf = requestAnimationFrame(frame);
+      // Once the ring has caught up it stops asking for frames, so a still mouse costs nothing; the next move or hover wakes it.
+      raf = Math.abs(mx - x) + Math.abs(my - y) + Math.abs(target - r) > 0.2 ? requestAnimationFrame(frame) : 0;
     };
+    const wake = () => { if (seen && !raf) raf = requestAnimationFrame(frame); };
 
     const onMove = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
       mx = e.clientX; my = e.clientY;
-      if (!seen) { seen = true; x = mx; y = my; el.style.opacity = '1'; raf = requestAnimationFrame(frame); }
+      if (!seen) { seen = true; x = mx; y = my; el.style.opacity = '1'; }
+      wake();
     };
     const onOver = (e: PointerEvent) => {
       if (e.pointerType !== 'mouse') return;
@@ -51,8 +54,9 @@ export default function Cursor() {
       current = next;
       target = next ? (next.hasAttribute('data-cursor') ? R_HOVER : R_LINK) : R_IDLE;
       setLabel(next?.getAttribute('data-cursor') ?? '');
+      wake();
     };
-    const onLeave = () => { el.style.opacity = '0'; seen = false; cancelAnimationFrame(raf); };
+    const onLeave = () => { el.style.opacity = '0'; seen = false; cancelAnimationFrame(raf); raf = 0; };
 
     addEventListener('pointermove', onMove, { passive: true });
     document.addEventListener('pointerover', onOver, { passive: true });

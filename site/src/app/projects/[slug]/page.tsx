@@ -7,9 +7,10 @@ import Gallery from '@/components/Gallery';
 import ProjectHero from '@/components/ProjectHero';
 import Split from '@/components/Split';
 import { site } from '@/content/site';
-import { getProject, projects } from '@/content/projects';
+import { CASE_STUDY, getProject, projects } from '@/content/projects';
 import styles from './project.module.scss';
 import Roll from '@/components/Roll';
+import EndCta from '@/components/EndCta';
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -60,11 +61,19 @@ export default async function ProjectPage({ params }: Params) {
           <div><dt>Where</dt><dd>{project.location}</dd></div>
           <div><dt>Category</dt><dd>{project.category}</dd></div>
           <div><dt>Area</dt><dd>{project.area}</dd></div>
+          {project.status && <div><dt>Status</dt><dd>{project.status}</dd></div>}
         </dl>
         <div className={styles.story}>
           {/* Headings carry no full stop; the summary keeps it where it is a paragraph (the home page card) */}
           <Split className={styles.storyLead} text={project.summary.replace(/\.$/, '')} />
           {project.description.map((p) => <p key={p} data-reveal>{p}</p>)}
+          {/* The case study, part by part, only where the studio has written it (none yet: see CASE_STUDY) */}
+          {CASE_STUDY.filter((part) => project.caseStudy?.[part]).map((part) => (
+            <div key={part} className={styles.part} data-reveal>
+              <h2 className="label">{part}</h2>
+              <p>{project.caseStudy![part]}</p>
+            </div>
+          ))}
           <div className={styles.storyActions} data-reveal>
             <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Start a project</Roll></Link>
             <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
@@ -80,17 +89,8 @@ export default async function ProjectPage({ params }: Params) {
         <Gallery images={project.gallery} title={project.title} />
       </section>
 
-      {/* A conversation, then the next project */}
       {/* The ending: the invitation first, as a full-width band; the next project after it, on paper, so it does not meet the footer */}
-      <section className={`section ${styles.cta}`}>
-        <div className={`container ${styles.ctaInner}`}>
-          <Split className={styles.endTitle} text="Tell us about your space" />
-          <div className={styles.endActions} data-reveal>
-            <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Start a project</Roll></Link>
-            <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
-          </div>
-        </div>
-      </section>
+      <EndCta action="Start a project" />
       <section className={`section container ${styles.end}`}>
         <Link prefetch={false} href={`/projects/${next.slug}`} className={styles.next} data-cursor="View" data-reveal>
           <span className={styles.nextText}>

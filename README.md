@@ -43,7 +43,9 @@ Enquiries are emailed over SMTP, the normal way a mailbox (Gmail, Microsoft 365,
 - `CONTACT_AUTOREPLY`: optional. Set to `on` (exactly) to send a visitor who gave an email a short fixed confirmation after the studio email is sent; any other value or empty means off. Turn it on only after the client approves the wording in `site/src/content/contact.ts`. It repeats nothing the visitor typed, replies go to `CONTACT_TO_EMAIL`, and if it fails the visitor still sees success (the studio already has the enquiry) and only the cause code is logged.
   Before turning it on, work through the owner checklist in ADR-009 (`docs/06-DECISIONS.md`).
 
-Without all five (host, user, password, to, from), the endpoint returns a controlled error and the form offers WhatsApp/email as a fallback rather than pretending a message was sent. If sending fails, the visitor sees the same fallback, and the cause code (never the settings) is written to the server log. The current rate limiter is per-process only; the intended guard is a Vercel Firewall rate-limit rule on `/api/contact`.
+- `N8N_CONTACT_WEBHOOK_URL`: optional. Each enquiry is also sent as JSON (name, contact, email or phone, type, location, message, time) to this webhook, for example an n8n workflow. An enquiry counts as delivered when the email or the webhook succeeds, so the webhook alone is enough for the form to work. The privacy notice describes it.
+
+Without the five mail settings or the webhook, the endpoint returns a controlled error and the form offers WhatsApp/email as a fallback rather than pretending a message was sent. If sending fails, the visitor sees the same fallback, and the cause code (never the settings) is written to the server log. The current rate limiter is per-process only; the intended guard is a Vercel Firewall rate-limit rule on `/api/contact`.
 
 Spam check (Cloudflare Turnstile, free): in the Cloudflare dashboard open Turnstile, add a widget for the site's domain, and copy its two keys into Vercel:
 

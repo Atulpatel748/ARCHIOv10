@@ -1,20 +1,26 @@
 // The three projects from the company profile. Image sizes are the extracted placeholders; replace with the original renders.
 
 export type ProjectImage = { src: string; alt: string; width: number; height: number; room?: string };
+// Shown on cards and project pages only when set. Set it only from the studio's written confirmation (CONSTRAINTS.md, floor
+// rule and E3): no project has a confirmed status yet, so none is set.
+export type ProjectStatus = 'Design Visualisation' | 'In Progress' | 'Completed';
+// The case-study parts a project page shows, in this order, each only when its text exists. None is written yet: we do not
+// invent briefs, decisions or specifications. CLIENT TO SUPPLY (list in docs/07-CONTENT-NEEDED.md).
+export const CASE_STUDY = ['Brief', 'Challenge', 'Key decisions', 'Space planning', 'Materials', 'Lighting', 'Specifications'] as const;
 export type Project = {
   slug: string;
   title: string; // CLIENT TO CONFIRM: working titles; the profile names projects by location only
   category: 'Residential' | 'Commercial' | 'Landscape';
   location: string;
   area: string;
+  status?: ProjectStatus;
+  caseStudy?: Partial<Record<(typeof CASE_STUDY)[number], string>>;
   summary: string;
   description: string[];
   cover: ProjectImage;
   hero: ProjectImage;
   gallery: ProjectImage[];
 };
-
-// Every project image is a design render, so wherever the work is shown as a project it carries this label.
 
 const img = (slug: string, file: string, width: number, height: number, alt: string, room?: string): ProjectImage =>
   ({ src: `/images/projects/${slug}/${file}.webp`, width, height, alt, room });

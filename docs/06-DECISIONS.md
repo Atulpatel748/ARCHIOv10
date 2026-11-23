@@ -72,8 +72,31 @@ Why the site is built the way it is, so nobody has to guess later. Each entry sa
 
 ## ADR-010: The hero slideshow has no pause button
 
-- **Status:** Accepted, 3 Nov 2026 (owner's choice, made knowing the trade-off below)
+- **Status:** Replaced by ADR-011 on 22 Nov 2026 (was accepted on 3 Nov 2026, the owner's choice, made knowing the trade-off below)
 - **Context:** The home hero changes slides every 8 seconds. Since 30 Oct 2026 it had a round pause/play button at the bottom right, added for WCAG 2.2.2 (moving content that lasts more than 5 seconds needs a way to pause or stop it). The owner asked for the button to go, the three slide tracks to sit in the centre of the bottom bar, and "View project" to move to the right.
 - **Decision:** The button is removed. Autoplay still pauses while the pointer is over the hero or keyboard focus is inside it, and when the tab is hidden; visitors who ask for reduced motion get no autoplay at all. The bar is now: place on the left, slide tracks centred, "View project" on the right (on phones the tracks take their own centred row above).
 - **Alternatives:** Stop autoplay for good when a slide track is clicked (keeps the rule, no visible button); no autoplay at all (keeps the rule, the hero no longer moves). The owner chose to remove the button without either.
 - **Consequences:** The hero no longer fully meets WCAG 2.2.2: a keyboard or screen-reader user cannot stop the slides for good, only pause them while focused inside the hero. Automated checks (axe, Lighthouse) do not test this rule, so their scores do not show it. If an accessibility review or a client asks for full WCAG 2.2 AA, use one of the alternatives above.
+
+## ADR-011: The hero slideshow gets a pause button again
+
+- **Status:** Accepted, 22 Nov 2026 (the owner's design-improvement brief asks for "a permanent pause/play control" on the auto hero slideshow); replaces ADR-010; on the feature branch `feature/archio-complete-design-improvement`, waiting for approval
+- **Context:** ADR-010 removed the button and CONSTRAINTS.md recorded exception E4 (WCAG 2.2.2) until 11 Feb 2027.
+- **Decision:** A small round pause/play button sits just right of the three slide tracks (on phones, at the right end of the tracks' row). The tracks stay centred and the bar keeps its layout (place left, "View project" right). Pause stops autoplay for good until Play is pressed; hover, keyboard focus and a hidden tab still pause it as before. With reduced motion there is no autoplay, so there is no button.
+- **Consequences:** WCAG 2.2.2 is met; exception E4 is closed. `e2e/home.spec.ts` checks the button and that pausing really stops the slides.
+
+## ADR-012: No first-visit preloader
+
+- **Status:** Accepted, 22 Nov 2026 (the brief: "remove the preloader if it delays content"); on the feature branch, waiting for approval
+- **Context:** The landing preloader (a line drawing of a room, at least 2 s, the page inert behind it) covered the home page on the first visit in a tab. CONSTRAINTS.md had measured its cost: mobile LCP 0.8 to 0.9 s before it, 2.1 to 2.5 s after (Lighthouse is always a first visit). A local Lighthouse run on 22 Nov 2026 gave the home page 3.4 s LCP with it.
+- **Decision:** The preloader, its head script (the `archio-seen` sessionStorage flag) and the `preloader:done` event are removed. The hero's WebGL transition now simply starts 0.9 s after load; the hero wordmark and the new proposition fade in with CSS.
+- **Alternatives:** Keep it but shorten the 2 s minimum (still hides the page and still counts against LCP); show it only once per browser (still the first impression for every new visitor).
+- **Consequences:** Content shows at once. The drawing is in git history (`site/src/components/Preloader.tsx` before this change) if the studio wants it back.
+
+## ADR-013: Project status and case-study fields, left empty until the studio supplies them
+
+- **Status:** Accepted, 22 Nov 2026; on the feature branch, waiting for approval
+- **Context:** The brief asks for a status on each project (Design Visualisation, In Progress, Completed) and case-study pages (brief, challenge, decisions, planning, materials, lighting, specifications). The only written word on status is the studio's questionnaire answer that the three projects were completed as white-label work (CONSTRAINTS.md, E3), which has not been checked; nothing on briefs, decisions or specifications exists anywhere.
+- **Decision:** `site/src/content/projects.ts` gains an optional `status` and an optional `caseStudy` (one text per part, in a fixed order). Cards, the home flagship card and the project page facts show the status only when it is set; the project page shows each case-study part only when its text exists. None is set: nothing is invented, and no visible "to be confirmed" text goes on a public page. `docs/07-CONTENT-NEEDED.md` lists what to ask for.
+- **Consequences:** The pages look as before until the studio answers. Setting `status: 'Design Visualisation'` (or the others) is a one-line change per project once confirmed; E3 still governs whether renders carry that label.
+

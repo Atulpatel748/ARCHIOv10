@@ -23,8 +23,6 @@ const isLocal = (url: string) => {
 };
 
 type Fixtures = {
-  /** Show the landing preloader (first visit in a tab). Off by default: tests start on the page itself. */
-  preloader: boolean;
   /** Console errors from the page, minus the ones caused by our own blocking of outside requests. */
   consoleErrors: string[];
   /** Same-origin responses with status 400 or more. */
@@ -32,13 +30,9 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
-  preloader: [false, { option: true }],
-
-  page: async ({ page, preloader }, provide) => {
+  page: async ({ page }, provide) => {
     // Nothing leaves the machine: Turnstile (challenges.cloudflare.com) and anything else outside is aborted.
     await page.route('**/*', (route) => (isLocal(route.request().url()) ? route.fallback() : route.abort('blockedbyclient')));
-    // The layout's head script skips the preloader when this key is set (see app/layout.tsx).
-    if (!preloader) await page.addInitScript(() => sessionStorage.setItem('archio-seen', '1'));
     await provide(page);
   },
 

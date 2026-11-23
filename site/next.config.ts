@@ -3,9 +3,9 @@ import type { NextConfig } from 'next';
 const dev = process.env.NODE_ENV !== 'production';
 
 // Everything the site loads comes from its own origin (fonts are self-hosted by next/font, images are local).
-// script-src keeps 'unsafe-inline': Next.js writes inline scripts for hydration and the layout has an inline preloader script,
-// and allowing them by nonce would make every page dynamic. style-src needs 'unsafe-inline' for the style attributes GSAP,
-// the preloader and React set. blob: and data: cover three.js textures and inline SVG images. The dev server also needs
+// script-src keeps 'unsafe-inline': Next.js writes inline scripts for hydration (and the JSON-LD data),
+// and allowing them by nonce would make every page dynamic. style-src needs 'unsafe-inline' for the style attributes GSAP
+// and React set. blob: and data: cover three.js textures and inline SVG images. The dev server also needs
 // eval (React's dev tools) and a websocket (hot reload), so those are added only outside production. challenges.cloudflare.com is
 // Cloudflare Turnstile, the contact form's spam check: its script, the frame it draws in, and its calls home.
 const turnstile = 'https://challenges.cloudflare.com';

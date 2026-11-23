@@ -13,7 +13,7 @@ export default defineConfig({
   outputDir: 'test-results',
   use: {
     baseURL,
-    // Deterministic by default: no autoplay, no WebGL transition (ADR-005), no preloader minimum. Tests that need motion opt out.
+    // Deterministic by default: no autoplay, no WebGL transition (ADR-005). Tests that need motion opt out.
     reducedMotion: 'reduce',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
@@ -40,6 +40,7 @@ export default defineConfig({
       SMTP_PASS: '',
       CONTACT_TO_EMAIL: '',
       CONTACT_FROM_EMAIL: '',
+      N8N_CONTACT_WEBHOOK_URL: '',
     },
   },
 });
