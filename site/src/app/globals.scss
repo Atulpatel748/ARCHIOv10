@@ -79,7 +79,7 @@ html.lenis, html.lenis body { height: auto; }
 .h2 { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; text-wrap: balance; overflow-wrap: break-word; }
 .h3 { font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.875rem); line-height: 1.2; }
 .lead { font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem); line-height: 1.55; }
-.serif { font-family: var(--font-body), Georgia, serif; font-weight: 400; }
+.serif { font-family: var(--font-ui), sans-serif; font-weight: 400; } /* the name is historic: body text is Public Sans since Lora was dropped */
 
 /* Pill buttons with small uppercase labels (after YODEZEEN); solid and outline variants */
 .btn {
@@ -90,8 +90,8 @@ html.lenis, html.lenis body { height: auto; }
   &:active { transform: scale(0.98); }
 }
 .btn--solid { background: var(--oxblood); border-color: var(--oxblood); color: var(--sand); @include hover { &:hover { background: var(--deep); } } &:focus-visible { outline-color: var(--oxblood); } }
-.btn--accent { background: var(--blush); border-color: var(--blush); color: var(--oxblood); @include hover { &:hover { background: var(--oxblood); border-color: var(--oxblood); color: var(--sand); } } } /* the brand accent, for "Start a project" */
-.btn--light { background: var(--sand); border-color: var(--sand); color: var(--oxblood); @include hover { &:hover { background: var(--blush); border-color: var(--blush); } } }
+.btn--accent { background: var(--oxblood); border-color: var(--oxblood); color: var(--sand); @include hover { &:hover { background: var(--deep); } } &:focus-visible { outline-color: var(--oxblood); } } /* one button style everywhere (client, 23 Nov 2026): same as solid */
+.btn--light { background: var(--sand); border-color: var(--sand); color: var(--oxblood); @include hover { &:hover { background: var(--paper); border-color: var(--paper); } } } /* the same button on dark strips */
 .btn--outline { @include hover { &:hover { background: var(--oxblood); border-color: var(--oxblood); color: var(--sand); } } }
 .btn--outline-light { color: var(--sand); @include hover { &:hover { background: var(--paper); color: var(--oxblood); } } }
 

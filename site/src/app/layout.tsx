@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { preload } from 'react-dom';
-import { Belleza, Lora, Public_Sans } from 'next/font/google';
+import { Belleza, Public_Sans } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
@@ -12,12 +12,11 @@ import { site } from '@/content/site';
 import { Analytics } from '@vercel/analytics/next';
 import './globals.scss';
 
-// Belleza stands in for Optima (not licensed for web); Public Sans and Lora are the brand kit's own fonts.
+// Belleza stands in for Optima (not licensed for web); Public Sans is the brand kit's secondary font, used for all body text (Lora dropped, 23 Nov 2026).
 // Latin only: every page is English, and a preloaded "latin-ext" file (letters like ł, č, ő) was downloaded on every visit
 // although no page used it (about 38 KB). If copy with such letters is ever added, put 'latin-ext' back.
 const display = Belleza({ weight: '400', subsets: ['latin'], variable: '--font-display', display: 'swap' });
 const ui = Public_Sans({ weight: ['300', '400', '500'], subsets: ['latin'], variable: '--font-ui', display: 'swap' });
-const body = Lora({ weight: '400', subsets: ['latin'], variable: '--font-body', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -51,7 +50,7 @@ const organization = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   preload('/brand/logo-wordmark.svg', { as: 'image', crossOrigin: 'anonymous' }); // the wordmark is a CSS mask, which the browser would otherwise find late; mask images load in CORS mode, so the preload must too
   return (
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${display.variable} ${ui.variable} ${body.variable}`}>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${display.variable} ${ui.variable}`}>
       <head>
         {/* The preloader is for the landing page, the first time the site is opened in a tab: every other page and every later visit skips it, before first paint. If sessionStorage is blocked, the visit cannot be remembered, so the preloader is skipped rather than shown on every load. */}
         <script dangerouslySetInnerHTML={{ __html: "(function(){var d=document.documentElement,f=1;try{var k='archio-seen';f=!sessionStorage.getItem(k);sessionStorage.setItem(k,'1')}catch(e){f=0}if(!f||location.pathname!=='/')d.setAttribute('data-no-preloader','')})()" }} />

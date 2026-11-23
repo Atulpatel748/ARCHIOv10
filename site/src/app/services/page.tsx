@@ -46,7 +46,7 @@ export default function ServicesPage() {
       <div className="container">
         <div className={styles.bandsNext} data-reveal>
           <p>Not sure where to begin? Get in touch with us</p>
-          <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Contact us</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--light"><Roll>Contact us</Roll></Link>
         </div>
       </div>
 

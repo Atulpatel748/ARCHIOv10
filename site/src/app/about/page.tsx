@@ -24,26 +24,30 @@ export default function AboutPage() {
         label="About us"
         title="Design that works, functionally,"
         accent="aesthetically and commercially"
-        intro={'Archió is a consultancy-led interior design studio in Dubai, founded by Pooja Vijayakumar and S. Harshitha.'}
-      />
+      >
+        <div className={styles.headMedia}>
+          <Image src="/images/about/managers-office.webp" alt="Manager's office with a marble feature wall and lit shelving" width={864} height={1080} sizes="(max-width: 1023px) 100vw, 30vw" priority />
+        </div>
+      </PageHead>
 
       <section className={`section container ${styles.about}`}>
         {/* No second statement here: the heading above already says it (the home page carries the philosophy quote) */}
         <h2 className={styles.whoTitle} data-reveal>Who we are</h2>
         <div className={styles.body}>
-          {about.body.map((p) => <p key={p} data-reveal>{p}</p>)}
+          <p data-reveal>{about.body[0]}</p>
+          <p data-reveal>{about.body.slice(1).join(' ')}</p>
         </div>
       </section>
 
       <section className={styles.vm}>
         <div className={`container ${styles.vmGrid}`}>
-          <div data-reveal>
+          <div className={styles.vmRow} data-reveal>
             <h2 className={styles.vmTitle}>Our vision</h2>
-            <p className="serif">{vision}</p>
+            <p>{vision}</p>
           </div>
-          <div data-reveal>
+          <div className={styles.vmRow} data-reveal>
             <h2 className={styles.vmTitle}>Our mission</h2>
-            <p className="serif">{mission}</p>
+            <p>{mission}</p>
           </div>
         </div>
       </section>
@@ -77,7 +81,6 @@ export default function AboutPage() {
         <p className={styles.closingLine} data-reveal>If you are looking to design, refurbish or revamp your space, let&apos;s talk</p>
         <div className={styles.closingActions} data-reveal>
           <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Contact us</Roll></Link>
-          <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Start a project</Roll></Link>
         </div>
       </section>
     </>

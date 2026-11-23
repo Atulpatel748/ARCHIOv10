@@ -50,11 +50,8 @@
 }
 
 /* The position */
-.position {
-  display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 32px var(--gutter);
-  @include tablet-down { grid-template-columns: 1fr; }
-}
-.positionLead { font-family: var(--font-display); font-size: clamp(1.75rem, 1.1rem + 2.2vw, 3.25rem); line-height: 1.18; max-width: 26ch; }
+.position { display: grid; gap: 22px; }
+.positionLead { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(1.75rem, 0.8rem + 3.9vw, 5.25rem); line-height: 1; max-width: 24ch; overflow-wrap: break-word; }
 
 /* What we do: a heading over the stage index (see StageList) */
 .headRow { display: grid; gap: 22px; margin-bottom: clamp(40px, 5vw, 72px); .big { font-size: clamp(1.75rem, 0.8rem + 3.9vw, 5.25rem); line-height: 1; max-width: 24ch; } }
@@ -86,6 +83,6 @@
 /* Philosophy: dark, text only */
 .philosophy { display: flex; align-items: center; color: var(--sand); background: var(--deep); }
 /* Once "We Design" releases, the empty lower half of its pinned stage would show as blank paper: the dark section rises over it instead */
-.philosophyInner { display: grid; gap: 32px; justify-items: center; text-align: center; padding-block: var(--section); }
+.philosophyInner { display: grid; gap: 32px; justify-items: start; text-align: left; padding-block: var(--section); }
 .quote { text-transform: uppercase; letter-spacing: 0.01em; font-family: var(--font-display); font-size: clamp(2.5rem, 1.2rem + 4.4vw, 6rem); line-height: 1.04; max-width: 17ch; color: var(--sand); :global(.accent) { color: var(--sand); } }
 .philosophyBody { max-width: 52ch; font-size: 1.125rem; line-height: 1.7; color: var(--blush); }

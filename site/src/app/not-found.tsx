@@ -13,7 +13,7 @@ export default function NotFound() {
         <p className="not-found__text">The address may have changed. The projects, services and studio are one step away.</p>
         <div className="not-found__links">
           <Link prefetch={false} href="/projects" className="btn btn--light"><Roll>View projects</Roll></Link>
-          <Link prefetch={false} href="/" className="btn btn--outline-light"><Roll>Home</Roll></Link>
+          <Link prefetch={false} href="/" className="btn btn--light"><Roll>Home</Roll></Link>
         </div>
       </div>
     </section>

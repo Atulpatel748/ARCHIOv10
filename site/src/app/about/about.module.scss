@@ -4,25 +4,29 @@
 
 %display { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.98; overflow-wrap: break-word; }
 
-/* Who we are: the heading on the left, the words on the right; the first paragraph larger, the other two side by side */
+/* The picture beside the opening heading (it replaced the founder note) */
+.headMedia { width: 100%; max-width: 30rem; img { display: block; width: 100%; height: auto; } }
+
+/* Who we are: the heading on the left, the words on the right; the first paragraph larger, the rest one paragraph below it */
 .about {
   display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 9fr); gap: 28px clamp(32px, 5.5vw, 80px); align-items: start;
   @include tablet-down { grid-template-columns: 1fr; }
 }
 .whoTitle { @extend %display; font-size: clamp(2rem, 1.4rem + 1.6vw, 2.75rem); }
 .body {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 48px; font-size: 1rem; line-height: 1.7;
-  p:first-child { grid-column: 1 / -1; font-family: var(--font-body), Georgia, serif; font-size: clamp(1.25rem, 1rem + 0.7vw, 1.625rem); line-height: 1.45; }
-  @include phone { grid-template-columns: 1fr; }
+  display: grid; gap: 24px; max-width: 62ch; font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.7;
+  p:first-child { font-size: clamp(1.25rem, 1rem + 0.7vw, 1.625rem); line-height: 1.45; }
 }
 
-/* Vision and mission: one tinted band, side by side */
-.vm { background: color-mix(in srgb, var(--oxblood) 5%, var(--paper)); padding-block: clamp(48px, 5vw, 64px); }
-.vmGrid {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px clamp(32px, 5.5vw, 80px);
-  > div { display: grid; gap: 18px; align-content: start; }
-  :global(.serif) { font-size: 1.1875rem; line-height: 1.65; }
-  @include phone { grid-template-columns: 1fr; }
+/* Vision and mission: one tinted band, one row each (heading left, words right), so their different lengths do not show */
+.vm { background: color-mix(in srgb, var(--oxblood) 5%, var(--paper)); padding-block: clamp(48px, 5vw, 72px); }
+.vmGrid { display: grid; }
+.vmRow {
+  display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 9fr); gap: 18px clamp(32px, 5.5vw, 80px); align-items: baseline;
+  padding-block: clamp(28px, 3vw, 40px);
+  & + & { border-top: 1px solid var(--line); }
+  p { max-width: 62ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.65; }
+  @include tablet-down { grid-template-columns: 1fr; }
 }
 .vmTitle { @extend %display; font-size: clamp(2.25rem, 1.5rem + 2.2vw, 3.5rem); }
 
@@ -34,29 +38,29 @@
 .media img { width: 100%; height: auto; display: block; }
 .why {
   display: grid; gap: 24px;
-  :global(.serif) { font-size: clamp(1.125rem, 1rem + 0.35vw, 1.3125rem); line-height: 1.7; }
+  :global(.serif) { font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.7; }
 }
 .whyTitle {
-  font-family: var(--font-body), Georgia, serif; font-weight: 400; font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.875rem); line-height: 1.15;
+  font-family: var(--font-display), sans-serif; font-weight: 400; font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.875rem); line-height: 1.15;
   :global(.label) { display: block; margin-bottom: 16px; }
 }
 
 /* Team: the heading with the two founders on the same line */
 .teamSection {
-  display: grid; gap: 28px clamp(32px, 5.5vw, 80px); align-items: end; padding-block: clamp(32px, 3vw, 40px);
+  display: grid; gap: 28px clamp(32px, 5.5vw, 80px); align-items: end; padding-block: clamp(48px, 5vw, 80px) clamp(32px, 3vw, 48px);
   @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 4.5fr) minmax(0, 4.5fr); }
 }
 .teamHead { display: grid; gap: 14px; justify-items: start; }
-.teamTitle { @extend %display; font-size: clamp(2.5rem, 1.6rem + 2.6vw, 4rem); }
+.teamTitle { @extend %display; font-size: clamp(2.75rem, 1.4rem + 4vw, 5.5rem); }
 .who {
-  display: grid; gap: 6px;
-  h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.875rem); line-height: 1.2; }
-  p { font-size: 0.9375rem; color: var(--accent-color); }
+  display: grid; gap: 8px; padding-top: 18px; border-top: 1px solid var(--line);
+  h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.625rem, 1.2rem + 1.2vw, 2.5rem); line-height: 1.15; }
+  p { font-size: 1rem; color: var(--accent-color); }
 }
 
 /* The closing line on the left, the two ways on beside it */
 .closing {
   display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px 40px; padding-block: clamp(32px, 3.5vw, 48px) clamp(56px, 6vw, 80px);
 }
-.closingLine { margin: 0; max-width: 30ch; font-family: var(--font-body), Georgia, serif; font-size: clamp(1.625rem, 1.1rem + 1.6vw, 2.5rem); line-height: 1.2; }
+.closingLine { margin: 0; max-width: 40ch; font-family: var(--font-ui), sans-serif; font-weight: 300; font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); line-height: 1.45; }
 .closingActions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 16px; }

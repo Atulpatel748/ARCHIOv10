@@ -11,7 +11,7 @@ export default function WorkPage({ projects }: { projects: Project[] }) {
       <section className={styles.head}>
         <div className="container">
           <div className={styles.headA}>
-            <p className="label" data-reveal>Projects</p>
+            <p className="label" data-reveal>Our work</p>
             <h1 className={styles.title}>Selected designs</h1>
             <p className={styles.lead} data-reveal>Residential, commercial and landscape design across Dubai.</p>
           </div>

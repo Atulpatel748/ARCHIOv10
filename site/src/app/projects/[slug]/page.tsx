@@ -86,7 +86,7 @@ export default async function ProjectPage({ params }: Params) {
         <div className={`container ${styles.ctaInner}`}>
           <Split className={styles.endTitle} text="Tell us about your space" />
           <div className={styles.endActions} data-reveal>
-            <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Start a project</Roll></Link>
+            <Link prefetch={false} href="/contact" className="btn btn--light"><Roll>Start a project</Roll></Link>
             <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
           </div>
         </div>
