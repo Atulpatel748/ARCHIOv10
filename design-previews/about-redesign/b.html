@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About option B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Belleza&family=Public+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* B: Cinematic bands. A full-screen render opening, alternating light and dark bands, large founder portraits. */
+  .hero { position: relative; height: 100vh; min-height: 640px; color: var(--paper); overflow: hidden; }
+  .hero img { position: absolute; inset: 0; height: 100%; object-fit: cover; }
+  .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(59 12 15 / 0.55), rgb(59 12 15 / 0.45) 35%, rgb(59 12 15 / 0.9)); }
+  .hero .nav { position: relative; z-index: 2; color: var(--paper); }
+  .hero .nav .pill { background: var(--paper); color: var(--oxblood); }
+  .heroText { position: absolute; z-index: 2; left: var(--m); right: var(--m); bottom: clamp(40px, 6vw, 88px); display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 40px; align-items: end; }
+  .heroText .label { color: var(--blush); }
+  .heroText h1 { font-size: clamp(2.75rem, 1rem + 6vw, 8rem); margin-top: 18px; }
+  .heroText p { font-size: 18px; font-weight: 300; max-width: 34ch; }
+  .statement { padding-block: clamp(80px, 10vw, 160px); }
+  .statement h2 { font-size: clamp(2.25rem, 1rem + 4.4vw, 6.25rem); max-width: 16ch; margin-top: 20px; }
+  .split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); align-items: center; padding-bottom: clamp(80px, 10vw, 160px); }
+  .split p { font-size: 18px; max-width: 56ch; }
+  .split p + p { margin-top: 20px; }
+  .split .big { font-size: clamp(1.375rem, 1rem + 0.9vw, 1.875rem); font-weight: 300; line-height: 1.4; }
+  .dark { background: var(--deep); color: var(--paper); padding-block: clamp(72px, 9vw, 140px); }
+  .dark .label { color: var(--blush); }
+  .vmRow { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); padding-block: clamp(36px, 4vw, 56px); border-top: 1px solid rgb(218 207 186 / 0.22); align-items: baseline; }
+  .vmRow h2 { font-size: clamp(2.5rem, 1rem + 4vw, 5.5rem); }
+  .vmRow p { font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); font-weight: 300; max-width: 52ch; }
+  .points { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 48px; border-top: 1px solid var(--line); }
+  .points div { padding: 32px 28px 8px 0; border-right: 1px solid var(--line); }
+  .points div + div { padding-left: 28px; }
+  .points div:last-child { border-right: 0; }
+  .points b { display: block; font-family: 'Belleza'; font-weight: 400; font-size: 44px; line-height: 1; margin-bottom: 24px; }
+  .whyBlock { padding-block: clamp(80px, 10vw, 160px); }
+  .whyBlock h2 { font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); max-width: 18ch; margin-top: 20px; }
+  .team { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr); gap: clamp(24px, 3vw, 48px); align-items: end; padding-bottom: clamp(80px, 10vw, 140px); }
+  .team h2 { font-size: clamp(3rem, 1rem + 5vw, 7rem); }
+  .portrait { background: var(--blush); overflow: hidden; }
+  .portrait img { mix-blend-mode: multiply; aspect-ratio: 4 / 5; object-fit: cover; object-position: top; }
+  .person h3 { font-size: clamp(1.5rem, 1rem + 1vw, 2.25rem); text-transform: none; margin-top: 18px; }
+  .person p { color: var(--muted); }
+  .cta { background: var(--oxblood); color: var(--paper); padding-block: clamp(64px, 8vw, 120px); }
+  .cta .wrap { display: flex; justify-content: space-between; align-items: end; gap: 32px; }
+  .cta h2 { font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); max-width: 14ch; }
+  footer.f { background: var(--deep); }
+</style></head>
+<body>
+<div class="optionTag">Option B: Cinematic bands</div>
+
+<header class="hero">
+  <img src="../../site/public/images/hero/dubai-marina-residence-2560.webp" alt="">
+  <nav class="nav"><span>Projects &nbsp; Services &nbsp; <u>About</u></span><span class="logo">ARCHIÓ</span><span class="pill">Contact us +</span></nav>
+  <div class="heroText">
+    <div><p class="label">About us</p><h1 class="display">Design that works, functionally, aesthetically and commercially</h1></div>
+    <p>A consultancy-led interior design studio in Dubai.</p>
+  </div>
+</header>
+
+<section class="wrap statement">
+  <p class="label">Who we are</p>
+  <h2 class="display">Not driven by trends or superficial styling</h2>
+</section>
+<section class="wrap split">
+  <img src="../../site/public/images/projects/dubai-marina-residence/bar-under-stair.webp" alt="">
+  <div>
+    <p class="big">We work closely with clients to understand how a space needs to perform, then design solutions that align with real-life use, business goals, and long-term value.</p>
+    <p style="margin-top:28px">Our team works across residential and commercial design, focused on spaces that balance refined aesthetics with real-world function. We apply that same rigour to Dubai's market across residential, commercial, and mixed-use environments, prioritising clarity, practicality, and thoughtful design decisions over unnecessary complexity.</p>
+  </div>
+</section>
+
+<section class="dark"><div class="wrap">
+  <p class="label" style="margin-bottom:32px">What drives us</p>
+  <div class="vmRow"><h2 class="display">Vision</h2><p>To create purposeful spaces that balance design integrity with everyday usability, where form always serves function, not the other way around. We move beyond surface-level styling toward environments that genuinely improve how people live, work, and do business.</p></div>
+  <div class="vmRow"><h2 class="display">Mission</h2><p>To deliver design solutions rooted in clarity and practicality, guiding clients with honest, expert advice they can rely on. We aim to simplify the design process through structured consultancy, creating spaces that remain relevant well beyond short-term trends.</p></div>
+</div></section>
+
+<section class="wrap whyBlock">
+  <p class="label">Why choose us</p>
+  <h2 class="display">We measure success in outcomes, not optics</h2>
+  <div class="points">
+    <div><b>01</b>Clear direction, from concept through to site coordination</div>
+    <div><b>02</b>Efficient use of budget and resources</div>
+    <div><b>03</b>Practical solutions tailored to real-world use</div>
+    <div><b>04</b>Consistent communication throughout the project</div>
+  </div>
+</section>
+
+<section class="wrap team">
+  <div><p class="label">The founders</p><h2 class="display" style="margin-top:18px">Our<br>team</h2></div>
+  <div class="person"><div class="portrait"><img src="../../site/public/images/team/pooja-vijayakumar.webp" alt=""></div><h3 class="display">Pooja Vijayakumar</h3><p>Co-Founder, Design</p></div>
+  <div class="person"><div class="portrait"><img src="../../site/public/images/team/s-harshitha.webp" alt=""></div><h3 class="display">S. Harshitha</h3><p>Co-Founder, Strategy &amp; Growth</p></div>
+</section>
+
+<section class="cta"><div class="wrap"><h2 class="display">Tell us about your space</h2><a class="btn btn--light">Contact us</a></div></section>
+<footer class="f">ARCHIÓ</footer>
+</body></html>

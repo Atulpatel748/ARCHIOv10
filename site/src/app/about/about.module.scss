@@ -1,66 +1,62 @@
 @use '../../styles/tokens' as *;
 
-/* The About page as in the approved mockup: every heading has its words beside it, so no half of the screen is left empty */
+/* The About page, option A "Editorial index" (Gate 2, 23 Nov 2026): every section is one row of the same grid, its numbered
+   label in a narrow left column and its words in a wide right column, so all text starts on the same line. */
 
 %display { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.98; overflow-wrap: break-word; }
 
-/* The picture beside the opening heading (it replaced the founder note) */
-.headMedia { width: 100%; max-width: 30rem; img { display: block; width: 100%; height: auto; } }
+/* Opening: the label, the large heading across the page, then a wide render (taller on phones) */
+.hero { display: grid; gap: clamp(18px, 2vw, 28px); padding-top: calc(var(--header-h) + clamp(3rem, 2rem + 4vw, 6rem)); container-type: inline-size; }
+/* Never mid-word: "COMMERCIALLY" is about 7.2 times the font size, so the size is capped to fit it in the page width */
+.title { @extend %display; letter-spacing: -0.01em; line-height: 0.94; text-wrap: balance; font-size: min(clamp(2.5rem, 1rem + 6.6vw, 9rem), calc(100cqw / 7.6)); max-width: 9em; }
+.heroImg {
+  margin-top: clamp(24px, 3vw, 48px); aspect-ratio: 21 / 9; overflow: hidden;
+  img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%; }
+  @include phone { aspect-ratio: 4 / 3; }
+}
 
-/* Who we are: the heading on the left, the words on the right; the first paragraph larger, the rest one paragraph below it */
-.about {
-  display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 9fr); gap: 28px clamp(32px, 5.5vw, 80px); align-items: start;
+.row {
+  display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px clamp(32px, 5vw, 80px);
+  padding-block: clamp(48px, 6vw, 96px); border-top: 1px solid var(--line);
+  &:first-child { border-top: 0; }
   @include tablet-down { grid-template-columns: 1fr; }
 }
-.whoTitle { @extend %display; font-size: clamp(2rem, 1.4rem + 1.6vw, 2.75rem); }
-.body {
-  display: grid; gap: 24px; max-width: 62ch; font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.7;
-  p:first-child { font-size: clamp(1.25rem, 1rem + 0.7vw, 1.625rem); line-height: 1.45; }
+.idx { display: flex; gap: 14px; align-items: baseline; b { font-family: var(--font-display); font-weight: 400; font-size: 0.9375rem; letter-spacing: 0; } }
+
+.lead { font-weight: 300; font-size: clamp(1.375rem, 1rem + 1.1vw, 2.125rem); line-height: 1.32; max-width: 32ch; }
+.copy { margin-top: 28px; max-width: 62ch; font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.7; }
+
+.h3 { @extend %display; font-size: clamp(1.75rem, 1.1rem + 1.6vw, 2.75rem); line-height: 1.02; }
+
+/* Vision and mission: one row each, heading left and words right, so their different lengths do not show */
+.vm {
+  display: grid; gap: clamp(32px, 4vw, 48px);
+  > div { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 6fr); gap: 12px 32px; align-items: baseline; }
+  p { max-width: 56ch; font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.7; }
+  @include tablet-down { > div { grid-template-columns: 1fr; } }
 }
 
-/* Vision and mission: one tinted band, one row each (heading left, words right), so their different lengths do not show */
-.vm { background: color-mix(in srgb, var(--oxblood) 5%, var(--paper)); padding-block: clamp(48px, 5vw, 72px); }
-.vmGrid { display: grid; }
-.vmRow {
-  display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 9fr); gap: 18px clamp(32px, 5.5vw, 80px); align-items: baseline;
-  padding-block: clamp(28px, 3vw, 40px);
-  & + & { border-top: 1px solid var(--line); }
-  p { max-width: 62ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.65; }
-  @include tablet-down { grid-template-columns: 1fr; }
-}
-.vmTitle { @extend %display; font-size: clamp(2.25rem, 1.5rem + 2.2vw, 3.5rem); }
-
-/* Why choose us: the picture, a sentence-style heading and one paragraph */
-.split {
-  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px clamp(32px, 5.5vw, 80px); align-items: center;
-  @include phone { grid-template-columns: 1fr; }
-}
-.media img { width: 100%; height: auto; display: block; }
+/* Why choose us: the picture beside its heading and paragraph */
 .why {
-  display: grid; gap: 24px;
-  :global(.serif) { font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.7; }
+  display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 28px clamp(32px, 4vw, 64px); align-items: center;
+  .h3 { max-width: 18ch; margin-bottom: 24px; text-wrap: balance; }
+  p { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.7; }
+  @include tablet-down { grid-template-columns: 1fr; }
 }
-.whyTitle {
-  font-family: var(--font-display), sans-serif; font-weight: 400; font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.875rem); line-height: 1.15;
-  :global(.label) { display: block; margin-bottom: 16px; }
-}
+.whyImg img { display: block; width: 100%; height: auto; }
 
-/* Team: the heading with the two founders on the same line */
-.teamSection {
-  display: grid; gap: 28px clamp(32px, 5.5vw, 80px); align-items: end; padding-block: clamp(48px, 5vw, 80px) clamp(32px, 3vw, 48px);
-  @media (min-width: 64em) { grid-template-columns: minmax(0, 4fr) minmax(0, 4.5fr) minmax(0, 4.5fr); }
-}
-.teamHead { display: grid; gap: 14px; justify-items: start; }
-.teamTitle { @extend %display; font-size: clamp(2.75rem, 1.4rem + 4vw, 5.5rem); }
-.who {
-  display: grid; gap: 8px; padding-top: 18px; border-top: 1px solid var(--line);
-  h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.625rem, 1.2rem + 1.2vw, 2.5rem); line-height: 1.15; }
+/* The founders: a large heading, then the two names side by side, each under a fine line */
+.teamTitle { @extend %display; font-size: clamp(2.5rem, 1.2rem + 3.6vw, 4.75rem); margin-bottom: clamp(28px, 3vw, 44px); }
+.team { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px clamp(24px, 3vw, 48px); @include phone { grid-template-columns: 1fr; } }
+.person {
+  display: grid; gap: 6px; padding-top: 20px; border-top: 1px solid var(--oxblood);
+  h3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.625rem, 1.1rem + 1.3vw, 2.5rem); line-height: 1.15; }
   p { font-size: 1rem; color: var(--accent-color); }
 }
 
-/* The closing line on the left, the two ways on beside it */
-.closing {
-  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 28px 40px; padding-block: clamp(32px, 3.5vw, 48px) clamp(56px, 6vw, 80px);
+/* The closing line and one way on */
+.close {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px 40px;
+  padding-block: clamp(40px, 4vw, 56px) clamp(64px, 7vw, 104px); border-top: 1px solid var(--line);
+  p { margin: 0; max-width: 40ch; font-weight: 300; font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); line-height: 1.45; }
 }
-.closingLine { margin: 0; max-width: 40ch; font-family: var(--font-ui), sans-serif; font-weight: 300; font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); line-height: 1.45; }
-.closingActions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 16px; }

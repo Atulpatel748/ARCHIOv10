@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About option C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Belleza&family=Public+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+  /* C: Sticky split. The left column stays put (heading and section index); the right column scrolls through pictures and words. */
+  .layout { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); }
+  .pin { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding-block: 48px 56px; }
+  .pin h1 { font-size: clamp(2.5rem, 1rem + 3.9vw, 6rem); margin-top: 20px; }
+  .toc { display: grid; gap: 12px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .toc span { display: flex; gap: 16px; align-items: center; color: var(--muted); }
+  .toc span::before { content: ''; width: 28px; height: 1px; background: currentColor; }
+  .toc .on { color: var(--oxblood); }
+  .toc .on::before { width: 56px; }
+  .flow { display: grid; gap: clamp(72px, 8vw, 128px); padding-block: 48px 120px; }
+  .block { display: grid; gap: 28px; }
+  .block .lead { font-size: clamp(1.375rem, 1rem + 1vw, 2rem); font-weight: 300; line-height: 1.35; }
+  .block p { font-size: 18px; max-width: 58ch; }
+  .block h2 { font-size: clamp(2.25rem, 1rem + 2.6vw, 4rem); }
+  .tall { aspect-ratio: 4 / 5; overflow: hidden; } .tall img { height: 100%; object-fit: cover; }
+  .wide { aspect-ratio: 16 / 9; overflow: hidden; } .wide img { height: 100%; object-fit: cover; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .pair h3 { font-size: clamp(1.75rem, 1rem + 1.4vw, 2.5rem); margin-bottom: 14px; }
+  .people { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .people .ph { background: var(--blush); } .people .ph img { mix-blend-mode: multiply; aspect-ratio: 1; object-fit: cover; object-position: top; }
+  .people h3 { font-size: 30px; text-transform: none; margin-top: 16px; }
+  .people p { color: var(--muted); font-size: 15px; }
+  .end { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .end p { font-size: 22px; font-weight: 300; max-width: 30ch; }
+</style></head>
+<body>
+<div class="optionTag">Option C: Sticky split</div>
+<nav class="nav"><span>Projects &nbsp; Services &nbsp; <u>About</u></span><span class="logo">ARCHIÓ</span><span class="pill">Contact us +</span></nav>
+
+<div class="wrap layout">
+  <aside class="pin">
+    <div><p class="label">About us</p><h1 class="display">Design that works, functionally, aesthetically and commercially</h1></div>
+    <div class="toc"><span class="on">Who we are</span><span>Vision &amp; mission</span><span>Why choose us</span><span>Our team</span></div>
+  </aside>
+
+  <main class="flow">
+    <section class="block">
+      <div class="tall"><img src="../../site/public/images/about/managers-office.webp" alt=""></div>
+      <p class="label">Who we are</p>
+      <p class="lead">Not driven by trends or superficial styling. We work closely with clients to understand how a space needs to perform, then design solutions that align with real-life use, business goals, and long-term value.</p>
+      <p>Our team works across residential and commercial design, focused on spaces that balance refined aesthetics with real-world function. We apply that same rigour to Dubai's market across residential, commercial, and mixed-use environments, prioritising clarity, practicality, and thoughtful design decisions over unnecessary complexity.</p>
+    </section>
+
+    <section class="block">
+      <p class="label">Vision &amp; mission</p>
+      <div class="pair">
+        <div><h3 class="display">Our vision</h3><p>To create purposeful spaces that balance design integrity with everyday usability, where form always serves function, not the other way around. We move beyond surface-level styling toward environments that genuinely improve how people live, work, and do business.</p></div>
+        <div><h3 class="display">Our mission</h3><p>To deliver design solutions rooted in clarity and practicality, guiding clients with honest, expert advice they can rely on. We aim to simplify the design process through structured consultancy, creating spaces that remain relevant well beyond short-term trends.</p></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="wide"><img src="../../site/public/images/projects/arabian-ranches-garden/pergola-kitchen-dusk.webp" alt=""></div>
+      <p class="label">Why choose us</p>
+      <h2 class="display">We measure success in outcomes, not optics</h2>
+      <p>Function carries equal weight to aesthetics, never an afterthought. Our advice is unbiased and consultancy-driven, not sales-driven, and our solutions are shaped by real constraints rather than idealised scenarios. We keep communication clear from the first brief to the final design, and stay involved where it matters, not where it adds noise.</p>
+    </section>
+
+    <section class="block">
+      <p class="label">The founders</p>
+      <h2 class="display">Our team</h2>
+      <div class="people">
+        <div><div class="ph"><img src="../../site/public/images/team/pooja-vijayakumar.webp" alt=""></div><h3 class="display">Pooja Vijayakumar</h3><p>Co-Founder, Design</p></div>
+        <div><div class="ph"><img src="../../site/public/images/team/s-harshitha.webp" alt=""></div><h3 class="display">S. Harshitha</h3><p>Co-Founder, Strategy &amp; Growth</p></div>
+      </div>
+    </section>
+
+    <div class="end"><p>If you are looking to design, refurbish or revamp your space, let's talk.</p><a class="btn">Contact us</a></div>
+  </main>
+</div>
+<footer class="f">ARCHIÓ</footer>
+</body></html>
