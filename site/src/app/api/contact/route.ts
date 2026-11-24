@@ -49,12 +49,13 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
-function enquiryFingerprint(contact: string, isEmail: boolean, type: string, message: string): string {
+// Name and location are part of it, so a resend that corrects either one is delivered, not dropped as a duplicate.
+function enquiryFingerprint(contact: string, isEmail: boolean, type: string, message: string, name: string, location: string): string {
   const normalizedContact = isEmail ? contact.toLowerCase() : contact.replace(/\D/g, '');
-  const normalizedType = type.toLowerCase().replace(/\s+/g, ' ').trim();
+  const norm = (value: string) => value.toLowerCase().replace(/\s+/g, ' ').trim();
   const normalizedMessage = message.replace(/\s+/g, ' ').trim();
   return createHash('sha256')
-    .update(JSON.stringify([normalizedContact, normalizedType, normalizedMessage]))
+    .update(JSON.stringify([normalizedContact, norm(type), normalizedMessage, norm(name), norm(location)]))
     .digest('hex');
 }
 
@@ -83,10 +84,6 @@ function cleanupRequests(now: number): void {
   }
 }
 
-export async function GET() {
-  return Response.json({ ok: true }, { headers: noStore });
-}
-
 export async function POST(request: Request) {
   if (!sameOrigin(request)) return fail('forbidden', 403);
 
@@ -98,13 +95,25 @@ export async function POST(request: Request) {
     return fail('too_large', 413);
   }
 
-  let raw: string;
+  // Count the bytes as they arrive and stop at the limit, so a body sent without a length is never read whole.
+  const chunks: Uint8Array[] = [];
+  let total = 0;
   try {
-    raw = await request.text();
+    const reader = request.body?.getReader();
+    while (reader) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > MAX_BODY_BYTES) {
+        await reader.cancel();
+        return fail('too_large', 413);
+      }
+      chunks.push(value);
+    }
   } catch {
     return fail('invalid', 400);
   }
-  if (new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) return fail('too_large', 413);
+  const raw = new TextDecoder().decode(Buffer.concat(chunks));
 
   let parsed: unknown;
   try {
@@ -121,9 +130,9 @@ export async function POST(request: Request) {
   const safeIp = clientIp(request);
   cleanupRequests(now);
   let priorRequests = requests.get(safeIp);
-  if (!priorRequests && requests.size >= MAX_REQUEST_IPS) {
-    return fail('capacity_exceeded', 503);
-  }
+  // Full: forget the oldest address (a Map keeps insertion order). Refusing new addresses instead would let 5,000 junk
+  // requests lock every real visitor out of the form for ten minutes.
+  if (!priorRequests && requests.size >= MAX_REQUEST_IPS) requests.delete(requests.keys().next().value!);
   if (!priorRequests) priorRequests = [];
   if (priorRequests.length >= RATE_LIMIT) return fail('rate_limited', 429);
   priorRequests.push(now);
@@ -168,7 +177,7 @@ export async function POST(request: Request) {
   if (!settings && !webhookUrl) return fail('not_configured', 503);
 
   const isEmail = contact.includes('@');
-  const fingerprint = enquiryFingerprint(contact, isEmail, type, message);
+  const fingerprint = enquiryFingerprint(contact, isEmail, type, message, name, location);
   for (const [key, enquiry] of enquiries) {
     if (enquiry.expiresAt <= now && !enquiry.inFlight) enquiries.delete(key);
   }
@@ -206,7 +215,10 @@ export async function POST(request: Request) {
   const wasDuplicate = Boolean(enquiry);
   if (!enquiry) {
     if (enquiries.size >= MAX_ENQUIRIES) {
-      return fail('capacity_exceeded', 503);
+      // Full: forget the oldest enquiry that is not being sent right now; only when every one is mid-send, refuse.
+      const oldestIdle = [...enquiries].find(([, e]) => !e.inFlight)?.[0];
+      if (oldestIdle === undefined) return fail('capacity_exceeded', 503);
+      enquiries.delete(oldestIdle);
     }
     enquiry = {
       expiresAt: now + DUPLICATE_WINDOW_MS,

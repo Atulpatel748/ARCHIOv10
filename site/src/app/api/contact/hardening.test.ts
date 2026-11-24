@@ -393,3 +393,44 @@ test('project content is consistent and every image file exists', () => {
     }
   }
 });
+
+// --- audit fixes, 24 Nov 2026 ---
+test('a full rate-limit list forgets its oldest address instead of locking new visitors out', async () => {
+  for (let i = 0; i < 5000; i++) await send({}, { 'x-real-ip': `cap-${i}` });
+  const fresh = await send({}, { 'x-real-ip': 'cap-new-visitor' });
+  assert.equal(fresh.status, 422); // reached validation: not 503 capacity_exceeded
+});
+
+test('a full enquiry list forgets its oldest finished enquiry instead of refusing new ones', async () => {
+  capture();
+  for (let i = 0; i < 5000; i++) assert.equal((await send({ ...valid, message: `bulk enquiry ${i}` })).status, 200);
+  const next = await send({ ...valid, message: 'one more after the list is full' });
+  assert.equal(next.status, 200);
+});
+
+test('a resend that corrects the name or location is delivered, an identical one is not', async () => {
+  const sent = capture();
+  const enquiry = { ...valid, contact: 'fix@example.com', location: 'Dubai Marinaa', message: 'corrected resend case' };
+  assert.equal((await send(enquiry)).status, 200);
+  const corrected = await send({ ...enquiry, location: 'Dubai Marina' });
+  assert.deepEqual(await corrected.json(), { ok: true });
+  const renamed = await send({ ...enquiry, location: 'Dubai Marina', name: 'Asha R. Rao' });
+  assert.deepEqual(await renamed.json(), { ok: true });
+  assert.equal(sent.length, 3);
+  const same = await send({ ...enquiry, location: 'dubai  marina', name: 'asha r. rao' });
+  assert.deepEqual(await same.json(), { ok: true, duplicate: true });
+  assert.equal(sent.length, 3);
+});
+
+test('a body sent without a length is cut off at 16 KB, and a small one still works', { timeout: 5000 }, async () => {
+  const post = (body: ReadableStream) => POST(new Request('http://localhost/api/contact', { method: 'POST', headers: { 'content-type': 'application/json', 'x-real-ip': `stream-${n++}` }, body, duplex: 'half' } as RequestInit));
+  // A body that never ends: reading it whole would never finish, so this only passes if reading stops at the limit
+  const endless = new ReadableStream({ pull(c) { c.enqueue(new Uint8Array(4096).fill(32)); } });
+  assert.equal((await post(endless)).status, 413);
+  const small = new ReadableStream({ start(c) { c.enqueue(new TextEncoder().encode('{}')); c.close(); } });
+  assert.equal((await post(small)).status, 422);
+});
+
+test('the contact route answers POST only', async () => {
+  assert.equal('GET' in (await import('./route.ts')), false);
+});
