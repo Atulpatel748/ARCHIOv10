@@ -50,9 +50,9 @@ const FRAGMENT = `
     gl_FragColor = mix(b, a, m);
   }`;
 
-// The hero photos come as ready-sized files (-640, -1080, -1920, -2560 .webp in /images/hero), served as they are: nothing is
+// The hero photos come as ready-sized files (-640, -1080, -1920, -2560, -3840 .webp in /images/hero; AI-upscaled 4x, 24 Nov 2026), served as they are: nothing is
 // processed on the first request, so the picture is there as soon as it has downloaded.
-const heroLoader = ({ src, width }: { src: string; width: number }) => src.replace(/\.webp$/, `-${width <= 640 ? 640 : width <= 1200 ? 1080 : width <= 1920 ? 1920 : 2560}.webp`);
+const heroLoader = ({ src, width }: { src: string; width: number }) => src.replace(/\.webp$/, `-${width <= 640 ? 640 : width <= 1200 ? 1080 : width <= 1920 ? 1920 : width <= 2560 ? 2560 : 3840}.webp`);
 
 type GL = { show(index: number): void; go(from: number, to: number): Promise<void>; dispose(): void };
 
