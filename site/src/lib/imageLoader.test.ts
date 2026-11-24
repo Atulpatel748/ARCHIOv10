@@ -14,7 +14,9 @@ test('picks the smallest ready-made size that is at least as wide as asked', () 
   assert.equal(imageLoader({ src, width: 750 }), '/images/projects/jlt-office/boardroom-828.webp');
   assert.equal(imageLoader({ src, width: 1200 }), '/images/projects/jlt-office/boardroom-1080.webp'); // a 3x phone: not the 1920 copy
   assert.equal(imageLoader({ src, width: 1201 }), '/images/projects/jlt-office/boardroom-1920.webp');
-  assert.equal(imageLoader({ src, width: 3840 }), '/images/projects/jlt-office/boardroom-1920.webp'); // never larger than the biggest copy
+  assert.equal(imageLoader({ src, width: 1920 }), '/images/projects/jlt-office/boardroom-1920.webp');
+  assert.equal(imageLoader({ src, width: 2048 }), '/images/projects/jlt-office/boardroom-2560.webp'); // retina laptops
+  assert.equal(imageLoader({ src, width: 3840 }), '/images/projects/jlt-office/boardroom-3200.webp'); // never larger than the biggest copy
 });
 
 test('leaves anything that is not a photo in public/images alone', () => {
