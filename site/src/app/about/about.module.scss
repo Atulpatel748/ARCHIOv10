@@ -17,8 +17,7 @@
 
 .row {
   display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 24px clamp(32px, 5vw, 80px);
-  padding-block: clamp(48px, 6vw, 96px); border-top: 1px solid var(--line);
-  &:first-child { border-top: 0; }
+  padding-block: clamp(48px, 6vw, 96px); /* no lines between sections (owner, 24 Nov 2026): the space separates them */
   @include tablet-down { grid-template-columns: 1fr; }
 }
 .idx { margin: 0; }
@@ -57,6 +56,6 @@
 /* The closing line and one way on */
 .close {
   display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px 40px;
-  padding-block: clamp(40px, 4vw, 56px) clamp(64px, 7vw, 104px); border-top: 1px solid var(--line);
+  padding-block: clamp(40px, 4vw, 56px) clamp(64px, 7vw, 104px);
   p { margin: 0; max-width: 40ch; font-weight: 300; font-size: clamp(1.125rem, 1rem + 0.5vw, 1.5rem); line-height: 1.45; }
 }

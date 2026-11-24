@@ -3,8 +3,8 @@
 /* The pinned tunnel shared by the projects page and the project pages: the photos fly towards you through a corridor while the section is pinned.
    With motion: a tall section (--len) with a sticky stage; the photos start invisible and are placed by the script. Without motion it is not shown. */
 .tunnel { display: none; background: var(--paper); color: var(--oxblood); @media (prefers-reduced-motion: no-preference) { display: block; height: var(--len, 520dvh); } }
-.stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 50%, #fff 0, transparent 70%); perspective: 1200px; @include phone { perspective: 900px; } }
-.centre { position: relative; z-index: 2; text-shadow: 0 0 28px rgb(218 207 186 / 0.95), 0 0 8px rgb(218 207 186 / 0.8); display: grid; gap: 1rem; justify-items: center; text-align: center; padding: 0 1.5rem; }
+.stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; display: grid; place-items: center; background: radial-gradient(ellipse 34% 30% at 50% 50%, rgb(255 255 255 / 0.5), transparent); /* a small, soft light behind the name; it was a full-screen white glow that washed out the photos (owner, 24 Nov 2026) */ perspective: 1200px; @include phone { perspective: 900px; } }
+.centre { position: relative; z-index: 2; text-shadow: 0 0 12px rgb(218 207 186 / 0.9), 0 0 4px rgb(218 207 186 / 0.8); display: grid; gap: 1rem; justify-items: center; text-align: center; padding: 0 1.5rem; }
 .space { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
 .card {
   position: absolute; left: 50%; top: 50%; width: clamp(180px, 18vw, 270px); opacity: 0; overflow: hidden; background: var(--sand); box-shadow: 0 10px 28px rgb(59 12 15 / 0.12); will-change: transform, opacity; transition: opacity 450ms ease;
