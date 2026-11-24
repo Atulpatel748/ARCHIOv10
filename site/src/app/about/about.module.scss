@@ -21,7 +21,7 @@
   &:first-child { border-top: 0; }
   @include tablet-down { grid-template-columns: 1fr; }
 }
-.idx { display: flex; gap: 14px; align-items: baseline; b { font-family: var(--font-display); font-weight: 400; font-size: 0.9375rem; letter-spacing: 0; } }
+.idx { margin: 0; }
 
 .lead { font-weight: 300; font-size: clamp(1.375rem, 1rem + 1.1vw, 2.125rem); line-height: 1.32; max-width: 32ch; }
 .copy { margin-top: 28px; max-width: 62ch; font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.7; }

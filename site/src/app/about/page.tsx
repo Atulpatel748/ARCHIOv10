@@ -32,7 +32,7 @@ export default function AboutPage() {
 
       <div className="container">
         <section className={styles.row}>
-          <p className={`label ${styles.idx}`} data-reveal><b>01</b>Who we are</p>
+          <p className={`label ${styles.idx}`} data-reveal>Who we are</p>
           <div>
             <p className={styles.lead} data-reveal>{about.body[0]}</p>
             <p className={styles.copy} data-reveal>{about.body.slice(1).join(' ')}</p>
@@ -40,7 +40,7 @@ export default function AboutPage() {
         </section>
 
         <section className={styles.row}>
-          <p className={`label ${styles.idx}`} data-reveal><b>02</b>Vision &amp; mission</p>
+          <p className={`label ${styles.idx}`} data-reveal>Vision &amp; mission</p>
           <div className={styles.vm}>
             <div data-reveal><h2 className={styles.h3}>Our vision</h2><p>{vision}</p></div>
             <div data-reveal><h2 className={styles.h3}>Our mission</h2><p>{mission}</p></div>
@@ -48,7 +48,7 @@ export default function AboutPage() {
         </section>
 
         <section className={styles.row}>
-          <p className={`label ${styles.idx}`} data-reveal><b>03</b>Why choose us</p>
+          <p className={`label ${styles.idx}`} data-reveal>Why choose us</p>
           <div className={styles.why}>
             <div className={styles.whyImg} data-reveal>
               <Image src="/images/projects/dubai-marina-residence/bar-under-stair.webp" alt="Curved bar beneath a marble staircase" width={666} height={800} sizes="(max-width: 900px) 92vw, 30vw" />
@@ -61,7 +61,7 @@ export default function AboutPage() {
         </section>
 
         <section className={styles.row}>
-          <p className={`label ${styles.idx}`} data-reveal><b>04</b>The founders</p>
+          <p className={`label ${styles.idx}`} data-reveal>The founders</p>
           <div>
             <h2 className={styles.teamTitle} data-reveal>Our team</h2>
             <div className={styles.team}>
