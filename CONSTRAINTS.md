@@ -43,7 +43,7 @@ These are recorded so they cannot quietly get worse. Hold the line; improve them
 | --- | --- | --- |
 | Mobile LCP, slow-network test | 2.1 to 2.5 s on most pages; 2.5 to 2.8 s on `/projects`; 3.1 to 3.4 s on the Dubai Marina and Arabian Ranches pages (3 Nov 2026). It was 0.8 to 0.9 s on most pages before the first-visit preloader (28 Oct 2026): Lighthouse is always a first visit, and the page title is the largest thing on screen but stays covered for the preloader's 2 s minimum | must not rise; the goal is 2.5 s or less |
 | JavaScript per page, Lighthouse mobile transfer | 202 to 216 KB (3 Nov 2026): about 117 KB is React and Next.js, about 58 KB is gsap, ScrollTrigger and Lenis fetched once the browser is idle (after the first load), the rest is the page's own code | must not grow |
-| Fonts | about 58 KB (3 files, Latin only); it was 96 KB (6 files) until 28 Oct 2026, and an earlier note of 47 KB had counted only the two biggest files | must not grow |
+| Fonts | about 37 KB (2 files: Belleza and Public Sans, Latin only) since Lora was dropped on 23 Nov 2026; it was 58 KB (3 files) before that and 96 KB (6 files) until 28 Oct 2026 | must not grow |
 | Whole page weight on mobile | 311 to 527 KB | must not grow |
 | Vercel image resizing on request (`/_next/image`) | 0 per visit since 30 Oct 2026 (photos are resized ahead of time, ADR-007); it was about 57 for a three-page visit | must stay 0 |
 | Contact form emails delivered | none yet (the SMTP settings are not set in Vercel) | must reach "works" before launch |

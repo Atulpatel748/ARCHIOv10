@@ -90,10 +90,7 @@ html.lenis, html.lenis body { height: auto; }
   &:active { transform: scale(0.98); }
 }
 .btn--solid { background: var(--oxblood); border-color: var(--oxblood); color: var(--sand); @include hover { &:hover { background: var(--deep); } } &:focus-visible { outline-color: var(--oxblood); } }
-.btn--accent { background: var(--oxblood); border-color: var(--oxblood); color: var(--sand); @include hover { &:hover { background: var(--deep); } } &:focus-visible { outline-color: var(--oxblood); } } /* one button style everywhere (client, 23 Nov 2026): same as solid */
 .btn--light { background: var(--sand); border-color: var(--sand); color: var(--oxblood); @include hover { &:hover { background: var(--paper); border-color: var(--paper); } } } /* the same button on dark strips */
-.btn--outline { @include hover { &:hover { background: var(--oxblood); border-color: var(--oxblood); color: var(--sand); } } }
-.btn--outline-light { color: var(--sand); @include hover { &:hover { background: var(--paper); color: var(--oxblood); } } }
 
 /* 404 page. Kept here, not in a module: Next.js preloads the not-found page's own CSS on every page, which the browser flags as unused. */
 .not-found {

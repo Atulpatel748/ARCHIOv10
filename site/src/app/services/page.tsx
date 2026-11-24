@@ -74,7 +74,7 @@ export default function ServicesPage() {
         {/* The words and the way in sit beside the heading, so its right side is not left empty */}
         <div className={styles.processBody}>
           <p className="serif" data-reveal>{approach.body}</p>
-          <Link prefetch={false} href="/contact" className="btn btn--accent" data-reveal><Roll>Start a project</Roll></Link>
+          <Link prefetch={false} href="/contact" className="btn btn--solid" data-reveal><Roll>Start a project</Roll></Link>
         </div>
       </section>
     </>

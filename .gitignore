@@ -29,3 +29,6 @@ Thumbs.db
 
 # Agent worktrees (each is its own checkout; never commit them)
 .claude/worktrees/
+
+# Local browser-test captures (console logs, page snapshots, screenshots)
+.playwright-mcp/

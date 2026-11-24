@@ -66,7 +66,7 @@ export default async function ProjectPage({ params }: Params) {
           <Split className={styles.storyLead} text={project.summary.replace(/\.$/, '')} />
           {project.description.map((p) => <p key={p} data-reveal>{p}</p>)}
           <div className={styles.storyActions} data-reveal>
-            <Link prefetch={false} href="/contact" className="btn btn--accent"><Roll>Start a project</Roll></Link>
+            <Link prefetch={false} href="/contact" className="btn btn--solid"><Roll>Start a project</Roll></Link>
             <a href={site.whatsappHref} className="text-link"><Roll>Message us on WhatsApp</Roll></a>
           </div>
         </div>
