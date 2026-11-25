@@ -30,7 +30,7 @@
 /* Vision and mission: one row each, heading left and words right, so their different lengths do not show */
 .vm {
   display: grid; gap: clamp(32px, 4vw, 48px);
-  > div { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 6fr); gap: 12px 32px; align-items: baseline; }
+  > div { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 6fr); gap: 12px 32px; align-items: center; /* owner: heading at the middle of its paragraph */ }
   p { max-width: 56ch; font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.7; }
   @include tablet-down { > div { grid-template-columns: 1fr; } }
 }

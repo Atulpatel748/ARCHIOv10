@@ -1,14 +1,14 @@
 import Split from './Split';
 import styles from './PageHead.module.scss';
 
-type Props = { label: string; title: string; accent?: string; intro?: string; children?: React.ReactNode };
+type Props = { label: string; title: string; accent?: string; intro?: string; stacked?: boolean; children?: React.ReactNode };
 
 // A plain page opening with no photograph behind it: the label and a large uppercase title on the left, the introduction and
-// any actions beside it on the right (stacked on narrow screens).
-export default function PageHead({ label, title, accent, intro, children }: Props) {
+// any actions beside it on the right (stacked on narrow screens, or always with `stacked`).
+export default function PageHead({ label, title, accent, intro, stacked, children }: Props) {
   return (
     <section className={styles.head}>
-      <div className={`container ${styles.grid}`}>
+      <div className={`container ${styles.grid}${stacked ? ` ${styles.stacked}` : ''}`}>
         <div className={styles.main}>
           <p className="label" data-reveal>{label}</p>
           <Split as="h1" className={styles.title} text={title} accent={accent} />

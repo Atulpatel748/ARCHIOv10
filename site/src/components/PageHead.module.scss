@@ -3,7 +3,15 @@
 .head { padding-block: calc(var(--header-h) + clamp(3.5rem, 2.5rem + 5vw, 8rem)) clamp(3rem, 2rem + 4vw, 6rem); }
 .grid {
   display: grid; gap: clamp(28px, 4vw, 56px) clamp(32px, 6vw, 112px); align-items: center;
-  @media (min-width: 64em) { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); }
+  // Wide screens: the label gets its own row so the introduction centres on the title alone (owner: middle of the heading)
+  @media (min-width: 64em) {
+    &:not(.stacked) {
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); row-gap: clamp(18px, 2vw, 28px);
+      .main { display: contents; }
+      .main > * { grid-column: 1; }
+      .side { grid-column: 2; grid-row: 2; }
+    }
+  }
 }
 .main { display: grid; gap: clamp(18px, 2vw, 28px); }
 .title {

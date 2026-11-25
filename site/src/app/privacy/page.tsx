@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <>
-      <PageHead label="Website information" title="Privacy notice" intro="This notice explains how Archió Interior Design Studio (“Archió”, “we” or “us”) handles information you submit through this website.">
+      <PageHead label="Website information" title="Privacy notice" stacked intro="This notice explains how Archió Interior Design Studio (“Archió”, “we” or “us”) handles information you submit through this website.">
         <p className={styles.updated}>Last updated: 12 November 2026</p>
       </PageHead>
       <section className={`section container ${styles.page}`}>
