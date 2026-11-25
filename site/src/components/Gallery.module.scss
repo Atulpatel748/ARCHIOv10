@@ -18,7 +18,7 @@
   @include tablet-down {
     position: sticky; top: var(--header-h); z-index: 5; margin-inline: calc(-1 * var(--margin)); padding: 8px var(--margin); background: var(--paper);
     ol { position: relative; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-    a { align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid rgb(76 17 20 / 0.32); border-radius: 999px; white-space: nowrap; font-size: 1rem; translate: none; span { display: none; } &[aria-current='true'] { translate: none; color: var(--sand); background: var(--oxblood); border-color: var(--oxblood); } }
+    a { align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid rgb(76 17 20 / 0.32); border-radius: 999px; white-space: nowrap; font-size: 1rem; translate: none; span { display: none; } &[aria-current='true'] { &:focus-visible { outline-color: var(--oxblood); } translate: none; color: var(--sand); background: var(--oxblood); border-color: var(--oxblood); } }
   }
 }
 @include tablet-down { .rooms { display: block; } .chapters { margin-top: 2rem; } .chapter { scroll-margin-top: calc(var(--header-h) + 100px); } }
@@ -87,3 +87,6 @@
   .prev { left: calc(50% - 3.75rem); }
   .next { right: calc(50% - 3.75rem); }
 }
+
+/* The sticky room chips stay above the room names that scroll under them */
+@include tablet-down { .index { z-index: 6; } }

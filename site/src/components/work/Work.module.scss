@@ -29,5 +29,5 @@
   min-height: 44px; padding: 0 22px; border: 1px solid rgb(76 17 20 / 0.32); border-radius: 999px; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
   transition: background-color 250ms var(--ease), color 250ms var(--ease), border-color 250ms var(--ease);
   @include hover { &:hover { border-color: var(--oxblood); } }
-  &[aria-pressed='true'] { background: var(--oxblood); border-color: var(--oxblood); color: var(--sand); @media (forced-colors: active) { border-width: 3px; text-decoration: underline; } }
+  &[aria-pressed='true'] { &:focus-visible { outline-color: var(--oxblood); } background: var(--oxblood); border-color: var(--oxblood); color: var(--sand); @media (forced-colors: active) { border-width: 3px; text-decoration: underline; } }
 }

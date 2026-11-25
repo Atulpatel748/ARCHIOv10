@@ -5,7 +5,7 @@
 .field { display: grid; gap: 4px; border: 0; margin: 0; padding: 0; min-width: 0; }
 .field > label, .field legend { padding: 0; font-size: 0.875rem; color: var(--blush); }
 .field > label.consent { font-size: 1rem; color: inherit; } /* the consent line is a label too; keep it full size, not the small field-label size */
-.optional { color: #C4A99B; } /* solid, 6.5:1 on the oxblood */
+.optional { color: var(--blush); } /* brand token, 7.8:1 on the oxblood */
 .field:focus-within > label, .field:focus-within legend { color: var(--sand); }
 .alt { margin: -16px 0 0; font-size: 0.9375rem; a { font-weight: 500; text-decoration: underline; text-underline-offset: 3px; padding: 10px 0; display: inline-block; } }
 .form :is(input, textarea, button) { scroll-margin-top: calc(var(--header-h) + 24px); } /* for the page's own scroll, when the smooth scroll is off */

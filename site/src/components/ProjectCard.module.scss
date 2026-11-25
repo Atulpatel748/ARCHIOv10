@@ -1,7 +1,7 @@
 @use '../styles/tokens' as *;
 
 .card { display: grid; }
-.link { display: grid; gap: 18px; text-decoration: none; }
+.link { display: grid; gap: 18px; align-content: start; text-decoration: none; } /* cards in one row keep titles and links level */
 .media { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--sand); }
 .image { object-fit: cover; transition: transform 900ms var(--ease); }
 .meta { display: grid; gap: 6px; justify-items: start; p { font-size: 0.9375rem; } }
