@@ -43,6 +43,7 @@ export default function Reveals() {
       // Lenis ignores scroll-padding, so a field reached with Tab or Shift+Tab could end up under the header or off screen (WCAG 2.4.11).
       const onFocus = (e: FocusEvent) => {
         const el = e.target as HTMLElement;
+        if (lenis.isScrolling === 'smooth') lenis.scrollTo(scrollY, { immediate: true }); // stop the glide to the previous field, or it pulls this one off screen again
         if (!el.closest?.('main') || el.closest('[data-recede], [data-seq]') || !el.matches('input, textarea, select, button, a')) return; // pinned scenes and the sticky hero scroll themselves
         // On phones a project's room list is a bar of chips that sticks under the header: leave room for it too
         const rooms = document.querySelector<HTMLElement>('nav[aria-label="Rooms"]');
@@ -53,7 +54,7 @@ export default function Reveals() {
           if (r.top < head || r.bottom > innerHeight - 24) lenis.scrollTo(el, { offset: -head }); // the bottom edge counts too: a field half off the screen is not visible
         };
         fix();
-        setTimeout(fix, 800); // and again once content that opens or moves on focus (the stage panels) has finished its transition
+        setTimeout(() => { if (document.activeElement === el) fix(); }, 800); // and again once content that opens or moves on focus (the stage panels) has finished its transition
       };
       addEventListener('focusin', onFocus);
       off = () => { removeEventListener('focusin', onFocus); gsap.ticker.remove(tick); lenis.destroy(); delete (window as unknown as { lenis?: unknown }).lenis; };
