@@ -28,14 +28,15 @@
 /* A collage per room: photos of different sizes placed loosely over each other, and each photo drifts by its own amount as the chapter moves through the screen (--p) */
 .chapter { position: relative; min-height: clamp(34rem, 70vw, 56rem); scroll-margin-top: calc(var(--header-h) + 24px); @include tablet-down { padding-top: 3.5rem; } @include phone { display: grid; gap: 1rem; min-height: 0; padding-top: 0; } }
 /* The sticky index already names the room on wide screens; the name shows here only where the index is hidden */
-.chapterName { display: none; margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; line-height: 1.1; @include tablet-down { display: block; position: absolute; left: 0; top: 0; z-index: 3; } @include phone { position: relative; } }
+.chapterName { display: none; margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; line-height: 1.1; @include tablet-down { display: block; position: absolute; left: 0; top: 0; z-index: 5; padding-right: 0.5em; background: var(--paper); } @include phone { position: relative; padding-right: 0; } } /* above every photo layer (s3 is 4), so a photo drifting in from the room above cannot cover it */
 .shot {
   --d: 0px;
   position: absolute; width: var(--w); aspect-ratio: var(--ar); padding: 0; border: 0; overflow: hidden; background: var(--sand); cursor: zoom-in;
   box-shadow: 0 0 0 clamp(4px, 0.5vw, 8px) var(--paper), 0 8px 24px rgb(59 12 15 / 0.08); translate: 0 calc((var(--p, 0.5) - 0.5) * var(--d));
   img { object-fit: cover; transition: scale 1.2s var(--ease); }
   @include hover { &:hover img { scale: 1.03; } }
-  @include phone { position: relative; left: auto; top: auto; width: 88%; translate: none; &:nth-of-type(even) { margin-inline-start: auto; } }
+  @include tablet-down { margin-top: 3.5rem; } /* absolute boxes ignore the chapter's top padding, so move the photos below the room name */
+  @include phone { position: relative; left: auto; top: auto; width: 88%; translate: none; margin-top: 0; &:nth-of-type(even) { margin-inline-start: auto; } }
 }
 .s0 { --w: 56%; --d: 40px; left: 0; top: 0; z-index: 1; }
 .s1 { --w: 38%; --d: -60px; left: 62%; top: 6%; z-index: 2; }
