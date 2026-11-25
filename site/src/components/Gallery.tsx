@@ -12,11 +12,12 @@ const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // A room with one or two photos is only as tall as they need (the collage height is for three or four): the tallest of the first
 // photo (56% wide, from the top) and the second (38% wide, 6% down), as a share of the room's width, plus room for the drift.
+// Larger rooms get the same sum as a floor, so a tall third or fourth photo cannot hang into the next room. A photo's top is a share
+// of the room's height, so its bottom fits when height >= top x height + its own height, i.e. height >= (width / ratio) / (1 - top).
 function smallRoom(shots: { img: ProjectImage }[]) {
-  if (shots.length > 2) return {};
-  const [a, b] = shots.map(({ img }) => img.width / img.height);
-  const fill = Math.max(0.56 / a, b ? 0.38 / b / 0.94 : 0) + 0.06;
-  return { 'data-small': '', style: { '--fill': fill.toFixed(3) } as CSSProperties };
+  const [a, b, c, d] = shots.map(({ img }) => img.width / img.height);
+  const fill = Math.max(0.56 / a, b ? 0.38 / b / 0.94 : 0, c ? 0.44 / c / 0.48 : 0, d ? 0.28 / d / 0.32 : 0) + 0.06;
+  return { ...(shots.length <= 2 ? { 'data-small': '' } : {}), style: { '--fill': fill.toFixed(3) } as CSSProperties };
 }
 
 // Room links scroll here, not by the browser: a native jump made while the smooth scroll was starting up was pulled back by it.

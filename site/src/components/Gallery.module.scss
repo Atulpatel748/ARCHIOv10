@@ -26,7 +26,7 @@
 /* A room with one or two photos: only as tall as its photos (--fill is that height as a share of the column width) */
 .chapter[data-small] { min-height: calc(var(--fill) * 100cqw); @include tablet-down { min-height: calc(var(--fill) * 100cqw + 3.5rem); } @include phone { min-height: 0; } }
 /* A collage per room: photos of different sizes placed loosely over each other, and each photo drifts by its own amount as the chapter moves through the screen (--p) */
-.chapter { position: relative; min-height: clamp(34rem, 70vw, 56rem); scroll-margin-top: calc(var(--header-h) + 24px); @include tablet-down { padding-top: 3.5rem; } @include phone { display: grid; gap: 1rem; min-height: 0; padding-top: 0; } }
+.chapter { position: relative; min-height: max(clamp(34rem, 70vw, 56rem), calc(var(--fill, 0) * 100cqw)); scroll-margin-top: calc(var(--header-h) + 24px); @include tablet-down { padding-top: 3.5rem; min-height: max(clamp(34rem, 70vw, 56rem), calc(var(--fill, 0) * 100cqw + 3.5rem)); } @include phone { display: grid; gap: 1rem; min-height: 0; padding-top: 0; } }
 /* The sticky index already names the room on wide screens; the name shows here only where the index is hidden */
 .chapterName { display: none; margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.6rem; line-height: 1.1; @include tablet-down { display: block; position: absolute; left: 0; top: 0; z-index: 5; padding-right: 0.5em; background: var(--paper); } @include phone { position: relative; padding-right: 0; } } /* above every photo layer (s3 is 4), so a photo drifting in from the room above cannot cover it */
 .shot {
