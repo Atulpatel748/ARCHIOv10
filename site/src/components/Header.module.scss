@@ -52,6 +52,7 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
     padding: 12px 0; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
     background: linear-gradient(currentColor 0 0) left calc(100% - 6px) / 0 1px no-repeat; transition: background-size 400ms var(--ease);
   }
+  .dark & a { text-shadow: 0 0 3px rgb(20 6 7 / 0.85), 0 1px 14px rgb(20 6 7 / 0.7); } /* sand links over the hero photo: same halo as the hero labels, 4.5:1 */
   a[aria-current='page'] { background-size: 100% 1px; @media (forced-colors: active) { text-decoration: underline; text-underline-offset: 6px; } } /* the gradient line is removed in high-contrast mode */
   @include tablet-down { display: none; }
 }
@@ -84,7 +85,7 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
 }
 .bars {
   display: grid; gap: 5px; width: 18px;
-  span { height: 1.5px; background: currentColor; transition: translate 500ms var(--ease), rotate 500ms var(--ease), width 500ms var(--ease); }
+  span { height: 1.5px; background: currentColor; transition: translate 500ms var(--ease), rotate 500ms var(--ease), width 500ms var(--ease); @media (forced-colors: active) { forced-color-adjust: none; background: CanvasText; } } /* high-contrast mode drops backgrounds, which hid the bars */
   span:last-child { justify-self: end; width: 12px; }
 }
 @include hover { .toggle:hover .bars span:last-child { width: 18px; } }

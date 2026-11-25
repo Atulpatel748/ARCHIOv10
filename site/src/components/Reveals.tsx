@@ -44,14 +44,14 @@ export default function Reveals() {
       const onFocus = (e: FocusEvent) => {
         const el = e.target as HTMLElement;
         if (lenis.isScrolling === 'smooth') lenis.scrollTo(scrollY, { immediate: true }); // stop the glide to the previous field, or it pulls this one off screen again
-        if (!el.closest?.('main') || el.closest('[data-recede], [data-seq]') || !el.matches('input, textarea, select, button, a')) return; // pinned scenes and the sticky hero scroll themselves
+        if (!el.closest?.('main, footer') || el.closest('[data-recede], [data-seq]') || !el.matches('input, textarea, select, button, a')) return; // pinned scenes and the sticky hero scroll themselves
         // On phones a project's room list is a bar of chips that sticks under the header: leave room for it too
         const rooms = document.querySelector<HTMLElement>('nav[aria-label="Rooms"]');
         const bar = rooms && getComputedStyle(rooms).position === 'sticky' && rooms.offsetWidth > innerWidth * 0.8 ? rooms.offsetHeight : 0;
         const head = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80) + 24 + bar;
         const fix = () => {
           const r = el.getBoundingClientRect();
-          if (r.top < head || r.bottom > innerHeight - 24) lenis.scrollTo(el, { offset: -head }); // the bottom edge counts too: a field half off the screen is not visible
+          if (r.top < head || r.bottom > innerHeight - (el.closest('footer') ? 80 : 24)) lenis.scrollTo(el, { offset: -head }); // footer links also clear the Back to top disc; the bottom edge counts too: a field half off the screen is not visible
         };
         if (el.hasAttribute('aria-expanded')) {
           // A stage button: the panel above it closes over 700 ms and moves it, so keep re-aiming at it until that is done
