@@ -53,7 +53,12 @@ export default function Reveals() {
           const r = el.getBoundingClientRect();
           if (r.top < head || r.bottom > innerHeight - 24) lenis.scrollTo(el, { offset: -head }); // the bottom edge counts too: a field half off the screen is not visible
         };
-        fix();
+        if (el.hasAttribute('aria-expanded')) {
+          // A stage button: the panel above it closes over 700 ms and moves it, so keep re-aiming at it until that is done
+          const end = performance.now() + 900;
+          const chase = () => { if (document.activeElement !== el) return; fix(); if (performance.now() < end) requestAnimationFrame(chase); };
+          chase();
+        } else fix();
         setTimeout(() => { if (document.activeElement === el) fix(); }, 800); // and again once content that opens or moves on focus (the stage panels) has finished its transition
       };
       addEventListener('focusin', onFocus);

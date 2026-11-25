@@ -21,7 +21,7 @@
 .choices { display: flex; flex-wrap: wrap; gap: 4px 28px; margin-top: 6px; }
 .choice {
   display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer;
-  input { appearance: none; flex: none; width: 20px; height: 20px; margin: 0; border: 1px solid rgb(218 207 186 / 0.7); border-radius: 50%; background: transparent; cursor: pointer; &:checked { border-color: var(--sand); background: radial-gradient(circle, var(--sand) 0 42%, transparent 48%); } }
+  input { appearance: none; flex: none; width: 20px; height: 20px; margin: 0; border: 1px solid rgb(218 207 186 / 0.7); border-radius: 50%; background: transparent; cursor: pointer; &:checked { border-color: var(--sand); background: radial-gradient(circle, var(--sand) 0 42%, transparent 48%); } &:focus-visible { outline: 0; } } /* the label ring below shows focus; this kept a black browser outline */
   &:has(input:focus-visible) { outline: 2px solid var(--sand); outline-offset: 2px; }
 }
 .consent {

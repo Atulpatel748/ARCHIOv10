@@ -17,7 +17,7 @@
   /* Phones and tablets: the rooms become a strip of chips that stays under the header, so a long page can be jumped through */
   @include tablet-down {
     position: sticky; top: var(--header-h); z-index: 5; margin-inline: calc(-1 * var(--margin)); padding: 8px var(--margin); background: var(--paper);
-    ol { position: relative; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    ol { position: relative; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 6px; margin: -6px; } /* room inside the scroll box for a chip's focus ring */
     a { align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--line-strong); border-radius: 999px; white-space: nowrap; font-size: 1rem; translate: none; span { display: none; } &[aria-current='true'] { &:focus-visible { outline-color: var(--oxblood); } translate: none; color: var(--sand); background: var(--oxblood); border-color: var(--oxblood); } }
   }
 }

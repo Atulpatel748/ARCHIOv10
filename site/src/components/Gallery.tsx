@@ -66,11 +66,11 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
   const [room, setRoom] = useState(0);
   const strip = useRef<HTMLOListElement>(null);
   // On a phone the rooms are a row of chips: keep the one for the room in view in the middle of the row (sideways only, the page does not move)
-  useEffect(() => {
+  const centre = (on: HTMLElement | null | undefined, behavior: ScrollBehavior = 'smooth') => {
     const row = strip.current;
-    const on = row?.querySelector<HTMLElement>('[aria-current="true"]');
-    if (row && on && row.scrollWidth > row.clientWidth) row.scrollTo({ left: on.offsetLeft - (row.clientWidth - on.offsetWidth) / 2, behavior: 'smooth' });
-  }, [room]);
+    if (row && on && row.scrollWidth > row.clientWidth) row.scrollTo({ left: on.offsetLeft - (row.clientWidth - on.offsetWidth) / 2, behavior });
+  };
+  useEffect(() => centre(strip.current?.querySelector<HTMLElement>('[aria-current="true"]')), [room]);
   const roomsEl = useRef<HTMLDivElement>(null);
 
   const frame = (i: number) => figs.current[i].querySelector<HTMLElement>('[data-frame]')!;
@@ -226,7 +226,7 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
       ) : (
       <div ref={roomsEl} className={styles.rooms}>
         <nav className={styles.index} aria-label="Rooms">
-          <ol ref={strip}>
+          <ol ref={strip} onFocus={(e) => centre(e.target as HTMLElement, 'auto')}>
             {groupByRoom(images).map((g, gi) => (
               <li key={`${g.room}-${gi}`}><a href={`#room-${gi}`} onClick={(e) => goToRoom(e, gi)} aria-current={room === gi ? 'true' : undefined}><span>{String(gi + 1).padStart(2, '0')}</span>{g.room}</a></li>
             ))}
