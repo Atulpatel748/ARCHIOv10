@@ -52,7 +52,7 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
     padding: 12px 0; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
     background: linear-gradient(currentColor 0 0) left calc(100% - 6px) / 0 1px no-repeat; transition: background-size 400ms var(--ease);
   }
-  a[aria-current='page'] { background-size: 100% 1px; }
+  a[aria-current='page'] { background-size: 100% 1px; @media (forced-colors: active) { text-decoration: underline; text-underline-offset: 6px; } } /* the gradient line is removed in high-contrast mode */
   @include tablet-down { display: none; }
 }
 /* The menu button: left side, phones and tablets */

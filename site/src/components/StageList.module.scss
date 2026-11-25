@@ -12,7 +12,7 @@
 .open .veil { background: linear-gradient(to bottom, rgb(20 6 7 / 0.55), transparent 40%), linear-gradient(to top, rgb(20 6 7 / 0.88), rgb(20 6 7 / 0.12) 62%); }
 
 .head { position: absolute; inset: 0 0 auto 0; margin: 0; font: inherit; }
-.head button { display: flex; align-items: baseline; gap: 18px; width: 100%; padding: 28px clamp(20px, 3vw, 36px); text-align: left; }
+.head button { display: flex; align-items: baseline; gap: 18px; width: 100%; padding: 28px clamp(20px, 3vw, 36px); text-align: left; &:focus-visible { outline-offset: -6px; } } /* the panel clips anything outside it, so the ring is drawn inside */
 .vName { font: 400 clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem)/1 var(--font-display); text-transform: uppercase; letter-spacing: 0.02em; transition: opacity 300ms var(--ease); }
 .hName { display: none; }
 
