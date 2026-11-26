@@ -6,11 +6,11 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
 /* No bar: a transparent frame holding the logo, the pill and the menu button. Only the logo slides away on scroll. */
 .header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); pointer-events: none; --ink: var(--oxblood); color: var(--ink); transition: color 300ms var(--ease); }
 .dark { --ink: var(--sand); }
-/* Phones: once scrolled, a plain bar sits behind the menu button and the pill, so the text below never runs under them.
+/* Phones and tablets: once scrolled, a plain bar sits behind the menu button and the pill, so the text below never runs under them.
    Paper over light sections, oxblood over dark ones; none on the open menu. */
 .header::before {
   content: ''; position: absolute; inset: 0; background: var(--paper); opacity: 0; transition: opacity 300ms var(--ease), background-color 300ms var(--ease);
-  @media (min-width: 768px) { display: none; }
+  @media (min-width: 1024px) { display: none; } /* phones and tablets (owner, 26 Nov 2026): on tablets too there are no links, only the floating buttons */
 }
 .dark::before { background: var(--oxblood); }
 .scrolled::before { opacity: 1; }
@@ -38,7 +38,7 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
 /* With the menu open the logo sits small in the header, never big over the menu's links (!important beats the inline --p) */
 .onMenu .brand { --p: 1 !important; }
 /* On the home page the wordmark is in the brand colour while it sits big over the hero, and fades to the header colour as it docks */
-.onHome .brand { color: color-mix(in srgb, var(--ink) calc(var(--p) * 100%), var(--oxblood)); transition: $slide, color 300ms var(--ease), visibility 0s; }
+.onHome .brand { color: color-mix(in srgb, var(--ink) calc(var(--p) * 100%), var(--oxblood)); transition: $slide, color 300ms var(--ease), visibility 0s; @include phone { color: color-mix(in srgb, var(--ink) calc(var(--p) * 100%), var(--sand)); } } /* phones: sand over the hero, the oxblood read muddy on the darkened photo (owner, 26 Nov 2026) */
 .brand[data-over-hero] { opacity: 0; visibility: hidden; }
 /* The links slide away with the logo, so neither sits on top of the text beneath as you scroll down */
 .hidden .nav { opacity: 0; visibility: hidden; transform: translateY(-100%); transition: $slide, visibility 0s linear 350ms; }

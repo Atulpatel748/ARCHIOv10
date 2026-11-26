@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import styles from './ScrollCue.module.scss';
 
@@ -8,9 +9,11 @@ import styles from './ScrollCue.module.scss';
 // "Back to top" button appears. Wide screens only (1280px and up), where the margin is empty. Decorative, so hidden from screen readers.
 export default function ScrollCue() {
   const ref = useRef<HTMLDivElement>(null);
+  const home = usePathname() === '/'; // Home only: on an inner page the reader is already reading (owner, 26 Nov 2026)
 
   useEffect(() => {
-    const el = ref.current!;
+    const el = ref.current;
+    if (!el) return;
     let frame = 0;
     const update = () => {
       frame = 0;
@@ -22,8 +25,9 @@ export default function ScrollCue() {
     addEventListener('scroll', queue, { passive: true });
     addEventListener('resize', queue);
     return () => { removeEventListener('scroll', queue); removeEventListener('resize', queue); cancelAnimationFrame(frame); };
-  }, []);
+  }, [home]);
 
+  if (!home) return null;
   return (
     <div ref={ref} className={styles.cue} aria-hidden="true">
       <span className={styles.word}>Scroll</span>

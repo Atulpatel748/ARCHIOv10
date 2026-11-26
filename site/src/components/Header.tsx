@@ -15,7 +15,7 @@ export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [scrolled, setScrolled] = useState(false); // past the top (on home, past the hero): phones get a bar behind the buttons
+  const [scrolled, setScrolled] = useState(false); // past the top (on home, past the hero): phones and tablets get a bar behind the buttons
   const [dark, setDark] = useState(true); // is the page behind the logo dark?
   const toggleRef = useRef<HTMLButtonElement>(null);
   const brandRef = useRef<HTMLAnchorElement>(null);
@@ -40,7 +40,7 @@ export default function Header() {
         if (el.closest('header, #site-menu, [data-preloader]')) continue;
         if (el instanceof HTMLImageElement || el instanceof HTMLCanvasElement || el instanceof HTMLVideoElement) {
           // With the phone bar showing, the bar takes the section's own colour: a photo passing under it must not flip it back and forth
-          if (scrolledRef.current && matchMedia('(max-width: 767px)').matches) continue;
+          if (scrolledRef.current && matchMedia('(max-width: 1023px)').matches) continue;
           theme = 'dark'; break;
         }
         const c = (getComputedStyle(el).backgroundColor.match(/[0-9.]+/g) ?? []).map(Number);

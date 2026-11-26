@@ -24,7 +24,7 @@ export default function RoomJourney({ steps }: { steps: Step[] }) {
           <ol>
             {steps.map((s, i) => (
               <li key={s.title} style={vars({ '--at': i * 0.25, '--next': i < 3 ? (i + 1) * 0.25 : 2 })}>
-                <span className={styles.eyebrow}>{String(i + 1).padStart(2, '0')} · {LABELS[i]}</span>
+                <span className={styles.eyebrow}>{LABELS[i]}</span>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
               </li>

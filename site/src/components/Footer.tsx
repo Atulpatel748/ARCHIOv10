@@ -19,7 +19,6 @@ export default function Footer() {
           <p className="label">Contact</p>
           {/* The icon says which is which on screen; the hidden word says it to screen readers */}
           <a href={site.whatsappHref}>{icons.whatsapp}<span className="visually-hidden">WhatsApp </span>{site.phone}</a>
-          <a href={site.phoneHref}>{icons.phone}<span className="visually-hidden">Call </span>{site.phone}</a>
           <a href={`mailto:${site.email}`}>{icons.mail}<span className="visually-hidden">Email </span>{site.email}</a>
           <a href={site.instagramHref}>{icons.instagram}<span className="visually-hidden">Instagram </span>{site.instagram}</a>
         </div>

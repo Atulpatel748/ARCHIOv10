@@ -67,7 +67,6 @@ export default function HomePage() {
 
       {/* The position */}
       <section className={`section container ${styles.position}`}>
-        <p className="label" data-reveal>Our positioning</p>
         <Split as="p" className={styles.positionLead} text={approach.title} />
       </section>
 
@@ -75,7 +74,6 @@ export default function HomePage() {
       <section className={`section ${styles.whatWeDo}`}>
         <div className="container">
           <div className={styles.headRow}>
-            <p className="label" data-reveal>What we do</p>
             <Split className={styles.big} text="Consultancy at every stage," accent="from first brief to site coordination" />
           </div>
           <StageList stages={stages} />
