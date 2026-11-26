@@ -51,7 +51,7 @@
 
 /* The position */
 .position { display: grid; gap: 22px; }
-.positionLead { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(1.75rem, 0.8rem + 3.9vw, 5.25rem); line-height: 1; max-width: 24ch; overflow-wrap: break-word; }
+.positionLead { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.01em; font-size: clamp(1.25rem, 0.75rem + 2.2vw, 2.75rem); line-height: 1.08; max-width: 24ch; overflow-wrap: break-word; } /* a quieter lead-in, about half the size of the headline that follows (owner, 26 Nov 2026) */
 
 /* What we do: a heading over the stage index (see StageList) */
 .headRow { display: grid; gap: 22px; margin-bottom: clamp(40px, 5vw, 72px); .big { font-size: clamp(1.75rem, 0.8rem + 3.9vw, 5.25rem); line-height: 1; max-width: 24ch; } }
