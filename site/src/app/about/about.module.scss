@@ -40,7 +40,7 @@
   display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 28px clamp(32px, 4vw, 64px); align-items: center;
   .h3 { max-width: 18ch; margin-bottom: 24px; text-wrap: balance; }
   p { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); line-height: 1.7; }
-  @include tablet-down { grid-template-columns: 1fr; }
+  @include tablet-down { grid-template-columns: 1fr; .h3 { max-width: 28ch; } } /* one column: the 18ch cap (for beside the photo) stacked it in 4 short lines */
 }
 .whyImg img { display: block; width: 100%; height: auto; }
 

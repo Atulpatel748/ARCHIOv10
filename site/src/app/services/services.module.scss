@@ -6,6 +6,8 @@
   @include tablet-down { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   @include phone { grid-template-columns: 1fr; }
 }
+/* Tablets: two per row left the third card alone beside an empty cell, so it spans the row, photo left and words right */
+@include tablet-down { @media (min-width: 768px) { .stage:last-child:nth-child(odd) { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; .stageMedia { aspect-ratio: auto; } } } } /* the photo fills the card height beside the words */
 .stage { display: grid; grid-template-rows: auto 1fr; background: color-mix(in srgb, var(--oxblood) 5%, var(--paper)); }
 .stageMedia {
   position: relative; aspect-ratio: 6 / 5; overflow: hidden;

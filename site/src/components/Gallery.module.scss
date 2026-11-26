@@ -18,7 +18,8 @@
   @include tablet-down {
     position: sticky; top: var(--header-h); z-index: 5; margin-inline: calc(-1 * var(--margin)); padding: 8px var(--margin); background: var(--paper);
     ol { position: relative; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 6px; margin: -6px; } /* room inside the scroll box for a chip's focus ring */
-    a { align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--line-strong); border-radius: 999px; white-space: nowrap; font-size: 1rem; translate: none; span { display: none; } &[aria-current='true'] { &:focus-visible { outline-color: var(--oxblood); } translate: none; color: var(--sand); background: var(--oxblood); border-color: var(--oxblood); } }
+    /* the same chip as the Projects filters (one pill style): small uppercase UI type, oxblood edge on hover */
+    a { align-items: center; min-height: 44px; padding: 0 22px; border: 1px solid var(--line-strong); border-radius: 999px; white-space: nowrap; font-family: var(--font-ui); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; line-height: 1; translate: none; transition: background-color 250ms var(--ease), color 250ms var(--ease), border-color 250ms var(--ease); @include hover { &:hover { border-color: var(--oxblood); } } @include phone { padding: 0 16px; } span { display: none; } &[aria-current='true'] { &:focus-visible { outline-color: var(--oxblood); } translate: none; color: var(--sand); background: var(--oxblood); border-color: var(--oxblood); } }
   }
 }
 @include tablet-down { .rooms { display: block; } .chapters { margin-top: 2rem; } .chapter { scroll-margin-top: calc(var(--header-h) + 100px); } }
