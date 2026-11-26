@@ -23,9 +23,12 @@ export function useTunnel(root: RefObject<HTMLElement | null>, cards: MutableRef
     let w = innerWidth, h = innerHeight, phone = innerWidth < 768, shown = -1;
     // Half the text box's size (it sits in the middle of the stage) and each card's laid-out size; transforms change neither
     let text = { x: 0, y: 0 }, sizes: [number, number][] = [];
+    let link = [0, 0, 0, 0]; // the "See the project" link's box, from the middle of the stage: left, top, right, bottom
     const measure = () => {
       const el = root.current?.querySelector<HTMLElement>('[data-tunnel-text]');
       if (el) text = { x: el.offsetWidth / 2, y: el.offsetHeight / 2 };
+      const a = el?.querySelector<HTMLElement>('.text-link');
+      if (a) link = [a.offsetLeft - text.x, a.offsetTop - text.y, a.offsetLeft + a.offsetWidth - text.x, a.offsetTop + a.offsetHeight - text.y];
       sizes = cards.current.map((c) => [c.offsetWidth, c.offsetHeight]);
     };
     const render = (p: number) => {
@@ -46,7 +49,11 @@ export function useTunnel(root: RefObject<HTMLElement | null>, cards: MutableRef
         const [cw, ch] = sizes[i] ?? [0, 0];
         const ox = Math.max(0, Math.min(x * s + (cw * s) / 2, text.x) - Math.max(x * s - (cw * s) / 2, -text.x));
         const oy = Math.max(0, Math.min(y * s + (ch * s) / 2, text.y) - Math.max(y * s - (ch * s) / 2, -text.y));
-        const covers = cw && ch ? (ox * oy) / (cw * ch * s * s) : 0;
+        // ...and how much of the link it covers: on a phone a photo grown large near you can sit on the link with a small share of itself; a quarter of the link covered fades it fully
+        const lx = Math.max(0, Math.min(x * s + (cw * s) / 2, link[2]) - Math.max(x * s - (cw * s) / 2, link[0]));
+        const ly = Math.max(0, Math.min(y * s + (ch * s) / 2, link[3]) - Math.max(y * s - (ch * s) / 2, link[1]));
+        const la = (link[2] - link[0]) * (link[3] - link[1]);
+        const covers = cw && ch ? Math.max((ox * oy) / (cw * ch * s * s), la ? (2 * lx * ly) / la : 0) : 0;
         const travel = lp < 0.18 ? lp / 0.18 : lp > 0.82 ? clamp((0.98 - lp) / 0.16) : 1;
         const own = owner === undefined || groupRef.current?.(i) === owner ? 1 : 0;
         el.style.opacity = String(travel * own * (1 - 0.88 * clamp(covers * 2)));

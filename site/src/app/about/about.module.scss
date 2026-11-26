@@ -7,8 +7,9 @@
 
 /* Opening: the label, the large heading across the page, then a wide render (taller on phones) */
 .hero { display: grid; gap: clamp(18px, 2vw, 28px); padding-top: calc(var(--header-h) + clamp(3rem, 2rem + 4vw, 6rem)); container-type: inline-size; }
-/* Never mid-word: "COMMERCIALLY" is about 7.2 times the font size, so the size is capped to fit it in the page width */
-.title { @extend %display; letter-spacing: -0.01em; line-height: 0.94; text-wrap: balance; font-size: min(var(--h1-lg), calc(100cqw / 7.6)); max-width: 9em; }
+/* Never mid-word: "COMMERCIALLY" is about 7.2 times the font size, so the size is capped to fit it in the page width. No width cap of its own:
+   at 9em it ran one or two words a line with the right half empty and the photo below the first screen (owner, 26 Nov 2026) */
+.title { @extend %display; letter-spacing: -0.01em; line-height: 0.94; text-wrap: balance; font-size: min(var(--h1-lg), calc(100cqw / 7.6)); }
 .heroImg {
   margin-top: clamp(24px, 3vw, 48px); aspect-ratio: 21 / 9; overflow: hidden;
   img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 78%; }

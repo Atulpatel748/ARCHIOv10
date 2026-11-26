@@ -35,7 +35,7 @@
   /* The two words start together in the middle, slide apart and fade, gone just before the scene ends */
   .seqTitle {
     position: absolute; left: 0; top: 50%; justify-content: center; gap: 0.09em; padding: 0.06em 0 0; transform: translateY(-50%);
-    opacity: min(calc(1 - var(--progress, 0) * 0.9), calc((0.97 - var(--progress, 0)) * 20)); /* the usual faint fade, then gone in the last few frames before the next section starts */
+    opacity: min(calc(1 - var(--progress, 0) * 0.9), calc((0.76 - var(--progress, 0)) * 5)); /* the usual faint fade, then gone by 76%: the sectors reach the words at about 78% and must not cross visible letters */
   }
   .seqStart { transform: translateX(calc(-17vw * var(--progress, 0))); }
   .seqEnd { transform: translateX(calc(17vw * var(--progress, 0))); }
