@@ -63,7 +63,7 @@
   .dot { width: 24px; }
   /* The caption needs the full width on a phone, so the controls take their own centred row above it */
   .controls { position: static; translate: none; order: -1; width: 100%; justify-content: center; gap: 6px; }
-  .place { font-size: 0.6875rem; letter-spacing: 0.1em; }
+  .place { font-size: 0.75rem; letter-spacing: 0.1em; }
   .slideLink { font-size: 0.75rem; }
 }
 @keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }

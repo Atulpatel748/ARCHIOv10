@@ -21,6 +21,7 @@ export default function ContactPage() {
       <section className={`section ${styles.talk}`} data-dark-end>
         <div className={`container ${styles.grid}`}>
           <div className={styles.info}>
+            <p className="label" data-reveal>Contact</p>
             <Split as="h1" className={styles.title} text="Start a conversation" />
             <p className={styles.invite} data-reveal>Tell us about your space and what it needs to do. We will reply to arrange a first conversation.</p>
             <dl className={styles.details} data-reveal>

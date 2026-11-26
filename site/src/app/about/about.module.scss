@@ -45,7 +45,7 @@
 .whyImg img { display: block; width: 100%; height: auto; }
 
 /* The founders: a large heading, then the two names side by side, each under a fine line */
-.teamTitle { @extend %display; font-size: clamp(2.5rem, 1.2rem + 3.6vw, 4.75rem); margin-bottom: clamp(28px, 3vw, 44px); }
+.teamTitle { @extend %display; font-size: clamp(1.75rem, 1.1rem + 1.6vw, 2.75rem); line-height: 1.02; margin-bottom: clamp(28px, 3vw, 44px); } /* the same size as the other section headings (.h3) */
 .team { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px clamp(24px, 3vw, 48px); @include phone { grid-template-columns: 1fr; } }
 .person {
   display: grid; gap: 6px; padding-top: 20px; border-top: 1px solid var(--oxblood);

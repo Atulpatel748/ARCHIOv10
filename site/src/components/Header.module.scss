@@ -69,8 +69,8 @@ $slide: opacity 250ms var(--ease), transform 350ms var(--ease);
   transition: background-color 300ms var(--ease), color 300ms var(--ease);
   > span[aria-hidden] { font-size: 1rem; line-height: 1; transition: transform 400ms var(--ease); }
   @include hover { &:hover { background: var(--deep); > span[aria-hidden] { transform: rotate(90deg); } } }
-  @include phone { padding: 0 14px; font-size: 0.6875rem; letter-spacing: 0.1em; > span[aria-hidden] { display: none; } }
-  @media (max-width: 359px) { padding: 0 10px; letter-spacing: 0.04em; } /* "Contact us" is wider than the old label: clear of the logo on the narrowest phones */
+  @include phone { padding: 0 14px; font-size: 0.75rem; letter-spacing: 0.1em; > span[aria-hidden] { display: none; } }
+  @media (max-width: 389px) { padding: 0 10px; letter-spacing: 0.04em; } /* "Contact us" at 12 px is wider: tighter below 390 px keeps it clear of the logo (360 px Android phones too) */
   @media (forced-colors: active) { border: 1px solid ButtonText; } /* high-contrast mode drops the fill and the ring, so give it a visible edge */
 }
 .onMenu .talk { background: var(--paper); color: var(--oxblood); }
