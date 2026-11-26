@@ -43,7 +43,11 @@
   @include hover { &:hover { background-size: 40% 1px; } }
 }
 /* One thin track per slide, centred in the bar: each track is a button that shows its slide, and fills while autoplay runs */
-.controls { position: absolute; left: 50%; translate: -50% 0; display: flex; align-items: center; gap: 8px; }
+.controls {
+  position: absolute; left: 50%; translate: -50% 0; display: flex; align-items: center; gap: 8px;
+  /* High-contrast mode removes the tracks' colours and leaves the photo: draw them on a system-colour strip so all slides show */
+  @media (forced-colors: active) { forced-color-adjust: none; background: Canvas; padding-inline: 8px; .track { background: CanvasText; } .track::after { background: Highlight; } }
+}
 .dot {
   width: 40px; min-height: 44px; display: flex; align-items: center;
   @include hover { &:hover .track { background: rgb(218 207 186 / 0.9); } }

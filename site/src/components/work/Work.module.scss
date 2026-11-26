@@ -10,7 +10,7 @@
 /* Never mid-word: the size is capped so the longest word ("SELECTED", about 4.6 times the font size) fits its column */
 .title {
   font-family: var(--font-display); font-weight: 400; text-transform: uppercase; letter-spacing: -0.01em; line-height: 0.9;
-  font-size: min(clamp(3.4rem, 1.4rem + 9vw, 12rem), calc(100cqw / 4.8));
+  font-size: min(var(--h1-lg), calc(100cqw / 4.8));
 }
 .lead { max-width: 38ch; font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem); line-height: 1.55; }
 

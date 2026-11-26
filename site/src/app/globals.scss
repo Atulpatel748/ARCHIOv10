@@ -16,6 +16,8 @@
   --section: clamp(56px, 6.5vw, 104px); /* tighter: the client found the gaps between sections too large */
   --accent-color: rgb(76 17 20 / 0.82); /* small labels and numbers: muted ink, still AA on the beige #DACFBA background; dark sections switch to blush */
   --line-strong: rgb(76 17 20 / 0.32); /* outline of chips and round buttons on the beige background */
+  --h1-lg: clamp(2.5rem, 1rem + 5.4vw, 7.5rem); /* page titles: two sizes only (owner, 26 Nov 2026); large for a page that opens on its title */
+  --h1-md: clamp(2.25rem, 1rem + 3.6vw, 5rem); /* medium where the title shares a column with a form (Contact) */
   @include phone { --header-h: 68px; }
 }
 
@@ -76,7 +78,7 @@ html.lenis, html.lenis body { height: auto; }
 /* Big uppercase display headings in the brand's Optima-style face, which matches the logo caps */
 .caps { text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.95; }
 
-.display { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(3rem, 1rem + 6vw, 7.5rem); line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; overflow-wrap: break-word; }
+.display { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: var(--h1-lg); line-height: 1; text-transform: uppercase; letter-spacing: 0.01em; overflow-wrap: break-word; }
 .h2 { font-family: var(--font-display), 'Optima', sans-serif; font-weight: 400; font-size: clamp(2.25rem, 1rem + 3.6vw, 5rem); text-transform: uppercase; letter-spacing: 0.01em; line-height: 1; text-wrap: balance; overflow-wrap: break-word; }
 .h3 { font-size: clamp(1.375rem, 1.15rem + 0.7vw, 1.875rem); line-height: 1.2; }
 .lead { font-size: clamp(1.125rem, 1rem + 0.45vw, 1.375rem); line-height: 1.55; }
