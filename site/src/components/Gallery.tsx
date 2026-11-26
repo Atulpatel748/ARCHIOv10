@@ -159,7 +159,8 @@ export default function Gallery({ images, title, layout = 'rooms' }: { images: P
   // The room index marks the chapter that is crossing the middle of the screen.
   useEffect(() => {
     const chapters = document.querySelectorAll<HTMLElement>('[data-chapter]');
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) setRoom(Number((e.target as HTMLElement).dataset.chapter)); }), { rootMargin: '-45% 0px -50% 0px' });
+    // A jump back above the gallery (Home key, Back to top without motion) crosses no chapter: once the first is below the middle again, mark it
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) setRoom(Number((e.target as HTMLElement).dataset.chapter)); else if (chapters[0].getBoundingClientRect().top > innerHeight / 2) setRoom(0); }), { rootMargin: '-45% 0px -50% 0px' });
     chapters.forEach((c) => io.observe(c));
     return () => io.disconnect();
   }, [images, layout]);

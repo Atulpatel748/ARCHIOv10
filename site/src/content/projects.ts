@@ -6,7 +6,7 @@ export type Project = {
   title: string; // CLIENT TO CONFIRM: working titles; the profile names projects by location only
   category: 'Residential' | 'Commercial' | 'Landscape';
   location: string;
-  area: string;
+  area: string; // number and unit joined by no-break spaces (\u00a0), so a narrow card never splits "2,000 sq" from "ft"
   summary: string;
   description: string[];
   cover: ProjectImage;
@@ -29,7 +29,7 @@ export const projects: Project[] = [
     title: 'Dubai Marina Residence',
     category: 'Residential',
     location: 'Dubai Marina',
-    area: '2,500 sq ft',
+    area: '2,500\u00a0sq\u00a0ft',
     summary: 'A residence designed so that architecture, material and light come together, from feature walls and joinery to lighting and finishing details.',
     description: [
       'We design interiors where architecture, material, and light come together seamlessly, from feature walls and joinery to lighting and finishing details.',
@@ -58,7 +58,7 @@ export const projects: Project[] = [
     title: 'JLT Office',
     category: 'Commercial',
     location: 'Jumeirah Lake Towers (JLT)',
-    area: '2,000 sq ft',
+    area: '2,000\u00a0sq\u00a0ft',
     summary: 'An office designed to make the right first impression, from reception areas and lounges to the working floor.',
     description: [
       'Commercial spaces that make the right first impression, from reception areas and lounges to full office layouts.',
@@ -83,7 +83,7 @@ export const projects: Project[] = [
     title: 'Arabian Ranches 2 Garden',
     category: 'Landscape',
     location: 'Arabian Ranches 2',
-    area: '6,500 sqm',
+    area: '6,500\u00a0sqm',
     summary: 'A landscape design that brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors.',
     description: [
       'This landscape design brings together classic Arabian architecture and a relaxed, resort-style way of living outdoors. Palms and layered greenery line a stone path to the entrance, setting a calm, welcoming tone from the moment you arrive.',
