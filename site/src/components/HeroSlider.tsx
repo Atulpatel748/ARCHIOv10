@@ -215,7 +215,7 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
       onFocus={(e) => { if (e.target.matches(':focus-visible')) setFocused(true); }} onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setFocused(false); }}
       data-recede
     >
-      <div className={styles.inner} data-recede-inner>
+      <div className={styles.inner}>
       <div ref={stage} className={`${styles.stage} ${glReady ? styles.glReady : ''}`}>
         {slides.map((s, i) => (
           <div key={s.src} className={`${styles.slide} ${i === current ? styles.active : ''}`}>

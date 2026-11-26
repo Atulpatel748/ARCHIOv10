@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      <PageHead stacked label="Services" title="Expertise at every stage" accent="of a project" intro={servicesIntro} />
+      <PageHead label="Services" title="Expertise at every stage" accent="of a project" intro={servicesIntro} />
 
       {/* The three stages as one row of cards (client: too much open space in the full-screen bands) */}
       <div className={`container ${styles.stages}`}>

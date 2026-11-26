@@ -146,3 +146,18 @@ test.describe('back to top', () => {
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   });
 });
+
+// A clicked link keeps focus, and the footer is the same on every page: the keyboard-focus helper used to scroll the new page
+// back down to that footer link 0.8 s after the page change.
+test.describe('footer links with smooth scrolling', () => {
+  test.use({ reducedMotion: 'no-preference' });
+  test('a footer link clicked at the bottom of a page opens the next page at the top', async ({ page }) => {
+    await page.goto('/about');
+    await expect.poll(() => page.evaluate(() => 'lenis' in window)).toBe(true);
+    await page.evaluate(() => (window as unknown as { lenis: { scrollTo(y: number, o: object): void } }).lenis.scrollTo(document.documentElement.scrollHeight, { immediate: true }));
+    await page.locator('footer').getByRole('link', { name: 'Services', exact: true }).click();
+    await expect(page).toHaveURL('/services');
+    await page.waitForTimeout(1500); // longer than the helper's 0.8 s re-check
+    expect(await page.evaluate(() => scrollY)).toBeLessThan(50);
+  });
+});

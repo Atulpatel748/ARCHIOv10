@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 
 // Smooth scroll (Lenis, driven by GSAP's ticker), scroll reveals and the hero cover effect. Kept deliberately quiet:
 //   [data-reveal], [data-split], [data-mask]  a slow fade with a small rise
-//   [data-recede]  the hero recedes while the next section slides over it
+//   [data-recede]  the hero stays put while the next section slides over it (no shrink or fade: that showed the dark edges; owner, 26 Nov 2026)
 // Elements already on screen at load are left alone so nothing flashes; reduced motion turns all of it off.
 // gsap, ScrollTrigger and Lenis are about 59 KB compressed, so they are fetched when the browser is idle, not in the first load.
 // Everything below the first screen is still visible until they arrive; the reveals then hide it only if it is off screen.
@@ -43,6 +43,8 @@ export default function Reveals() {
       // Lenis ignores scroll-padding, so a field reached with Tab or Shift+Tab could end up under the header or off screen (WCAG 2.4.11).
       const onFocus = (e: FocusEvent) => {
         const el = e.target as HTMLElement;
+        if (!el.matches?.(':focus-visible')) return; // keyboard focus only: a clicked link keeps focus, and the footer link stays focused on the next page
+        const page = location.pathname;
         if (lenis.isScrolling === 'smooth') lenis.scrollTo(scrollY, { immediate: true }); // stop the glide to the previous field, or it pulls this one off screen again
         if (!el.closest?.('main, footer') || el.closest('[data-recede], [data-seq]') || !el.matches('input, textarea, select, button, a')) return; // pinned scenes and the sticky hero scroll themselves
         // On phones a project's room list is a bar of chips that sticks under the header: leave room for it too
@@ -56,10 +58,10 @@ export default function Reveals() {
         if (el.hasAttribute('aria-expanded')) {
           // A stage button: the panel above it closes over 700 ms and moves it, so keep re-aiming at it until that is done
           const end = performance.now() + 900;
-          const chase = () => { if (document.activeElement !== el) return; fix(); if (performance.now() < end) requestAnimationFrame(chase); };
+          const chase = () => { if (document.activeElement !== el || location.pathname !== page) return; fix(); if (performance.now() < end) requestAnimationFrame(chase); };
           chase();
         } else fix();
-        setTimeout(() => { if (document.activeElement === el) fix(); }, 800); // and again once content that opens or moves on focus (the stage panels) has finished its transition
+        setTimeout(() => { if (document.activeElement === el && location.pathname === page) fix(); }, 800); // and again once content that opens or moves on focus (the stage panels) has finished its transition
       };
       addEventListener('focusin', onFocus);
       off = () => { removeEventListener('focusin', onFocus); gsap.ticker.remove(tick); lenis.destroy(); delete (window as unknown as { lenis?: unknown }).lenis; };
@@ -131,20 +133,16 @@ export default function Reveals() {
           gsap.fromTo(el, { opacity: 0, y: 20 }, { ...fade, scrollTrigger: once(el) });
         });
 
-        // Hero recedes (scales down, fades, drifts up) while the next section slides up over it. Once the next section has
-        // covered it completely the hero is inert, so keyboard focus cannot land on controls nobody can see.
+        // The pinned hero stays as it is while the next section slides up over it. Once the next section has covered it
+        // completely the hero is inert, so keyboard focus cannot land on controls nobody can see.
         const heroes = gsap.utils.toArray<HTMLElement>('[data-recede]');
         heroes.forEach((el) => {
           const next = el.nextElementSibling;
-          if (!next || getComputedStyle(el).position !== 'sticky') return; // a hero that is not pinned (portrait project pages) just scrolls
-          gsap.to(el.querySelector('[data-recede-inner]') ?? el, {
-            scale: 0.92, opacity: 0.35, yPercent: -6, ease: 'none',
-            // From the very top (shorter heroes have the next section already on screen) until the next section reaches the top.
-            scrollTrigger: {
-              start: 0, end: () => next.getBoundingClientRect().top + window.scrollY, scrub: true,
-              onLeave: () => el.setAttribute('inert', ''),
-              onEnterBack: () => el.removeAttribute('inert'),
-            },
+          if (!next || getComputedStyle(el).position !== 'sticky') return; // a hero that is not pinned just scrolls
+          ScrollTrigger.create({
+            start: 0, end: () => next.getBoundingClientRect().top + window.scrollY, // until the next section reaches the top
+            onLeave: () => el.setAttribute('inert', ''),
+            onEnterBack: () => el.removeAttribute('inert'),
           });
         });
         return () => heroes.forEach((el) => el.removeAttribute('inert'));
