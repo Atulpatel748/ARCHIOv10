@@ -72,7 +72,8 @@ Why the site is built the way it is, so nobody has to guess later. Each entry sa
 
 ## ADR-010: The hero slideshow has no pause button
 
-- **Status:** Accepted, 3 Nov 2026 (owner's choice, made knowing the trade-off below)
+- **Status:** Reversed, 27 Nov 2026: a pause/play button was added back to the hero bar (left of the slide tracks, which stay centred), after the 27 Nov audit listed the missing pause control as an open WCAG 2.2.2 gap. It is hidden when the visitor asks for reduced motion (nothing moves then). Its choice wins over hover and focus. The text below is the 3 Nov record.
+- **Original status:** Accepted, 3 Nov 2026 (owner's choice, made knowing the trade-off below)
 - **Context:** The home hero changes slides every 8 seconds. Since 30 Oct 2026 it had a round pause/play button at the bottom right, added for WCAG 2.2.2 (moving content that lasts more than 5 seconds needs a way to pause or stop it). The owner asked for the button to go, the three slide tracks to sit in the centre of the bottom bar, and "View project" to move to the right.
 - **Decision:** The button is removed. Autoplay still pauses while the pointer is over the hero or keyboard focus is inside it, and when the tab is hidden; visitors who ask for reduced motion get no autoplay at all. The bar is now: place on the left, slide tracks centred, "View project" on the right (on phones the tracks take their own centred row above).
 - **Alternatives:** Stop autoplay for good when a slide track is clicked (keeps the rule, no visible button); no autoplay at all (keeps the rule, the hero no longer moves). The owner chose to remove the button without either.

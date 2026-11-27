@@ -8,7 +8,7 @@ test.describe('hero slider, reduced motion', () => {
     const dots = hero(page).getByRole('button', { name: /^Show slide \d of 3/ });
     await expect(dots).toHaveCount(3);
     await expect(dots.nth(0)).toHaveAttribute('aria-current', 'true');
-    await expect(hero(page).getByRole('button', { name: /slideshow/ })).toHaveCount(0);
+    await expect(hero(page).getByRole('button', { name: /slideshow/ })).toHaveCount(1);
 
     for (const i of [1, 2, 0]) {
       // A change takes 0.7 s and clicks during it are ignored, so retry the click until it lands.
@@ -38,9 +38,9 @@ test.describe('hero slider, normal motion', () => {
   // Phone width: the hero keeps the plain crossfade there and never loads WebGL (ADR-005).
   test.use({ reducedMotion: 'no-preference', viewport: { width: 390, height: 844 } });
 
-  test('has no pause button (removed by the owner, ADR-010); the tracks sit in a centred row above the caption', async ({ page }) => {
+  test('has a pause button (WCAG 2.2.2); the tracks sit in a centred row above the caption', async ({ page }) => {
     await page.goto('/');
-    await expect(hero(page).getByRole('button', { name: /slideshow/ })).toHaveCount(0);
+    await expect(hero(page).getByRole('button', { name: /slideshow/ })).toHaveCount(1);
     const dots = hero(page).getByRole('button', { name: /^Show slide \d of 3/ });
     const first = (await dots.nth(0).boundingBox())!;
     const last = (await dots.nth(2).boundingBox())!;
@@ -53,9 +53,20 @@ test.describe('hero slider, normal motion', () => {
 test.describe('hero bar on a desktop', () => {
   test.use({ reducedMotion: 'no-preference', viewport: { width: 1280, height: 800 } });
 
+  test('the pause button stops autoplay and play starts it again, even with focus inside the hero', async ({ page }) => {
+    await page.goto('/');
+    const dots = hero(page).getByRole('button', { name: /^Show slide \d of 3/ });
+    await hero(page).getByRole('button', { name: 'Pause slideshow' }).click();
+    await page.mouse.move(0, 0); // off the hero, so only the button's choice is left
+    await page.waitForTimeout(9000);
+    await expect(dots.nth(0)).toHaveAttribute('aria-current', 'true');
+    await hero(page).getByRole('button', { name: 'Play slideshow' }).click();
+    await expect(dots.nth(1)).toHaveAttribute('aria-current', 'true', { timeout: 10000 });
+  });
+
   test('place on the left, slide tracks centred, View project on the right', async ({ page }) => {
     await page.goto('/');
-    await expect(hero(page).getByRole('button', { name: /slideshow/ })).toHaveCount(0);
+    await expect(hero(page).getByRole('button', { name: /slideshow/ })).toHaveCount(1);
     const dots = hero(page).getByRole('button', { name: /^Show slide \d of 3/ });
     const first = (await dots.nth(0).boundingBox())!;
     const last = (await dots.nth(2).boundingBox())!;

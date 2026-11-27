@@ -142,8 +142,8 @@ async function createGL(stage: HTMLDivElement, srcs: string[], onLost: () => voi
 }
 
 // Full-screen hero: the three projects, changed by a WebGL displacement transition ("GL slider").
-// Autoplays every 8 s and pauses on hover/focus or when the tab is hidden. The owner removed the pause button (ADR-010),
-// so there is no way to stop it for good (short of WCAG 2.2.2); reduced motion means no autoplay and a crossfade.
+// Autoplays every 8 s and pauses on hover/focus or when the tab is hidden. A pause/play button (WCAG 2.2.2, ADR-010 reversed)
+// stops it for good and overrides hover/focus; reduced motion means no autoplay, a crossfade and no button.
 export default function HeroSlider({ slides, children }: { slides: Slide[]; children: React.ReactNode }) {
   const stage = useRef<HTMLDivElement>(null);
   const gl = useRef<GL | null>(null);
@@ -152,7 +152,9 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
   // Hover and keyboard focus are tracked apart, so leaving with the mouse does not restart autoplay under a focused keyboard user.
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const paused = hovered || focused;
+  // 'paused'/'playing' are the visitor's own choice from the button and win over hover and focus.
+  const [mode, setMode] = useState<'auto' | 'paused' | 'playing'>('auto');
+  const paused = mode === 'paused' || (mode === 'auto' && (hovered || focused));
   const [glReady, setGlReady] = useState(false);
   const reduced = useSyncExternalStore(subscribeReduced, getReduced, getReducedServer);
   const playing = !reduced && !paused;
@@ -248,19 +250,31 @@ export default function HeroSlider({ slides, children }: { slides: Slide[]; chil
           </Link>
         </div>
         <div className={styles.controls}>
-          {slides.map((s, i) => (
-            <button
-              key={s.src}
-              type="button"
-              className={styles.dot}
-              data-current={i === current}
-              aria-label={`Show slide ${i + 1} of ${slides.length}: ${s.title}`}
-              aria-current={i === current ? 'true' : undefined}
-              onClick={() => go(i)}
-            >
-              <span className={`${styles.track} ${i === current && playing ? styles.running : ''}`} aria-hidden="true" />
-            </button>
-          ))}
+          <div className={styles.group}>
+            {!reduced && (
+              <button
+                type="button"
+                className={styles.pause}
+                aria-label={mode === 'paused' ? 'Play slideshow' : 'Pause slideshow'}
+                onClick={() => setMode(mode === 'paused' ? 'playing' : 'paused')}
+              >
+                <svg viewBox="0 0 12 12" aria-hidden="true">{mode === 'paused' ? <path d="M2.5 1.5v9l8-4.5Z" /> : <path d="M2.5 1.5h2.6v9H2.5Zm4.4 0h2.6v9H6.9Z" />}</svg>
+              </button>
+            )}
+            {slides.map((s, i) => (
+              <button
+                key={s.src}
+                type="button"
+                className={styles.dot}
+                data-current={i === current}
+                aria-label={`Show slide ${i + 1} of ${slides.length}: ${s.title}`}
+                aria-current={i === current ? 'true' : undefined}
+                onClick={() => go(i)}
+              >
+                <span className={`${styles.track} ${i === current && playing ? styles.running : ''}`} aria-hidden="true" />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
       </div>
